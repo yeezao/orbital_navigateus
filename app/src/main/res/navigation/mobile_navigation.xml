@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.example.myapptest.ui.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_stops_services"
+            app:destination="@id/navigation_stops_services_master" />
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_directions"
+            app:destination="@id/navigation_directions" />
+<!--        <argument-->
+<!--            android:name="passStopsList"-->
+<!--            app:argType="string" />-->
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_stops_services_master"
+        android:name="com.example.myapptest.ui.stops_services.StopsServicesMasterFragment"
+        android:label="@string/stops_services"
+        tools:layout="@layout/fragment_stops_services_master">
+        <action
+            android:id="@+id/action_navigation_stops_services_to_navigation_home"
+            app:destination="@id/navigation_home" />
+        <action
+            android:id="@+id/action_navigation_stops_services_to_navigation_directions"
+            app:destination="@id/navigation_directions" />
+<!--        <action-->
+<!--            android:id="@+id/action_navigation_stops_services_master_to_navigation_stops_services_stops"-->
+<!--            app:destination="@id/navigation_stops_services_stops" />-->
+    </fragment>
+
+<!--    <fragment-->
+<!--        android:id="@+id/navigation_stops_services_stops"-->
+<!--        android:name="com.example.myapptest.ui.stops_services.StopsServicesFragment"-->
+<!--        android:label="Stops &amp; Services (Stops)"-->
+<!--        tools:layout="@layout/fragment_stops_services">-->
+<!--    </fragment>-->
+
+    <fragment
+        android:id="@+id/navigation_directions"
+        android:name="com.example.myapptest.ui.directions.DirectionsFragment"
+        android:label="@string/title_directions"
+        tools:layout="@layout/fragment_directions" >
+        <action
+            android:id="@+id/action_navigation_directions_to_navigation_home"
+            app:destination="@id/navigation_home" />
+        <action
+            android:id="@+id/action_navigation_directions_to_navigation_stops_services"
+            app:destination="@id/navigation_stops_services_master" />
+        <action
+            android:id="@+id/action_navigation_directions_to_navigation_directions_result"
+            app:destination="@id/navigation_directions_result" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_directions_result"
+        android:name="com.example.myapptest.ui.directions.DirectionsResultFragment"
+        android:label="Directions (Results)"
+        tools:layout="@layout/fragment_directions_result" >
+        <action
+            android:id="@+id/action_navigation_directions_to_navigation_directions_result"
+            app:destination="@id/navigation_directions_result" />
+    </fragment>
+</navigation>

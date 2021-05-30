@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+
+    <TextView
+        android:id="@+id/list_child"
+        android:layout_width="135dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="1dp"
+        android:paddingLeft="29dp"
+        android:paddingTop="9dp"
+        android:paddingBottom="9dp"
+        android:textAlignment="viewStart"
+        android:textColor="@color/black"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/list_child_timing1"
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="1dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="9dp"
+        android:paddingBottom="9dp"
+        android:text="--"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/list_child"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/list_child_timing2"
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="1dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="9dp"
+        android:paddingBottom="9dp"
+        android:text="--"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/list_child_timing1"
+        app:layout_constraintTop_toTopOf="parent" />
+
+<!--    <TextView-->
+<!--        android:id="@+id/list_child_timing2_live"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginEnd="20dp"-->
+<!--        android:paddingLeft="5dp"-->
+<!--        android:paddingTop="2dp"-->
+<!--        android:paddingRight="5dp"-->
+<!--        android:paddingBottom="2dp"-->
+<!--        android:textAlignment="textEnd"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:textSize="10dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/list_child_timing2"-->
+<!--        app:layout_constraintEnd_toEndOf="@+id/list_child_timing2"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/list_child_timing2" />-->
+
+    <ImageView
+        android:id="@+id/live_timing_imageview"
+        android:layout_width="13dp"
+        android:layout_height="13dp"
+        android:layout_marginEnd="35dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="@+id/list_child_timing1"
+        app:layout_constraintEnd_toEndOf="@+id/list_child_timing1"
+        app:layout_constraintTop_toTopOf="@+id/list_child_timing1"
+        app:srcCompat="@drawable/ic_wifi_signal" />
+
+    <ImageView
+        android:id="@+id/live_timing_imageview_2"
+        android:layout_width="13dp"
+        android:layout_height="13dp"
+        android:layout_marginEnd="35dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="@+id/list_child_timing2"
+        app:layout_constraintEnd_toEndOf="@+id/list_child_timing2"
+        app:layout_constraintTop_toTopOf="@+id/list_child_timing2"
+        app:srcCompat="@drawable/ic_wifi_signal" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
