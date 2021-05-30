@@ -85,51 +85,6 @@ public class StopsServicesLTAFragment extends Fragment {
             }
         });
 
-//        expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-//            @Override
-//            public void onGroupExpand(int groupPosition) {
-//
-//                List<String> list = new ArrayList<>();
-//
-//                String url = "https://nnextbus.nus.edu.sg/ShuttleService?busstopname=" + internalName.get(groupPosition);
-//                String auth = "Basic TlVTbmV4dGJ1czoxM2RMP3pZLDNmZVdSXiJU";
-//
-//                StringRequest stringRequest = new StringRequest (Request.Method.GET, url, new Response.Listener<String>() {
-//
-//                    @Override
-//                    public void onResponse(String response) {
-//                        Log.e("GetStopInfo response is", response);
-//                        servicesAtStop = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].name");
-//                        Log.e("servicesAtStop is: ", servicesAtStop.toString());
-//                        for (String item : servicesAtStop) {
-//                            list.add(item);
-//                        }
-//                        listItem.put(listGroup.get(i), list);
-//                        adapter.notifyDataSetChanged();
-//                    }
-//
-//                }, new Response.ErrorListener() {
-//
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        // TODO: Handle error
-//                        Log.e("volley API error", "" + error);
-//                    }
-//
-//                }) {
-//
-//                    @Override
-//                    public Map<String, String> getHeaders() throws AuthFailureError {
-//                        Map<String, String> params = new HashMap<String, String>();
-//                        params.put("Content-Type", "application/json; charset=UTF-8");
-//                        params.put("Authorization", auth);
-//                        return params;
-//                    }
-//                };
-//
-//            }
-//        });
-
     }
 
     String jsonRaw;
@@ -201,6 +156,7 @@ public class StopsServicesLTAFragment extends Fragment {
                 for (int i = 0; i < servicesAtStop.size(); i++) {
                     serviceInfoAtStop = new ServiceInStopDetails();
                     serviceInfoAtStop.setServiceNum(servicesAtStop.get(i));
+                    //TODO: manipulate LTA's return string into int to find difference
                     serviceInfoAtStop.setFirstArrival(serviceFirstArrival.get(i));
 //                    Log.e("first arrival is: ", "" + serviceFirstArrival.get(i));
                     serviceInfoAtStop.setSecondArrival(serviceSecondArrival.get(i));
@@ -217,9 +173,6 @@ public class StopsServicesLTAFragment extends Fragment {
 
                 callback.onSuccess();
 
-//                listItem.put(listGroup.get(groupPosition), list);
-
-//                adapter.notifyDataSetChanged();
             }
 
         }, new Response.ErrorListener() {

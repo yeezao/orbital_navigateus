@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -76,13 +77,16 @@ public class StopsServicesFragment extends Fragment {
                     getListOfChildServices(groupPosition, true, new VolleyCallBack() {
                         @Override
                         public void onSuccess() {
-                            expandableListView.expandGroup(groupPosition);
+                            expandableListView.expandGroup(groupPosition, true);
                         }
                     });
                 }
                 return true;
             }
         });
+
+
+
     }
 
 //    List<String> captions;
@@ -168,7 +172,7 @@ public class StopsServicesFragment extends Fragment {
     List<String> firstArrivalLive;
     List<String> secondArrivalLive;
 
-    private void getListOfChildServices(int groupPosition, boolean isOnClick, final VolleyCallBack callback) {
+    public void getListOfChildServices(int groupPosition, boolean isOnClick, final VolleyCallBack callback) {
 
 
         String url = "https://nnextbus.nus.edu.sg/ShuttleService?busstopname=" + listOfAllStops.get(groupPosition).getStopId();
@@ -205,11 +209,6 @@ public class StopsServicesFragment extends Fragment {
                 callback.onSuccess();
                 Log.e("listItem is: ", "" + listItem);
 
-//                callBack.onSuccess();
-
-//                listItem.put(listGroup.get(groupPosition), list);
-
-//                adapter.notifyDataSetChanged();
             }
 
         }, new Response.ErrorListener() {
@@ -251,6 +250,8 @@ public class StopsServicesFragment extends Fragment {
     public interface VolleyCallBack {
         void onSuccess();
     }
+
+
 
 
 //        List<String> list;

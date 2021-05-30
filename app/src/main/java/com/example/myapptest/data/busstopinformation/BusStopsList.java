@@ -47,7 +47,6 @@
 //
 //                    @Override
 //                    public void onErrorResponse(VolleyError error) {
-//                        // TODO: Handle error
 //                        Log.e("volley API error", "" + error);
 //                    }
 //

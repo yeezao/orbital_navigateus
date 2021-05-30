@@ -14,8 +14,6 @@ import com.example.myapptest.R;
 import com.example.myapptest.data.busstopinformation.ServiceInStopDetails;
 import com.example.myapptest.data.busstopinformation.StopList;
 
-import org.w3c.dom.Text;
-
 import java.util.HashMap;
 import java.util.List;
 
@@ -86,11 +84,21 @@ public class StopsMainAdapter extends BaseExpandableListAdapter {
         }
         TextView textViewParent = convertView.findViewById(R.id.list_parent);
         textViewParent.setText(group.getStopName());
-        if (group.getStopDescription() != null) {
+        if (group.getStopDescription() != null) { //for LTA only
             TextView textViewSubparent = convertView.findViewById(R.id.list_subparent);
             textViewSubparent.setText(group.getStopDescription() + " (" + group.getStopId() + ")");
             textViewSubparent.setTextColor(ContextCompat.getColor(context, R.color.grey1));
+        } else { //for NUS only
+            ImageView refreshTimingButton = convertView.findViewById(R.id.refresh_timing_button);
+            if (isExpanded == false) {
+                refreshTimingButton.setVisibility(ImageView.INVISIBLE);
+            } else {
+                refreshTimingButton.setVisibility(ImageView.VISIBLE);
+
+            }
         }
+
+
 //        TextView textViewSubParent = convertView.findViewById(R.id.list_subparent);
 //        textViewSubParent.setText(group);
         return convertView;
@@ -114,7 +122,7 @@ public class StopsMainAdapter extends BaseExpandableListAdapter {
             TextView textViewService = convertView.findViewById(R.id.list_child);
             textViewService.setText(child.getServiceNum());
 
-            //for list_item_nus
+            //for list_item_nus (NUS only)
             if (child.getFirstArrivalLive() != null) {
                 TextView textViewTime1 = convertView.findViewById(R.id.list_child_timing1);
 
@@ -184,7 +192,7 @@ public class StopsMainAdapter extends BaseExpandableListAdapter {
                     }
                 }
             }
-            //for list_item_lta
+            //for list_item_lta (LTA only)
             else {
                 TextView textViewArrival1 = convertView.findViewById(R.id.list_child_timing1);
                 textViewArrival1.setText(child.getFirstArrival());
@@ -203,47 +211,6 @@ public class StopsMainAdapter extends BaseExpandableListAdapter {
         return true;
     }
 
-    List<String> servicesAtStop;
 
-//    private int getChildrenCountOnline(int groupPosition) {
-//
-//        String url = "https://nnextbus.nus.edu.sg/ShuttleService?busstopname=" + listGroup.get(groupPosition);
-//        String auth = "Basic TlVTbmV4dGJ1czoxM2RMP3pZLDNmZVdSXiJU";
-//
-//        StringRequest stringRequest = new StringRequest (Request.Method.GET, url, new Response.Listener<String>() {
-//
-//            @Override
-//            public void onResponse(String response) {
-//                servicesAtStop = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].name");
-////                return servicesAtStop.size();
-//            }
-//
-//        }, new Response.ErrorListener() {
-//
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                // TODO: Handle error
-//                Log.e("volley API error", "" + error);
-//            }
-//
-//        }) {
-//
-//            @Override
-//            public Map<String, String> getHeaders() throws AuthFailureError {
-//                Map<String, String> params = new HashMap<String, String>();
-//                params.put("Content-Type", "application/json; charset=UTF-8");
-//                params.put("Authorization", auth);
-//                return params;
-//            }
-//        };
-//
-//        try {
-//            Thread.sleep(1000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return servicesAtStop.size();
-//    }
 
 }

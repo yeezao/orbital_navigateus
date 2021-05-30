@@ -70,7 +70,6 @@ public class HomeFragment extends Fragment {
         });
 
         TextView textView = view.findViewById(R.id.textView_timingTest);
-        RequestQueue queue = Volley.newRequestQueue(this.getContext());
         String url = "https://nnextbus.nus.edu.sg/BusStops";
         String auth = "Basic TlVTbmV4dGJ1czoxM2RMP3pZLDNmZVdSXiJU";
 
