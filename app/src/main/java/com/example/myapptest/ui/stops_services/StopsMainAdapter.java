@@ -87,15 +87,9 @@ public class StopsMainAdapter extends BaseExpandableListAdapter {
         if (group.getStopDescription() != null) { //for LTA only
             TextView textViewSubparent = convertView.findViewById(R.id.list_subparent);
             textViewSubparent.setText(group.getStopDescription() + " (" + group.getStopId() + ")");
-            textViewSubparent.setTextColor(ContextCompat.getColor(context, R.color.grey1));
+            textViewSubparent.setTextColor(ContextCompat.getColor(context, R.color.greydarker1));
         } else { //for NUS only
-            ImageView refreshTimingButton = convertView.findViewById(R.id.refresh_timing_button);
-            if (isExpanded == false) {
-                refreshTimingButton.setVisibility(ImageView.INVISIBLE);
-            } else {
-                refreshTimingButton.setVisibility(ImageView.VISIBLE);
 
-            }
         }
 
 

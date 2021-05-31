@@ -12,5 +12,6 @@
     <color name="transparent">#00000000</color>
     <color name="green">#09851E</color>
     <color name="grey">#B1B1B1</color>
-    <color name="grey1">#787878</color>
+    <color name="greydarker1">#787878</color>
+    <color name="greylighter1">#DDDDDD</color>
 </resources>

@@ -11,7 +11,7 @@
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" >
         <action
-            android:id="@+id/action_navigation_home_to_navigation_stops_services"
+            android:id="@+id/action_navigation_home_to_navigation_stops_services_master"
             app:destination="@id/navigation_stops_services_master" />
         <action
             android:id="@+id/action_navigation_home_to_navigation_directions"
@@ -32,7 +32,7 @@
         <action
             android:id="@+id/action_navigation_stops_services_to_navigation_directions"
             app:destination="@id/navigation_directions" />
-<!--        <action-->
+        <!--        <action-->
 <!--            android:id="@+id/action_navigation_stops_services_master_to_navigation_stops_services_stops"-->
 <!--            app:destination="@id/navigation_stops_services_stops" />-->
     </fragment>

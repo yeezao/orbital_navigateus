@@ -14,25 +14,14 @@
         android:layout_marginTop="12dp"
         android:layout_marginBottom="12dp"
         android:paddingLeft="28dp"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp"
         android:textColor="@color/black"
-        android:textSize="20sp"
+        android:textSize="17dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/refresh_timing_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        app:layout_constraintBottom_toBottomOf="@+id/list_parent"
-        app:layout_constraintEnd_toEndOf="@+id/list_parent"
-        app:layout_constraintTop_toTopOf="@+id/list_parent"
-        app:srcCompat="@drawable/ic_baseline_refresh_24" />
 
 
     <!--    <TextView-->

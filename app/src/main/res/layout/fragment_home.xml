@@ -112,11 +112,12 @@
         android:id="@+id/textView_timingTest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:text='Nothing here at the moment. \nClick into the "Stops &amp; Services" tab for functionality.'
+        android:textAlignment="center"
         app:layout_constraintBottom_toTopOf="@+id/recentStops_label"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/view" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

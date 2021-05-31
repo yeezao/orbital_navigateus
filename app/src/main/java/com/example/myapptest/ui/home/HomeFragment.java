@@ -21,11 +21,16 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.myapptest.R;
+import com.example.myapptest.data.busstopinformation.StopList;
 import com.example.myapptest.data.timings.BusArrivalTimings;
+import com.example.myapptest.ui.stops_services.StopsServicesLTAFragment;
+import com.jayway.jsonpath.JsonPath;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class HomeFragment extends Fragment {
@@ -56,6 +61,8 @@ public class HomeFragment extends Fragment {
 //        return root;
 
 
+    String firstPassStopsList;
+
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -69,31 +76,35 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        getStringOfGroupStops(view);
+
+    }
+
+    private void getStringOfGroupStops(View view) {
+
         TextView textView = view.findViewById(R.id.textView_timingTest);
         String url = "https://nnextbus.nus.edu.sg/BusStops";
         String auth = "Basic TlVTbmV4dGJ1czoxM2RMP3pZLDNmZVdSXiJU";
 
         StringRequest stringRequest = new StringRequest
-            (Request.Method.GET, url, new Response.Listener<String>() {
+                (Request.Method.GET, url, new Response.Listener<String>() {
 
-                @Override
-                public void onResponse(String response) {
-                    Log.d("response is", response);
-                    textView.setText("Response: " + response);
-//                    HomeFragmentDirections.ActionNavigationHomeToNavigationStopsServices action =
-//                            HomeFragmentDirections.actionNavigationHomeToNavigationStopsServices(response);
-//                    NavHostFragment.findNavController(HomeFragment.this).navigate(action);
-                }
-            }, new Response.ErrorListener() {
+                    @Override
+                    public void onResponse(String response) {
+                        firstPassStopsList = response;
+                        Log.d("response is", response);
+//                        textView.setText("Response: " + response);
+                    }
+                }, new Response.ErrorListener() {
 
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    // TODO: Handle error
-                    Log.e("volley API error", "" + error);
-                }
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO: Handle error
+                        Log.e("volley API error", "" + error);
+                    }
 
 
-        }) {
+                }) {
 
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
@@ -106,10 +117,6 @@ public class HomeFragment extends Fragment {
 
         RequestQueue requestQueue = Volley.newRequestQueue(this.getContext().getApplicationContext());
         requestQueue.add(stringRequest);
-
-//        new BusArrivalTimings().getBusArrivalTimings("UTown", "0");
-
-
 
     }
 

@@ -2,15 +2,21 @@ package com.example.myapptest.ui.stops_services;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.ProcessLifecycleOwner;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -23,6 +29,7 @@ import com.example.myapptest.R;
 import com.example.myapptest.data.busstopinformation.ServiceInStopDetails;
 import com.example.myapptest.data.busstopinformation.StopDetails;
 import com.example.myapptest.data.busstopinformation.StopList;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.jayway.jsonpath.JsonPath;
 
 import java.util.ArrayList;
@@ -49,6 +56,9 @@ public class StopsServicesFragment extends Fragment {
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_stops_services, container, false);
 
+        ProgressBar refreshTimingProgressBar = view.findViewById(R.id.progressBar_refreshTiming);
+        refreshTimingProgressBar.setVisibility(View.INVISIBLE);
+
         expandableListView = (ExpandableListView) view.findViewById(R.id.expandable_listview_nus_stops);
         listGroup = new ArrayList<>();
         listItem = new HashMap<>();
@@ -62,6 +72,8 @@ public class StopsServicesFragment extends Fragment {
     }
 
     List<StopDetails> listStopsInstance = null;
+
+    boolean progressBarInvisible = true;
 
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -85,8 +97,61 @@ public class StopsServicesFragment extends Fragment {
             }
         });
 
+//        Button refreshButton = view.findViewById(R.id.floating_refresh_button);
+//        refreshButton.setOnClickListener(new View.OnClickListener());
 
+        FloatingActionButton floatingRefreshButton = view.findViewById(R.id.floating_refresh_button);
+        ProgressBar refreshTimingProgressBar = view.findViewById(R.id.progressBar_refreshTiming);
 
+        floatingRefreshButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                refreshTimingProgressBar.setVisibility(View.VISIBLE);
+                refreshTimingProgressBar.bringToFront();
+                progressBarInvisible = false;
+                refreshTimings(true, view);
+            }
+        });
+
+        if (ProcessLifecycleOwner.get().getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
+            final Handler timeRefreshHandler = new Handler(Looper.getMainLooper());
+            timeRefreshHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    refreshTimings(false, view);
+                    timeRefreshHandler.postDelayed(this, 20000);
+                }
+            }, 20000);
+        }
+
+    }
+
+    private void refreshTimings(boolean isOnClick, View view) {
+        ProgressBar refreshTimingProgressBar = view.findViewById(R.id.progressBar_refreshTiming);
+        for (int i = 0; i < listOfAllStops.size(); i++) {
+            if (expandableListView.isGroupExpanded(i)) {
+                getListOfChildServices(i, true, new VolleyCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        setProgressBarInvisible(refreshTimingProgressBar, 500);
+                    }
+                });
+            }
+        }
+        if (progressBarInvisible == false) {
+            setProgressBarInvisible(refreshTimingProgressBar, 800);
+        }
+    }
+
+    private void setProgressBarInvisible(ProgressBar refreshTimingProgressBar, int delay) {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                refreshTimingProgressBar.setVisibility(View.INVISIBLE);
+            }
+        }, delay);
+        progressBarInvisible = true;
     }
 
 //    List<String> captions;
@@ -95,13 +160,24 @@ public class StopsServicesFragment extends Fragment {
     StopList listOfStops;
     List<String> listOfNames;
     List<String> listOfIds;
+    String jsonRaw;
+
+    public void setJsonRaw(String jsonRaw) {
+        this.jsonRaw = jsonRaw;
+    }
+
 
     private void getListOfGroupStops() {
 
-//        jsonRaw = StopsServicesFragmentArgs.fromBundle(getArguments()).getPassStopsListSecond();
-//
-//        captions = JsonPath.read(jsonRaw, "$.BusStopsResult.busstops[*].caption");
-//        internalName = JsonPath.read(jsonRaw, "$.BusStopsResult.busstops[*].name");
+//        listOfAllStops = new ArrayList<>();
+//        listOfNames = JsonPath.read(jsonRaw, "$.BusStopsResult.busstops[*].caption");
+//        listOfIds = JsonPath.read(jsonRaw, "$.BusStopsResult.busstops[*].name");
+//        for (int i = 0; i < listOfNames.size(); i++) {
+//            listOfStops = new StopList();
+//            listOfStops.setStopName(listOfNames.get(i));
+//            listOfStops.setStopId(listOfIds.get(i));
+//            listOfAllStops.add(listOfStops);
+//        }
 //        initListData();
 
         String url = "https://nnextbus.nus.edu.sg/BusStops";
@@ -172,7 +248,7 @@ public class StopsServicesFragment extends Fragment {
     List<String> firstArrivalLive;
     List<String> secondArrivalLive;
 
-    public void getListOfChildServices(int groupPosition, boolean isOnClick, final VolleyCallBack callback) {
+    private void getListOfChildServices(int groupPosition, boolean isOnClick, final VolleyCallBack callback) {
 
 
         String url = "https://nnextbus.nus.edu.sg/ShuttleService?busstopname=" + listOfAllStops.get(groupPosition).getStopId();

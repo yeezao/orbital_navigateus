@@ -1,6 +1,7 @@
 package com.example.myapptest.ui.stops_services;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +15,22 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.myapptest.R;
 import com.example.myapptest.databinding.ActivityMainBinding;
 import com.example.myapptest.ui.home.HomeFragment;
 import com.example.myapptest.ui.home.HomeFragmentDirections;
 import com.google.android.material.tabs.TabLayout;
 import com.example.myapptest.ui.stops_services.SectionsPagerAdapter;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class StopsServicesMasterFragment extends Fragment {
 
@@ -54,9 +65,9 @@ public class StopsServicesMasterFragment extends Fragment {
         adapter.addFragment(new StopsServices2Fragment(), "NUS Services");
 
         viewPager.setAdapter(adapter);
-//        String jsonIntermediate = StopsServicesMasterFragmentArgs.fromBundle(getArguments()).getPassStopsList();
 //        StopsServicesMasterFragmentDirections.ActionNavigationStopsServicesMasterToNavigationStopsServicesStops action =
 //                StopsServicesMasterFragmentDirections.actionNavigationStopsServicesMasterToNavigationStopsServicesStops(jsonIntermediate);
 //        NavHostFragment.findNavController(StopsServicesMasterFragment.this).navigate(action);
     }
+
 }
