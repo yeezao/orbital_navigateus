@@ -29,7 +29,7 @@ This project uses the following dependencies and libraries:
 
 ### Current available functions
 * Obtain bus arrival timings at different stops around NUS
-<img src="https://user-images.githubusercontent.com/69508658/120092666-58b49300-c147-11eb-8ad6-5b8c2ab9b79d.jpg" width="200" height="400">
+<img src="https://user-images.githubusercontent.com/61348279/120185697-1f624d00-c245-11eb-975b-02fe82018ba6.jpg" width="200" height="400">
 
 ## Project Status
 The project is currently still being developed
