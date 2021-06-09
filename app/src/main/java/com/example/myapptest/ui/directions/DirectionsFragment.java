@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -19,6 +21,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.myapptest.MainActivity;
 import com.example.myapptest.R;
 import com.example.myapptest.databinding.FragmentDirectionsBinding;
 import com.google.android.material.snackbar.Snackbar;
@@ -29,7 +32,19 @@ public class DirectionsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
+
+        setHasOptionsMenu(true);
+
         return inflater.inflate(R.layout.fragment_directions, container, false);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(
+            Menu menu, MenuInflater inflater) {
+        menu.clear();
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Directions");
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.home_toolbar_menu, menu);
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {

@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.directions.DirectionsFragment">
+    tools:context=".ui.directions.DirectionsFragment"
+    android:background="@android:color/white">
 
 <!--    <TextView-->
 <!--        android:id="@+id/text_directions"-->
@@ -97,7 +98,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        android:src="@drawable/ic_baseline_more_vert_24"
+        android:src="@drawable/ic_baseline_directions_split_vert_24"
         app:layout_constraintBottom_toTopOf="@+id/imageView2"
         app:layout_constraintEnd_toStartOf="@+id/destInput"
         app:layout_constraintStart_toStartOf="parent"

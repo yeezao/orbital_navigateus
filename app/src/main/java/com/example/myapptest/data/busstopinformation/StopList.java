@@ -6,9 +6,10 @@ public class StopList {
     private String stopLongName;
     private String stopDescription;
     private String stopId;
-    private int stopLatitude;
-    private int stopLongitude;
+    private Double stopLatitude;
+    private Double stopLongitude;
     private String stopLinkage;
+    private Float distanceFromUser;
 
     public StopList() {
     }
@@ -45,19 +46,19 @@ public class StopList {
         this.stopId = stopId;
     }
 
-    public int getStopLatitude() {
+    public Double getStopLatitude() {
         return stopLatitude;
     }
 
-    public void setStopLatitude(int stopLatitude) {
+    public void setStopLatitude(Double stopLatitude) {
         this.stopLatitude = stopLatitude;
     }
 
-    public int getStopLongitude() {
+    public Double getStopLongitude() {
         return stopLongitude;
     }
 
-    public void setStopLongitude(int stopLongitude) {
+    public void setStopLongitude(Double stopLongitude) {
         this.stopLongitude = stopLongitude;
     }
 
@@ -67,6 +68,14 @@ public class StopList {
 
     public void setStopLinkage(String stopLinkage) {
         this.stopLinkage = stopLinkage;
+    }
+
+    public Float getDistanceFromUser() {
+        return distanceFromUser;
+    }
+
+    public void setDistanceFromUser(Float distanceFromUser) {
+        this.distanceFromUser = distanceFromUser;
     }
 
 

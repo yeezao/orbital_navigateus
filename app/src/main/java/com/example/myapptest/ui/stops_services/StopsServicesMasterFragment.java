@@ -1,36 +1,19 @@
 package com.example.myapptest.ui.stops_services;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.fragment.app.FragmentStatePagerAdapter;
-import androidx.navigation.fragment.NavHostFragment;
-import androidx.viewpager.widget.PagerAdapter;
+import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.ViewPager;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+import com.example.myapptest.MainActivity;
 import com.example.myapptest.R;
-import com.example.myapptest.databinding.ActivityMainBinding;
-import com.example.myapptest.ui.home.HomeFragment;
-import com.example.myapptest.ui.home.HomeFragmentDirections;
 import com.google.android.material.tabs.TabLayout;
-import com.example.myapptest.ui.stops_services.SectionsPagerAdapter;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class StopsServicesMasterFragment extends Fragment {
 
@@ -38,7 +21,7 @@ public class StopsServicesMasterFragment extends Fragment {
     private ViewPager firstViewPager;
 
     public StopsServicesMasterFragment() {
-        // Required empty public constructor
+        setRetainInstance(true);
     }
 
     @Override
@@ -48,6 +31,12 @@ public class StopsServicesMasterFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_stops_services_master, container, false);
 
+//        Toolbar stopsServicesMasterToolbar = rootView.findViewById(R.id.stops_services_master_toolbar);
+//        stopsServicesMasterToolbar.setTitle("Stops & Services");
+//        ((AppCompatActivity)getActivity()).setSupportActionBar(stopsServicesMasterToolbar);
+//        stopsServicesMasterToolbar.setTitleTextColor(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.white));
+//        setHasOptionsMenu(true);
+
         firstViewPager = (ViewPager) rootView.findViewById(R.id.viewpager_content);
 
         tabLayout = (TabLayout) rootView.findViewById(R.id.tabLayout2);
@@ -55,19 +44,110 @@ public class StopsServicesMasterFragment extends Fragment {
         tabLayout.bringToFront();
 
         setupViewPager(firstViewPager);
+        setHasOptionsMenu(true);
         return rootView;
     }
 
+    @Override
+    public void onCreateOptionsMenu(
+            Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.stops_services_master_toolbar_menu, menu);
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Stops & Services");
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    StopsServicesFragment newStopsServicesFragment = new StopsServicesFragment();
+
     private void setupViewPager(ViewPager viewPager) {
         TabViewPagerAdapter adapter = new TabViewPagerAdapter(getChildFragmentManager());
-        adapter.addFragment(new StopsServicesFragment(), "NUS Stops");
+        adapter.addFragment(newStopsServicesFragment, "NUS Stops");
+//        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         adapter.addFragment(new StopsServicesLTAFragment(), "LTA Stops");
-        adapter.addFragment(new StopsServices2Fragment(), "NUS Services");
+        adapter.addFragment(new StopsServices2Fragment(), "NUS Routes");
 
+        viewPager.setOffscreenPageLimit(2);
         viewPager.setAdapter(adapter);
 //        StopsServicesMasterFragmentDirections.ActionNavigationStopsServicesMasterToNavigationStopsServicesStops action =
 //                StopsServicesMasterFragmentDirections.actionNavigationStopsServicesMasterToNavigationStopsServicesStops(jsonIntermediate);
 //        NavHostFragment.findNavController(StopsServicesMasterFragment.this).navigate(action);
     }
+
+//    LocationManager locationManager;
+//    final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+//    boolean isLocationPermissionGranted = false;
+//
+//
+//    private void checkLocationPermission() {
+//        if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+//                && ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            // Consider calling
+//            //    ActivityCompat#requestPermissions
+//            // here to request the missing permissions, and then overriding
+//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//            //                                          int[] grantResults)
+//            // to handle the case where the user grants the permission. See the documentation
+//            // for ActivityCompat#requestPermissions for more details.
+//            ActivityCompat.requestPermissions(this.getActivity(),
+//                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+//                    MY_PERMISSIONS_REQUEST_LOCATION);
+//
+//            return;
+//        } else {
+//            newStopsServicesFragment.setLocationPermissionGranted(true);
+//        }
+//    }
+//
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode,
+//                                           String permissions[], int[] grantResults) {
+//        switch (requestCode) {
+//            case MY_PERMISSIONS_REQUEST_LOCATION: {
+//                // If request is cancelled, the result arrays are empty.
+//                if (grantResults.length > 0
+//                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//
+//                    // permission was granted, yay! Do the
+//                    // location-related task you need to do.
+//                    if (ContextCompat.checkSelfPermission(this.getContext(),
+//                            Manifest.permission.ACCESS_FINE_LOCATION)
+//                            == PackageManager.PERMISSION_GRANTED) {
+//                        isLocationPermissionGranted = true;
+//                        //TODO: pass in Lat/Lng and bool for location
+//                    }
+//
+//                } else {
+//
+//                    // permission denied, boo! Disable the
+//                    // functionality that depends on this permission.
+//                    isLocationPermissionGranted = false;
+//
+//                }
+//                return;
+//            }
+//
+//        }
+////        getUserLocationAndStopList(isLocationPermissionGranted);
+//        newStopsServicesFragment.setLocationPermissionGranted(isLocationPermissionGranted);
+//
+//    }
+//
+//    Location userLocation;
+//    Double userLatitude;
+//    Double userLongitude;
+
+//    private void getUserLocationAndStopList(boolean isLocationPermissionGranted) {
+//
+//        try {
+//            userLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//            if (userLocation == null) {
+//                getUserLocationAndStopList(isLocationPermissionGranted);
+//            }
+//        } catch (SecurityException e) {
+//            userLocation.setLatitude(0.0);
+//            userLocation.setLongitude(0.0);
+//        }
+//        newStopsServicesFragment.setUserLocation(userLocation);
+//    }
 
 }

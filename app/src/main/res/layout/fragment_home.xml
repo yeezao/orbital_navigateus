@@ -4,7 +4,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.HomeFragment">
+    tools:context=".ui.home.HomeFragment"
+    android:background="@color/white"
+    >
+
+<!--    <ImageView-->
+<!--        android:id="@+id/imageButtonClickForMore"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginEnd="20dp"-->
+<!--        android:background="?android:attr/selectableItemBackgroundBorderless"-->
+<!--        android:clickable="true"-->
+<!--        android:focusable="true"-->
+<!--        android:elevation="10dp"-->
+<!--        android:src="@drawable/ic_baseline_more_vert_24"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/appBarLayout"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/appBarLayout" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/textView2"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:elevation="10dp"-->
+<!--        android:fontFamily="sans-serif-medium"-->
+<!--        android:text="Home"-->
+<!--        android:textColor="@color/white"-->
+<!--        android:textSize="22sp"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/appBarLayout"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/appBarLayout"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/appBarLayout" />-->
 
     <View
         android:id="@+id/view"
@@ -22,7 +52,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="1dp"
         android:layout_marginEnd="40dp"
         android:backgroundTint="@color/transparent"
         android:hint="Search stops, buildings, services..."
@@ -103,10 +132,10 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:src="@drawable/ic_baseline_search_24"
-        app:layout_constraintBottom_toTopOf="@+id/view"
+        app:layout_constraintBottom_toBottomOf="@+id/home_search"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/home_search"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/home_search" />
 
     <TextView
         android:id="@+id/textView_timingTest"

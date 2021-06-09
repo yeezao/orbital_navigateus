@@ -48,6 +48,8 @@ public class TabViewPagerAdapter extends FragmentPagerAdapter {
         super(fm);
     }
 
+
+
     @Override
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
@@ -78,7 +80,7 @@ public class TabViewPagerAdapter extends FragmentPagerAdapter {
             case 1:
                 return "LTA Stops";
             case 2:
-                return "NUS Services";
+                return "NUS Routes";
 
         }
         return null;

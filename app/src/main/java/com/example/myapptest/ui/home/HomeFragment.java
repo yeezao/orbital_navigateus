@@ -1,39 +1,41 @@
 package com.example.myapptest.ui.home;
 
+import android.app.ActionBar;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.myapptest.MainActivity;
 import com.example.myapptest.R;
-import com.example.myapptest.data.busstopinformation.StopList;
-import com.example.myapptest.data.timings.BusArrivalTimings;
-import com.example.myapptest.ui.stops_services.StopsServicesLTAFragment;
-import com.jayway.jsonpath.JsonPath;
+import com.google.android.material.appbar.AppBarLayout;
 
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class HomeFragment extends Fragment {
+
+    public HomeFragment() {
+        setRetainInstance(true);
+    }
 
 //    private HomeViewModel homeViewModel;
 //    private FragmentHomeBinding binding;
@@ -41,8 +43,28 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+//        Toolbar homeToolbar = view.findViewById(R.id.home_toolbar);
+//        homeToolbar.setTitle("Home");
+//        ((AppCompatActivity)getActivity()).setSupportActionBar(homeToolbar);
+//        homeToolbar.setTitleTextColor(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.white));
+//        setHasOptionsMenu(true);
+//        homeToolbar.setTitle("Home");
 
+//        ActionBar actionBar = getActivity().getActionBar();
+        setHasOptionsMenu(true);
+
+        return view;
+
+    }
+
+    @Override
+    public void onCreateOptionsMenu(
+            Menu menu, MenuInflater inflater) {
+        menu.clear();
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Home");
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.home_toolbar_menu, menu);
     }
 
 //        homeViewModel =

@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat;
 import com.example.myapptest.R;
 import com.example.myapptest.data.busstopinformation.ServiceInStopDetails;
 import com.example.myapptest.data.busstopinformation.StopList;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.HashMap;
 import java.util.List;
@@ -163,6 +164,12 @@ public class StopsMainAdapter extends BaseExpandableListAdapter {
                     imageViewLive2Time.setVisibility(ImageView.INVISIBLE);
 //                textViewTime2Live.setText("");
 //                textViewTime2Live.setBackgroundColor(ContextCompat.getColor(context, R.color.transparent));
+                } else if (child.getSecondArrival().charAt(0) == '-') {
+                    textViewTime2.setText("< LAST BUS");
+                    textViewTime2.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
+                    textViewTime2.setTextColor(ContextCompat.getColor(context, R.color.grey));
+                    textViewTime2.setTextSize(14);
+                    imageViewLive2Time.setVisibility(ImageView.INVISIBLE);
                 } else {
                     textViewTime2.setText(child.getSecondArrival());
                     if (child.getSecondArrivalLive().length() == 0) {
