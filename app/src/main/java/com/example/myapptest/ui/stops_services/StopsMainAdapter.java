@@ -1,11 +1,13 @@
 package com.example.myapptest.ui.stops_services;
 
 import android.content.Context;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
@@ -74,7 +76,7 @@ public class StopsMainAdapter extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         StopList group = getGroup(groupPosition);
-        if(convertView == null){
+        if (convertView == null){
             LayoutInflater layoutInflater = (LayoutInflater) this.context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             if (group.getStopDescription() == null) {
@@ -93,6 +95,25 @@ public class StopsMainAdapter extends BaseExpandableListAdapter {
 
         }
 
+//        ProgressBar onClickProgressBar = convertView.findViewById(R.id.onGroupClickProgressBar);
+
+//        convertView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                onClickProgressBar.setVisibility(View.VISIBLE);
+//                Handler handler = new Handler();
+//                handler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        if (isExpanded == true) {
+//                            onClickProgressBar.setVisibility(View.INVISIBLE);
+//                            handler.removeCallbacksAndMessages(null);
+//                        }
+//                        handler.postDelayed(this, 200);
+//                    }
+//                }, 200);
+//            }
+//        });
 
 //        TextView textViewSubParent = convertView.findViewById(R.id.list_subparent);
 //        textViewSubParent.setText(group);

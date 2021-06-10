@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/setArrivalNotificationsDialog"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.stops_services.SetArrivalNotificationsDialogFragment" >
+
+    <View
+        android:id="@+id/view_dialog_arrivalnofitication"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="22dp"
+        android:layout_marginEnd="20dp"
+        android:background="@color/grey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/arrivalNotificationsStopName" />
+
+    <TextView
+        android:id="@+id/textView_setArrivalNotificationsDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="25dp"
+        android:text="Set arrival notifications for this stop"
+        android:textColor="@android:color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view_dialog_arrivalnofitication" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switch1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view_dialog_arrivalnofitication" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/containerForChipGroup"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_setArrivalNotificationsDescription">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/setServicesToWatchChipGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:chipSpacingHorizontal="15dp"
+            app:chipSpacingVertical="15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/chip_1"-->
+<!--                style="@style/Widget.MaterialComponents.Chip.Choice"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:checked="false"-->
+<!--                android:text="D1"-->
+<!--                app:ensureMinTouchTargetSize="false" />-->
+
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/chip_2"-->
+<!--                style="@style/Widget.MaterialComponents.Chip.Choice"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:checked="false"-->
+<!--                android:text="D2"-->
+<!--                app:ensureMinTouchTargetSize="false" />-->
+
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/chip_3"-->
+<!--                style="@style/Widget.MaterialComponents.Chip.Choice"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:checked="false"-->
+<!--                android:text="B1"-->
+<!--                app:ensureMinTouchTargetSize="false" />-->
+
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/chip_4"-->
+<!--                style="@style/Widget.MaterialComponents.Chip.Choice"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:checked="false"-->
+<!--                android:text="B2"-->
+<!--                app:ensureMinTouchTargetSize="false" />-->
+
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/chip_5"-->
+<!--                style="@style/Widget.MaterialComponents.Chip.Choice"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:checked="false"-->
+<!--                android:text="C(To FOS)"-->
+<!--                app:ensureMinTouchTargetSize="false" />-->
+
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/chip_6"-->
+<!--                style="@style/Widget.MaterialComponents.Chip.Choice"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:checked="false"-->
+<!--                android:text="C(To KRT)"-->
+<!--                app:ensureMinTouchTargetSize="false" />-->
+
+        </com.google.android.material.chip.ChipGroup>
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            android:text="Notify me when the bus is"
+            android:textColor="@android:color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/setServicesToWatchChipGroup" />
+
+        <Spinner
+            android:id="@+id/chooseTimeSpinner"
+            style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="23dp"
+            android:dropDownWidth="50dp"
+            android:spinnerMode="dropdown"
+            app:layout_constraintStart_toEndOf="@+id/textView8"
+            app:layout_constraintTop_toBottomOf="@+id/setServicesToWatchChipGroup" />
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="20dp"
+            android:text="minute(s) away."
+            android:textColor="@android:color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView8" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/arrivalNotificationsStopName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="25dp"
+        android:fontFamily="sans-serif-light"
+        android:textColor="@android:color/black"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

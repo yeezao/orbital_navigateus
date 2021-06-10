@@ -1,9 +1,9 @@
 package com.example.myapptest.ui.stops_services;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -19,10 +19,8 @@ import android.widget.ExpandableListView;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.location.LocationManagerCompat;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ProcessLifecycleOwner;
@@ -37,7 +35,6 @@ import com.android.volley.toolbox.Volley;
 import com.example.myapptest.R;
 import com.example.myapptest.data.busstopinformation.ArrivalNotifications;
 import com.example.myapptest.data.busstopinformation.ServiceInStopDetails;
-import com.example.myapptest.data.busstopinformation.StopDetails;
 import com.example.myapptest.data.busstopinformation.StopList;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -59,6 +56,7 @@ public class StopsServicesFragment extends Fragment {
     HashMap<StopList, List<ServiceInStopDetails>> listItem;
     StopsMainAdapter adapter;
 
+    //for location permissions and locating
     LocationManager locationManager;
     LocationManager secondLocationManager;
     Location userLocation = new Location("");
@@ -68,10 +66,11 @@ public class StopsServicesFragment extends Fragment {
 
     View viewForFragment;
 
-    //to store arrival data
+    //to store arrival data for setting arrival notifications
     List<ArrivalNotifications> arrivalNotificationsArray;
     ArrivalNotifications singleStopArrivalNotification;
 
+    //variables for service info at a particular stop
     ServiceInStopDetails serviceInfoAtStop;
     List<ServiceInStopDetails> servicesAllInfoAtStop;
     List<String> servicesAtStop;
@@ -252,6 +251,10 @@ public class StopsServicesFragment extends Fragment {
 
         viewForFragment = view;
 
+        floatingRefreshButton = view.findViewById(R.id.floating_refresh_button);
+        ProgressBar refreshTimingProgressBar = view.findViewById(R.id.progressBar_refreshTiming);
+        floatingRefreshButton.setImageResource(R.drawable.ic_outline_cancel_24);
+
         expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
@@ -259,10 +262,21 @@ public class StopsServicesFragment extends Fragment {
                 if (expandableListView.isGroupExpanded(groupPosition)) {
                     expandableListView.collapseGroup(groupPosition);
                 } else {
+                    refreshTimingProgressBar.setVisibility(View.VISIBLE);
+                    refreshTimingProgressBar.bringToFront();
+                    refreshTimingProgressBar.setClickable(false);
                     getListOfChildServices(groupPosition, true, new VolleyCallBack() {
                         @Override
                         public void onSuccess() {
                             expandableListView.expandGroup(groupPosition, true);
+                            refreshTimingProgressBar.setClickable(true);
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    refreshTimingProgressBar.setVisibility(View.INVISIBLE);
+                                }
+                            }, 200);
                         }
                     });
                 }
@@ -280,6 +294,7 @@ public class StopsServicesFragment extends Fragment {
                             Snackbar.LENGTH_LONG);
                     snackbar.setAnchorView(R.id.textView_container);
                     snackbar.show();
+                    SetArrivalNotificationsDialogFragment dialogFragment;
                     boolean isStopBeingWatched = false;
                     for (ArrivalNotifications temp : arrivalNotificationsArray) {
                         if (temp.getStopId() == listOfAllStops.get(groupPosition).getStopId() && temp.isWatchingForArrival()) {
@@ -291,14 +306,19 @@ public class StopsServicesFragment extends Fragment {
                     if (!isStopBeingWatched) {
                         singleStopArrivalNotification = new ArrivalNotifications();
                         singleStopArrivalNotification.setStopId(listOfAllStops.get(groupPosition).getStopId());
+                        singleStopArrivalNotification.setStopName(listOfAllStops.get(groupPosition).getStopName());
                         singleStopArrivalNotification.setWatchingForArrival(false);
                         try {
                             singleStopArrivalNotification.setServicesAtStop(listItem.get(listGroup.get(groupPosition)));
+                            dialogFragment = SetArrivalNotificationsDialogFragment.newInstance(singleStopArrivalNotification);
+                            dialogFragment.show(getChildFragmentManager(), SetArrivalNotificationsDialogFragment.TAG);
                         } catch (NullPointerException e) {
                             getListOfChildServices(groupPosition, false, new VolleyCallBack() {
                                 @Override
                                 public void onSuccess() {
                                     singleStopArrivalNotification.setServicesAtStop(listItem.get(listGroup.get(groupPosition)));
+                                    SetArrivalNotificationsDialogFragment dialogFragment = SetArrivalNotificationsDialogFragment.newInstance(singleStopArrivalNotification);
+                                    dialogFragment.show(getChildFragmentManager(), SetArrivalNotificationsDialogFragment.TAG);
                                 }
                             });
                         }
@@ -312,9 +332,6 @@ public class StopsServicesFragment extends Fragment {
 //        Button refreshButton = view.findViewById(R.id.floating_refresh_button);
 //        refreshButton.setOnClickListener(new View.OnClickListener());
 
-        floatingRefreshButton = view.findViewById(R.id.floating_refresh_button);
-        ProgressBar refreshTimingProgressBar = view.findViewById(R.id.progressBar_refreshTiming);
-        floatingRefreshButton.setImageResource(R.drawable.ic_outline_cancel_24);
 //        FloatingActionButton floatingGetLocationButton = view.findViewById(R.id.floating_refresh_location_button);
 //        ProgressBar refreshLocationProgressBar = view.findViewById(R.id.progressBar_refreshLocation);
 
@@ -392,7 +409,7 @@ public class StopsServicesFragment extends Fragment {
                 });
             }
         }
-        if (!searchingLocation) {
+        if (!searchingLocation && isOnClick) {
             setRefreshCircleInvisible(refreshTimingProgressBar, 800);
         }
     }
@@ -414,6 +431,7 @@ public class StopsServicesFragment extends Fragment {
         progressBarInvisible = true;
     }
 
+    //for getting full list of stops (parent only)
     List<StopList> listOfAllStops;
     StopList listOfStops;
     List<String> listOfNames;
@@ -475,10 +493,8 @@ public class StopsServicesFragment extends Fragment {
 
     }
 
-    ServiceInStopDetails list;
-    List<ServiceInStopDetails> listList;
-
     int j;
+    boolean didOrderChange = false;
 
     private void initListData() {
 
@@ -500,9 +516,16 @@ public class StopsServicesFragment extends Fragment {
                     }
                 }
                 if (nearestToUserIndex != i) {
+                    didOrderChange = true;
                     Collections.swap(listOfAllStops, i, nearestToUserIndex);
                 }
             }
+            if (didOrderChange) {
+                for (i = 0; i < listOfAllStops.size(); i++) {
+                    expandableListView.collapseGroup(i);
+                }
+            }
+            didOrderChange = false;
         }
         listGroup.clear();
         for (i = 0; i < listOfAllStops.size(); i++) {
