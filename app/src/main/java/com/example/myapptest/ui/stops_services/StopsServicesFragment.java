@@ -22,6 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ProcessLifecycleOwner;
 
@@ -32,6 +33,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.myapptest.MainActivity;
 import com.example.myapptest.R;
 import com.example.myapptest.data.busstopinformation.ArrivalNotifications;
 import com.example.myapptest.data.busstopinformation.ServiceInStopDetails;
@@ -67,7 +69,7 @@ public class StopsServicesFragment extends Fragment {
     View viewForFragment;
 
     //to store arrival data for setting arrival notifications
-    List<ArrivalNotifications> arrivalNotificationsArray;
+    List<ArrivalNotifications> arrivalNotificationsArray = new ArrayList<>();
     ArrivalNotifications singleStopArrivalNotification;
 
     //variables for service info at a particular stop
@@ -85,6 +87,7 @@ public class StopsServicesFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         View view = inflater.inflate(R.layout.fragment_stops_services, container, false);
 
         view.findViewById(R.id.StopsNUSMainLoadingProgressBar).setVisibility(View.VISIBLE);
@@ -145,7 +148,7 @@ public class StopsServicesFragment extends Fragment {
         @Override
         public void onLocationChanged(@NonNull Location location) {
             Log.e("network location is: ", location + "");
-            if (location.getAccuracy() < 25) {
+            if (location.getAccuracy() < 30) {
                 userLocation = location;
                 secondLocationManager.removeUpdates(this);
                 locationManager.removeUpdates(gpsLocationListener);
@@ -172,7 +175,7 @@ public class StopsServicesFragment extends Fragment {
         @Override
         public void onLocationChanged(@NonNull Location location) {
             Log.e("gps location is: ", location + "");
-            if (location.getAccuracy() < 25) {
+            if (location.getAccuracy() < 30) {
                 userLocation = location;
                 locationManager.removeUpdates(this);
                 secondLocationManager.removeUpdates(networkLocationListener);
@@ -262,21 +265,21 @@ public class StopsServicesFragment extends Fragment {
                 if (expandableListView.isGroupExpanded(groupPosition)) {
                     expandableListView.collapseGroup(groupPosition);
                 } else {
-                    refreshTimingProgressBar.setVisibility(View.VISIBLE);
-                    refreshTimingProgressBar.bringToFront();
-                    refreshTimingProgressBar.setClickable(false);
+//                    refreshTimingProgressBar.setVisibility(View.VISIBLE);
+//                    refreshTimingProgressBar.bringToFront();
+//                    refreshTimingProgressBar.setClickable(false);
                     getListOfChildServices(groupPosition, true, new VolleyCallBack() {
                         @Override
                         public void onSuccess() {
                             expandableListView.expandGroup(groupPosition, true);
-                            refreshTimingProgressBar.setClickable(true);
-                            Handler handler = new Handler();
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    refreshTimingProgressBar.setVisibility(View.INVISIBLE);
-                                }
-                            }, 200);
+//                            refreshTimingProgressBar.setClickable(true);
+//                            Handler handler = new Handler();
+//                            handler.postDelayed(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    refreshTimingProgressBar.setVisibility(View.INVISIBLE);
+//                                }
+//                            }, 200);
                         }
                     });
                 }
@@ -296,9 +299,15 @@ public class StopsServicesFragment extends Fragment {
                     snackbar.show();
                     SetArrivalNotificationsDialogFragment dialogFragment;
                     boolean isStopBeingWatched = false;
-                    for (ArrivalNotifications temp : arrivalNotificationsArray) {
-                        if (temp.getStopId() == listOfAllStops.get(groupPosition).getStopId() && temp.isWatchingForArrival()) {
+                    arrivalNotificationsArray = ((MainActivity) getActivity()).getArrivalNotificationsArray();
+                    for (int i = 0; i < arrivalNotificationsArray.size(); i++) {
+                        if (arrivalNotificationsArray.get(i).getStopId().equals(listOfAllStops.get(groupPosition).getStopId())
+                                && arrivalNotificationsArray.get(i).isWatchingForArrival()) {
+                            Log.e("entered", "yes i  entered");
                             isStopBeingWatched = true;
+                            dialogFragment = SetArrivalNotificationsDialogFragment.newInstance(arrivalNotificationsArray.get(i));
+//                            dialogFragment.setArrivalNotificationsDialogListener(StopsServicesFragment.this);
+                            dialogFragment.show(getChildFragmentManager(), SetArrivalNotificationsDialogFragment.TAG);
                             break;
                             //TODO: break, pull existing watch info to programmatically set toggles/checkboxes and do not instantiate new singleStopArrivalNotification
                         }
@@ -308,16 +317,21 @@ public class StopsServicesFragment extends Fragment {
                         singleStopArrivalNotification.setStopId(listOfAllStops.get(groupPosition).getStopId());
                         singleStopArrivalNotification.setStopName(listOfAllStops.get(groupPosition).getStopName());
                         singleStopArrivalNotification.setWatchingForArrival(false);
-                        try {
+                        if (listItem.get(listGroup.get(groupPosition)) != null) {
+                            Log.e("listitem this pos is:", listItem.get(listGroup.get(groupPosition)) + "");
                             singleStopArrivalNotification.setServicesAtStop(listItem.get(listGroup.get(groupPosition)));
                             dialogFragment = SetArrivalNotificationsDialogFragment.newInstance(singleStopArrivalNotification);
+//                            dialogFragment.setArrivalNotificationsDialogListener(StopsServicesFragment.this);
                             dialogFragment.show(getChildFragmentManager(), SetArrivalNotificationsDialogFragment.TAG);
-                        } catch (NullPointerException e) {
+                        } else {
                             getListOfChildServices(groupPosition, false, new VolleyCallBack() {
                                 @Override
                                 public void onSuccess() {
+                                    Log.e("listitem this pos after refresh is:", listItem.get(listGroup.get(groupPosition)) + "");
                                     singleStopArrivalNotification.setServicesAtStop(listItem.get(listGroup.get(groupPosition)));
                                     SetArrivalNotificationsDialogFragment dialogFragment = SetArrivalNotificationsDialogFragment.newInstance(singleStopArrivalNotification);
+//                                    dialogFragment.setArrivalNotificationsDialogListener(StopsServicesFragment.this);
+//                                    dialogFragment.setTargetFragment(StopsServicesFragment.this, 0);
                                     dialogFragment.show(getChildFragmentManager(), SetArrivalNotificationsDialogFragment.TAG);
                                 }
                             });
@@ -438,35 +452,36 @@ public class StopsServicesFragment extends Fragment {
     List<String> listOfIds;
     List<Double> listOfLat;
     List<Double> listOfLong;
-    String jsonRaw;
+
+    String listOfStopsRetrieved;
+
 
     private void getListOfGroupStops() {
 
         floatingRefreshButton.setClickable(false);
 
-        Log.e("im here", "yes");
+        try {
+            listOfStopsRetrieved = ((MainActivity) getActivity()).getFirstPassStopsList();
+            if (listOfStopsRetrieved != null) {
+                ((MainActivity) getActivity()).setFirstPassStopsList(listOfStopsRetrieved);
+                AddStopsToList(listOfStopsRetrieved);
+            } else {
+                RePullStopsList();
+            }
+        } catch (NullPointerException e) {
+            RePullStopsList();
+        }
+    }
 
+    private void RePullStopsList() {
         String url = "https://nnextbus.nus.edu.sg/BusStops";
+        Log.e("im here in RePullStopsList", "yes");
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
-                Log.e("GetBusStopsList response is", response);
-                listOfAllStops = new ArrayList<>();
-                listOfNames = JsonPath.read(response, "$.BusStopsResult.busstops[*].caption");
-                listOfIds = JsonPath.read(response, "$.BusStopsResult.busstops[*].name");
-                listOfLong = JsonPath.read(response, "$.BusStopsResult.busstops[*].longitude");
-                listOfLat = JsonPath.read(response, "$.BusStopsResult.busstops[*].latitude");
-                for (int i = 0; i < listOfNames.size(); i++) {
-                    listOfStops = new StopList();
-                    listOfStops.setStopName(listOfNames.get(i));
-                    listOfStops.setStopId(listOfIds.get(i));
-                    listOfStops.setStopLongitude(listOfLong.get(i));
-                    listOfStops.setStopLatitude(listOfLat.get(i));
-                    listOfAllStops.add(listOfStops);
-                }
-                initListData();
+                AddStopsToList(response);
             }
         }, new Response.ErrorListener() {
 
@@ -488,9 +503,27 @@ public class StopsServicesFragment extends Fragment {
             }
         };
 
-        RequestQueue requestQueue = Volley.newRequestQueue(this.getContext());
-        requestQueue.add(stringRequest);
+        if (this.getContext() != null) {
+            RequestQueue requestQueue = Volley.newRequestQueue(this.getContext());
+            requestQueue.add(stringRequest);
+        }
+    }
 
+    private void AddStopsToList(String data) {
+        listOfAllStops = new ArrayList<>();
+        listOfNames = JsonPath.read(data, "$.BusStopsResult.busstops[*].caption");
+        listOfIds = JsonPath.read(data, "$.BusStopsResult.busstops[*].name");
+        listOfLong = JsonPath.read(data, "$.BusStopsResult.busstops[*].longitude");
+        listOfLat = JsonPath.read(data, "$.BusStopsResult.busstops[*].latitude");
+        for (int i = 0; i < listOfNames.size(); i++) {
+            listOfStops = new StopList();
+            listOfStops.setStopName(listOfNames.get(i));
+            listOfStops.setStopId(listOfIds.get(i));
+            listOfStops.setStopLongitude(listOfLong.get(i));
+            listOfStops.setStopLatitude(listOfLat.get(i));
+            listOfAllStops.add(listOfStops);
+        }
+        initListData();
     }
 
     int j;
@@ -639,4 +672,5 @@ public class StopsServicesFragment extends Fragment {
     public interface VolleyCallBack {
         void onSuccess();
     }
+
 }

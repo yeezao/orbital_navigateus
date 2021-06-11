@@ -2,11 +2,24 @@ package com.example.myapptest;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.myapptest.data.busstopinformation.ArrivalNotifications;
+import com.example.myapptest.data.naviagationdata.NavigationSearchInfo;
 import com.example.myapptest.databinding.ActivityMainBinding;
 import com.example.myapptest.ui.directions.DirectionsFragment;
 import com.example.myapptest.ui.home.HomeFragment;
+import com.example.myapptest.ui.stops_services.SetArrivalNotificationsDialogFragment;
 import com.example.myapptest.ui.stops_services.StopsServicesFragment;
 import com.example.myapptest.ui.stops_services.StopsServicesMasterFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -25,9 +38,12 @@ import com.example.myapptest.databinding.ActivityMainBinding;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SetArrivalNotificationsDialogFragment.ArrivalNotificationsDialogListenerForActivity {
 
     private ActivityMainBinding binding;
 
@@ -52,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
 
         navView = findViewById(R.id.nav_view);
         navView.bringToFront();
+
+        getStringOfGroupStops();
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -78,39 +96,15 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView.OnNavigationItemReselectedListener mOnNavigationItemReselectedListener
             = new BottomNavigationView.OnNavigationItemReselectedListener() {
 
-        @Override
+        @Override //do nothing
         public void onNavigationItemReselected(@NonNull MenuItem item) {
-            //do nothing
-//            switch (item.getItemId()) {
-//                case R.id.navigation_home:
-////                    fm.beginTransaction().remove(homeFragment).remove(stopsServicesMasterFragment).remove(directionsFragment).commit();
-////                    fm.beginTransaction().add(R.id.nav_host_fragment_activity_main, homeFragment, "1").commit();
-//                    fm.beginTransaction().remove(homeFragment).commit();
-//                    homeFragment = new HomeFragment();
-//                    fm.beginTransaction().add(R.id.nav_host_fragment_activity_main, homeFragment, "1").show(homeFragment).commitNow();
-////                    fm.beginTransaction().hide(active).show(homeFragment).commit();
-////                    active = homeFragment;
-//
-//                case R.id.navigation_stops_services_master:
-//                    fm.beginTransaction().remove(stopsServicesMasterFragment).commit();
-//                    stopsServicesMasterFragment = new StopsServicesMasterFragment();
-//                    fm.beginTransaction().add(R.id.nav_host_fragment_activity_main, stopsServicesMasterFragment, "2").show(stopsServicesMasterFragment).commitNow();
-////                    fm.beginTransaction().replace(R.id.nav_host_fragment_activity_main, stopsServicesMasterFragment).commitNow();
-////                    fm.beginTransaction().hide(active).show(stopsServicesMasterFragment).commit();
-////                    active = stopsServicesMasterFragment;
-//
-//                case R.id.navigation_directions:
-//                    fm.beginTransaction().remove(directionsFragment).commit();
-//                    directionsFragment = new DirectionsFragment();
-//                    fm.beginTransaction().add(R.id.nav_host_fragment_activity_main, directionsFragment, "3").show(directionsFragment).commitNow();
-////                    fm.beginTransaction().replace(R.id.nav_host_fragment_activity_main, directionsFragment).commitNow();
-////                    fm.beginTransaction().hide(active).show(directionsFragment).commit();
-////                    active = directionsFragment;
-//            }
         }
 
     };
 
+
+
+    //currently not in use
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -160,28 +154,123 @@ public class MainActivity extends AppCompatActivity {
 //        }
 //    });
 
-    @Override
-    public void onBackPressed() {
-
-        int count = getSupportFragmentManager().getBackStackEntryCount();
-
-        Fragment fragmentChecker = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_main);
-
-        if (count == 0) {
-            super.onBackPressed();
-            //additional code
-        } else if (fragmentChecker instanceof StopsServicesMasterFragment
-                || fragmentChecker instanceof DirectionsFragment || fragmentChecker instanceof HomeFragment) {
-            fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            navView.getMenu().getItem(1).setChecked(true);
-//        } else if (fragmentChecker instanceof HomeFragment) {
+//    @Override
+//    public void onBackPressed() {
+//
+//        int count = getSupportFragmentManager().getBackStackEntryCount();
+//
+//        Fragment fragmentChecker = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_main);
+//
+//        if (count == 0) {
+//            super.onBackPressed();
+//            //additional code
+//        } else if (fragmentChecker instanceof StopsServicesMasterFragment
+//                || fragmentChecker instanceof DirectionsFragment || fragmentChecker instanceof HomeFragment) {
 //            fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 //            navView.getMenu().getItem(1).setChecked(true);
+////        } else if (fragmentChecker instanceof HomeFragment) {
+////            fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+////            navView.getMenu().getItem(1).setChecked(true);
+////            super.onBackPressed();
+//        } else {
 //            super.onBackPressed();
-        } else {
-            super.onBackPressed();
-        }
+//        }
+//
+//    }
 
+    //variables and methods for global list of bus stops
+    String firstPassStopsList;
+
+    private void getStringOfGroupStops() {
+
+        String url = "https://nnextbus.nus.edu.sg/BusStops";
+
+        StringRequest stringRequest = new StringRequest
+                (Request.Method.GET, url, new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+                        firstPassStopsList = response;
+                        Log.d("response is", response);
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO: Handle error
+                        Log.e("volley API error", "" + error);
+                    }
+
+
+                }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/json; charset=UTF-8");
+                params.put("Authorization", getString(R.string.auth_header));
+                return params;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this.getApplicationContext());
+        requestQueue.add(stringRequest);
+
+    }
+
+    public String getFirstPassStopsList() {
+        return firstPassStopsList;
+    }
+
+    public void setFirstPassStopsList(String firstPassStopsList) {
+        this.firstPassStopsList = firstPassStopsList;
+    }
+
+    //variables and methods for global bus arrival notifications
+    List<ArrivalNotifications> arrivalNotificationsArray = new ArrayList<>();
+
+    @Override
+    public void onDialogPositiveClick(ArrivalNotifications singleStopArrivalNotifications) {
+        int i;
+        boolean stopRepeated = false;
+        Log.e("entered", "yes in activity");
+        for (i = 0; i < arrivalNotificationsArray.size(); i++) {
+            if (singleStopArrivalNotifications.getStopId() == arrivalNotificationsArray.get(i).getStopId()
+                    && singleStopArrivalNotifications.isWatchingForArrival()) {
+                arrivalNotificationsArray.set(i, singleStopArrivalNotifications);
+                Log.e("stopname repeated is" , singleStopArrivalNotifications.getStopName());
+                stopRepeated = true;
+                break;
+            }
+        }
+        if (stopRepeated == false) {
+            arrivalNotificationsArray.add(singleStopArrivalNotifications);
+            Log.e("stopname new is" , singleStopArrivalNotifications.getStopId());
+        }
+    }
+
+    @Override
+    public void onDialogNegativeClick() {
+        //do nothing
+    }
+
+    public List<ArrivalNotifications> getArrivalNotificationsArray() {
+        return arrivalNotificationsArray;
+    }
+
+    public void setArrivalNotificationsArray(List<ArrivalNotifications> arrivalNotificationsArray) {
+        this.arrivalNotificationsArray = arrivalNotificationsArray;
+    }
+
+    //variables and methods for global navigation information
+    NavigationSearchInfo navigationSearchInfo;
+
+    public NavigationSearchInfo getNavigationSearchInfo() {
+        return navigationSearchInfo;
+    }
+
+    public void setNavigationSearchInfo(NavigationSearchInfo navigationSearchInfo) {
+        this.navigationSearchInfo = navigationSearchInfo;
     }
 }
 

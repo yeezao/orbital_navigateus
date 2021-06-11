@@ -44,14 +44,6 @@ public class HomeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-//        Toolbar homeToolbar = view.findViewById(R.id.home_toolbar);
-//        homeToolbar.setTitle("Home");
-//        ((AppCompatActivity)getActivity()).setSupportActionBar(homeToolbar);
-//        homeToolbar.setTitleTextColor(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.white));
-//        setHasOptionsMenu(true);
-//        homeToolbar.setTitle("Home");
-
-//        ActionBar actionBar = getActivity().getActionBar();
         setHasOptionsMenu(true);
 
         return view;
@@ -67,24 +59,6 @@ public class HomeFragment extends Fragment {
         inflater.inflate(R.menu.home_toolbar_menu, menu);
     }
 
-//        homeViewModel =
-//                new ViewModelProvider(this).get(HomeViewModel.class);
-//
-//        binding = FragmentHomeBinding.inflate(inflater, container, false);
-//        View root = binding.getRoot();
-//
-//        final TextView textView = binding.textHome;
-//        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable String s) {
-//                textView.setText(s);
-//            }
-//        });
-//        return root;
-
-
-    String firstPassStopsList;
-
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -98,55 +72,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        getStringOfGroupStops(view);
+//        getStringOfGroupStops(view);
 
     }
-
-    private void getStringOfGroupStops(View view) {
-
-        TextView textView = view.findViewById(R.id.textView_timingTest);
-        String url = "https://nnextbus.nus.edu.sg/BusStops";
-        String auth = "Basic TlVTbmV4dGJ1czoxM2RMP3pZLDNmZVdSXiJU";
-
-        StringRequest stringRequest = new StringRequest
-                (Request.Method.GET, url, new Response.Listener<String>() {
-
-                    @Override
-                    public void onResponse(String response) {
-                        firstPassStopsList = response;
-                        Log.d("response is", response);
-//                        textView.setText("Response: " + response);
-                    }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // TODO: Handle error
-                        Log.e("volley API error", "" + error);
-                    }
-
-
-                }) {
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("Content-Type", "application/json; charset=UTF-8");
-                params.put("Authorization", auth);
-                return params;
-            }
-        };
-
-        RequestQueue requestQueue = Volley.newRequestQueue(this.getContext().getApplicationContext());
-        requestQueue.add(stringRequest);
-
-    }
-
-
-//
-//    @Override
-//    public void onDestroyView() {
-//        super.onDestroyView();
-//        binding = null;
-//    }
 }

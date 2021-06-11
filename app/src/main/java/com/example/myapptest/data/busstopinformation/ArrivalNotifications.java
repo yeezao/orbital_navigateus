@@ -17,6 +17,7 @@ public class ArrivalNotifications {
     private String stopName;
     private String stopId;
     private List<ServiceInStopDetails> servicesAtStop;
+    private int timeToWatch;
 
     public String getStopName() {
         return stopName;
@@ -72,10 +73,14 @@ public class ArrivalNotifications {
 
     public void setServicesAtStop(List<ServiceInStopDetails> servicesAtStop) {
         this.servicesAtStop = servicesAtStop;
-        for (ServiceInStopDetails temp: servicesAtStop) {
-            Log.e("this instance is:", temp.getServiceNum() + "");
-        }
     }
 
 
+    public int getTimeToWatch() {
+        return timeToWatch;
+    }
+
+    public void setTimeToWatch(int timeToWatch) {
+        this.timeToWatch = timeToWatch;
+    }
 }

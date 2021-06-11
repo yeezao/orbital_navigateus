@@ -55,18 +55,16 @@
         <action
             android:id="@+id/action_navigation_directions_to_navigation_stops_services"
             app:destination="@id/navigation_stops_services_master" />
-        <action
-            android:id="@+id/action_navigation_directions_to_navigation_directions_result"
-            app:destination="@id/navigation_directions_result" />
+
     </fragment>
 
-    <fragment
-        android:id="@+id/navigation_directions_result"
-        android:name="com.example.myapptest.ui.directions.DirectionsResultFragment"
-        android:label="Directions (Results)"
-        tools:layout="@layout/fragment_directions_result" >
-        <action
-            android:id="@+id/action_navigation_directions_to_navigation_directions_result"
-            app:destination="@id/navigation_directions_result" />
-    </fragment>
+<!--    <fragment-->
+<!--        android:id="@+id/navigation_directions_result"-->
+<!--        android:name="com.example.myapptest.ui.directions.DirectionsResultFragment"-->
+<!--        android:label="Directions (Results)"-->
+<!--        tools:layout="@layout/fragment_directions_result" >-->
+<!--        <action-->
+<!--            android:id="@+id/action_navigation_directions_to_navigation_directions_result"-->
+<!--            app:destination="@id/navigation_directions_result" />-->
+<!--    </fragment>-->
 </navigation>
