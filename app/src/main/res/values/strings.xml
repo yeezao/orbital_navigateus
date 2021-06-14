@@ -12,6 +12,13 @@
     <string name="lta_stops">LTA Stops</string>
     <string name="enter_stop_or_building_name">Enter stop or building name</string>
     <string name="directions_input_error">Please check that you\'ve entered both origin and destination</string>
+    <string name="persistent_channel_name">Monitoring-In-Progress Notifications</string>
+    <string name="persistent_channel_description">Displays a notificaiton while bus arrival monitoring is active</string>
+    <string name="arrivalnotifications_monitoring_notif_id">ArrivalMonitoringNotifId</string>
+
+    <string name="regular_channel_name">Arrival Monitoring Trigger Notifications</string>
+    <string name="regular_channel_description">Displays a notificaiton when the arrival timing set is reached</string>
+    <string name="arrivalnotifications_triggered_notif_id">ArrivalTriggeredNotifId</string>
 
     <string-array name="chooseTimeSpinner_array">
         <item>1</item>

@@ -1,5 +1,11 @@
 package com.example.myapptest.data.naviagationdata;
 
+import com.example.myapptest.data.busstopinformation.ServiceInStopDetails;
+import com.example.myapptest.data.busstopinformation.StopList;
+import com.example.myapptest.ui.stops_services.StopsServicesFragment;
+
+import java.util.List;
+
 public class NavigationSearchInfo {
 
     private String origin;
@@ -7,6 +13,11 @@ public class NavigationSearchInfo {
     private boolean sheltered;
     private boolean barrierFree;
     private boolean internalBusOnly;
+    private StopList originDetails;
+    private StopList destDetails;
+    private List<ServiceInStopDetails> originServiceDetails;
+    private List<ServiceInStopDetails> destServiceDetails;
+
 
     public String getOrigin() {
         return origin;
@@ -47,5 +58,39 @@ public class NavigationSearchInfo {
     public void setInternalBusOnly(boolean internalBusOnly) {
         this.internalBusOnly = internalBusOnly;
     }
+
+    public StopList getOriginDetails() {
+        return originDetails;
+    }
+
+    public void setOriginDetails(StopList originDetails) {
+        this.originDetails = originDetails;
+    }
+
+    public StopList getDestDetails() {
+        return destDetails;
+    }
+
+    public void setDestDetails(StopList destDetails) {
+        this.destDetails = destDetails;
+    }
+
+
+    public List<ServiceInStopDetails> getOriginServiceDetails() {
+        return originServiceDetails;
+    }
+
+    public void setOriginServiceDetails(List<ServiceInStopDetails> originServiceDetails) {
+        this.originServiceDetails = originServiceDetails;
+    }
+
+    public List<ServiceInStopDetails> getDestServiceDetails() {
+        return destServiceDetails;
+    }
+
+    public void setDestServiceDetails(List<ServiceInStopDetails> destServiceDetails) {
+        this.destServiceDetails = destServiceDetails;
+    }
+
 
 }

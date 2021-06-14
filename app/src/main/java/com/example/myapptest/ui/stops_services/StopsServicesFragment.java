@@ -81,6 +81,9 @@ public class StopsServicesFragment extends Fragment {
     List<String> firstArrivalLive;
     List<String> secondArrivalLive;
 
+    ProgressBar stopsNUSMainLoadingProgressBar;
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -91,6 +94,10 @@ public class StopsServicesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_stops_services, container, false);
 
         view.findViewById(R.id.StopsNUSMainLoadingProgressBar).setVisibility(View.VISIBLE);
+
+        floatingRefreshButton = view.findViewById(R.id.floating_refresh_button);
+        floatingRefreshButton.setImageResource(R.drawable.ic_outline_cancel_24);
+        stopsNUSMainLoadingProgressBar = view.findViewById(R.id.StopsNUSMainLoadingProgressBar);
 
         expandableListView = (ExpandableListView) view.findViewById(R.id.expandable_listview_nus_stops);
         listGroup = new ArrayList<>();
@@ -225,6 +232,11 @@ public class StopsServicesFragment extends Fragment {
                 snackbar.setAnchorView(R.id.nav_view);
                 snackbar.show();
                 searchingLocation = false;
+                if (isFirstRun == true) {
+                    getListOfGroupStops();
+                } else {
+                    initListData();
+                }
             }
 
         } catch (SecurityException e) {
@@ -254,9 +266,7 @@ public class StopsServicesFragment extends Fragment {
 
         viewForFragment = view;
 
-        floatingRefreshButton = view.findViewById(R.id.floating_refresh_button);
         ProgressBar refreshTimingProgressBar = view.findViewById(R.id.progressBar_refreshTiming);
-        floatingRefreshButton.setImageResource(R.drawable.ic_outline_cancel_24);
 
         expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
@@ -453,7 +463,7 @@ public class StopsServicesFragment extends Fragment {
     List<Double> listOfLat;
     List<Double> listOfLong;
 
-    String listOfStopsRetrieved;
+    List<StopList> listOfStopsRetrieved;
 
 
     private void getListOfGroupStops() {
@@ -461,10 +471,10 @@ public class StopsServicesFragment extends Fragment {
         floatingRefreshButton.setClickable(false);
 
         try {
-            listOfStopsRetrieved = ((MainActivity) getActivity()).getFirstPassStopsList();
+            listOfStopsRetrieved = ((MainActivity) getActivity()).getListOfAllStops();
             if (listOfStopsRetrieved != null) {
-                ((MainActivity) getActivity()).setFirstPassStopsList(listOfStopsRetrieved);
-                AddStopsToList(listOfStopsRetrieved);
+                ((MainActivity) getActivity()).setListOfAllStops(listOfStopsRetrieved);
+                initListData();
             } else {
                 RePullStopsList();
             }
@@ -509,12 +519,12 @@ public class StopsServicesFragment extends Fragment {
         }
     }
 
-    private void AddStopsToList(String data) {
+    private void AddStopsToList(String response) {
         listOfAllStops = new ArrayList<>();
-        listOfNames = JsonPath.read(data, "$.BusStopsResult.busstops[*].caption");
-        listOfIds = JsonPath.read(data, "$.BusStopsResult.busstops[*].name");
-        listOfLong = JsonPath.read(data, "$.BusStopsResult.busstops[*].longitude");
-        listOfLat = JsonPath.read(data, "$.BusStopsResult.busstops[*].latitude");
+        listOfNames = JsonPath.read(response, "$.BusStopsResult.busstops[*].caption");
+        listOfIds = JsonPath.read(response, "$.BusStopsResult.busstops[*].name");
+        listOfLong = JsonPath.read(response, "$.BusStopsResult.busstops[*].longitude");
+        listOfLat = JsonPath.read(response, "$.BusStopsResult.busstops[*].latitude");
         for (int i = 0; i < listOfNames.size(); i++) {
             listOfStops = new StopList();
             listOfStops.setStopName(listOfNames.get(i));
@@ -523,6 +533,7 @@ public class StopsServicesFragment extends Fragment {
             listOfStops.setStopLatitude(listOfLat.get(i));
             listOfAllStops.add(listOfStops);
         }
+        ((MainActivity) getActivity()).setListOfAllStops(listOfAllStops);
         initListData();
     }
 
@@ -569,7 +580,6 @@ public class StopsServicesFragment extends Fragment {
 
         Log.e("isfirstrun is:" , "" + isFirstRun);
 
-        ProgressBar stopsNUSMainLoadingProgressBar = getActivity().findViewById(R.id.StopsNUSMainLoadingProgressBar);
 
         if (isFirstRun == false) {
             adapter.notifyDataSetChanged();
@@ -588,20 +598,19 @@ public class StopsServicesFragment extends Fragment {
                     adapter.notifyDataSetChanged();
                 }
             }, 400);
+            if (ProcessLifecycleOwner.get().getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
+                timeRefreshHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        refreshTimings(false, viewForFragment);
+                        timeRefreshHandler.postDelayed(this, 20000);
+                    }
+                }, 20000);
+            }
         }
         isFirstRun = false;
-        if (ProcessLifecycleOwner.get().getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED) && isFirstRun == false) {
-            timeRefreshHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    refreshTimings(false, viewForFragment);
-                    timeRefreshHandler.postDelayed(this, 20000);
-                }
-            }, 20000);
-        }
+
     }
-
-
 
     private void getListOfChildServices(int groupPosition, boolean isOnClick, final VolleyCallBack callback) {
 

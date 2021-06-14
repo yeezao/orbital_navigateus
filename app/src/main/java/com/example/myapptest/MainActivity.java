@@ -1,11 +1,15 @@
 package com.example.myapptest;
 
-import android.content.DialogInterface;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.media.AudioAttributes;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -15,28 +19,27 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.myapptest.data.busstopinformation.ArrivalNotifications;
+import com.example.myapptest.data.busstopinformation.ServiceInStopDetails;
+import com.example.myapptest.data.busstopinformation.StopList;
 import com.example.myapptest.data.naviagationdata.NavigationSearchInfo;
 import com.example.myapptest.databinding.ActivityMainBinding;
 import com.example.myapptest.ui.directions.DirectionsFragment;
 import com.example.myapptest.ui.home.HomeFragment;
 import com.example.myapptest.ui.stops_services.SetArrivalNotificationsDialogFragment;
-import com.example.myapptest.ui.stops_services.StopsServicesFragment;
 import com.example.myapptest.ui.stops_services.StopsServicesMasterFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.myapptest.databinding.ActivityMainBinding;
-
-import org.jetbrains.annotations.NotNull;
+import com.jayway.jsonpath.JsonPath;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -68,8 +71,11 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
 
         navView = findViewById(R.id.nav_view);
         navView.bringToFront();
+        createNotificationChannel();
 
         getStringOfGroupStops();
+
+        BeginMonitoring();
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -102,7 +108,52 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
 
     };
 
+    NotificationManager notificationManager;
+    Uri soundUri;
 
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence persistentName = getString(R.string.persistent_channel_name);
+            String descriptionPersistent = getString(R.string.persistent_channel_description);
+            CharSequence regularName = getString(R.string.regular_channel_name);
+            String descriptionRegular = getString(R.string.regular_channel_description);
+            int importanceArrivalNotifications = NotificationManager.IMPORTANCE_HIGH;
+            AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                    .build();
+
+            NotificationChannel channelArrivalNotificationsPersistent
+                    = new NotificationChannel(getString(R.string.arrivalnotifications_monitoring_notif_id), persistentName, importanceArrivalNotifications);
+            channelArrivalNotificationsPersistent.setDescription(descriptionPersistent);
+            channelArrivalNotificationsPersistent.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+            channelArrivalNotificationsPersistent.enableVibration(false);
+            channelArrivalNotificationsPersistent.setSound(null, audioAttributes);
+            channelArrivalNotificationsPersistent.setBypassDnd(true);
+
+            NotificationChannel channelArrivalNotificationsRegular
+                    = new NotificationChannel(getString(R.string.arrivalnotifications_triggered_notif_id), "Notify Arrival", importanceArrivalNotifications);
+            channelArrivalNotificationsRegular.setDescription(descriptionRegular);
+            channelArrivalNotificationsRegular.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+            channelArrivalNotificationsRegular.setBypassDnd(true);
+            channelArrivalNotificationsRegular.enableLights(true);
+            channelArrivalNotificationsRegular.setVibrationPattern(new long[] {0, 1000, 1000, 1000});
+
+            soundUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.quite_impressed_565);
+            channelArrivalNotificationsRegular.setSound(soundUri, audioAttributes);
+            channelArrivalNotificationsRegular.enableVibration(true);
+
+            List<NotificationChannel> listToAdd = new ArrayList<>();
+            listToAdd.add(channelArrivalNotificationsPersistent);
+            listToAdd.add(channelArrivalNotificationsRegular);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            notificationManager = getSystemService(NotificationManager.class);
+//            notificationManager.createNotificationChannels(listToAdd);
+            notificationManager.createNotificationChannels(listToAdd);
+        }
+    }
 
     //currently not in use
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -181,6 +232,13 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
     //variables and methods for global list of bus stops
     String firstPassStopsList;
 
+    List<StopList> listOfAllStops;
+    StopList listOfStops;
+    List<String> listOfNames;
+    List<String> listOfIds;
+    List<Double> listOfLat;
+    List<Double> listOfLong;
+
     private void getStringOfGroupStops() {
 
         String url = "https://nnextbus.nus.edu.sg/BusStops";
@@ -191,6 +249,19 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
                     @Override
                     public void onResponse(String response) {
                         firstPassStopsList = response;
+                        listOfAllStops = new ArrayList<>();
+                        listOfNames = JsonPath.read(response, "$.BusStopsResult.busstops[*].caption");
+                        listOfIds = JsonPath.read(response, "$.BusStopsResult.busstops[*].name");
+                        listOfLong = JsonPath.read(response, "$.BusStopsResult.busstops[*].longitude");
+                        listOfLat = JsonPath.read(response, "$.BusStopsResult.busstops[*].latitude");
+                        for (int i = 0; i < listOfNames.size(); i++) {
+                            listOfStops = new StopList();
+                            listOfStops.setStopName(listOfNames.get(i));
+                            listOfStops.setStopId(listOfIds.get(i));
+                            listOfStops.setStopLongitude(listOfLong.get(i));
+                            listOfStops.setStopLatitude(listOfLat.get(i));
+                            listOfAllStops.add(listOfStops);
+                        }
                         Log.d("response is", response);
                     }
                 }, new Response.ErrorListener() {
@@ -218,40 +289,249 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
 
     }
 
-    public String getFirstPassStopsList() {
-        return firstPassStopsList;
-    }
-
-    public void setFirstPassStopsList(String firstPassStopsList) {
-        this.firstPassStopsList = firstPassStopsList;
-    }
-
     //variables and methods for global bus arrival notifications
     List<ArrivalNotifications> arrivalNotificationsArray = new ArrayList<>();
+    Handler monitoringHandler;
 
     @Override
     public void onDialogPositiveClick(ArrivalNotifications singleStopArrivalNotifications) {
         int i;
         boolean stopRepeated = false;
+        boolean startNewMonitoring = false;
+        NotificationCompat.Builder persistentBuilder = new NotificationCompat.Builder(this, getString(R.string.arrivalnotifications_monitoring_notif_id));
         Log.e("entered", "yes in activity");
         for (i = 0; i < arrivalNotificationsArray.size(); i++) {
             if (singleStopArrivalNotifications.getStopId() == arrivalNotificationsArray.get(i).getStopId()
-                    && singleStopArrivalNotifications.isWatchingForArrival()) {
+                    && singleStopArrivalNotifications.isWatchingForArrival() && singleStopArrivalNotifications.getServicesBeingWatched().size() > 0) {
                 arrivalNotificationsArray.set(i, singleStopArrivalNotifications);
                 Log.e("stopname repeated is" , singleStopArrivalNotifications.getStopName());
                 stopRepeated = true;
+                startNewMonitoring = true;
                 break;
             }
         }
-        if (stopRepeated == false) {
+        if (!stopRepeated && singleStopArrivalNotifications.isWatchingForArrival() && singleStopArrivalNotifications.getServicesBeingWatched().size() > 0) {
             arrivalNotificationsArray.add(singleStopArrivalNotifications);
+            startNewMonitoring = true;
             Log.e("stopname new is" , singleStopArrivalNotifications.getStopId());
         }
+        if (startNewMonitoring) {
+            persistentBuilder.setContentTitle("Monitoring " + singleStopArrivalNotifications.getStopName() + "...")
+                    .setContentText("Please do not quit the app. "
+                            + "We'll notify you when any of your selected buses are "
+                            + singleStopArrivalNotifications.getTimeToWatch()
+                            + " minute(s) away.")
+                    .setOngoing(true)
+                    .setSmallIcon(R.drawable.ic_baseline_directions_bus_24)
+                    .setSound(null)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH);
+            notificationManager.cancel(singleStopArrivalNotifications.getStopId(), 0);
+            notificationManager.notify(singleStopArrivalNotifications.getStopId(), 0, persistentBuilder.build());
+        }
+
     }
 
     @Override
     public void onDialogNegativeClick() {
         //do nothing
+    }
+
+    private void BeginMonitoring() {
+        monitoringHandler = new Handler();
+        monitoringHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                DoMonitoring();
+                Log.e("domonitoring is active", "yes");
+                monitoringHandler.postDelayed(this, 10000);
+            }
+        }, 10000);
+    }
+
+    private void DoMonitoring() {
+        try {
+            if (arrivalNotificationsArray.size() > 0) {
+                for (int i = 0; i < arrivalNotificationsArray.size(); i++) {
+                    if (arrivalNotificationsArray.get(i).isWatchingForArrival()) {
+                        updateMonitoringAndNotification(arrivalNotificationsArray.get(i), notificationManager);
+                    }
+                }
+            }
+        } catch (NullPointerException e) {
+
+        }
+    }
+
+    public void updateMonitoringAndNotification(ArrivalNotifications singleStopArrivalNotificationForUpdate, NotificationManager notificationManager) {
+        Log.e("entered", "updatemonitoringandnotification");
+        getChildTimings(singleStopArrivalNotificationForUpdate.getStopId(), new MainActivity.VolleyCallBack() {
+            @Override
+            public void onSuccess() {
+                List<ServiceInStopDetails> monitoringAllServicesAtStop = servicesAllInfoAtStop;
+                List<String> returnInfo = DetermineMonitoringThresholdReached(singleStopArrivalNotificationForUpdate, monitoringAllServicesAtStop);
+                if (returnInfo != null) {
+                    ChangeNotification(returnInfo, singleStopArrivalNotificationForUpdate);
+                    ChangeArrivalNotificationsArray(singleStopArrivalNotificationForUpdate);
+                } else {
+                    //?
+                }
+            }
+        });
+    }
+
+    private void ChangeNotification(List<String> returnInfo, ArrivalNotifications singleStopNotificationForUpdate) {
+        Log.e("entered", "changenotification");
+        NotificationCompat.Builder regularBuilder = new NotificationCompat.Builder(this, getString(R.string.arrivalnotifications_triggered_notif_id));
+        regularBuilder.setContentTitle("Your monitored bus is arriving in " + returnInfo.get(1) + " minute(s)!")
+                .setContentText("Service " + returnInfo.get(0) + " is arriving in " + returnInfo.get(1)
+                        + " minute(s) at " + singleStopNotificationForUpdate.getStopName() + ". "
+                        + "The subsequent arrival is for Service " + returnInfo.get(2) + " in " + returnInfo.get(3) + " minute(s).")
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText("Service " + returnInfo.get(0) + " is arriving in " + returnInfo.get(1)
+                                + " minute(s) at " + singleStopNotificationForUpdate.getStopName() + ". "
+                                + "The subsequent arrival is Service " + returnInfo.get(2) + " in " + returnInfo.get(3) + " minute(s)."))
+                .setSmallIcon(R.drawable.ic_baseline_directions_bus_24)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setSound(soundUri);
+//        notification.sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+//                .setDefaults(Notification.DEFAULT_ALL);
+        notificationManager.notify(singleStopNotificationForUpdate.getStopId(), 0, regularBuilder.build());
+    }
+
+    private void ChangeArrivalNotificationsArray(ArrivalNotifications singleStopArrivalNotificationForUpdate) {
+        for (int i = 0; i < arrivalNotificationsArray.size(); i++) {
+            if (arrivalNotificationsArray.get(i).getStopId().equals(singleStopArrivalNotificationForUpdate.getStopId())) {
+                arrivalNotificationsArray.get(i).setWatchingForArrival(false);
+            }
+        }
+    }
+
+    private List<String> DetermineMonitoringThresholdReached(ArrivalNotifications singleStopArrivalNotificationForUpdate, List<ServiceInStopDetails> monitoringAllServicesAtStop) {
+        int i = 0;
+        int j = 0;
+        while (i < singleStopArrivalNotificationForUpdate.getServicesBeingWatched().size() && j < servicesAllInfoAtStop.size()) {
+            Log.e("checking in threshold for", servicesAllInfoAtStop.get(j).getServiceNum());
+            if (servicesAllInfoAtStop.get(j).getServiceNum().equals(singleStopArrivalNotificationForUpdate.getServicesBeingWatched().get(i))) {
+                Log.e("matching", servicesAllInfoAtStop.get(j).getServiceNum());
+                if (servicesAllInfoAtStop.get(j).getFirstArrival().equals((singleStopArrivalNotificationForUpdate.getTimeToWatch()) + "")
+                        || servicesAllInfoAtStop.get(j).getSecondArrival().equals(singleStopArrivalNotificationForUpdate.getTimeToWatch() + "")) {
+                    Log.e("timing match", "yes");
+                    List<String> returnInfo = new ArrayList<>();
+                    returnInfo.add(servicesAllInfoAtStop.get(j).getServiceNum());
+                    returnInfo.add(servicesAllInfoAtStop.get(j).getFirstArrival());
+                    i = 0;
+                    j = 0;
+                    List<String> additionReturnInfo = AdditionalThresholdInformation(singleStopArrivalNotificationForUpdate, servicesAllInfoAtStop.get(j).getServiceNum());
+                    returnInfo.add(additionReturnInfo.get(0));
+                    returnInfo.add(additionReturnInfo.get(1));
+                    return returnInfo;
+                } else {
+                    i++;
+                    j++;
+                }
+            } else {
+                j++;
+            }
+        }
+        return null;
+    }
+
+    private List<String> AdditionalThresholdInformation(ArrivalNotifications singleStopArrivalNotificationForUpdate, String serviceMatched) {
+        int i = 0;
+        int j = 0;
+        int nextEarliestArrival = 1000;
+        String nextServiceWithEarliestArrival = "";
+        while (i < singleStopArrivalNotificationForUpdate.getServicesBeingWatched().size() && j < servicesAllInfoAtStop.size()) {
+            Log.e("checking in threshold for", servicesAllInfoAtStop.get(j).getServiceNum());
+            if (servicesAllInfoAtStop.get(j).getServiceNum().equals(singleStopArrivalNotificationForUpdate.getServicesBeingWatched().get(i))) {
+                Log.e("matching", servicesAllInfoAtStop.get(j).getServiceNum());
+                if (Integer.valueOf(servicesAllInfoAtStop.get(j).getFirstArrival()) > singleStopArrivalNotificationForUpdate.getTimeToWatch()
+                        && Integer.valueOf(servicesAllInfoAtStop.get(j).getFirstArrival()) < nextEarliestArrival) {
+                    nextEarliestArrival = Integer.valueOf(servicesAllInfoAtStop.get(j).getFirstArrival());
+                    nextServiceWithEarliestArrival = servicesAllInfoAtStop.get(j).getServiceNum();
+                } else if (Integer.valueOf(servicesAllInfoAtStop.get(j).getSecondArrival()) > singleStopArrivalNotificationForUpdate.getTimeToWatch()
+                        && Integer.valueOf(servicesAllInfoAtStop.get(j).getSecondArrival()) < nextEarliestArrival) {
+                    nextEarliestArrival = Integer.valueOf(servicesAllInfoAtStop.get(j).getSecondArrival());
+                    nextServiceWithEarliestArrival = servicesAllInfoAtStop.get(j).getServiceNum();
+                }
+                i++;
+                j++;
+            } else {
+                j++;
+            }
+        }
+        List<String> returnInfo = new ArrayList<>();
+        returnInfo.add(nextServiceWithEarliestArrival);
+        returnInfo.add(nextEarliestArrival + "");
+        return returnInfo;
+    }
+
+
+    //variables and method for retrieving service info at a particular stop
+    ServiceInStopDetails serviceInfoAtStop;
+    List<ServiceInStopDetails> servicesAllInfoAtStop;
+    List<String> servicesAtStop;
+    List<String> serviceFirstArrival;
+    List<String> serviceSecondArrival;
+    List<String> firstArrivalLive;
+    List<String> secondArrivalLive;
+
+    private void getChildTimings(String stopId, final MainActivity.VolleyCallBack callback) {
+
+        String url = "https://nnextbus.nus.edu.sg/ShuttleService?busstopname=" + stopId;
+
+        StringRequest stopStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                servicesAllInfoAtStop = new ArrayList<>();
+                Log.e("GetStopInfo in activity response is", response);
+                servicesAtStop = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].name");
+                serviceFirstArrival = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].arrivalTime");
+                serviceSecondArrival = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].nextArrivalTime");
+                firstArrivalLive = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].arrivalTime_veh_plate");
+                secondArrivalLive = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].nextArrivalTime_veh_plate");
+                Log.e("servicesAtStop is: ", servicesAtStop.get(0));
+                for (int i = 0; i < servicesAtStop.size(); i++) {
+                    serviceInfoAtStop = new ServiceInStopDetails();
+                    serviceInfoAtStop.setServiceNum(servicesAtStop.get(i));
+                    serviceInfoAtStop.setFirstArrival(serviceFirstArrival.get(i));
+                    Log.e("first arrival is: ", "" + serviceFirstArrival.get(i));
+                    serviceInfoAtStop.setSecondArrival(serviceSecondArrival.get(i));
+                    serviceInfoAtStop.setFirstArrivalLive(firstArrivalLive.get(i));
+                    serviceInfoAtStop.setSecondArrivalLive(secondArrivalLive.get(i));
+                    servicesAllInfoAtStop.add(serviceInfoAtStop);
+                }
+                callback.onSuccess();
+
+            }
+
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // TODO: Handle error
+                Log.e("volley API error", "" + error);
+            }
+
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/json; charset=UTF-8");
+                params.put("Authorization", getString(R.string.auth_header));
+                return params;
+            }
+        };
+
+        if (this != null) {
+            RequestQueue stopRequestQueue = Volley.newRequestQueue(this);
+            stopRequestQueue.add(stopStringRequest);
+        }
+
+//        Log.e("list is: ", list.toString());
+//        return list;
     }
 
     public List<ArrivalNotifications> getArrivalNotificationsArray() {
@@ -260,6 +540,22 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
 
     public void setArrivalNotificationsArray(List<ArrivalNotifications> arrivalNotificationsArray) {
         this.arrivalNotificationsArray = arrivalNotificationsArray;
+    }
+
+    public List<StopList> getListOfAllStops() {
+        return listOfAllStops;
+    }
+
+    public void setListOfAllStops(List<StopList> listOfAllStops) {
+        this.listOfAllStops = listOfAllStops;
+    }
+
+    public String getFirstPassStopsList() {
+        return firstPassStopsList;
+    }
+
+    public void setFirstPassStopsList(String firstPassStopsList) {
+        this.firstPassStopsList = firstPassStopsList;
     }
 
     //variables and methods for global navigation information
@@ -271,6 +567,10 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
 
     public void setNavigationSearchInfo(NavigationSearchInfo navigationSearchInfo) {
         this.navigationSearchInfo = navigationSearchInfo;
+    }
+
+    public interface VolleyCallBack {
+        void onSuccess();
     }
 }
 

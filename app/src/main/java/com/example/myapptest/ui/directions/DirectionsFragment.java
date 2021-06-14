@@ -2,6 +2,7 @@ package com.example.myapptest.ui.directions;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -36,21 +37,27 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.myapptest.MainActivity;
 import com.example.myapptest.R;
+import com.example.myapptest.data.busrouteinformation.ServiceRoute;
+import com.example.myapptest.data.busstopinformation.ServiceInStopDetails;
+import com.example.myapptest.data.busstopinformation.StopList;
 import com.example.myapptest.data.naviagationdata.NavigationSearchInfo;
 import com.example.myapptest.databinding.FragmentDirectionsBinding;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.jayway.jsonpath.JsonPath;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class DirectionsFragment extends Fragment {
 
+    List<StopList> listOfBusStopsObject;
     String listOfBusStopsString;
     AppCompatAutoCompleteTextView destInputEditor;
     AppCompatAutoCompleteTextView originInputEditor;
+    TextView textViewIntermediate;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -59,8 +66,10 @@ public class DirectionsFragment extends Fragment {
 
         destInputEditor = view.findViewById(R.id.destInputEditor);
         originInputEditor = view.findViewById(R.id.originInputEditor);
+        listOfBusStopsObject = ((MainActivity) getActivity()).getListOfAllStops();
         listOfBusStopsString = ((MainActivity) getActivity()).getFirstPassStopsList();
-        if (listOfBusStopsString != null) {
+        textViewIntermediate = view.findViewById(R.id.textView6);
+        if (listOfBusStopsObject != null && listOfBusStopsString != null) {
             SetAutoFillAdapter();
         } else {
             GetBusStopsListOnline();
@@ -105,13 +114,24 @@ public class DirectionsFragment extends Fragment {
 
     }
 
+    List<String> listOfNames;
+    List<String> listOfIds;
+
     private void SetAutoFillAdapter() {
-        List<String> listOfNames = JsonPath.read(listOfBusStopsString, "$.BusStopsResult.busstops[*].caption");
+        listOfNames = JsonPath.read(listOfBusStopsString, "$.BusStopsResult.busstops[*].caption");
+        listOfIds = JsonPath.read(listOfBusStopsString, "$.BusStopsResult.busstops[*].name");
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this.getContext(), android.R.layout.simple_list_item_1, listOfNames);
         Log.e("arrayadapter is", arrayAdapter + "");
         destInputEditor.setAdapter(arrayAdapter);
         originInputEditor.setAdapter(arrayAdapter);
     }
+
+    List<StopList> listOfAllStops;
+    StopList listOfStops;
+    List<String> listOfNamesReload;
+    List<String> listOfIdsReload;
+    List<Double> listOfLat;
+    List<Double> listOfLong;
 
     private void GetBusStopsListOnline() {
         String url = "https://nnextbus.nus.edu.sg/BusStops";
@@ -122,6 +142,20 @@ public class DirectionsFragment extends Fragment {
             public void onResponse(String response) {
                 listOfBusStopsString = response;
                 ((MainActivity) getActivity()).setFirstPassStopsList(listOfBusStopsString);
+                listOfAllStops = new ArrayList<>();
+                listOfNamesReload = JsonPath.read(response, "$.BusStopsResult.busstops[*].caption");
+                listOfIdsReload = JsonPath.read(response, "$.BusStopsResult.busstops[*].name");
+                listOfLong = JsonPath.read(response, "$.BusStopsResult.busstops[*].longitude");
+                listOfLat = JsonPath.read(response, "$.BusStopsResult.busstops[*].latitude");
+                for (int i = 0; i < listOfNamesReload.size(); i++) {
+                    listOfStops = new StopList();
+                    listOfStops.setStopName(listOfNamesReload.get(i));
+                    listOfStops.setStopId(listOfIdsReload.get(i));
+                    listOfStops.setStopLongitude(listOfLong.get(i));
+                    listOfStops.setStopLatitude(listOfLat.get(i));
+                    listOfAllStops.add(listOfStops);
+                }
+                ((MainActivity) getActivity()).setListOfAllStops(listOfAllStops);
                 SetAutoFillAdapter();
             }
         }, new Response.ErrorListener() {
@@ -150,6 +184,13 @@ public class DirectionsFragment extends Fragment {
         }
     }
 
+    NavigationSearchInfo navigationSearchInfo;
+
+    String originId;
+    String destId;
+
+    ProgressBar waitingForDirectionsResultProgressBar;
+
     private void PackageSearchInfo(View view) {
         InputMethodManager inputManager = (InputMethodManager)
                 getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -164,15 +205,19 @@ public class DirectionsFragment extends Fragment {
         String originText = originInputEditor.getText().toString();
         String destText = destInputEditor.getText().toString();
 
-        Log.d("originText", originText);
-        Log.d("destText", destText);
+//        Log.e("originid is", originId);
+//        Log.e("destid is", destId);
 
         if (originText.trim().length() > 0 && destText.trim().length() > 0) {
 
-            NavigationSearchInfo navigationSearchInfo = new NavigationSearchInfo();
+            originId = listOfIds.get(listOfNames.indexOf(originText));
+            destId = listOfIds.get(listOfNames.indexOf(destText));
 
-            Log.e("origintext is", originText);
-            Log.e("destText is", destText);
+            navigationSearchInfo = new NavigationSearchInfo();
+
+            navigationSearchInfo.setOriginDetails(listOfBusStopsObject.get(listOfNames.indexOf(originText)));
+            Log.e("origin index is:", listOfNames.indexOf(originText) + "");
+            navigationSearchInfo.setDestDetails(listOfBusStopsObject.get(listOfNames.indexOf(destText)));
 
             navigationSearchInfo.setOrigin(originText);
             navigationSearchInfo.setDest(destText);
@@ -187,9 +232,22 @@ public class DirectionsFragment extends Fragment {
 
             ((MainActivity) getActivity()).setNavigationSearchInfo(navigationSearchInfo);
 
-            ProgressBar waitingForDirectionsResultProgressBar = view.findViewById(R.id.waiting_for_directions_result_progressBar);
+            waitingForDirectionsResultProgressBar = view.findViewById(R.id.waiting_for_directions_result_progressBar);
             waitingForDirectionsResultProgressBar.setVisibility(View.VISIBLE);
 
+            GetServicesAtStopDetailsOnline(originId, new VolleyCallBack() {
+                @Override
+                public void onSuccess() {
+                    navigationSearchInfo.setOriginServiceDetails(servicesAllInfoAtStop);;
+                    GetServicesAtStopDetailsOnline(destId, new VolleyCallBack() {
+                        @Override
+                        public void onSuccess() {
+                            navigationSearchInfo.setDestServiceDetails(servicesAllInfoAtStop);
+                            StartNavigation();
+                        }
+                    });
+                }
+            });
             //TODO: call navigation function by passing in navigationSearchInfo
 
         } else {
@@ -199,6 +257,199 @@ public class DirectionsFragment extends Fragment {
             snackbar.setAnchorView(R.id.nav_view);
             snackbar.show();
         }
+    }
+
+    ServiceInStopDetails serviceInfoAtStop;
+    List<ServiceInStopDetails> servicesAllInfoAtStop;
+    List<String> servicesAtStop;
+    List<String> serviceFirstArrival;
+    List<String> serviceSecondArrival;
+    List<String> firstArrivalLive;
+    List<String> secondArrivalLive;
+
+    private void GetServicesAtStopDetailsOnline(String stopToSearch, final VolleyCallBack callBack) {
+        String url = "https://nnextbus.nus.edu.sg/ShuttleService?busstopname=" + stopToSearch;
+
+        StringRequest stopStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                servicesAllInfoAtStop = new ArrayList<>();
+                Log.e("GetStopInfo response is", response);
+                servicesAtStop = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].name");
+                serviceFirstArrival = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].arrivalTime");
+                serviceSecondArrival = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].nextArrivalTime");
+                firstArrivalLive = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].arrivalTime_veh_plate");
+                secondArrivalLive = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].nextArrivalTime_veh_plate");
+                Log.e("servicesAtStop is: ", servicesAtStop.get(0));
+                for (int i = 0; i < servicesAtStop.size(); i++) {
+                    serviceInfoAtStop = new ServiceInStopDetails();
+                    serviceInfoAtStop.setServiceNum(servicesAtStop.get(i));
+                    serviceInfoAtStop.setFirstArrival(serviceFirstArrival.get(i));
+                    Log.e("first arrival is: ", "" + serviceFirstArrival.get(i));
+                    serviceInfoAtStop.setSecondArrival(serviceSecondArrival.get(i));
+                    serviceInfoAtStop.setFirstArrivalLive(firstArrivalLive.get(i));
+                    serviceInfoAtStop.setSecondArrivalLive(secondArrivalLive.get(i));
+                    servicesAllInfoAtStop.add(serviceInfoAtStop);
+                }
+                if (stopToSearch.equals(originId)) {
+                    servicesAtOrigin = servicesAtStop;
+                } else if (stopToSearch.equals(destId)) {
+                    servicesAtDest = servicesAtStop;
+                }
+                callBack.onSuccess();
+
+            }
+
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // TODO: Handle error
+                Log.e("volley API error", "" + error);
+            }
+
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/json; charset=UTF-8");
+                params.put("Authorization", getActivity().getString(R.string.auth_header));
+                return params;
+            }
+        };
+
+        if (this.getContext() != null) {
+            RequestQueue stopRequestQueue = Volley.newRequestQueue(this.getContext());
+            stopRequestQueue.add(stopStringRequest);
+        }
+
+    }
+
+    List<String> servicesAtOrigin;
+    List<String> servicesAtDest;
+    List<String> sharedCommonServices;
+
+    private void StartNavigation() {
+
+        sharedCommonServices =  new ArrayList<>();
+
+        for (int i = 0; i < navigationSearchInfo.getOriginServiceDetails().size(); i++) {
+                String serviceBeingCompared = navigationSearchInfo.getOriginServiceDetails().get(i).getServiceNum();
+                Log.e("serviceBeingCompared i is", serviceBeingCompared);
+            for (int j = 0; j < navigationSearchInfo.getDestServiceDetails().size(); j++) {
+                Log.e("serviceBeingCompared j inner is", navigationSearchInfo.getDestServiceDetails().get(j).getServiceNum());
+                if (serviceBeingCompared.equals(navigationSearchInfo.getDestServiceDetails().get(j).getServiceNum())) {
+                    sharedCommonServices.add(serviceBeingCompared);
+                }
+            }
+        }
+
+        GetServiceRoute("C", new VolleyCallBack() {
+            @Override
+            public void onSuccess() {
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        waitingForDirectionsResultProgressBar.setVisibility(View.GONE);
+                    }
+                }, 300);
+            }
+        });
+
+
+    }
+
+    List<ServiceRoute> listOfStopsOnSelectedServiceRoute;
+    List<ServiceRoute> listOfStopsFromOriginToDest;
+    ServiceRoute stopAlongServiceRoute;
+    List<String> stopNames;
+    List<String> stopIds;
+    List<Double> stopLats;
+    List<Double> stopLongs;
+
+    private void GetServiceRoute(String service, final VolleyCallBack callBack) {
+        String url = "https://nnextbus.nus.edu.sg/PickupPoint?route_code=" + service;
+
+        Log.e("service is", service);
+
+        StringRequest stopStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+
+                listOfStopsFromOriginToDest = new ArrayList<>();
+                stopNames = JsonPath.read(response, "$.PickupPointResult.pickuppoint[*].pickupname");
+                stopIds = JsonPath.read(response, "$.PickupPointResult.pickuppoint[*].busstopcode");
+                stopLongs = JsonPath.read(response, "$.PickupPointResult.pickuppoint[*].lng");
+                stopLats = JsonPath.read(response, "$.PickupPointResult.pickuppoint[*].lat");
+                Log.e("starting index", stopIds.indexOf(originId) + "");
+                Log.e("ending index", stopIds.indexOf(destId) + "");
+                for (int i = stopIds.indexOf(originId); i < stopIds.indexOf(destId); i++) {
+                    stopAlongServiceRoute = new ServiceRoute();
+                    stopAlongServiceRoute.setStopCaption(stopNames.get(i));
+                    stopAlongServiceRoute.setStopId(stopIds.get(i));
+                    stopAlongServiceRoute.setStopLat(stopLats.get(i));
+                    stopAlongServiceRoute.setStopLong(stopLongs.get(i));
+                    listOfStopsFromOriginToDest.add(stopAlongServiceRoute);
+                }
+                if (listOfStopsFromOriginToDest.size() == 0) {
+                    Log.e("no route found", "unfortunate");
+                } else {
+                    textViewIntermediate.setText(service + " " + listOfStopsFromOriginToDest.size());
+                }
+
+
+//                servicesAllInfoAtStop = new ArrayList<>();
+//                Log.e("GetStopInfo response is", response);
+//                servicesAtStop = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].name");
+//                serviceFirstArrival = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].arrivalTime");
+//                serviceSecondArrival = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].nextArrivalTime");
+//                firstArrivalLive = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].arrivalTime_veh_plate");
+//                secondArrivalLive = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].nextArrivalTime_veh_plate");
+//                Log.e("servicesAtStop is: ", servicesAtStop.get(0));
+//                for (int i = 0; i < servicesAtStop.size(); i++) {
+//                    serviceInfoAtStop = new ServiceInStopDetails();
+//                    serviceInfoAtStop.setServiceNum(servicesAtStop.get(i));
+//                    serviceInfoAtStop.setFirstArrival(serviceFirstArrival.get(i));
+//                    Log.e("first arrival is: ", "" + serviceFirstArrival.get(i));
+//                    serviceInfoAtStop.setSecondArrival(serviceSecondArrival.get(i));
+//                    serviceInfoAtStop.setFirstArrivalLive(firstArrivalLive.get(i));
+//                    serviceInfoAtStop.setSecondArrivalLive(secondArrivalLive.get(i));
+//                    servicesAllInfoAtStop.add(serviceInfoAtStop);
+                callBack.onSuccess();
+
+            }
+
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // TODO: Handle error
+                Log.e("volley API error", "" + error);
+            }
+
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/json; charset=UTF-8");
+                params.put("Authorization", getActivity().getString(R.string.auth_header));
+                return params;
+            }
+        };
+
+        if (this.getContext() != null) {
+            RequestQueue stopRequestQueue = Volley.newRequestQueue(this.getContext());
+            stopRequestQueue.add(stopStringRequest);
+        }
+    }
+
+    public interface VolleyCallBack {
+        void onSuccess();
     }
 
 }
