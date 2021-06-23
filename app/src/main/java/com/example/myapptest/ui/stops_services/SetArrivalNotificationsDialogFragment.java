@@ -98,16 +98,19 @@ public class SetArrivalNotificationsDialogFragment extends DialogFragment {
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         //positive button action
-                        List<String> servicesBeingWatched = new ArrayList<>();
-                        for (int i = 0; i < singleStopArrivalNotifications.getServicesAtStop().size(); i++) {
-                            Chip chip = (Chip) servicesChipGroup.getChildAt(i);
-                            if (chip.isChecked()) {
-                                servicesBeingWatched.add((String) chip.getText());
-                                Log.e("ChipText is", chip.getText() + "");
+                        if (singleStopArrivalNotifications.isWatchingForArrival()) {
+                            singleStopArrivalNotifications.setTimeToWatch(timeToWatch);
+                            List<String> servicesBeingWatched = new ArrayList<>();
+                            for (int i = 0; i < singleStopArrivalNotifications.getServicesAtStop().size(); i++) {
+                                Chip chip = (Chip) servicesChipGroup.getChildAt(i);
+                                if (chip.isChecked()) {
+                                    servicesBeingWatched.add((String) chip.getText());
+                                    Log.e("ChipText is", chip.getText() + "");
+                                }
                             }
+                            singleStopArrivalNotifications.setServicesBeingWatched(servicesBeingWatched);
+
                         }
-                        singleStopArrivalNotifications.setServicesBeingWatched(servicesBeingWatched);
-                        singleStopArrivalNotifications.setTimeToWatch(timeToWatch);
                         Log.e("timeToWatch is:", timeToWatch + "");
 
                         listenerForActivity.onDialogPositiveClick(singleStopArrivalNotifications);

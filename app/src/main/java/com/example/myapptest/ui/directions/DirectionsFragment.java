@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -22,11 +23,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -40,12 +44,19 @@ import com.example.myapptest.R;
 import com.example.myapptest.data.busrouteinformation.ServiceRoute;
 import com.example.myapptest.data.busstopinformation.ServiceInStopDetails;
 import com.example.myapptest.data.busstopinformation.StopList;
+import com.example.myapptest.data.naviagationdata.NavigationGraph;
+import com.example.myapptest.data.naviagationdata.NavigationPartialResults;
+import com.example.myapptest.data.naviagationdata.NavigationResults;
 import com.example.myapptest.data.naviagationdata.NavigationSearchInfo;
 import com.example.myapptest.databinding.FragmentDirectionsBinding;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.jayway.jsonpath.JsonPath;
 
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -57,7 +68,7 @@ public class DirectionsFragment extends Fragment {
     String listOfBusStopsString;
     AppCompatAutoCompleteTextView destInputEditor;
     AppCompatAutoCompleteTextView originInputEditor;
-    TextView textViewIntermediate;
+//    TextView textViewIntermediate;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -68,12 +79,8 @@ public class DirectionsFragment extends Fragment {
         originInputEditor = view.findViewById(R.id.originInputEditor);
         listOfBusStopsObject = ((MainActivity) getActivity()).getListOfAllStops();
         listOfBusStopsString = ((MainActivity) getActivity()).getFirstPassStopsList();
-        textViewIntermediate = view.findViewById(R.id.textView6);
-        if (listOfBusStopsObject != null && listOfBusStopsString != null) {
-            SetAutoFillAdapter();
-        } else {
-            GetBusStopsListOnline();
-        }
+//        textViewIntermediate = view.findViewById(R.id.textView6);
+        SetAutoFillAdapter();
 
         setHasOptionsMenu(true);
 
@@ -89,12 +96,14 @@ public class DirectionsFragment extends Fragment {
         inflater.inflate(R.menu.home_toolbar_menu, menu);
     }
 
+    Button goButtonForNav;
 
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        view.findViewById(R.id.button_go).setOnClickListener(new View.OnClickListener() {
+        goButtonForNav = view.findViewById(R.id.button_go);
+        goButtonForNav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 PackageSearchInfo(view);
@@ -118,8 +127,8 @@ public class DirectionsFragment extends Fragment {
     List<String> listOfIds;
 
     private void SetAutoFillAdapter() {
-        listOfNames = JsonPath.read(listOfBusStopsString, "$.BusStopsResult.busstops[*].caption");
-        listOfIds = JsonPath.read(listOfBusStopsString, "$.BusStopsResult.busstops[*].name");
+        String loadLocationsForSearch = loadJSONFromAsset("points.json");
+        listOfNames = JsonPath.read(loadLocationsForSearch, "$.nodes[*].name");
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this.getContext(), android.R.layout.simple_list_item_1, listOfNames);
         Log.e("arrayadapter is", arrayAdapter + "");
         destInputEditor.setAdapter(arrayAdapter);
@@ -208,16 +217,25 @@ public class DirectionsFragment extends Fragment {
 //        Log.e("originid is", originId);
 //        Log.e("destid is", destId);
 
-        if (originText.trim().length() > 0 && destText.trim().length() > 0) {
+        if (originText.trim().equals(destText.trim())) {
+            Snackbar snackbar = Snackbar.make(view,
+                    "Please enter different locations for your start point and destination.",
+                    Snackbar.LENGTH_LONG);
+            snackbar.setAnchorView(R.id.nav_view);
+            snackbar.show();
 
-            originId = listOfIds.get(listOfNames.indexOf(originText));
-            destId = listOfIds.get(listOfNames.indexOf(destText));
+        } else if (originText.trim().length() > 0 && destText.trim().length() > 0) {
+
+            goButtonForNav.setClickable(false);
+
+//            originId = listOfIds.get(listOfNames.indexOf(originText));
+//            destId = listOfIds.get(listOfNames.indexOf(destText));
 
             navigationSearchInfo = new NavigationSearchInfo();
 
-            navigationSearchInfo.setOriginDetails(listOfBusStopsObject.get(listOfNames.indexOf(originText)));
-            Log.e("origin index is:", listOfNames.indexOf(originText) + "");
-            navigationSearchInfo.setDestDetails(listOfBusStopsObject.get(listOfNames.indexOf(destText)));
+//            navigationSearchInfo.setOriginDetails(listOfBusStopsObject.get(listOfNames.indexOf(originText)));
+//            Log.e("origin index is:", listOfNames.indexOf(originText) + "");
+//            navigationSearchInfo.setDestDetails(listOfBusStopsObject.get(listOfNames.indexOf(destText)));
 
             navigationSearchInfo.setOrigin(originText);
             navigationSearchInfo.setDest(destText);
@@ -235,20 +253,31 @@ public class DirectionsFragment extends Fragment {
             waitingForDirectionsResultProgressBar = view.findViewById(R.id.waiting_for_directions_result_progressBar);
             waitingForDirectionsResultProgressBar.setVisibility(View.VISIBLE);
 
-            GetServicesAtStopDetailsOnline(originId, new VolleyCallBack() {
+//            GetServicesAtStopDetailsOnline(originId, new VolleyCallBack() {
+//                @Override
+//                public void onSuccess() {
+//                    navigationSearchInfo.setOriginServiceDetails(servicesAllInfoAtStop);;
+//                    GetServicesAtStopDetailsOnline(destId, new VolleyCallBack() {
+//                        @Override
+//                        public void onSuccess() {
+//                            navigationSearchInfo.setDestServiceDetails(servicesAllInfoAtStop);
+//                            StartNavigation();
+//                        }
+//                    });
+//                }
+//            });
+            NavigationGraph navGraph = new NavigationGraph();
+            navGraph.CreateNavGraph(navigationSearchInfo, getContext());
+            navGraph.startNavProcess(navigationSearchInfo, getActivity(), getContext(), new NavigationGraph.NavigationResultsFullyComplete() {
                 @Override
-                public void onSuccess() {
-                    navigationSearchInfo.setOriginServiceDetails(servicesAllInfoAtStop);;
-                    GetServicesAtStopDetailsOnline(destId, new VolleyCallBack() {
-                        @Override
-                        public void onSuccess() {
-                            navigationSearchInfo.setDestServiceDetails(servicesAllInfoAtStop);
-                            StartNavigation();
-                        }
-                    });
+                public void onNavResultsComplete(List<NavigationResults> navigationResults) {
+                    if (navigationResults != null) {
+                        displayNavResults(navigationResults, view);
+                        goButtonForNav.setClickable(true);
+
+                    }
                 }
             });
-            //TODO: call navigation function by passing in navigationSearchInfo
 
         } else {
             Snackbar snackbar = Snackbar.make(view,
@@ -257,6 +286,19 @@ public class DirectionsFragment extends Fragment {
             snackbar.setAnchorView(R.id.nav_view);
             snackbar.show();
         }
+    }
+
+    private void displayNavResults(List<NavigationResults> navigationResults, View view) {
+        RecyclerView resultRecyclerView = view.findViewById(R.id.resultrecyclerView);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        resultRecyclerView.setLayoutManager(linearLayoutManager);
+        CustomAdapterRecyclerView customAdapterRecyclerView = new CustomAdapterRecyclerView(getActivity(), navigationResults);
+        resultRecyclerView.setAdapter(customAdapterRecyclerView);
+
+        waitingForDirectionsResultProgressBar.setVisibility(View.GONE);
+        resultRecyclerView.setVisibility(View.VISIBLE);
+
+
     }
 
     ServiceInStopDetails serviceInfoAtStop;
@@ -331,36 +373,7 @@ public class DirectionsFragment extends Fragment {
     List<String> servicesAtDest;
     List<String> sharedCommonServices;
 
-    private void StartNavigation() {
 
-        sharedCommonServices =  new ArrayList<>();
-
-        for (int i = 0; i < navigationSearchInfo.getOriginServiceDetails().size(); i++) {
-                String serviceBeingCompared = navigationSearchInfo.getOriginServiceDetails().get(i).getServiceNum();
-                Log.e("serviceBeingCompared i is", serviceBeingCompared);
-            for (int j = 0; j < navigationSearchInfo.getDestServiceDetails().size(); j++) {
-                Log.e("serviceBeingCompared j inner is", navigationSearchInfo.getDestServiceDetails().get(j).getServiceNum());
-                if (serviceBeingCompared.equals(navigationSearchInfo.getDestServiceDetails().get(j).getServiceNum())) {
-                    sharedCommonServices.add(serviceBeingCompared);
-                }
-            }
-        }
-
-        GetServiceRoute("C", new VolleyCallBack() {
-            @Override
-            public void onSuccess() {
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        waitingForDirectionsResultProgressBar.setVisibility(View.GONE);
-                    }
-                }, 300);
-            }
-        });
-
-
-    }
 
     List<ServiceRoute> listOfStopsOnSelectedServiceRoute;
     List<ServiceRoute> listOfStopsFromOriginToDest;
@@ -398,7 +411,7 @@ public class DirectionsFragment extends Fragment {
                 if (listOfStopsFromOriginToDest.size() == 0) {
                     Log.e("no route found", "unfortunate");
                 } else {
-                    textViewIntermediate.setText(service + " " + listOfStopsFromOriginToDest.size());
+//                    textViewIntermediate.setText(service + " " + listOfStopsFromOriginToDest.size());
                 }
 
 
@@ -448,8 +461,56 @@ public class DirectionsFragment extends Fragment {
         }
     }
 
+    private String loadJSONFromAsset(String fileName) {
+        String json = null;
+        try {
+            InputStream is = getContext().getAssets().open(fileName);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
+    }
+
     public interface VolleyCallBack {
         void onSuccess();
     }
+
+//    private void StartNavigation() {
+//
+//        sharedCommonServices =  new ArrayList<>();
+//
+//        for (int i = 0; i < navigationSearchInfo.getOriginServiceDetails().size(); i++) {
+//                String serviceBeingCompared = navigationSearchInfo.getOriginServiceDetails().get(i).getServiceNum();
+//                Log.e("serviceBeingCompared i is", serviceBeingCompared);
+//            for (int j = 0; j < navigationSearchInfo.getDestServiceDetails().size(); j++) {
+//                Log.e("serviceBeingCompared j inner is", navigationSearchInfo.getDestServiceDetails().get(j).getServiceNum());
+//                if (serviceBeingCompared.equals(navigationSearchInfo.getDestServiceDetails().get(j).getServiceNum())) {
+//                    sharedCommonServices.add(serviceBeingCompared);
+//                }
+//            }
+//        }
+//
+//        GetServiceRoute("C", new VolleyCallBack() {
+//            @Override
+//            public void onSuccess() {
+//                Handler handler = new Handler();
+//                handler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        waitingForDirectionsResultProgressBar.setVisibility(View.GONE);
+//                    }
+//                }, 300);
+//            }
+//        });
+//
+//
+//    }
+
 
 }

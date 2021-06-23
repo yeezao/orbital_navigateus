@@ -18,6 +18,7 @@ public class ArrivalNotifications {
     private String stopId;
     private List<ServiceInStopDetails> servicesAtStop;
     private int timeToWatch;
+    private List<Boolean> beginWatching;
 
     public String getStopName() {
         return stopName;
@@ -83,4 +84,14 @@ public class ArrivalNotifications {
     public void setTimeToWatch(int timeToWatch) {
         this.timeToWatch = timeToWatch;
     }
+
+    public List<Boolean> getBeginWatching() {
+        return beginWatching;
+    }
+
+    public void setBeginWatching(List<Boolean> beginWatching) {
+        this.beginWatching = beginWatching;
+    }
+
+
 }

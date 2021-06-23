@@ -72,14 +72,7 @@ public class StopsServicesFragment extends Fragment {
     List<ArrivalNotifications> arrivalNotificationsArray = new ArrayList<>();
     ArrivalNotifications singleStopArrivalNotification;
 
-    //variables for service info at a particular stop
-    ServiceInStopDetails serviceInfoAtStop;
-    List<ServiceInStopDetails> servicesAllInfoAtStop;
-    List<String> servicesAtStop;
-    List<String> serviceFirstArrival;
-    List<String> serviceSecondArrival;
-    List<String> firstArrivalLive;
-    List<String> secondArrivalLive;
+
 
     ProgressBar stopsNUSMainLoadingProgressBar;
 
@@ -302,11 +295,6 @@ public class StopsServicesFragment extends Fragment {
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 int groupPosition = ExpandableListView.getPackedPositionGroup(id);
                 if (ExpandableListView.getPackedPositionType(id) == ExpandableListView.PACKED_POSITION_TYPE_GROUP) {
-                    Snackbar snackbar = Snackbar.make(view,
-                            "Testing Group Long Click " + groupPosition + "" ,
-                            Snackbar.LENGTH_LONG);
-                    snackbar.setAnchorView(R.id.textView_container);
-                    snackbar.show();
                     SetArrivalNotificationsDialogFragment dialogFragment;
                     boolean isStopBeingWatched = false;
                     arrivalNotificationsArray = ((MainActivity) getActivity()).getArrivalNotificationsArray();
@@ -474,6 +462,7 @@ public class StopsServicesFragment extends Fragment {
             listOfStopsRetrieved = ((MainActivity) getActivity()).getListOfAllStops();
             if (listOfStopsRetrieved != null) {
                 ((MainActivity) getActivity()).setListOfAllStops(listOfStopsRetrieved);
+                listOfAllStops = listOfStopsRetrieved;
                 initListData();
             } else {
                 RePullStopsList();
@@ -612,8 +601,15 @@ public class StopsServicesFragment extends Fragment {
 
     }
 
-    private void getListOfChildServices(int groupPosition, boolean isOnClick, final VolleyCallBack callback) {
+    ServiceInStopDetails serviceInfoAtStop;
+    List<ServiceInStopDetails> servicesAllInfoAtStop;
+    List<String> servicesAtStop;
+    List<String> serviceFirstArrival;
+    List<String> serviceSecondArrival;
+    List<String> firstArrivalLive;
+    List<String> secondArrivalLive;
 
+    private void getListOfChildServices(int groupPosition, boolean isOnClick, final VolleyCallBack callback) {
 
         String url = "https://nnextbus.nus.edu.sg/ShuttleService?busstopname=" + listOfAllStops.get(groupPosition).getStopId();
 

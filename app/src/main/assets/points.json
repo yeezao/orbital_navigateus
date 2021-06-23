@@ -1,0 +1,1548 @@
+{
+  "nodes": [
+    {
+      "name": "Town Plaza",
+      "altname": "TP",
+      "id": "TOWNPLAZA",
+      "numid": 100,
+      "lat": 1.304144,
+      "lon": 103.7738
+    },
+    {
+      "name": "Create Tower",
+      "altname": "",
+      "id": "CREATETOWER",
+      "numid": 101,
+      "lat": 1.304182,
+      "lon": 103.7743
+    },
+    {
+      "name": "Create",
+      "altname": "",
+      "id": "CREATE",
+      "numid": 102,
+      "lat": 1.304031,
+      "lon": 103.7736
+    },
+    {
+      "name": "Stephen Riady Centre",
+      "altname": "SRC",
+      "id": "SRC",
+      "numid": 103,
+      "lat": 1.304674,
+      "lon": 103.7724
+    },
+    {
+      "name": "Education Resource Centre",
+      "altname": "ERC",
+      "id": "ERC",
+      "numid": 104,
+      "lat": 1.305878,
+      "lon": 103.7729
+    },
+    {
+      "name": "Utown Residence",
+      "altname": "",
+      "id": "UTR",
+      "numid": 105,
+      "lat": 1.305203,
+      "lon": 103.7738
+    },
+    {
+      "name": "Tembusu College",
+      "altname": "",
+      "id": "TEMBU",
+      "numid": 106,
+      "lat": 1.305922,
+      "lon": 103.7739
+    },
+    {
+      "name": "Cinnamon College",
+      "altname": "USP",
+      "id": "USP",
+      "numid": 107,
+      "lat": 1.306707,
+      "lon": 103.7734
+    },
+    {
+      "name": "College of Alice & Peter Tan",
+      "altname": "CAPT",
+      "id": "CAPT",
+      "numid": 108,
+      "lat": 1.307568,
+      "lon": 103.7731
+    },
+    {
+      "name": "Residential College 4",
+      "altname": "RC4",
+      "id": "RC4",
+      "numid": 109,
+      "lat": 1.30816,
+      "lon": 103.7734
+    },
+    {
+      "name": "Saga College",
+      "altname": "",
+      "id": "SAGA",
+      "numid": 110,
+      "lat": 1.305752,
+      "lon": 103.7723
+    },
+    {
+      "name": "Elm College",
+      "altname": "",
+      "id": "ELM",
+      "numid": 111,
+      "lat": 1.306347,
+      "lon": 103.7723
+    },
+    {
+      "name": "Yale-NUS",
+      "altname": "YNC",
+      "id": "YNC",
+      "numid": 112,
+      "lat": 1.30706,
+      "lon": 103.772
+    },
+    {
+      "name": "Cendana College",
+      "altname": "",
+      "id": "CENDANA",
+      "numid": 113,
+      "lat": 1.307901,
+      "lon": 103.7721
+    },
+    {
+      "name": "AS5 (Bus Stop)",
+      "altname": "",
+      "id": "AS7",
+      "numid": 1,
+      "lat": 1.2935,
+      "lon": 103.7721
+    },
+    {
+      "name": "BIZ 2 (Bus Stop)",
+      "altname": "",
+      "id": "BIZ2",
+      "numid": 2,
+      "lat": 1.29334,
+      "lon": 103.7752
+    },
+    {
+      "name": "Botanic Gardens MRT (PUDO)",
+      "altname": "",
+      "id": "BG-MRT",
+      "numid": 3,
+      "lat": 1.3227,
+      "lon": 103.8151
+    },
+    {
+      "name": "Oei Tiong Ham Building (Bus Stop)",
+      "altname": "OTH Bldg",
+      "id": "BUKITTIMAH-BTC2",
+      "numid": 4,
+      "lat": 1.319744,
+      "lon": 103.8179
+    },
+    {
+      "name": "Central Library (Bus Stop)",
+      "altname": "CLB (Bus Stop)",
+      "id": "CENLIB",
+      "numid": 5,
+      "lat": 1.2964,
+      "lon": 103.7722
+    },
+    {
+      "name": "College Green (Bus Stop)",
+      "altname": "",
+      "id": "CGH",
+      "numid": 6,
+      "lat": 1.323333,
+      "lon": 103.8163
+    },
+    {
+      "name": "COM2 (Bus Stop)",
+      "altname": "",
+      "id": "COM2",
+      "numid": 7,
+      "lat": 1.294285,
+      "lon": 103.7738
+    },
+    {
+      "name": "EA (Bus Stop)",
+      "altname": "",
+      "id": "BLK-EA-OPP",
+      "numid": 8,
+      "lat": 1.3004,
+      "lon": 103.7701
+    },
+    {
+      "name": "Information Technology (Bus Stop)",
+      "altname": "IT (Bus Stop)",
+      "id": "COMCEN",
+      "numid": 9,
+      "lat": 1.297376,
+      "lon": 103.7729
+    },
+    {
+      "name": "Kent Ridge Bus Terminal",
+      "altname": "KRT",
+      "id": "KR-BT",
+      "numid": 10,
+      "lat": 1.294167,
+      "lon": 103.7697
+    },
+    {
+      "name": "Kent Ridge MRT (Bus Stop)",
+      "altname": "KR MRT",
+      "id": "KR-MRT",
+      "numid": 11,
+      "lat": 1.294833,
+      "lon": 103.7844
+    },
+    {
+      "name": "Kent Vale (Bus Stop)",
+      "altname": "KV",
+      "id": "KV",
+      "numid": 12,
+      "lat": 1.3021,
+      "lon": 103.7691
+    },
+    {
+      "name": "LT13 (Bus Stop)",
+      "altname": "",
+      "id": "LT13",
+      "numid": 13,
+      "lat": 1.294779,
+      "lon": 103.7706
+    },
+    {
+      "name": "LT27 (Bus Stop)",
+      "altname": "",
+      "id": "LT27",
+      "numid": 14,
+      "lat": 1.2974,
+      "lon": 103.781
+    },
+    {
+      "name": "Museum (Bus Stop)",
+      "altname": "",
+      "id": "MUSEUM",
+      "numid": 15,
+      "lat": 1.301102,
+      "lon": 103.7737
+    },
+    {
+      "name": "Opp HSSML",
+      "altname": "",
+      "id": "HSSML-OPP",
+      "numid": 16,
+      "lat": 1.292778,
+      "lon": 103.775
+    },
+    {
+      "name": "Opp Kent Ridge MRT",
+      "altname": "Opp KR MRT",
+      "id": "KR-MRT-OPP",
+      "numid": 17,
+      "lat": 1.294876,
+      "lon": 103.7846
+    },
+    {
+      "name": "Opp NUSS (Bus Stop)",
+      "altname": "",
+      "id": "NUSS-OPP",
+      "numid": 18,
+      "lat": 1.2933,
+      "lon": 103.7724
+    },
+    {
+      "name": "Opp TCOMS (Bus Stop)",
+      "altname": "",
+      "id": "PGP12-OPP",
+      "numid": 19,
+      "lat": 1.2938,
+      "lon": 103.777
+    },
+    {
+      "name": "Opp UHall (Bus Stop)",
+      "altname": "",
+      "id": "UHALL-OPP",
+      "numid": 20,
+      "lat": 1.2975,
+      "lon": 103.7782
+    },
+    {
+      "name": "Opp University Health Centre (Bus Stop)",
+      "altname": "Opp UHC",
+      "id": "STAFFCLUB-OPP",
+      "numid": 21,
+      "lat": 1.2988,
+      "lon": 103.7755
+    },
+    {
+      "name": "Opp YIH (Bus Stop)",
+      "altname": "",
+      "id": "YIH-OPP",
+      "numid": 22,
+      "lat": 1.298969,
+      "lon": 103.7742
+    },
+    {
+      "name": "PGP Hse 15 (Bus Stop)",
+      "altname": "",
+      "id": "PGP14-15",
+      "numid": 23,
+      "lat": 1.293056,
+      "lon": 103.7778
+    },
+    {
+      "name": "PGP Hse 7 (Bus Stop)",
+      "altname": "",
+      "id": "PGP7",
+      "numid": 24,
+      "lat": 1.2932,
+      "lon": 103.7778
+    },
+    {
+      "name": "Prince George's Park (Bus Stop)",
+      "altname": "PGP Terminal",
+      "id": "PGPT",
+      "numid": 25,
+      "lat": 1.2918,
+      "lon": 103.7805
+    },
+    {
+      "name": "Prince George's Park Residence (Bus Stop)",
+      "altname": "PGPR (Bus Stop)",
+      "id": "PGP",
+      "numid": 26,
+      "lat": 1.290999,
+      "lon": 103.781
+    },
+    {
+      "name": "Raffles Hall (Bus Stop)",
+      "altname": "RH (Bus Stop)",
+      "id": "RAFFLES",
+      "numid": 27,
+      "lat": 1.301029,
+      "lon": 103.7727
+    },
+    {
+      "name": "S17 (Bus Stop)",
+      "altname": "",
+      "id": "S17",
+      "numid": 28,
+      "lat": 1.297477,
+      "lon": 103.7814
+    },
+    {
+      "name": "TCOMS (Bus Stop)",
+      "altname": "",
+      "id": "PGP12",
+      "numid": 29,
+      "lat": 1.293702,
+      "lon": 103.7765
+    },
+    {
+      "name": "The Japanese Primary School",
+      "altname": "The Japanese Pri Sch",
+      "id": "JP-SCH-16151",
+      "numid": 30,
+      "lat": 1.300731,
+      "lon": 103.77
+    },
+    {
+      "name": "Uhall (Bus Stop)",
+      "altname": "",
+      "id": "UHALL",
+      "numid": 31,
+      "lat": 1.297223,
+      "lon": 103.7787
+    },
+    {
+      "name": "University Health Centre (Bus Stop)",
+      "altname": "UHC (Bus Stop)",
+      "id": "STAFFCLUB",
+      "numid": 32,
+      "lat": 1.2989,
+      "lon": 103.7761
+    },
+    {
+      "name": "University Town (Bus Stop)",
+      "altname": "Utown (Bus Stop)",
+      "id": "UTown",
+      "numid": 33,
+      "lat": 1.303622,
+      "lon": 103.7747
+    },
+    {
+      "name": "Ventus (Opp LT13) (Bus Stop)",
+      "altname": "Ventus",
+      "id": "LT13-OPP",
+      "numid": 34,
+      "lat": 1.2953,
+      "lon": 103.7706
+    },
+    {
+      "name": "Yusof Ishak House (Bus Stop)",
+      "altname": "YIH (Bus Stop)",
+      "id": "YIH",
+      "numid": 35,
+      "lat": 1.2987,
+      "lon": 103.7743
+    },
+    {
+      "name": "SDE3 (Bus Stop)",
+      "altname": "",
+      "id": "",
+      "numid": 36,
+      "lat": 1.297821,
+      "lon": 103.7699
+    },
+    {
+      "name": "Opp SDE3 (Bus Stop)",
+      "altname": "",
+      "id": "",
+      "numid": 37,
+      "lat": 1.297866,
+      "lon": 103.7696
+    },
+    {
+      "name": "EA",
+      "altname": "",
+      "id": "EA",
+      "numid": 200,
+      "lat": 1.300543,
+      "lon": 103.7708
+    },
+    {
+      "name": "E1",
+      "altname": "",
+      "id": "E1",
+      "numid": 201,
+      "lat": 1.298789,
+      "lon": 103.771
+    },
+    {
+      "name": "E1A",
+      "altname": "",
+      "id": "E1A",
+      "numid": 202,
+      "lat": 1.299367,
+      "lon": 103.7708
+    },
+    {
+      "name": "E2",
+      "altname": "",
+      "id": "E2",
+      "numid": 203,
+      "lat": 1.29934,
+      "lon": 103.7711
+    },
+    {
+      "name": "E2A",
+      "altname": "",
+      "id": "E2A",
+      "numid": 204,
+      "lat": 1.298848,
+      "lon": 103.7713
+    },
+    {
+      "name": "E3",
+      "altname": "",
+      "id": "E3",
+      "numid": 205,
+      "lat": 1.299464,
+      "lon": 103.7717
+    },
+    {
+      "name": "E3A",
+      "altname": "",
+      "id": "E3A",
+      "numid": 206,
+      "lat": 1.300336,
+      "lon": 103.7714
+    },
+    {
+      "name": "E4",
+      "altname": "",
+      "id": "E4",
+      "numid": 207,
+      "lat": 1.298434,
+      "lon": 103.7724
+    },
+    {
+      "name": "E4A",
+      "altname": "",
+      "id": "E4A",
+      "numid": 208,
+      "lat": 1.29865,
+      "lon": 103.7726
+    },
+    {
+      "name": "E5",
+      "altname": "",
+      "id": "E5",
+      "numid": 209,
+      "lat": 1.298018,
+      "lon": 103.7725
+    },
+    {
+      "name": "E5A / T-Lab",
+      "altname": "",
+      "id": "E5A",
+      "numid": 210,
+      "lat": 1.299781,
+      "lon": 103.7721
+    },
+    {
+      "name": "E6",
+      "altname": "",
+      "id": "E6",
+      "numid": 211,
+      "lat": 1.299295,
+      "lon": 103.7731
+    },
+    {
+      "name": "E7 (U/C)",
+      "altname": "",
+      "id": "E7",
+      "numid": 212,
+      "lat": 1.298632,
+      "lon": 103.7735
+    },
+    {
+      "name": "EW1",
+      "altname": "",
+      "id": "EW1",
+      "numid": 213,
+      "lat": 1.299053,
+      "lon": 103.7705
+    },
+    {
+      "name": "EW1A",
+      "altname": "",
+      "id": "EW1A",
+      "numid": 214,
+      "lat": 1.299432,
+      "lon": 103.7704
+    },
+    {
+      "name": "EW2",
+      "altname": "",
+      "id": "EW2",
+      "numid": 215,
+      "lat": 1.299177,
+      "lon": 103.7725
+    },
+    {
+      "name": "Techno Edge",
+      "altname": "",
+      "id": "TECHNO",
+      "numid": 216,
+      "lat": 1.297953,
+      "lon": 103.7717
+    },
+    {
+      "name": "CELC",
+      "altname": "",
+      "id": "CELC",
+      "numid": 217,
+      "lat": 1.297035,
+      "lon": 103.7715
+    },
+    {
+      "name": "SDE1",
+      "altname": "",
+      "id": "SDE1",
+      "numid": 251,
+      "lat": 1.29733,
+      "lon": 103.7707
+    },
+    {
+      "name": "SDE2",
+      "altname": "",
+      "id": "SDE2",
+      "numid": 252,
+      "lat": 1.297323,
+      "lon": 103.7711
+    },
+    {
+      "name": "SDE3",
+      "altname": "",
+      "id": "SDE3",
+      "numid": 253,
+      "lat": 1.297862,
+      "lon": 103.7705
+    },
+    {
+      "name": "SDE4",
+      "altname": "",
+      "id": "SDE4",
+      "numid": 254,
+      "lat": 1.296867,
+      "lon": 103.7704
+    },
+    {
+      "name": "Raffles Hall",
+      "altname": "RH",
+      "id": "RH",
+      "numid": 990,
+      "lat": 1.30012,
+      "lon": 103.7738
+    },
+    {
+      "name": "Information Technology",
+      "altname": "IT",
+      "id": "IT",
+      "numid": 223,
+      "lat": 1.29758,
+      "lon": 103.7725
+    },
+    {
+      "name": "LT1",
+      "altname": "",
+      "id": "LT1",
+      "numid": 901,
+      "lat": 1.29984,
+      "lon": 103.7712
+    },
+    {
+      "name": "LT2",
+      "altname": "",
+      "id": "LT2",
+      "numid": 902,
+      "lat": 1.299583,
+      "lon": 103.7718
+    },
+    {
+      "name": "LT3",
+      "altname": "",
+      "id": "LT3",
+      "numid": 903,
+      "lat": 1.297903,
+      "lon": 103.7733
+    },
+    {
+      "name": "LT4",
+      "altname": "",
+      "id": "LT4",
+      "numid": 904,
+      "lat": 1.297748,
+      "lon": 103.7735
+    },
+    {
+      "name": "LT5",
+      "altname": "",
+      "id": "LT5",
+      "numid": 905,
+      "lat": 1.298487,
+      "lon": 103.7713
+    },
+    {
+      "name": "LT6",
+      "altname": "",
+      "id": "LT6",
+      "numid": 906,
+      "lat": 1.298946,
+      "lon": 103.7719
+    },
+    {
+      "name": "LT7",
+      "altname": "",
+      "id": "LT7",
+      "numid": 907,
+      "lat": 1.300484,
+      "lon": 103.7711
+    },
+    {
+      "name": "LT8",
+      "altname": "",
+      "id": "LT8",
+      "numid": 908,
+      "lat": 1.345477,
+      "lon": 103.6807
+    },
+    {
+      "name": "LT9",
+      "altname": "",
+      "id": "LT9",
+      "numid": 909,
+      "lat": 1.295394,
+      "lon": 103.7722
+    },
+    {
+      "name": "LT10",
+      "altname": "",
+      "id": "LT10",
+      "numid": 910,
+      "lat": 1.295021,
+      "lon": 103.772
+    },
+    {
+      "name": "LT11",
+      "altname": "",
+      "id": "LT11",
+      "numid": 911,
+      "lat": 1.346457,
+      "lon": 103.6807
+    },
+    {
+      "name": "LT12",
+      "altname": "",
+      "id": "LT12",
+      "numid": 912,
+      "lat": 1.29515,
+      "lon": 103.7712
+    },
+    {
+      "name": "LT13",
+      "altname": "",
+      "id": "LT13AS",
+      "numid": 913,
+      "lat": 1.29521,
+      "lon": 103.7711
+    },
+    {
+      "name": "LT14",
+      "altname": "",
+      "id": "LT14",
+      "numid": 914,
+      "lat": 1.295908,
+      "lon": 103.7737
+    },
+    {
+      "name": "LT15",
+      "altname": "",
+      "id": "LT15",
+      "numid": 915,
+      "lat": 1.295797,
+      "lon": 103.7735
+    },
+    {
+      "name": "LT16",
+      "altname": "",
+      "id": "LT16",
+      "numid": 916,
+      "lat": 1.294828,
+      "lon": 103.7738
+    },
+    {
+      "name": "LT17",
+      "altname": "",
+      "id": "LT17",
+      "numid": 917,
+      "lat": 1.293892,
+      "lon": 103.774
+    },
+    {
+      "name": "LT18",
+      "altname": "",
+      "id": "LT18",
+      "numid": 918,
+      "lat": 1.293719,
+      "lon": 103.775
+    },
+    {
+      "name": "LT19",
+      "altname": "",
+      "id": "LT19",
+      "numid": 919,
+      "lat": 1.296095,
+      "lon": 103.7743
+    },
+    {
+      "name": "LT20",
+      "altname": "",
+      "id": "LT20",
+      "numid": 920,
+      "lat": 1.29581,
+      "lon": 103.7788
+    },
+    {
+      "name": "LT21",
+      "altname": "",
+      "id": "LT21",
+      "numid": 921,
+      "lat": 1.29582,
+      "lon": 103.7783
+    },
+    {
+      "name": "LT22",
+      "altname": "",
+      "id": "LT22",
+      "numid": 922,
+      "lat": 1.295848,
+      "lon": 103.7798
+    },
+    {
+      "name": "LT23",
+      "altname": "",
+      "id": "LT23",
+      "numid": 923,
+      "lat": 1.296418,
+      "lon": 103.7799
+    },
+    {
+      "name": "LT24",
+      "altname": "",
+      "id": "LT24",
+      "numid": 924,
+      "lat": 1.29578,
+      "lon": 103.7806
+    },
+    {
+      "name": "LT25",
+      "altname": "",
+      "id": "LT25",
+      "numid": 925,
+      "lat": 1.296365,
+      "lon": 103.7806
+    },
+    {
+      "name": "LT26",
+      "altname": "",
+      "id": "LT26",
+      "numid": 926,
+      "lat": 1.296679,
+      "lon": 103.7802
+    },
+    {
+      "name": "LT27",
+      "altname": "",
+      "id": "LT27FOS",
+      "numid": 927,
+      "lat": 1.297262,
+      "lon": 103.7809
+    },
+    {
+      "name": "LT28",
+      "altname": "",
+      "id": "LT28",
+      "numid": 928,
+      "lat": 1.297558,
+      "lon": 103.7813
+    },
+    {
+      "name": "LT29",
+      "altname": "",
+      "id": "LT29",
+      "numid": 929,
+      "lat": 1.297545,
+      "lon": 103.7813
+    },
+    {
+      "name": "LT31",
+      "altname": "",
+      "id": "LT31",
+      "numid": 931,
+      "lat": 1.29707,
+      "lon": 103.7804
+    },
+    {
+      "name": "LT32",
+      "altname": "",
+      "id": "LT32",
+      "numid": 932,
+      "lat": 1.296516,
+      "lon": 103.7784
+    },
+    {
+      "name": "LT33",
+      "altname": "",
+      "id": "LT33",
+      "numid": 933,
+      "lat": 1.297971,
+      "lon": 103.7809
+    },
+    {
+      "name": "LT34",
+      "altname": "",
+      "id": "LT34",
+      "numid": 934,
+      "lat": 1.297982,
+      "lon": 103.781
+    },
+    {
+      "name": "LT35",
+      "altname": "",
+      "id": "LT35",
+      "numid": 935,
+      "lat": 1.29557,
+      "lon": 103.7814
+    },
+    {
+      "name": "LT36",
+      "altname": "",
+      "id": "LT36",
+      "numid": 936,
+      "lat": 1.295509,
+      "lon": 103.7818
+    },
+    {
+      "name": "LT38",
+      "altname": "",
+      "id": "LT38",
+      "numid": 938,
+      "lat": 1.335998,
+      "lon": 103.7741
+    },
+    {
+      "name": "LT50",
+      "altname": "",
+      "id": "LT50",
+      "numid": 950,
+      "lat": 1.305413,
+      "lon": 103.7721
+    },
+    {
+      "name": "LT51",
+      "altname": "",
+      "id": "LT51",
+      "numid": 951,
+      "lat": 1.305413,
+      "lon": 103.7721
+    },
+    {
+      "name": "LT52",
+      "altname": "",
+      "id": "LT52",
+      "numid": 952,
+      "lat": 1.305413,
+      "lon": 103.7721
+    },
+    {
+      "name": "LT53",
+      "altname": "",
+      "id": "LT53",
+      "numid": 953,
+      "lat": 1.305413,
+      "lon": 103.7721
+    },
+    {
+      "name": "LT54",
+      "altname": "",
+      "id": "LT54",
+      "numid": 954,
+      "lat": 1.305413,
+      "lon": 103.7721
+    },
+    {
+      "name": "AS1",
+      "altname": "",
+      "id": "AS1",
+      "numid": 301,
+      "lat": 1.295182,
+      "lon": 103.7717
+    },
+    {
+      "name": "AS2",
+      "altname": "",
+      "id": "AS2",
+      "numid": 302,
+      "lat": 1.295128,
+      "lon": 103.7713
+    },
+    {
+      "name": "AS3",
+      "altname": "",
+      "id": "AS3",
+      "numid": 303,
+      "lat": 1.294651,
+      "lon": 103.7713
+    },
+    {
+      "name": "AS4",
+      "altname": "",
+      "id": "AS4",
+      "numid": 304,
+      "lat": 1.294485,
+      "lon": 103.7718
+    },
+    {
+      "name": "AS5",
+      "altname": "",
+      "id": "AS5",
+      "numid": 305,
+      "lat": 1.29419,
+      "lon": 103.7717
+    },
+    {
+      "name": "AS6",
+      "altname": "",
+      "id": "AS6",
+      "numid": 306,
+      "lat": 1.29552,
+      "lon": 103.7732
+    },
+    {
+      "name": "AS7 / Shaw Foundation House",
+      "altname": "",
+      "id": "AS7AS",
+      "numid": 307,
+      "lat": 1.294244,
+      "lon": 103.7711
+    },
+    {
+      "name": "AS8",
+      "altname": "",
+      "id": "AS8",
+      "numid": 308,
+      "lat": 1.296213,
+      "lon": 103.772
+    },
+    {
+      "name": "Central Library (Level 1)",
+      "altname": "CLBL1",
+      "id": "CLBL1",
+      "numid": 91,
+      "lat": 1.296844,
+      "lon": 103.7732
+    },
+    {
+      "name": "Central Library (Level 6)",
+      "altname": "CLBL6",
+      "id": "CLBL6",
+      "numid": 96,
+      "lat": 1.296844,
+      "lon": 103.7732
+    },
+    {
+      "name": "NUS IT - IT Care Office",
+      "altname": "ITCARE",
+      "id": "ITCARE",
+      "numid": 99,
+      "lat": 1.297719,
+      "lon": 103.7725
+    },
+    {
+      "name": "COM1",
+      "altname": "",
+      "id": "COM1",
+      "numid": 331,
+      "lat": 1.295094,
+      "lon": 103.7737
+    },
+    {
+      "name": "COM2",
+      "altname": "",
+      "id": "COM2COM",
+      "numid": 332,
+      "lat": 1.294481,
+      "lon": 103.7741
+    },
+    {
+      "name": "COM3",
+      "altname": "",
+      "id": "COM3COM",
+      "numid": 333,
+      "lat": 1.294417,
+      "lon": 103.7753
+    },
+    {
+      "name": "The Deck",
+      "altname": "Deck",
+      "id": "DECK",
+      "numid": 334,
+      "lat": 1.298376,
+      "lon": 103.7724
+    },
+    {
+      "name": "Yusof Ishak House",
+      "altname": "YIH",
+      "id": "YIH",
+      "numid": 380,
+      "lat": 1.298828,
+      "lon": 103.7751
+    },
+    {
+      "name": "University Sports Centre",
+      "altname": "USC",
+      "id": "USC",
+      "numid": 381,
+      "lat": 1.300129,
+      "lon": 103.7753
+    },
+    {
+      "name": "MPSH",
+      "altname": "MPSH",
+      "id": "MPSH",
+      "numid": 391,
+      "lat": 1.300656,
+      "lon": 103.7761
+    },
+    {
+      "name": "USC Outdoor Courts",
+      "altname": "",
+      "id": "USCOUTDOOR",
+      "numid": 382,
+      "lat": 1.299392,
+      "lon": 103.7758
+    },
+    {
+      "name": "USC Running Track",
+      "altname": "",
+      "id": "USCTRACK",
+      "numid": 383,
+      "lat": 1.298689,
+      "lon": 103.7783
+    },
+    {
+      "name": "USC Multi-Purpose Field",
+      "altname": "",
+      "id": "USCFIELD",
+      "numid": 384,
+      "lat": 1.298689,
+      "lon": 103.7783
+    },
+    {
+      "name": "University Health Centre",
+      "altname": "",
+      "id": "UHC",
+      "numid": 385,
+      "lat": 1.299318,
+      "lon": 103.7764
+    },
+    {
+      "name": "NUS Staff Club",
+      "altname": "",
+      "id": "NSC",
+      "numid": 386,
+      "lat": 1.299456,
+      "lon": 103.7759
+    },
+    {
+      "name": "University Hall",
+      "altname": "",
+      "id": "UNIHALL",
+      "numid": 387,
+      "lat": 1.297548,
+      "lon": 103.7779
+    },
+    {
+      "name": "Ridge View Residential College",
+      "altname": "RVRC",
+      "id": "RVRC",
+      "numid": 970,
+      "lat": 1.297806,
+      "lon": 103.7772
+    },
+    {
+      "name": "Eusoff Hall",
+      "altname": "EH",
+      "id": "EH",
+      "numid": 991,
+      "lat": 1.294028,
+      "lon": 103.7704
+    },
+    {
+      "name": "Temasek Hall",
+      "altname": "TH",
+      "id": "TH",
+      "numid": 992,
+      "lat": 1.293098,
+      "lon": 103.7714
+    },
+    {
+      "name": "Kent Ridge Hall",
+      "altname": "KRH",
+      "id": "KRH",
+      "numid": 993,
+      "lat": 1.292089,
+      "lon": 103.7747
+    },
+    {
+      "name": "Sheares Hall",
+      "altname": "SH",
+      "id": "SH",
+      "numid": 994,
+      "lat": 1.291577,
+      "lon": 103.7758
+    },
+    {
+      "name": "PGP House",
+      "altname": "PGPH",
+      "id": "PGPH",
+      "numid": 995,
+      "lat": 1.290912,
+      "lon": 103.7806
+    },
+    {
+      "name": "Prince George's Park Residences",
+      "altname": "PGPR",
+      "id": "PGPR",
+      "numid": 960,
+      "lat": 1.291581,
+      "lon": 103.7825
+    },
+    {
+      "name": "King Edward VII Hall",
+      "altname": "KE7",
+      "id": "KE7",
+      "numid": 996,
+      "lat": 1.292671,
+      "lon": 103.7811
+    },
+    {
+      "name": "Kent Vale",
+      "altname": "KV",
+      "id": "KVKV",
+      "numid": 120,
+      "lat": 1.3027,
+      "lon": 103.7694
+    },
+    {
+      "name": "University Cultural Centre",
+      "altname": "UCC",
+      "id": "UCC",
+      "numid": 121,
+      "lat": 1.301773,
+      "lon": 103.7722
+    },
+    {
+      "name": "Yong Siew Toh Conservatory",
+      "altname": "YST",
+      "id": "YST",
+      "numid": 122,
+      "lat": 1.302651,
+      "lon": 103.7721
+    },
+    {
+      "name": "NUS Museum",
+      "altname": "",
+      "id": "NUSM",
+      "numid": 123,
+      "lat": 1.301509,
+      "lon": 103.7727
+    },
+    {
+      "name": "Lee Kong Chian Natural History Museum",
+      "altname": "LKCNHM",
+      "id": "LKCNHM",
+      "numid": 124,
+      "lat": 1.301507,
+      "lon": 103.7731
+    },
+    {
+      "name": "Kent Ridge MRT",
+      "altname": "KRMRT",
+      "id": "KRMRT",
+      "numid": 80,
+      "lat": 1.293822,
+      "lon": 103.7844
+    },
+    {
+      "name": "National University Hospital (Main Bldg)",
+      "altname": "NUH",
+      "id": "NUHMB",
+      "numid": 81,
+      "lat": 1.29435,
+      "lon": 103.7835
+    },
+    {
+      "name": "NUCOHS / Faculty of Dentistry",
+      "altname": "NUCOHS",
+      "id": "NUCOHS",
+      "numid": 82,
+      "lat": 1.296173,
+      "lon": 103.7833
+    },
+    {
+      "name": "BIZ1 / Mochtar Riady Building",
+      "altname": "",
+      "id": "BIZ1",
+      "numid": 341,
+      "lat": 1.292648,
+      "lon": 103.7739
+    },
+    {
+      "name": "BIZ2",
+      "altname": "",
+      "id": "BIZ2",
+      "numid": 342,
+      "lat": 1.293627,
+      "lon": 103.7751
+    },
+    {
+      "name": "Hon Sui Sen Memorial Library",
+      "altname": "HSSML",
+      "id": "HSSML",
+      "numid": 340,
+      "lat": 1.293191,
+      "lon": 103.7745
+    },
+    {
+      "name": "Hon Sui Sen Auditorium",
+      "altname": "",
+      "id": "HSSA",
+      "numid": 343,
+      "lat": 1.293685,
+      "lon": 103.7747
+    },
+    {
+      "name": "I3",
+      "altname": "",
+      "id": "I3",
+      "numid": 344,
+      "lat": 1.293097,
+      "lon": 103.7753
+    },
+    {
+      "name": "Innovation 4.0",
+      "altname": "",
+      "id": "I4",
+      "numid": 345,
+      "lat": 1.294476,
+      "lon": 103.7759
+    },
+    {
+      "name": "Ventus / UCI",
+      "altname": "",
+      "id": "UCI",
+      "numid": 339,
+      "lat": 1.296216,
+      "lon": 103.7702
+    },
+    {
+      "name": "S1",
+      "altname": "",
+      "id": "S1",
+      "numid": 401,
+      "lat": 1.295751,
+      "lon": 103.7779
+    },
+    {
+      "name": "S1A",
+      "altname": "",
+      "id": "S1A",
+      "numid": 402,
+      "lat": 1.296729,
+      "lon": 103.7803
+    },
+    {
+      "name": "S2",
+      "altname": "",
+      "id": "S2",
+      "numid": 403,
+      "lat": 1.296559,
+      "lon": 103.7783
+    },
+    {
+      "name": "S3",
+      "altname": "",
+      "id": "S3",
+      "numid": 404,
+      "lat": 1.295769,
+      "lon": 103.7786
+    },
+    {
+      "name": "S4",
+      "altname": "",
+      "id": "S4",
+      "numid": 405,
+      "lat": 1.295761,
+      "lon": 103.7792
+    },
+    {
+      "name": "S4A",
+      "altname": "",
+      "id": "S4A",
+      "numid": 406,
+      "lat": 1.295979,
+      "lon": 103.7792
+    },
+    {
+      "name": "S5",
+      "altname": "",
+      "id": "S5",
+      "numid": 407,
+      "lat": 1.295586,
+      "lon": 103.7798
+    },
+    {
+      "name": "S6",
+      "altname": "",
+      "id": "S6",
+      "numid": 408,
+      "lat": 1.295158,
+      "lon": 103.7803
+    },
+    {
+      "name": "S7",
+      "altname": "",
+      "id": "S7",
+      "numid": 409,
+      "lat": 1.296512,
+      "lon": 103.7789
+    },
+    {
+      "name": "S8",
+      "altname": "",
+      "id": "S8",
+      "numid": 410,
+      "lat": 1.29619,
+      "lon": 103.7794
+    },
+    {
+      "name": "S9",
+      "altname": "",
+      "id": "S9",
+      "numid": 411,
+      "lat": 1.296135,
+      "lon": 103.78
+    },
+    {
+      "name": "S9A",
+      "altname": "",
+      "id": "S9A",
+      "numid": 412,
+      "lat": 1.29598,
+      "lon": 103.7799
+    },
+    {
+      "name": "S10",
+      "altname": "",
+      "id": "S10",
+      "numid": 413,
+      "lat": 1.296433,
+      "lon": 103.7797
+    },
+    {
+      "name": "S11",
+      "altname": "",
+      "id": "S11",
+      "numid": 414,
+      "lat": 1.29686,
+      "lon": 103.7788
+    },
+    {
+      "name": "S12",
+      "altname": "",
+      "id": "S12",
+      "numid": 415,
+      "lat": 1.297179,
+      "lon": 103.7787
+    },
+    {
+      "name": "S13",
+      "altname": "",
+      "id": "S13",
+      "numid": 416,
+      "lat": 1.296919,
+      "lon": 103.7792
+    },
+    {
+      "name": "S14",
+      "altname": "",
+      "id": "S14",
+      "numid": 417,
+      "lat": 1.296962,
+      "lon": 103.7798
+    },
+    {
+      "name": "S15",
+      "altname": "",
+      "id": "S15",
+      "numid": 418,
+      "lat": 1.297176,
+      "lon": 103.7802
+    },
+    {
+      "name": "S16",
+      "altname": "",
+      "id": "S16",
+      "numid": 419,
+      "lat": 1.296769,
+      "lon": 103.7803
+    },
+    {
+      "name": "S17",
+      "altname": "",
+      "id": "S17",
+      "numid": 420,
+      "lat": 1.297776,
+      "lon": 103.7806
+    },
+    {
+      "name": "MD1",
+      "altname": "",
+      "id": "MD1",
+      "numid": 430,
+      "lat": 1.29529,
+      "lon": 103.7808
+    },
+    {
+      "name": "MD2",
+      "altname": "",
+      "id": "MD2",
+      "numid": 431,
+      "lat": 1.294882,
+      "lon": 103.7812
+    },
+    {
+      "name": "MD3",
+      "altname": "",
+      "id": "MD3",
+      "numid": 432,
+      "lat": 1.295268,
+      "lon": 103.7811
+    },
+    {
+      "name": "MD4",
+      "altname": "",
+      "id": "MD4",
+      "numid": 433,
+      "lat": 1.295876,
+      "lon": 103.781
+    },
+    {
+      "name": "MD5",
+      "altname": "",
+      "id": "MD5",
+      "numid": 434,
+      "lat": 1.29559,
+      "lon": 103.7814
+    },
+    {
+      "name": "MD6",
+      "altname": "",
+      "id": "MD6",
+      "numid": 435,
+      "lat": 1.295595,
+      "lon": 103.7817
+    },
+    {
+      "name": "MD7",
+      "altname": "",
+      "id": "MD7",
+      "numid": 436,
+      "lat": 1.296213,
+      "lon": 103.781
+    },
+    {
+      "name": "MD9",
+      "altname": "",
+      "id": "MD9",
+      "numid": 437,
+      "lat": 1.296734,
+      "lon": 103.7813
+    },
+    {
+      "name": "MD10",
+      "altname": "",
+      "id": "MD10",
+      "numid": 438,
+      "lat": 1.296375,
+      "lon": 103.7817
+    },
+    {
+      "name": "MD11",
+      "altname": "",
+      "id": "MD11",
+      "numid": 439,
+      "lat": 1.29592,
+      "lon": 103.7817
+    }
+  ]
+}

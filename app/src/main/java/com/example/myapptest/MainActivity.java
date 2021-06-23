@@ -3,6 +3,7 @@ package com.example.myapptest;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.Service;
 import android.media.AudioAttributes;
 import android.net.Uri;
 import android.os.Build;
@@ -295,9 +296,36 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
 
     @Override
     public void onDialogPositiveClick(ArrivalNotifications singleStopArrivalNotifications) {
-        int i;
         boolean stopRepeated = false;
         boolean startNewMonitoring = false;
+
+        List<ServiceInStopDetails> forBoolListCheck = singleStopArrivalNotifications.getServicesAtStop();
+        List<Boolean> boolList = new ArrayList<>();
+        int i = 0;
+        int j = 0;
+        while (singleStopArrivalNotifications.isWatchingForArrival() && i < singleStopArrivalNotifications.getServicesBeingWatched().size()
+                && j < singleStopArrivalNotifications.getServicesAtStop().size()) {
+            Log.e("checking in threshold for", forBoolListCheck.get(j).getServiceNum());
+            if (forBoolListCheck.get(j).getServiceNum().equals(singleStopArrivalNotifications.getServicesBeingWatched().get(i))) {
+                Log.e("matching", forBoolListCheck.get(j).getServiceNum());
+                if (!forBoolListCheck.get(j).getFirstArrival().equals("-") && !forBoolListCheck.get(j).getFirstArrival().equals("Arr")
+                        && (Integer.parseInt(forBoolListCheck.get(j).getFirstArrival()) > singleStopArrivalNotifications.getTimeToWatch())) {
+                    boolList.add(true);
+                }
+                else if (forBoolListCheck.get(j).getFirstArrival().equals("-")){
+                    boolList.add(true);
+                } else {
+                    boolList.add(false);
+                }
+                i++;
+                j++;
+
+            } else {
+                j++;
+            }
+        }
+        singleStopArrivalNotifications.setBeginWatching(boolList);
+
         NotificationCompat.Builder persistentBuilder = new NotificationCompat.Builder(this, getString(R.string.arrivalnotifications_monitoring_notif_id));
         Log.e("entered", "yes in activity");
         for (i = 0; i < arrivalNotificationsArray.size(); i++) {
@@ -327,7 +355,10 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
                     .setPriority(NotificationCompat.PRIORITY_HIGH);
             notificationManager.cancel(singleStopArrivalNotifications.getStopId(), 0);
             notificationManager.notify(singleStopArrivalNotifications.getStopId(), 0, persistentBuilder.build());
+        } else {
+            notificationManager.cancel(singleStopArrivalNotifications.getStopId(), 0);
         }
+
 
     }
 
@@ -353,7 +384,7 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
             if (arrivalNotificationsArray.size() > 0) {
                 for (int i = 0; i < arrivalNotificationsArray.size(); i++) {
                     if (arrivalNotificationsArray.get(i).isWatchingForArrival()) {
-                        updateMonitoringAndNotification(arrivalNotificationsArray.get(i), notificationManager);
+                        updateMonitoringAndNotification(arrivalNotificationsArray.get(i), i);
                     }
                 }
             }
@@ -362,12 +393,30 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
         }
     }
 
-    public void updateMonitoringAndNotification(ArrivalNotifications singleStopArrivalNotificationForUpdate, NotificationManager notificationManager) {
+    public void updateMonitoringAndNotification(ArrivalNotifications singleStopArrivalNotificationForUpdate, int index) {
         Log.e("entered", "updatemonitoringandnotification");
         getChildTimings(singleStopArrivalNotificationForUpdate.getStopId(), new MainActivity.VolleyCallBack() {
             @Override
             public void onSuccess() {
                 List<ServiceInStopDetails> monitoringAllServicesAtStop = servicesAllInfoAtStop;
+                int i = 0;
+                int j = 0;
+                while (i < singleStopArrivalNotificationForUpdate.getServicesBeingWatched().size()
+                        && j < singleStopArrivalNotificationForUpdate.getServicesAtStop().size()) {
+                    if (singleStopArrivalNotificationForUpdate.getServicesAtStop().get(j).getServiceNum()
+                            .equals(singleStopArrivalNotificationForUpdate.getServicesBeingWatched().get(i))) {
+                        if (!arrivalNotificationsArray.get(index).getBeginWatching().get(i) && !monitoringAllServicesAtStop.get(j).getFirstArrival().equals("-")
+                                && !monitoringAllServicesAtStop.get(j).getFirstArrival().equals("Arr")
+                                && Integer.parseInt(monitoringAllServicesAtStop.get(j).getFirstArrival()) >= singleStopArrivalNotificationForUpdate.getTimeToWatch()){
+                            arrivalNotificationsArray.get(index).getBeginWatching().set(i, true);
+                        }
+                        i++;
+                        j++;
+
+                    } else {
+                        j++;
+                    }
+                }
                 List<String> returnInfo = DetermineMonitoringThresholdReached(singleStopArrivalNotificationForUpdate, monitoringAllServicesAtStop);
                 if (returnInfo != null) {
                     ChangeNotification(returnInfo, singleStopArrivalNotificationForUpdate);
@@ -380,21 +429,62 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
     }
 
     private void ChangeNotification(List<String> returnInfo, ArrivalNotifications singleStopNotificationForUpdate) {
-        Log.e("entered", "changenotification");
         NotificationCompat.Builder regularBuilder = new NotificationCompat.Builder(this, getString(R.string.arrivalnotifications_triggered_notif_id));
-        regularBuilder.setContentTitle("Your monitored bus is arriving in " + returnInfo.get(1) + " minute(s)!")
-                .setContentText("Service " + returnInfo.get(0) + " is arriving in " + returnInfo.get(1)
-                        + " minute(s) at " + singleStopNotificationForUpdate.getStopName() + ". "
+        Log.e("entered", "changenotification");
+        if (returnInfo.get(1).equals("0")) {
+            if (returnInfo.size() > 2) {
+                regularBuilder.setContentTitle("Your monitored bus is arriving now!")
+                        .setContentText("Service " + returnInfo.get(0) + " is arriving now at "
+                                + singleStopNotificationForUpdate.getStopName() + ". "
+                                + "The subsequent arrival is for Service " + returnInfo.get(2) + " in " + returnInfo.get(3) + " minute(s).")
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText("Service " + returnInfo.get(0) + " is arriving now at " + singleStopNotificationForUpdate.getStopName() + ". "
+                                        + "The subsequent arrival is Service " + returnInfo.get(2) + " in " + returnInfo.get(3) + " minute(s)."));
+            } else {
+                regularBuilder.setContentTitle("Your monitored bus is arriving now!")
+                        .setContentText("Service " + returnInfo.get(0) + " is arriving now at " + singleStopNotificationForUpdate.getStopName() + ".")
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText("Service " + returnInfo.get(0) + " is arriving now at " + singleStopNotificationForUpdate.getStopName() + "."));
+            }
+        } else if (returnInfo.get(1).equals("1")) {
+            if (returnInfo.size() > 2) {
+                regularBuilder.setContentTitle("Your monitored bus is arriving in " + returnInfo.get(1) + " minute!")
+                        .setContentText("Service " + returnInfo.get(0) + " is arriving in " + returnInfo.get(1)
+                        + " minute at " + singleStopNotificationForUpdate.getStopName() + ". "
                         + "The subsequent arrival is for Service " + returnInfo.get(2) + " in " + returnInfo.get(3) + " minute(s).")
-                .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText("Service " + returnInfo.get(0) + " is arriving in " + returnInfo.get(1)
-                                + " minute(s) at " + singleStopNotificationForUpdate.getStopName() + ". "
-                                + "The subsequent arrival is Service " + returnInfo.get(2) + " in " + returnInfo.get(3) + " minute(s)."))
-                .setSmallIcon(R.drawable.ic_baseline_directions_bus_24)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setSound(soundUri);
-//        notification.sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-//                .setDefaults(Notification.DEFAULT_ALL);
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText("Service " + returnInfo.get(0) + " is arriving in " + returnInfo.get(1)
+                                        + " minute at " + singleStopNotificationForUpdate.getStopName() + ". "
+                                        + "The subsequent arrival is Service " + returnInfo.get(2) + " in " + returnInfo.get(3) + " minute(s)."));
+            } else {
+                regularBuilder.setContentTitle("Your monitored bus is arriving in " + returnInfo.get(1) + " minute!")
+                        .setContentText("Service " + returnInfo.get(0) + " is arriving in " + returnInfo.get(1)
+                        + " minute at " + singleStopNotificationForUpdate.getStopName() + ".")
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText("Service " + returnInfo.get(0) + " is arriving in " + returnInfo.get(1)
+                                        + " minute at " + singleStopNotificationForUpdate.getStopName() + "."));
+            }
+        } else {
+            if (returnInfo.size() > 2) {
+                regularBuilder.setContentTitle("Your monitored bus is arriving in " + returnInfo.get(1) + " minutes!")
+                        .setContentText("Service " + returnInfo.get(0) + " is arriving in " + returnInfo.get(1)
+                        + " minutes at " + singleStopNotificationForUpdate.getStopName() + ". "
+                        + "The subsequent arrival is for Service " + returnInfo.get(2) + " in " + returnInfo.get(3) + " minutes.")
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText("Service " + returnInfo.get(0) + " is arriving in " + returnInfo.get(1)
+                                        + " minutes at " + singleStopNotificationForUpdate.getStopName() + ". "
+                                        + "The subsequent arrival is Service " + returnInfo.get(2) + " in " + returnInfo.get(3) + " minutes."));
+            } else {
+                regularBuilder.setContentTitle("Your monitored bus is arriving in " + returnInfo.get(1) + " minutes!").
+                        setContentText("Service " + returnInfo.get(0) + " is arriving in " + returnInfo.get(1)
+                        + " minutes at " + singleStopNotificationForUpdate.getStopName() + ".")
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText("Service " + returnInfo.get(0) + " is arriving in " + returnInfo.get(1)
+                                        + " minutes at " + singleStopNotificationForUpdate.getStopName() + "."));
+            }
+        }
+        regularBuilder.setSmallIcon(R.drawable.ic_baseline_directions_bus_24)
+                .setPriority(NotificationCompat.PRIORITY_HIGH);
         notificationManager.notify(singleStopNotificationForUpdate.getStopId(), 0, regularBuilder.build());
     }
 
@@ -409,26 +499,53 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
     private List<String> DetermineMonitoringThresholdReached(ArrivalNotifications singleStopArrivalNotificationForUpdate, List<ServiceInStopDetails> monitoringAllServicesAtStop) {
         int i = 0;
         int j = 0;
-        while (i < singleStopArrivalNotificationForUpdate.getServicesBeingWatched().size() && j < servicesAllInfoAtStop.size()) {
-            Log.e("checking in threshold for", servicesAllInfoAtStop.get(j).getServiceNum());
-            if (servicesAllInfoAtStop.get(j).getServiceNum().equals(singleStopArrivalNotificationForUpdate.getServicesBeingWatched().get(i))) {
-                Log.e("matching", servicesAllInfoAtStop.get(j).getServiceNum());
-                if (servicesAllInfoAtStop.get(j).getFirstArrival().equals((singleStopArrivalNotificationForUpdate.getTimeToWatch()) + "")
-                        || servicesAllInfoAtStop.get(j).getSecondArrival().equals(singleStopArrivalNotificationForUpdate.getTimeToWatch() + "")) {
+        while (i < singleStopArrivalNotificationForUpdate.getServicesBeingWatched().size() && j < monitoringAllServicesAtStop.size()) {
+            Log.e("checking in threshold for", monitoringAllServicesAtStop.get(j).getServiceNum());
+            if (monitoringAllServicesAtStop.get(j).getServiceNum().equals(singleStopArrivalNotificationForUpdate.getServicesBeingWatched().get(i))) {
+                Log.e("matching", monitoringAllServicesAtStop.get(j).getServiceNum());
+                if ((!monitoringAllServicesAtStop.get(j).getFirstArrival().equals("-") && !monitoringAllServicesAtStop.get(j).getFirstArrival().equals("Arr")
+                        && singleStopArrivalNotificationForUpdate.getBeginWatching().get(i)
+                        && (Integer.parseInt(monitoringAllServicesAtStop.get(j).getFirstArrival()) <= singleStopArrivalNotificationForUpdate.getTimeToWatch()))
+                        || (singleStopArrivalNotificationForUpdate.getBeginWatching().get(i) && monitoringAllServicesAtStop.get(j).getFirstArrival().equals("Arr"))) {
                     Log.e("timing match", "yes");
                     List<String> returnInfo = new ArrayList<>();
-                    returnInfo.add(servicesAllInfoAtStop.get(j).getServiceNum());
-                    returnInfo.add(servicesAllInfoAtStop.get(j).getFirstArrival());
+                    returnInfo.add(monitoringAllServicesAtStop.get(j).getServiceNum());
+                    if (monitoringAllServicesAtStop.get(j).getFirstArrival().equals("Arr")) {
+                        returnInfo.add("0");
+                    } else {
+                        returnInfo.add(monitoringAllServicesAtStop.get(j).getFirstArrival());
+                    }
                     i = 0;
                     j = 0;
-                    List<String> additionReturnInfo = AdditionalThresholdInformation(singleStopArrivalNotificationForUpdate, servicesAllInfoAtStop.get(j).getServiceNum());
-                    returnInfo.add(additionReturnInfo.get(0));
-                    returnInfo.add(additionReturnInfo.get(1));
+                    List<String> additionReturnInfo = AdditionalThresholdInformation(singleStopArrivalNotificationForUpdate,
+                            monitoringAllServicesAtStop, monitoringAllServicesAtStop.get(j).getServiceNum());
+                    if (additionReturnInfo != null) {
+                        returnInfo.add(additionReturnInfo.get(0));
+                        returnInfo.add(additionReturnInfo.get(1));
+                    }
                     return returnInfo;
-                } else {
-                    i++;
-                    j++;
+                } if (!monitoringAllServicesAtStop.get(j).getSecondArrival().equals("-") && !monitoringAllServicesAtStop.get(j).getSecondArrival().equals("Arr")
+                        && Integer.parseInt(monitoringAllServicesAtStop.get(j).getSecondArrival()) <= singleStopArrivalNotificationForUpdate.getTimeToWatch()) {
+                    List<String> returnInfo = new ArrayList<>();
+                    returnInfo.add(monitoringAllServicesAtStop.get(j).getServiceNum());
+                    if (monitoringAllServicesAtStop.get(j).getSecondArrival().equals("Arr")) {
+                        returnInfo.add("0");
+                    } else {
+                        returnInfo.add(monitoringAllServicesAtStop.get(j).getSecondArrival());
+                    }
+                    i = 0;
+                    j = 0;
+                    List<String> additionReturnInfo = AdditionalThresholdInformation(singleStopArrivalNotificationForUpdate,
+                            monitoringAllServicesAtStop, monitoringAllServicesAtStop.get(j).getServiceNum());
+                    if (additionReturnInfo != null) {
+                        returnInfo.add(additionReturnInfo.get(0));
+                        returnInfo.add(additionReturnInfo.get(1));
+                    }
+                    return returnInfo;
                 }
+                i++;
+                j++;
+
             } else {
                 j++;
             }
@@ -436,23 +553,25 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
         return null;
     }
 
-    private List<String> AdditionalThresholdInformation(ArrivalNotifications singleStopArrivalNotificationForUpdate, String serviceMatched) {
+    private List<String> AdditionalThresholdInformation(ArrivalNotifications singleStopArrivalNotificationForUpdate, List<ServiceInStopDetails> monitoringAllServicesAtStop, String serviceMatched) {
         int i = 0;
         int j = 0;
         int nextEarliestArrival = 1000;
         String nextServiceWithEarliestArrival = "";
-        while (i < singleStopArrivalNotificationForUpdate.getServicesBeingWatched().size() && j < servicesAllInfoAtStop.size()) {
-            Log.e("checking in threshold for", servicesAllInfoAtStop.get(j).getServiceNum());
-            if (servicesAllInfoAtStop.get(j).getServiceNum().equals(singleStopArrivalNotificationForUpdate.getServicesBeingWatched().get(i))) {
-                Log.e("matching", servicesAllInfoAtStop.get(j).getServiceNum());
-                if (Integer.valueOf(servicesAllInfoAtStop.get(j).getFirstArrival()) > singleStopArrivalNotificationForUpdate.getTimeToWatch()
-                        && Integer.valueOf(servicesAllInfoAtStop.get(j).getFirstArrival()) < nextEarliestArrival) {
-                    nextEarliestArrival = Integer.valueOf(servicesAllInfoAtStop.get(j).getFirstArrival());
-                    nextServiceWithEarliestArrival = servicesAllInfoAtStop.get(j).getServiceNum();
-                } else if (Integer.valueOf(servicesAllInfoAtStop.get(j).getSecondArrival()) > singleStopArrivalNotificationForUpdate.getTimeToWatch()
-                        && Integer.valueOf(servicesAllInfoAtStop.get(j).getSecondArrival()) < nextEarliestArrival) {
-                    nextEarliestArrival = Integer.valueOf(servicesAllInfoAtStop.get(j).getSecondArrival());
-                    nextServiceWithEarliestArrival = servicesAllInfoAtStop.get(j).getServiceNum();
+        while (i < singleStopArrivalNotificationForUpdate.getServicesBeingWatched().size() && j < monitoringAllServicesAtStop.size()) {
+            Log.e("checking in threshold for", monitoringAllServicesAtStop.get(j).getServiceNum());
+            if (monitoringAllServicesAtStop.get(j).getServiceNum().equals(singleStopArrivalNotificationForUpdate.getServicesBeingWatched().get(i))) {
+                Log.e("matching", monitoringAllServicesAtStop.get(j).getServiceNum());
+                if (!monitoringAllServicesAtStop.get(j).getFirstArrival().equals("-") && !monitoringAllServicesAtStop.get(j).getFirstArrival().equals("Arr")
+                        && Integer.parseInt(monitoringAllServicesAtStop.get(j).getFirstArrival()) > singleStopArrivalNotificationForUpdate.getTimeToWatch()
+                        && Integer.parseInt(monitoringAllServicesAtStop.get(j).getFirstArrival()) < nextEarliestArrival && !monitoringAllServicesAtStop.get(j).getServiceNum().equals(serviceMatched)) {
+                    nextEarliestArrival = Integer.parseInt(monitoringAllServicesAtStop.get(j).getFirstArrival());
+                    nextServiceWithEarliestArrival = monitoringAllServicesAtStop.get(j).getServiceNum();
+                } else if (!monitoringAllServicesAtStop.get(j).getSecondArrival().equals("-") && !monitoringAllServicesAtStop.get(j).getSecondArrival().equals("Arr")
+                        && Integer.parseInt(monitoringAllServicesAtStop.get(j).getSecondArrival()) > singleStopArrivalNotificationForUpdate.getTimeToWatch()
+                        && Integer.parseInt(monitoringAllServicesAtStop.get(j).getSecondArrival()) < nextEarliestArrival) {
+                    nextEarliestArrival = Integer.parseInt(monitoringAllServicesAtStop.get(j).getSecondArrival());
+                    nextServiceWithEarliestArrival = monitoringAllServicesAtStop.get(j).getServiceNum();
                 }
                 i++;
                 j++;
@@ -461,6 +580,9 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
             }
         }
         List<String> returnInfo = new ArrayList<>();
+        if (nextEarliestArrival == 1000) {
+            return null;
+        }
         returnInfo.add(nextServiceWithEarliestArrival);
         returnInfo.add(nextEarliestArrival + "");
         return returnInfo;

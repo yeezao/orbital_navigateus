@@ -1,0 +1,1704 @@
+{
+ "edges": [
+   {
+     "from": "RC4",
+     "fromnumid": 109,
+     "to": "CAPT",
+     "tonumid": 108,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "RC4",
+     "fromnumid": 109,
+     "to": "CENDANA",
+     "tonumid": 113,
+     "by": "walk",
+     "duration": 1,
+     "sheltered": "n",
+     "accessible": "y"
+   },
+   {
+     "from": "CAPT",
+     "fromnumid": 108,
+     "to": "CENDANA",
+     "tonumid": 113,
+     "by": "walk",
+     "duration": 1,
+     "sheltered": "n",
+     "accessible": "n"
+   },
+   {
+     "from": "CAPT",
+     "fromnumid": 108,
+     "to": "USP",
+     "tonumid": 107,
+     "by": "walk",
+     "duration": 3,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "CAPT",
+     "fromnumid": 108,
+     "to": "YNC",
+     "tonumid": 112,
+     "by": "walk",
+     "duration": 3,
+     "sheltered": "n",
+     "accessible": "n"
+   },
+   {
+     "from": "CENDANA",
+     "fromnumid": 113,
+     "to": "ELM",
+     "tonumid": 111,
+     "by": "walk",
+     "duration": 4,
+     "sheltered": "n",
+     "accessible": "y"
+   },
+   {
+     "from": "ELM",
+     "fromnumid": 111,
+     "to": "SAGA",
+     "tonumid": 110,
+     "by": "walk",
+     "duration": 1,
+     "sheltered": "n",
+     "accessible": "y"
+   },
+   {
+     "from": "SAGA",
+     "fromnumid": 110,
+     "to": "SRC",
+     "tonumid": 103,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "n",
+     "accessible": "y"
+   },
+   {
+     "from": "SAGA",
+     "fromnumid": 110,
+     "to": "ERC",
+     "tonumid": 104,
+     "by": "walk",
+     "duration": 1,
+     "sheltered": "n",
+     "accessible": "y"
+   },
+   {
+     "from": "USP",
+     "fromnumid": 107,
+     "to": "TEMBU",
+     "tonumid": 106,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "TEMBU",
+     "fromnumid": 106,
+     "to": "UTR",
+     "tonumid": 105,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "TEMBU",
+     "fromnumid": 106,
+     "to": "UTR",
+     "tonumid": 105,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "n"
+   },
+   {
+     "from": "UTR",
+     "fromnumid": 105,
+     "to": "TOWNPLAZA",
+     "tonumid": 100,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "TEMBU",
+     "fromnumid": 106,
+     "to": "ERC",
+     "tonumid": 104,
+     "by": "walk",
+     "duration": 1,
+     "sheltered": "n",
+     "accessible": "y"
+   },
+   {
+     "from": "TEMBU",
+     "fromnumid": 106,
+     "to": "ERC",
+     "tonumid": 104,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "n"
+   },
+   {
+     "from": "UTR",
+     "fromnumid": 105,
+     "to": "ERC",
+     "tonumid": 104,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "ERC",
+     "fromnumid": 104,
+     "to": "SRC",
+     "tonumid": 103,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "SRC",
+     "fromnumid": 103,
+     "to": "TOWNPLAZA",
+     "tonumid": 100,
+     "by": "walk",
+     "duration": 3,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "TOWNPLAZA",
+     "fromnumid": 100,
+     "to": "CREATE",
+     "tonumid": 102,
+     "by": "walk",
+     "duration": 1,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "TOWNPLAZA",
+     "fromnumid": 100,
+     "to": "CREATETOWER",
+     "tonumid": 101,
+     "by": "walk",
+     "duration": 1,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "TOWNPLAZA",
+     "fromnumid": 100,
+     "to": "Utown",
+     "tonumid": 33,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "ERC",
+     "fromnumid": 104,
+     "to": "YNC",
+     "tonumid": 112,
+     "by": "walk",
+     "duration": 5,
+     "sheltered": "n",
+     "accessible": "n"
+   },
+   {
+     "from": "COMCEN",
+     "fromnumid": 9,
+     "to": "E5",
+     "tonumid": 209,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "n"
+   },
+   {
+     "from": "COMCEN",
+     "fromnumid": 9,
+     "to": "IT",
+     "tonumid": 223,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "n",
+     "accessible": "y"
+   },
+   {
+     "from": "COMCEN",
+     "fromnumid": 9,
+     "to": "IT",
+     "tonumid": 223,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "n"
+   },
+   {
+     "from": "COMCEN",
+     "fromnumid": 9,
+     "to": "CELC",
+     "tonumid": 217,
+     "by": "walk",
+     "duration": 4,
+     "sheltered": "n",
+     "accessible": "y"
+   },
+   {
+     "from": "CELC",
+     "fromnumid": 217,
+     "to": "TECHNO",
+     "tonumid": 216,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "n",
+     "accessible": "y"
+   },
+   {
+     "from": "CENLIB",
+     "fromnumid": 5,
+     "to": "CELC",
+     "tonumid": 217,
+     "by": "walk",
+     "duration": 5,
+     "sheltered": "n",
+     "accessible": "y"
+   },
+   {
+     "from": "CENLIB",
+     "fromnumid": 5,
+     "to": "COMCEN",
+     "tonumid": 9,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "n",
+     "accessible": "y"
+   },
+   {
+     "from": "CENLIB",
+     "fromnumid": 5,
+     "to": "COMCEN",
+     "tonumid": 9,
+     "by": "walk",
+     "duration": 8,
+     "sheltered": "y",
+     "accessible": "n"
+   },
+   {
+     "from": "YIH",
+     "fromnumid": 35,
+     "to": "E7",
+     "tonumid": 212,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "n",
+     "accessible": "y"
+   },
+   {
+     "from": "COMCEN",
+     "fromnumid": 9,
+     "to": "E4A",
+     "tonumid": 208,
+     "by": "walk",
+     "duration": 4,
+     "sheltered": "n",
+     "accessible": "n"
+   },
+   {
+     "from": "COMCEN",
+     "fromnumid": 9,
+     "to": "E4",
+     "tonumid": 207,
+     "by": "walk",
+     "duration": 4,
+     "sheltered": "n",
+     "accessible": "n"
+   },
+   {
+     "from": "RAFFLES",
+     "fromnumid": 27,
+     "to": "RH",
+     "tonumid": 990,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "n",
+     "accessible": "n"
+   },
+   {
+     "from": "RAFFLES",
+     "fromnumid": 27,
+     "to": "E5A",
+     "tonumid": 210,
+     "by": "walk",
+     "duration": 5,
+     "sheltered": "n",
+     "accessible": "n"
+   },
+   {
+     "from": "RAFFLES",
+     "fromnumid": 27,
+     "to": "E3A",
+     "tonumid": 206,
+     "by": "walk",
+     "duration": 5,
+     "sheltered": "n",
+     "accessible": "n"
+   },
+   {
+     "from": "E5A",
+     "fromnumid": 210,
+     "to": "EW2",
+     "tonumid": 215,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "n",
+     "accessible": "n"
+   },
+   {
+     "from": "EW2",
+     "fromnumid": 215,
+     "to": "E6",
+     "tonumid": 211,
+     "by": "walk",
+     "duration": 1,
+     "sheltered": "n",
+     "accessible": "n"
+   },
+   {
+     "from": "EW2",
+     "fromnumid": 215,
+     "to": "E4A",
+     "tonumid": 208,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "n",
+     "accessible": "n"
+   },
+   {
+     "from": "E3A",
+     "fromnumid": 206,
+     "to": "EA",
+     "tonumid": 200,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "BLK-EA-OPP",
+     "fromnumid": 8,
+     "to": "EA",
+     "tonumid": 200,
+     "by": "walk",
+     "duration": 1,
+     "sheltered": "y",
+     "accessible": "n"
+   },
+   {
+     "from": "YIH-OPP",
+     "fromnumid": 22,
+     "to": "E7",
+     "tonumid": 212,
+     "by": "walk",
+     "duration": 3,
+     "sheltered": "n",
+     "accessible": "n"
+   },
+   {
+     "from": "E7",
+     "fromnumid": 212,
+     "to": "E4A",
+     "tonumid": 208,
+     "by": "walk",
+     "duration": 3,
+     "sheltered": "n",
+     "accessible": "n"
+   },
+   {
+     "from": "E7",
+     "fromnumid": 212,
+     "to": "E4",
+     "tonumid": 207,
+     "by": "walk",
+     "duration": 3,
+     "sheltered": "n",
+     "accessible": "n"
+   },
+   {
+     "from": "COMCEN",
+     "fromnumid": 9,
+     "to": "E7",
+     "tonumid": 212,
+     "by": "walk",
+     "duration": 3,
+     "sheltered": "n",
+     "accessible": "y"
+   },
+   {
+     "from": "MUSEUM",
+     "fromnumid": 15,
+     "to": "RAFFLES",
+     "tonumid": 27,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "n",
+     "accessible": "y"
+   },
+   {
+     "from": "MUSEUM",
+     "fromnumid": 15,
+     "to": "Utown",
+     "tonumid": 33,
+     "by": "walk",
+     "duration": 8,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "E5",
+     "fromnumid": 209,
+     "to": "E4",
+     "tonumid": 207,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "E4",
+     "fromnumid": 207,
+     "to": "E4A",
+     "tonumid": 208,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "E4",
+     "fromnumid": 207,
+     "to": "E3",
+     "tonumid": 205,
+     "by": "walk",
+     "duration": 3,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "EA",
+     "fromnumid": 200,
+     "to": "E2",
+     "tonumid": 203,
+     "by": "walk",
+     "duration": 4,
+     "sheltered": "y",
+     "accessible": "n"
+   },
+   {
+     "from": "EA",
+     "fromnumid": 200,
+     "to": "E1A",
+     "tonumid": 202,
+     "by": "walk",
+     "duration": 5,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "E1A",
+     "fromnumid": 202,
+     "to": "E1",
+     "tonumid": 201,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "E2",
+     "fromnumid": 203,
+     "to": "LT1",
+     "tonumid": 901,
+     "by": "walk",
+     "duration": 1,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "E2",
+     "fromnumid": 203,
+     "to": "LT2",
+     "tonumid": 902,
+     "by": "walk",
+     "duration": 1,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "E4",
+     "fromnumid": 207,
+     "to": "LT6",
+     "tonumid": 906,
+     "by": "walk",
+     "duration": 1,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "EA",
+     "fromnumid": 200,
+     "to": "LT7",
+     "tonumid": 907,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "E1A",
+     "fromnumid": 202,
+     "to": "EW1A",
+     "tonumid": 214,
+     "by": "walk",
+     "duration": 3,
+     "sheltered": "n",
+     "accessible": "n"
+   },
+   {
+     "from": "E1A",
+     "fromnumid": 202,
+     "to": "EW1",
+     "tonumid": 213,
+     "by": "walk",
+     "duration": 3,
+     "sheltered": "n",
+     "accessible": "n"
+   },
+   {
+     "from": "E3",
+     "fromnumid": 205,
+     "to": "E2",
+     "tonumid": 203,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "E1A",
+     "fromnumid": 202,
+     "to": "E2",
+     "tonumid": 203,
+     "by": "walk",
+     "duration": 1,
+     "sheltered": "n",
+     "accessible": "n"
+   },
+   {
+     "from": "E1",
+     "fromnumid": 201,
+     "to": "E4",
+     "tonumid": 207,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "E2",
+     "fromnumid": 203,
+     "to": "E2A",
+     "tonumid": 204,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "n"
+   },
+   {
+     "from": "E4",
+     "fromnumid": 207,
+     "to": "E2A",
+     "tonumid": 204,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "n",
+     "accessible": "n"
+   },
+   {
+     "from": "LT7",
+     "fromnumid": 907,
+     "to": "E2",
+     "tonumid": 203,
+     "by": "walk",
+     "duration": 3,
+     "sheltered": "y",
+     "accessible": "n"
+   },
+   {
+     "from": "E3",
+     "fromnumid": 205,
+     "to": "E5A",
+     "tonumid": 210,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "E1",
+     "fromnumid": 201,
+     "to": "TECHNO",
+     "tonumid": 216,
+     "by": "walk",
+     "duration": 3,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "E4",
+     "fromnumid": 207,
+     "to": "TECHNO",
+     "tonumid": 216,
+     "by": "walk",
+     "duration": 3,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "IT",
+     "fromnumid": 223,
+     "to": "TECHNO",
+     "tonumid": 216,
+     "by": "walk",
+     "duration": 3,
+     "sheltered": "n",
+     "accessible": "n"
+   },
+   {
+     "from": "EW1",
+     "fromnumid": 213,
+     "to": "TECHNO",
+     "tonumid": 216,
+     "by": "walk",
+     "duration": 3,
+     "sheltered": "n",
+     "accessible": "n"
+   },
+   {
+     "from": "CENLIB",
+     "fromnumid": 5,
+     "to": "SDE4",
+     "tonumid": 254,
+     "by": "walk",
+     "duration": 7,
+     "sheltered": "n",
+     "accessible": "y"
+   },
+   {
+     "from": "COMCEN",
+     "fromnumid": 9,
+     "to": "SDE4",
+     "tonumid": 254,
+     "by": "walk",
+     "duration": 8,
+     "sheltered": "n",
+     "accessible": "y"
+   },
+   {
+     "from": "SDE4",
+     "fromnumid": 254,
+     "to": "SDE3",
+     "tonumid": 253,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "SDE3",
+     "fromnumid": 253,
+     "to": "SDE1",
+     "tonumid": 251,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "SDE1",
+     "fromnumid": 251,
+     "to": "SDE2",
+     "tonumid": 252,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "LT13-OPP",
+     "fromnumid": 34,
+     "to": "SDE4",
+     "tonumid": 254,
+     "by": "walk",
+     "duration": 5,
+     "sheltered": "n",
+     "accessible": "y"
+   },
+   {
+     "from": "LT13",
+     "fromnumid": 13,
+     "to": "SDE4",
+     "tonumid": 254,
+     "by": "walk",
+     "duration": 7,
+     "sheltered": "n",
+     "accessible": "y"
+   },
+   {
+     "from": "AS7",
+     "fromnumid": 1,
+     "to": "COM2",
+     "tonumid": 7,
+     "by": "bus",
+     "duration": 3,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "COM2",
+     "fromnumid": 7,
+     "to": "BIZ2",
+     "tonumid": 2,
+     "by": "bus",
+     "duration": 3,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "AS7",
+     "fromnumid": 1,
+     "to": "BIZ2",
+     "tonumid": 2,
+     "by": "bus",
+     "duration": 3,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "LT13",
+     "fromnumid": 13,
+     "to": "AS7",
+     "tonumid": 1,
+     "by": "bus",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "CENLIB",
+     "fromnumid": 5,
+     "to": "LT13",
+     "tonumid": 13,
+     "by": "bus",
+     "duration": 4,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "YIH",
+     "fromnumid": 35,
+     "to": "CENLIB",
+     "tonumid": 5,
+     "by": "bus",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "BIZ2",
+     "fromnumid": 2,
+     "to": "PGP12-OPP",
+     "tonumid": 19,
+     "by": "bus",
+     "duration": 4,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "PGP12-OPP",
+     "fromnumid": 19,
+     "to": "PGP7",
+     "tonumid": 24,
+     "by": "bus",
+     "duration": 3,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "PGP7",
+     "fromnumid": 24,
+     "to": "PGPT",
+     "tonumid": 25,
+     "by": "bus",
+     "duration": 3,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "PGPT",
+     "fromnumid": 25,
+     "to": "CGH",
+     "tonumid": 6,
+     "by": "bus",
+     "duration": 15,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "CGH",
+     "fromnumid": 6,
+     "to": "BUKITTIMAH-BTC2",
+     "tonumid": 4,
+     "by": "bus",
+     "duration": 5,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "BUKITTIMAH-BTC2",
+     "fromnumid": 4,
+     "to": "BG-MRT",
+     "tonumid": 3,
+     "by": "bus",
+     "duration": 4,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "BG-MRT",
+     "fromnumid": 3,
+     "to": "MUSEM",
+     "tonumid": 15,
+     "by": "bus",
+     "duration": 15,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "MUSEUM",
+     "fromnumid": 15,
+     "to": "EA",
+     "tonumid": 8,
+     "by": "bus",
+     "duration": 4,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "EA",
+     "fromnumid": 8,
+     "to": "KR-BT",
+     "tonumid": 10,
+     "by": "bus",
+     "duration": 4,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "STAFFCLUB-OPP",
+     "fromnumid": 21,
+     "to": "YIH",
+     "tonumid": 35,
+     "by": "bus",
+     "duration": 1,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "Utown",
+     "fromnumid": 33,
+     "to": "YIH",
+     "tonumid": 35,
+     "by": "bus",
+     "duration": 4,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "MUSEUM",
+     "fromnumid": 15,
+     "to": "Utown",
+     "tonumid": 33,
+     "by": "bus",
+     "duration": 3,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "Utown",
+     "fromnumid": 33,
+     "to": "STAFFCLUB",
+     "tonumid": 32,
+     "by": "bus",
+     "duration": 4,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "KV",
+     "fromnumid": 12,
+     "to": "MUSEUM",
+     "tonumid": 15,
+     "by": "bus",
+     "duration": 4,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "KR-BT",
+     "fromnumid": 10,
+     "to": "COMCEN",
+     "tonumid": 9,
+     "by": "bus",
+     "duration": 6,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "KR-BT",
+     "fromnumid": 10,
+     "to": "JP-SCH-16151",
+     "tonumid": 30,
+     "by": "bus",
+     "duration": 5,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "JP-SCH-16151",
+     "fromnumid": 30,
+     "to": "KV",
+     "tonumid": 12,
+     "by": "bus",
+     "duration": 3,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "UTown",
+     "fromnumid": 33,
+     "to": "RAFFLES",
+     "tonumid": 27,
+     "by": "bus",
+     "duration": 4,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "RAFFLES",
+     "fromnumid": 27,
+     "to": "EA",
+     "tonumid": 8,
+     "by": "bus",
+     "duration": 3,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "UHALL",
+     "fromnumid": 31,
+     "to": "STAFFCLUB-OPP",
+     "tonumid": 21,
+     "by": "bus",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "LT27",
+     "fromnumid": 14,
+     "to": "UHALL",
+     "tonumid": 31,
+     "by": "bus",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "KR-MRT",
+     "fromnumid": 11,
+     "to": "LT27",
+     "tonumid": 14,
+     "by": "bus",
+     "duration": 4,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "PGPT",
+     "fromnumid": 25,
+     "to": "KR-MRT",
+     "tonumid": 11,
+     "by": "bus",
+     "duration": 7,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "PGP12-OPP",
+     "fromnumid": 19,
+     "to": "PGPT",
+     "tonumid": 25,
+     "by": "bus",
+     "duration": 5,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "STAFFCLUB-OPP",
+     "fromnumid": 21,
+     "to": "UTown",
+     "tonumid": 33,
+     "by": "bus",
+     "duration": 5,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "STAFFCLUB-OPP",
+     "fromnumid": 21,
+     "to": "MUSEUM",
+     "tonumid": 15,
+     "by": "bus",
+     "duration": 4,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "MUSEUM",
+     "fromnumid": 15,
+     "to": "STAFFCLUB",
+     "tonumid": 32,
+     "by": "bus",
+     "duration": 3,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "STAFFCLUB",
+     "fromnumid": 32,
+     "to": "UHALL-OPP",
+     "tonumid": 20,
+     "by": "bus",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "UHALL-OPP",
+     "fromnumid": 20,
+     "to": "S17",
+     "tonumid": 28,
+     "by": "bus",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "S17",
+     "fromnumid": 28,
+     "to": "KR-MRT-OPP",
+     "tonumid": 17,
+     "by": "bus",
+     "duration": 3,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "KR-MRT-OPP",
+     "fromnumid": 17,
+     "to": "PGP",
+     "tonumid": 26,
+     "by": "bus",
+     "duration": 8,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "PGP",
+     "fromnumid": 26,
+     "to": "PGP12",
+     "tonumid": 29,
+     "by": "bus",
+     "duration": 5,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "PGP",
+     "fromnumid": 26,
+     "to": "PGP14-15",
+     "tonumid": 23,
+     "by": "bus",
+     "duration": 4,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "PGP14-15",
+     "fromnumid": 23,
+     "to": "PGP12",
+     "tonumid": 29,
+     "by": "bus",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "PGP12",
+     "fromnumid": 29,
+     "to": "HSSML-OPP",
+     "tonumid": 16,
+     "by": "bus",
+     "duration": 3,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "HSSML-OPP",
+     "fromnumid": 16,
+     "to": "NUSS-OPP",
+     "tonumid": 18,
+     "by": "bus",
+     "duration": 4,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "NUSS-OPP",
+     "fromnumid": 18,
+     "to": "COM2",
+     "tonumid": 7,
+     "by": "bus",
+     "duration": 3,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "COM2",
+     "fromnumid": 7,
+     "to": "LT13-OPP",
+     "tonumid": 34,
+     "by": "bus",
+     "duration": 4,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "NUSS-OPP",
+     "fromnumid": 18,
+     "to": "LT13-OPP",
+     "tonumid": 34,
+     "by": "bus",
+     "duration": 3,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "LT13-OPP",
+     "fromnumid": 34,
+     "to": "COMCEN",
+     "tonumid": 9,
+     "by": "bus",
+     "duration": 5,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "COMCEN",
+     "fromnumid": 9,
+     "to": "YIH-OPP",
+     "tonumid": 22,
+     "by": "bus",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "YIH-OPP",
+     "fromnumid": 22,
+     "to": "MUSEUM",
+     "tonumid": 15,
+     "by": "bus",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "YIH-OPP",
+     "fromnumid": 22,
+     "to": "UTown",
+     "tonumid": 33,
+     "by": "bus",
+     "duration": 4,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "S17",
+     "fromnumid": 28,
+     "to": "LT27",
+     "tonumid": 14,
+     "by": "bus",
+     "duration": 3,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "STAFFCLUB-OPP",
+     "fromnumid": 21,
+     "to": "YIH",
+     "tonumid": 35,
+     "by": "walk",
+     "duration": 3,
+     "sheltered": "n",
+     "accessible": "y"
+   },
+   {
+     "from": "STAFFCLUB-OPP",
+     "fromnumid": 21,
+     "to": "YIH",
+     "tonumid": 35,
+     "by": "walk",
+     "duration": 5,
+     "sheltered": "y",
+     "accessible": "n"
+   },
+   {
+     "from": "STAFFCLUB",
+     "fromnumid": 32,
+     "to": "STAFFCLUB-OPP",
+     "tonumid": 21,
+     "by": "walk",
+     "duration": 1,
+     "sheltered": "n",
+     "accessible": "y"
+   },
+   {
+     "from": "STAFFCLUB",
+     "fromnumid": 32,
+     "to": "STAFFCLUB-OPP",
+     "tonumid": 21,
+     "by": "walk",
+     "duration": 4,
+     "sheltered": "y",
+     "accessible": "n"
+   },
+   {
+     "from": "COMCEN",
+     "fromnumid": 9,
+     "to": "LT3",
+     "tonumid": 903,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "n"
+   },
+   {
+     "from": "COMCEN",
+     "fromnumid": 9,
+     "to": "LT4",
+     "tonumid": 904,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "n"
+   },
+   {
+     "from": "LT3",
+     "fromnumid": 903,
+     "to": "LT4",
+     "tonumid": 904,
+     "by": "walk",
+     "duration": 1,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "COMCEN",
+     "fromnumid": 9,
+     "to": "CLBL6",
+     "tonumid": 96,
+     "by": "walk",
+     "duration": 4,
+     "sheltered": "y",
+     "accessible": "n"
+   },
+   {
+     "from": "CENLIB",
+     "fromnumid": 5,
+     "to": "CLBL1",
+     "tonumid": 91,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "COMCEN",
+     "fromnumid": 9,
+     "to": "ITCARE",
+     "tonumid": 99,
+     "by": "walk",
+     "duration": 5,
+     "sheltered": "y",
+     "accessible": "n"
+   },
+   {
+     "from": "CLBL1",
+     "fromnumid": 91,
+     "to": "CLBL6",
+     "tonumid": 96,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "n"
+   },
+   {
+     "from": "CLBL6",
+     "fromnumid": 96,
+     "to": "ITCARE",
+     "tonumid": 99,
+     "by": "walk",
+     "duration": 1,
+     "sheltered": "y",
+     "accessible": "n"
+   },
+   {
+     "from": "CLBL1",
+     "fromnumid": 91,
+     "to": "AS6",
+     "tonumid": 306,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "CLBL6",
+     "fromnumid": 96,
+     "to": "AS6",
+     "tonumid": 306,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "n"
+   },
+   {
+     "from": "CLBL6",
+     "fromnumid": 96,
+     "to": "E5",
+     "tonumid": 209,
+     "by": "walk",
+     "duration": 3,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "CENLIB",
+     "fromnumid": 5,
+     "to": "AS8",
+     "tonumid": 308,
+     "by": "walk",
+     "duration": 1,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "AS6",
+     "fromnumid": 306,
+     "to": "AS8",
+     "tonumid": 308,
+     "by": "walk",
+     "duration": 1,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "AS6",
+     "fromnumid": 306,
+     "to": "AS1",
+     "tonumid": 301,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "AS8",
+     "fromnumid": 308,
+     "to": "AS1",
+     "tonumid": 301,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "AS1",
+     "fromnumid": 301,
+     "to": "LT9",
+     "tonumid": 909,
+     "by": "walk",
+     "duration": 1,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "LT9",
+     "fromnumid": 909,
+     "to": "DECK",
+     "tonumid": 334,
+     "by": "walk",
+     "duration": 1,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "AS1",
+     "fromnumid": 301,
+     "to": "LT10",
+     "tonumid": 910,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "n"
+   },
+   {
+     "from": "AS1",
+     "fromnumid": 301,
+     "to": "AS2",
+     "tonumid": 302,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "n"
+   },
+   {
+     "from": "LT10",
+     "fromnumid": 910,
+     "to": "AS4",
+     "tonumid": 304,
+     "by": "walk",
+     "duration": 1,
+     "sheltered": "y",
+     "accessible": "n"
+   },
+   {
+     "from": "LT10",
+     "fromnumid": 910,
+     "to": "AS3",
+     "tonumid": 303,
+     "by": "walk",
+     "duration": 1,
+     "sheltered": "y",
+     "accessible": "n"
+   },
+   {
+     "from": "AS2",
+     "fromnumid": 302,
+     "to": "AS3",
+     "tonumid": 303,
+     "by": "walk",
+     "duration": 1,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "AS3",
+     "fromnumid": 303,
+     "to": "AS4",
+     "tonumid": 304,
+     "by": "walk",
+     "duration": 1,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "AS3",
+     "fromnumid": 303,
+     "to": "AS7",
+     "tonumid": 307,
+     "by": "walk",
+     "duration": 1,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "AS4",
+     "fromnumid": 304,
+     "to": "AS5",
+     "tonumid": 305,
+     "by": "walk",
+     "duration": 1,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "AS5",
+     "fromnumid": 305,
+     "to": "LT8",
+     "tonumid": 908,
+     "by": "walk",
+     "duration": 1,
+     "sheltered": "y",
+     "accessible": "n"
+   },
+   {
+     "from": "AS3",
+     "fromnumid": 303,
+     "to": "LT12",
+     "tonumid": 912,
+     "by": "walk",
+     "duration": 1,
+     "sheltered": "y",
+     "accessible": "n"
+   },
+   {
+     "from": "AS3",
+     "fromnumid": 303,
+     "to": "LT12",
+     "tonumid": 912,
+     "by": "walk",
+     "duration": 3,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "LT13BS",
+     "fromnumid": 13,
+     "to": "AS3",
+     "tonumid": 303,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "n",
+     "accessible": "n"
+   },
+   {
+     "from": "LT13",
+     "fromnumid": 913,
+     "to": "AS3",
+     "tonumid": 303,
+     "by": "walk",
+     "duration": 1,
+     "sheltered": "y",
+     "accessible": "n"
+   },
+   {
+     "from": "LT13",
+     "fromnumid": 913,
+     "to": "AS2",
+     "tonumid": 302,
+     "by": "walk",
+     "duration": 1,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "LT13BS",
+     "fromnumid": 13,
+     "to": "AS2",
+     "tonumid": 302,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "n",
+     "accessible": "y"
+   },
+   {
+     "from": "AS2",
+     "fromnumid": 302,
+     "to": "LT11",
+     "tonumid": 911,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "LT13-OPP",
+     "fromnumid": 34,
+     "to": "AS2",
+     "tonumid": 302,
+     "by": "walk",
+     "duration": 3,
+     "sheltered": "y",
+     "accessible": "n"
+   },
+   {
+     "from": "DECK",
+     "fromnumid": 334,
+     "to": "COM1",
+     "tonumid": 331,
+     "by": "walk",
+     "duration": 5,
+     "sheltered": "n",
+     "accessible": "y"
+   },
+   {
+     "from": "AS6",
+     "fromnumid": 306,
+     "to": "LT14",
+     "tonumid": 914,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "n"
+   },
+   {
+     "from": "LT14",
+     "fromnumid": 914,
+     "to": "LT15",
+     "tonumid": 915,
+     "by": "walk",
+     "duration": 1,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "LT15",
+     "fromnumid": 915,
+     "to": "COM1",
+     "tonumid": 331,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "y"
+   },
+   {
+     "from": "LT13BS",
+     "fromnumid": 13,
+     "to": "LT13-OPP",
+     "tonumid": 34,
+     "by": "walk",
+     "duration": 1,
+     "sheltered": "n",
+     "accessible": "y"
+   }
+ ]
+}

@@ -10,6 +10,7 @@ public class StopList {
     private Double stopLongitude;
     private String stopLinkage;
     private Float distanceFromUser;
+    private int stopNumId;
 
     public StopList() {
     }
@@ -76,6 +77,14 @@ public class StopList {
 
     public void setDistanceFromUser(Float distanceFromUser) {
         this.distanceFromUser = distanceFromUser;
+    }
+
+    public int getStopNumId() {
+        return stopNumId;
+    }
+
+    public void setStopNumId(int stopNumId) {
+        this.stopNumId = stopNumId;
     }
 
 

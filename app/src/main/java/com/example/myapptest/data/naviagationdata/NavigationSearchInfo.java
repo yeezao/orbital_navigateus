@@ -13,10 +13,8 @@ public class NavigationSearchInfo {
     private boolean sheltered;
     private boolean barrierFree;
     private boolean internalBusOnly;
-    private StopList originDetails;
-    private StopList destDetails;
-    private List<ServiceInStopDetails> originServiceDetails;
-    private List<ServiceInStopDetails> destServiceDetails;
+//    private StopList originDetails;
+//    private StopList destDetails;
 
 
     public String getOrigin() {
@@ -59,38 +57,37 @@ public class NavigationSearchInfo {
         this.internalBusOnly = internalBusOnly;
     }
 
-    public StopList getOriginDetails() {
-        return originDetails;
-    }
-
-    public void setOriginDetails(StopList originDetails) {
-        this.originDetails = originDetails;
-    }
-
-    public StopList getDestDetails() {
-        return destDetails;
-    }
-
-    public void setDestDetails(StopList destDetails) {
-        this.destDetails = destDetails;
-    }
-
-
-    public List<ServiceInStopDetails> getOriginServiceDetails() {
-        return originServiceDetails;
-    }
-
-    public void setOriginServiceDetails(List<ServiceInStopDetails> originServiceDetails) {
-        this.originServiceDetails = originServiceDetails;
-    }
-
-    public List<ServiceInStopDetails> getDestServiceDetails() {
-        return destServiceDetails;
-    }
-
-    public void setDestServiceDetails(List<ServiceInStopDetails> destServiceDetails) {
-        this.destServiceDetails = destServiceDetails;
-    }
+//    public StopList getOriginDetails() {
+//        return originDetails;
+//    }
+//
+//    public void setOriginDetails(StopList originDetails) {
+//        this.originDetails = originDetails;
+//    }
+//
+//    public StopList getDestDetails() {
+//        return destDetails;
+//    }
+//
+//    public void setDestDetails(StopList destDetails) {
+//        this.destDetails = destDetails;
+//    }
+//
+//    public List<ServiceInStopDetails> getOriginServiceDetails() {
+//        return originServiceDetails;
+//    }
+//
+//    public void setOriginServiceDetails(List<ServiceInStopDetails> originServiceDetails) {
+//        this.originServiceDetails = originServiceDetails;
+//    }
+//
+//    public List<ServiceInStopDetails> getDestServiceDetails() {
+//        return destServiceDetails;
+//    }
+//
+//    public void setDestServiceDetails(List<ServiceInStopDetails> destServiceDetails) {
+//        this.destServiceDetails = destServiceDetails;
+//    }
 
 
 }
