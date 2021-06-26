@@ -1,18 +1,12 @@
 package com.example.myapptest.data.naviagationdata;
 
-import com.example.myapptest.data.busstopinformation.ServiceInStopDetails;
-import com.example.myapptest.data.busstopinformation.StopList;
-import com.example.myapptest.ui.stops_services.StopsServicesFragment;
-
-import java.util.List;
-
 public class NavigationSearchInfo {
 
     private String origin;
     private String dest;
     private boolean sheltered;
     private boolean barrierFree;
-    private boolean internalBusOnly;
+    private boolean walkOnly;
 //    private StopList originDetails;
 //    private StopList destDetails;
 
@@ -49,12 +43,12 @@ public class NavigationSearchInfo {
         this.barrierFree = barrierFree;
     }
 
-    public boolean isInternalBusOnly() {
-        return internalBusOnly;
+    public boolean isWalkOnly() {
+        return walkOnly;
     }
 
-    public void setInternalBusOnly(boolean internalBusOnly) {
-        this.internalBusOnly = internalBusOnly;
+    public void setWalkOnly(boolean walkOnly) {
+        this.walkOnly = walkOnly;
     }
 
 //    public StopList getOriginDetails() {

@@ -2,15 +2,20 @@ package com.example.myapptest.ui.directions;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.myapptest.MainActivity;
 import com.example.myapptest.R;
+import com.example.myapptest.data.naviagationdata.NavigationResults;
 import com.example.myapptest.data.naviagationdata.NavigationSearchInfo;
 
 ///**
@@ -20,8 +25,9 @@ import com.example.myapptest.data.naviagationdata.NavigationSearchInfo;
 // */
 public class DirectionsResultFragment extends Fragment {
 
-    private String origin;
-    private String dest;
+    NavigationResults singleNavResult;
+    String origin;
+    String dest;
 
 //    public DirectionsResultFragment() {
 //        // Required empty public constructor
@@ -45,28 +51,38 @@ public class DirectionsResultFragment extends Fragment {
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        navigationSearchInfo = ((MainActivity) getActivity()).getNavigationSearchInfo();
-        Log.e("origin - dest is", navigationSearchInfo.getOrigin() + " " + navigationSearchInfo.getDest());
-
         View view = inflater.inflate(R.layout.fragment_directions_result, container, false);
+        TextView originTextBox = view.findViewById(R.id.textView_origin_resultList);
+        TextView destTextBox = view.findViewById(R.id.textView_dest_resultList);
+        origin = ((MainActivity) getActivity()).getOrigin();
+        dest = ((MainActivity) getActivity()).getDest();
+        originTextBox.setText(origin);
+        destTextBox.setText(dest);
+        singleNavResult = ((MainActivity) getActivity()).getNavResultSingle();
+
+        this.setHasOptionsMenu(true);
+//        NavigationResults navList = DirectionsResultFragmentArgs.fromBundle(getArguments()).getGetListSingleRoute();
 
         // Inflate the layout for this fragment
         return view;
+
     }
 
-    public String getOrigin() {
-        return origin;
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        RecyclerView singleResultRecyclerView = view.findViewById(R.id.singleresultrecyclerView);
+        singleResultRecyclerView.setClickable(false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        singleResultRecyclerView.setLayoutManager(linearLayoutManager);
+        SingleRouteListCustomAdapterRecyclerView singleRouteListCustomAdapterRecyclerView =
+                new SingleRouteListCustomAdapterRecyclerView(getActivity(), singleNavResult, origin, dest);
+        singleResultRecyclerView.setAdapter(singleRouteListCustomAdapterRecyclerView);
+
+//        waitingForDirectionsResultProgressBar.setVisibility(View.GONE);
+//        singleResultRecyclerView.setVisibility(View.VISIBLE);
+
+
     }
 
-    public void setOrigin(String origin) {
-        this.origin = origin;
-    }
-
-    public String getDest() {
-        return dest;
-    }
-
-    public void setDest(String dest) {
-        this.dest = dest;
-    }
 }

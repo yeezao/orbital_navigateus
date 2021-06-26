@@ -2,32 +2,29 @@ package com.example.myapptest.ui.directions;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.WindowMetrics;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -45,15 +42,10 @@ import com.example.myapptest.data.busrouteinformation.ServiceRoute;
 import com.example.myapptest.data.busstopinformation.ServiceInStopDetails;
 import com.example.myapptest.data.busstopinformation.StopList;
 import com.example.myapptest.data.naviagationdata.NavigationGraph;
-import com.example.myapptest.data.naviagationdata.NavigationPartialResults;
 import com.example.myapptest.data.naviagationdata.NavigationResults;
 import com.example.myapptest.data.naviagationdata.NavigationSearchInfo;
-import com.example.myapptest.databinding.FragmentDirectionsBinding;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputEditText;
 import com.jayway.jsonpath.JsonPath;
-
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -69,6 +61,9 @@ public class DirectionsFragment extends Fragment {
     AppCompatAutoCompleteTextView destInputEditor;
     AppCompatAutoCompleteTextView originInputEditor;
 //    TextView textViewIntermediate;
+    RecyclerView resultRecyclerView;
+    List<NavigationResults> savedNavigationResults;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -77,6 +72,7 @@ public class DirectionsFragment extends Fragment {
 
         destInputEditor = view.findViewById(R.id.destInputEditor);
         originInputEditor = view.findViewById(R.id.originInputEditor);
+        resultRecyclerView = view.findViewById(R.id.resultrecyclerView);
         listOfBusStopsObject = ((MainActivity) getActivity()).getListOfAllStops();
         listOfBusStopsString = ((MainActivity) getActivity()).getFirstPassStopsList();
 //        textViewIntermediate = view.findViewById(R.id.textView6);
@@ -97,10 +93,13 @@ public class DirectionsFragment extends Fragment {
     }
 
     Button goButtonForNav;
+    NavController navController;
 
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        navController = NavHostFragment.findNavController(DirectionsFragment.this);
 
         goButtonForNav = view.findViewById(R.id.button_go);
         goButtonForNav.setOnClickListener(new View.OnClickListener() {
@@ -200,6 +199,10 @@ public class DirectionsFragment extends Fragment {
 
     ProgressBar waitingForDirectionsResultProgressBar;
 
+    String originText;
+    String destText;
+
+
     private void PackageSearchInfo(View view) {
         InputMethodManager inputManager = (InputMethodManager)
                 getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -207,12 +210,17 @@ public class DirectionsFragment extends Fragment {
         try {
             inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
                     InputMethodManager.HIDE_NOT_ALWAYS);
+            this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+            destInputEditor.setFocusable(false);
+            originInputEditor.setFocusable(false);
+            destInputEditor.setFocusable(true);
+            originInputEditor.setFocusable(true);
         } catch (NullPointerException e) {
             //do nothing, just move on
         }
 
-        String originText = originInputEditor.getText().toString();
-        String destText = destInputEditor.getText().toString();
+        originText = originInputEditor.getText().toString();
+        destText = destInputEditor.getText().toString();
 
 //        Log.e("originid is", originId);
 //        Log.e("destid is", destId);
@@ -242,11 +250,11 @@ public class DirectionsFragment extends Fragment {
 
             CheckBox sheltered = (CheckBox) view.findViewById(R.id.checkbox_sheltered);
             CheckBox accessible = (CheckBox) view.findViewById(R.id.checkbox_accessible);
-            CheckBox internalOnly = (CheckBox) view.findViewById(R.id.checkbox_internalOnly);
+            CheckBox walkOnly = (CheckBox) view.findViewById(R.id.checkbox_walkOnly);
 
             navigationSearchInfo.setSheltered(sheltered.isChecked());
             navigationSearchInfo.setBarrierFree(accessible.isChecked());
-            navigationSearchInfo.setInternalBusOnly(internalOnly.isChecked());
+            navigationSearchInfo.setWalkOnly(walkOnly.isChecked());
 
             ((MainActivity) getActivity()).setNavigationSearchInfo(navigationSearchInfo);
 
@@ -270,11 +278,31 @@ public class DirectionsFragment extends Fragment {
             navGraph.CreateNavGraph(navigationSearchInfo, getContext());
             navGraph.startNavProcess(navigationSearchInfo, getActivity(), getContext(), new NavigationGraph.NavigationResultsFullyComplete() {
                 @Override
-                public void onNavResultsComplete(List<NavigationResults> navigationResults) {
-                    if (navigationResults != null) {
+                public void onNavResultsComplete(List<NavigationResults> navigationResults, int returnCode) {
+                    savedNavigationResults = navigationResults;
+                    if (navigationResults != null && navigationResults.size() > 0) {
                         displayNavResults(navigationResults, view);
                         goButtonForNav.setClickable(true);
 
+                    } else {
+                        if (returnCode == 1) {
+                            Snackbar snackbar = Snackbar.make(view,
+                                    "Check that you've entered your origin and destination correctly." +
+                                            " Click the Help button for more info.",
+                                    Snackbar.LENGTH_LONG);
+                            snackbar.setAnchorView(R.id.nav_view);
+                            snackbar.show();
+                        } else if (returnCode == 2) {
+                            Snackbar snackbar = Snackbar.make(view,
+                                    "We couldn't find any directions based on your search criteria." +
+                                            " Please adjust your criteria and try again.",
+                                    Snackbar.LENGTH_LONG);
+                            snackbar.setAnchorView(R.id.nav_view);
+                            snackbar.show();
+                        }
+//                        resultRecyclerView.setVisibility(View.GONE);
+                        goButtonForNav.setClickable(true);
+                        waitingForDirectionsResultProgressBar.setVisibility(View.GONE);
                     }
                 }
             });
@@ -289,10 +317,14 @@ public class DirectionsFragment extends Fragment {
     }
 
     private void displayNavResults(List<NavigationResults> navigationResults, View view) {
-        RecyclerView resultRecyclerView = view.findViewById(R.id.resultrecyclerView);
+        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        display.getMetrics(displayMetrics);
+        float dpWidth = displayMetrics.widthPixels;
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         resultRecyclerView.setLayoutManager(linearLayoutManager);
-        CustomAdapterRecyclerView customAdapterRecyclerView = new CustomAdapterRecyclerView(getActivity(), navigationResults);
+        CustomAdapterRecyclerView customAdapterRecyclerView =
+                new CustomAdapterRecyclerView(getActivity(), navigationResults, originText, destText, navController, dpWidth);
         resultRecyclerView.setAdapter(customAdapterRecyclerView);
 
         waitingForDirectionsResultProgressBar.setVisibility(View.GONE);

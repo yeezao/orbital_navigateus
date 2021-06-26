@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.directions.DirectionsFragment"
-    android:background="@android:color/white">
+    android:background="@android:color/white"
+    android:id="@+id/fragmentViewDirections">
 
 <!--    <TextView-->
 <!--        android:id="@+id/text_directions"-->
@@ -36,16 +37,16 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:text="Barrier-Free"
-        app:layout_constraintEnd_toStartOf="@+id/checkbox_internalOnly"
+        app:layout_constraintEnd_toStartOf="@+id/checkbox_walkOnly"
         app:layout_constraintStart_toEndOf="@+id/checkbox_sheltered"
         app:layout_constraintTop_toBottomOf="@+id/destInput" />
 
     <CheckBox
-        android:id="@+id/checkbox_internalOnly"
+        android:id="@+id/checkbox_walkOnly"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="15dp"
-        android:text="NUS Shuttle Only"
+        android:text="Walking Only"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/checkbox_accessible" />
 
@@ -107,11 +108,12 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/originInput"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="45dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="90dp"
+        android:hint="Choose start location..."
         app:boxBackgroundColor="@color/white"
         app:boxBackgroundMode="outline"
         app:boxCornerRadiusBottomEnd="10dp"
@@ -119,25 +121,25 @@
         app:boxCornerRadiusTopEnd="10dp"
         app:boxCornerRadiusTopStart="10dp"
         app:boxStrokeColor="@color/NUS_Orange"
+        app:endIconMode="clear_text"
         app:hintAnimationEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:hint="Choose start location...">
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.AppCompatAutoCompleteTextView
             android:id="@+id/originInputEditor"
-            android:inputType="text|textNoSuggestions"
-            android:imeOptions="actionNext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp"
+            android:imeOptions="actionNext"
+            android:inputType="text|textNoSuggestions"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
             android:selectAllOnFocus="true"
             android:shadowColor="@color/black"
             android:singleLine="true"
-            android:textSize="16sp"
-            android:textAppearance="?android:attr/textAppearanceListItemSecondary"/>
+            android:textAppearance="?android:attr/textAppearanceListItemSecondary"
+            android:textSize="14dp" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -155,6 +157,7 @@
         app:boxCornerRadiusBottomStart="10dp"
         app:boxCornerRadiusTopEnd="10dp"
         app:boxCornerRadiusTopStart="10dp"
+        app:endIconMode="clear_text"
         app:hintAnimationEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -162,17 +165,17 @@
 
         <androidx.appcompat.widget.AppCompatAutoCompleteTextView
             android:id="@+id/destInputEditor"
-            android:inputType="text|textNoSuggestions"
-            android:imeOptions="actionGo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Choose destination..."
+            android:imeOptions="actionGo|actionDone"
+            android:inputType="text|textNoSuggestions"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
             android:selectAllOnFocus="true"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp"
             android:singleLine="true"
-            android:textSize="16sp"
-            android:textAppearance="?android:attr/textAppearanceListItemSecondary"/>
+            android:textAppearance="?android:attr/textAppearanceListItemSecondary"
+            android:textSize="14dp" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -202,6 +205,7 @@
         android:id="@+id/resultrecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

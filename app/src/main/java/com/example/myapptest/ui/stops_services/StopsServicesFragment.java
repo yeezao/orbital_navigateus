@@ -83,7 +83,6 @@ public class StopsServicesFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
         View view = inflater.inflate(R.layout.fragment_stops_services, container, false);
 
         view.findViewById(R.id.StopsNUSMainLoadingProgressBar).setVisibility(View.VISIBLE);

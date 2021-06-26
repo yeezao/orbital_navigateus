@@ -22,6 +22,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.myapptest.data.busstopinformation.ArrivalNotifications;
 import com.example.myapptest.data.busstopinformation.ServiceInStopDetails;
 import com.example.myapptest.data.busstopinformation.StopList;
+import com.example.myapptest.data.naviagationdata.NavigationResults;
 import com.example.myapptest.data.naviagationdata.NavigationSearchInfo;
 import com.example.myapptest.databinding.ActivityMainBinding;
 import com.example.myapptest.ui.directions.DirectionsFragment;
@@ -58,6 +59,8 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
     Fragment active;
     BottomNavigationView navView;
 
+    NavController navController;
+
     //    private final StopsServicesMasterFragment stopsServicesMasterFragment = new StopsServicesMasterFragment();
 //    private final DirectionsFragment directionsFragment = new DirectionsFragment();
 //    private final androidx.fragment.app.FragmentManager fm = getSupportFragmentManager();
@@ -84,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
                 R.id.navigation_home, R.id.navigation_stops_services_master, R.id.navigation_directions)
                 .build();
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_main);
-        NavController navController = navHostFragment.getNavController();
+        navController = navHostFragment.getNavController();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
@@ -99,7 +102,6 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
 
     }
 
-
     private BottomNavigationView.OnNavigationItemReselectedListener mOnNavigationItemReselectedListener
             = new BottomNavigationView.OnNavigationItemReselectedListener() {
 
@@ -108,6 +110,31 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
         }
 
     };
+
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        if (item.getItemId() == android.R.id.home) {
+//            //Title bar back press triggers onBackPressed()
+//            onBackPressed();
+//            return true;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
+//
+////    Both navigation bar back press and title bar back press will trigger this method
+//    @Override
+//    public void onBackPressed() {
+//        while (!navController.getBackQueue().isEmpty()) {
+//            navController.navigateUp();
+//        }
+//        super.onBackPressed();
+//    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        navController.navigateUp();
+        return true;
+    }
 
     NotificationManager notificationManager;
     Uri soundUri;
@@ -690,6 +717,28 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
     public void setNavigationSearchInfo(NavigationSearchInfo navigationSearchInfo) {
         this.navigationSearchInfo = navigationSearchInfo;
     }
+
+    private NavigationResults navResultSingle;
+    private String origin, dest;
+
+    public void setNavResultSingle(NavigationResults navResultSingle, String origin, String dest) {
+        this.navResultSingle = navResultSingle;
+        this.origin = origin;
+        this.dest = dest;
+    }
+
+    public NavigationResults getNavResultSingle() {
+        return navResultSingle;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public String getDest() {
+        return dest;
+    }
+
 
     public interface VolleyCallBack {
         void onSuccess();

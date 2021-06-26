@@ -13,6 +13,7 @@ public class NavigationEdges {
     private boolean sheltered;
     private boolean accessible;
     private List<String> services;
+    private boolean usable = true;
 
     public String getFrom() {
         return from;
@@ -84,6 +85,14 @@ public class NavigationEdges {
 
     public void setServices(List<String> services) {
         this.services = services;
+    }
+
+    public boolean isUsable() {
+        return usable;
+    }
+
+    public void setUsable(boolean usable) {
+        this.usable = usable;
     }
 
 }

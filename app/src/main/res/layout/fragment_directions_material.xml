@@ -34,12 +34,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Barrier-Free"
-        app:layout_constraintEnd_toStartOf="@+id/checkbox_internalOnly"
+        app:layout_constraintEnd_toStartOf="@+id/checkbox_walkOnly"
         app:layout_constraintStart_toEndOf="@+id/checkbox_sheltered"
         tools:layout_editor_absoluteY="99dp" />
 
     <CheckBox
-        android:id="@+id/checkbox_internalOnly"
+        android:id="@+id/checkbox_walkOnly"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="15dp"
@@ -65,7 +65,7 @@
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="2dp"
         android:text="Go"
-        app:layout_constraintBottom_toTopOf="@+id/checkbox_internalOnly"
+        app:layout_constraintBottom_toTopOf="@+id/checkbox_walkOnly"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <ImageView

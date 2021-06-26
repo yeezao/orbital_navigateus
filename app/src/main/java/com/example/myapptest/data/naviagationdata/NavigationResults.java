@@ -23,5 +23,9 @@ public class NavigationResults {
         this.resultsConcatenated = resultsConcatenated;
     }
 
+    public void addResultsConcatenated(NavigationPartialResults resultsConcatenated) {
+        this.resultsConcatenated.add(resultsConcatenated);
+    }
+
 
 }

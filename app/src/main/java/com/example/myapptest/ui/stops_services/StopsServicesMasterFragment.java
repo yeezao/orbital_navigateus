@@ -21,7 +21,6 @@ public class StopsServicesMasterFragment extends Fragment {
     private ViewPager firstViewPager;
 
     public StopsServicesMasterFragment() {
-        setRetainInstance(true);
     }
 
     @Override
