@@ -113,5 +113,9 @@ public class NavigationNodes {
         this.edgeSelected = edgeSelected;
     }
 
+    public void removePreviousNode() {
+        this.prevNode = null;
+    }
+
 
 }

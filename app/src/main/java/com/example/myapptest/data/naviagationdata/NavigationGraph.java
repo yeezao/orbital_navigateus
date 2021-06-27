@@ -35,6 +35,7 @@ import com.example.myapptest.data.busstopinformation.ServiceInStopDetails;
 import com.example.myapptest.data.busstopinformation.StopList;
 import com.jayway.jsonpath.JsonPath;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,12 +45,7 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
 
     NavigationResultsFullyComplete navFinished;
 
-    public void setNavFinished() {
-        this.navFinished = navFinished;
-    }
-
     public NavigationNodes[] navNodes = new NavigationNodes[1000];
-//    public LinkedList<List<NavigationEdges>> navEdges = new LinkedList<List<NavigationEdges>>();
 
     List<NavigationNodes> listOfAllBusStops = new ArrayList<>();
 
@@ -57,7 +53,7 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
     boolean mustBeAccessible = false;
     boolean isWalkOnly = false;
 
-    public void CreateNavGraph(NavigationSearchInfo navigationSearchInfo, Context context) {
+    public void CreateNavGraph(@NotNull NavigationSearchInfo navigationSearchInfo, Context context) {
         try {
             JSONObject rawNavNodes = new JSONObject(loadJSONFromAsset("points.json", context));
             JSONObject rawNavEdges = new JSONObject(loadJSONFromAsset("graphedges.json", context));
@@ -69,9 +65,6 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
             mustBeAccessible = navigationSearchInfo.isBarrierFree();
             isWalkOnly = navigationSearchInfo.isWalkOnly();
 
-            Log.e("conditions review", (mustBeSheltered + "" + mustBeAccessible + isWalkOnly + ""));
-
-            Log.e("nodearray len", nodeArray.length() + "");
             for (int i = 0; i < nodeArray.length(); i++) {
                 JSONObject nodeDetail = nodeArray.getJSONObject(i);
                 int arrayIndex = nodeDetail.getInt("numid");
@@ -84,16 +77,13 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
                 tempNavNodes.setLon(nodeDetail.getDouble("lon"));
                 tempNavNodes.setNavEdgesFromThisNode(new ArrayList<>());
                 navNodes[arrayIndex] = tempNavNodes;
-                Log.e("waste", "my time " + i + " " + tempNavNodes.getName());
                 if (arrayIndex < 50) {
                     listOfAllBusStops.add(tempNavNodes);
                     Log.e("latlon", tempNavNodes.getName() + " " + tempNavNodes.getLat() + " " + tempNavNodes.getLon());
                 }
             }
 
-            Log.e("len", edgeArray.length() + "");
             for (int j = 0; j < edgeArray.length(); j++) {
-                Log.e("entered", j + "");
                 JSONObject edgeDetail = edgeArray.getJSONObject(j);
                 if (checkConditions(edgeDetail)) {
                     int arrayIndex1 = edgeDetail.getInt("fromnumid");
@@ -107,7 +97,7 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
                     tempNavEdge1.setDuration(edgeDetail.getInt("duration"));
 
 
-                    if (!tptType.equals("walk")) {
+                    if (!(tptType.equals("walk"))) {
     //                    JSONArray serviceArray = edgeDetail.getJSONArray("services");
     //                    List<String> serviceArrayToAdd = new ArrayList<>();
     //                    for (int k = 0; k < serviceArray.length(); k++) {
@@ -144,7 +134,6 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
                         if (tempListNavEdge2 == null) {
                             tempListNavEdge2 = new ArrayList<>();
                         }
-                        Log.e("tempnavedge2", tempNavEdge2.getFrom());
                         tempListNavEdge2.add(tempNavEdge2);
                         navNodes[arrayIndex2].setNavEdgesFromThisNode(tempListNavEdge2);
                     }
@@ -152,7 +141,6 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
                     if (tempListNavEdge1 == null) {
                         tempListNavEdge1 = new ArrayList<>();
                     }
-                    Log.e("tempnavedge1", tempNavEdge1.getFrom());
                     tempListNavEdge1.add(tempNavEdge1);
                     navNodes[arrayIndex1].setNavEdgesFromThisNode(tempListNavEdge1);
                 }
@@ -224,143 +212,145 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
             navFinished.onNavResultsComplete(null, 1);
             return;
         }
-//
-//        List<NavigationNodes> originStopDistanceList = new ArrayList<>();
-//        List<NavigationNodes> destStopDistanceList = new ArrayList<>();
-//
-//        Log.e("are they the same", (originStopDistanceList == destStopDistanceList) + "");
-//
-//        //TODO: fix this
-//        destStopDistanceList = sortBusStopDistance(destination, listOfAllBusStops);
-//        originStopDistanceList = sortBusStopDistance(origin, listOfAllBusStops);
-//
-//
-        boolean isFirstTime = true;
 
-        NavigationResults fullRoute = new NavigationResults();
+        for (int c = 0; c < 3; c++) {
 
-        NavigationNodes[] navNodesInstance = new NavigationNodes[1000];
-        for (int i = 0; i < navNodes.length; i++) {
-            navNodesInstance[i] = navNodes[i];
-        }
+            boolean isFirstTime = true;
+            NavigationResults fullRoute = new NavigationResults();
 
-        NavigationPartialResults trialResult = findShortestPath(navNodesInstance, origin, destination, false, false, isFirstTime);
-        if (trialResult == null || trialResult.getTimeForSegment() > 900) {
-            navFinished.onNavResultsComplete(null, 2);
-            return;
-        }
-        fullRoute.setTotalTimeTaken(trialResult.getTimeForSegment());
+            if (c > 0) {
 
-        List<NavigationMethodType> isTheMethodWalkingList = new ArrayList<>();
-        boolean isTheCurrentMethodWalking = false;
-        NavigationMethodType currentMethodType = new NavigationMethodType();
+                for (int i = 0; i < navNodes.length; i++) {
+                    if (navNodes[i] != null) {
+                        navNodes[i].setPrevNode(null);
+                        navNodes[i].setDiscovered(false);
+                        navNodes[i].setWeightTillNow(999);
+                    }
+                }
 
-        //determine route walk/bus order
-        for (int i = 1; i < trialResult.getNodesTraversed().size(); i++) {
-            Log.e("i is", i + "");
-            Log.e("path is", trialResult.getNodesTraversed().get(i).getEdgeSelected().getFrom() + " " + trialResult.getNodesTraversed().get(i).getEdgeSelected().getTo());
-            if (trialResult.getNodesTraversed().get(i).getEdgeSelected().getBy().equals("walk") && !isTheCurrentMethodWalking) {
-                if (i > 1) {
+                if (listResults.get(c - 1).getResultsConcatenated().size() > 1) {
+                    NavigationPartialResults segmentToOperate =
+                            listResults.get(c - 1).getResultsConcatenated().get(listResults.get(c - 1).getResultsConcatenated().size() - 2);
+                    NavigationNodes nodeToOperate = segmentToOperate.getNodesTraversed().get(segmentToOperate.getNodesTraversed().size() - 1);
+                    NavigationNodes nodeToOperateStart = segmentToOperate.getNodesTraversed().get(segmentToOperate.getNodesTraversed().size() - 2);
+                    List<NavigationEdges> edgeList = navNodes[nodeToOperateStart.getNumid()].getNavEdgesFromThisNode();
+                    Log.e("edges start and end", nodeToOperateStart.getName() + " " + nodeToOperate.getName());
+                    for (int d = 0; d < edgeList.size(); d++) {
+                        Log.e("check edge", edgeList.get(d).getBy() + " " + edgeList.get(d).getTo() + " " + nodeToOperate.getName());
+                        if (edgeList.get(d).getTonumid() == nodeToOperate.getNumid()) {
+                            NavigationEdges navEdgeToOperate = edgeList.get(d);
+                            navEdgeToOperate.setUsable(false);
+                            edgeList.set(d, navEdgeToOperate);
+                            navNodes[nodeToOperate.getNumid()].setNavEdgesFromThisNode(edgeList);
+                            Log.e("edge deleted", navEdgeToOperate.getFrom() + " " + navEdgeToOperate.getTo());
+                            break;
+                        }
+                    }
+                } else if (isWalkOnly && !mustBeSheltered) {
+//                    mustBeSheltered = true;
+                    break;
+                } else if (isWalkOnly || listResults.get(c - 1).getResultsConcatenated().size() <= 1) {
+                    break;
+                }
+
+            }
+
+            NavigationPartialResults trialResult = findShortestPath(origin, destination, false, false, isFirstTime);
+            if (trialResult == null || trialResult.getTimeForSegment() > 900 || trialResult.getNodesTraversed().size() == 0) {
+                if (listResults.size() == 0) {
+                    navFinished.onNavResultsComplete(null, 2);
+                } else {
+                    navFinished.onNavResultsComplete(listResults, 0);
+                }
+                return;
+            }
+            fullRoute.setTotalTimeTaken(trialResult.getTimeForSegment());
+
+            List<NavigationMethodType> isTheMethodWalkingList = new ArrayList<>();
+            boolean isTheCurrentMethodWalking = false;
+            NavigationMethodType currentMethodType = new NavigationMethodType();
+
+            //determine route walk/bus order
+            for (int i = 1; i < trialResult.getNodesTraversed().size(); i++) {
+                Log.e("i is", i + "");
+                Log.e("path is", trialResult.getNodesTraversed().get(i).getEdgeSelected().getFrom() + " " + trialResult.getNodesTraversed().get(i).getEdgeSelected().getTo());
+                if (trialResult.getNodesTraversed().get(i).getEdgeSelected().getBy().equals("walk") && !isTheCurrentMethodWalking) {
+                    if (i > 1) {
+                        Log.e("dest is", trialResult.getNodesTraversed().get(i - 1).getName());
+                        currentMethodType.setDest(trialResult.getNodesTraversed().get(i - 1));
+                        isTheMethodWalkingList.add(currentMethodType);
+                        currentMethodType = new NavigationMethodType();
+                    }
+                    isTheCurrentMethodWalking = true;
+                    currentMethodType.setWalking(true);
+                    Log.e("origin is", trialResult.getNodesTraversed().get(i - 1).getName());
+                    currentMethodType.setOrigin(trialResult.getNodesTraversed().get(i - 1));
+                } else if (isTheCurrentMethodWalking && !trialResult.getNodesTraversed().get(i).getEdgeSelected().getBy().equals("walk")) {
                     Log.e("dest is", trialResult.getNodesTraversed().get(i - 1).getName());
                     currentMethodType.setDest(trialResult.getNodesTraversed().get(i - 1));
                     isTheMethodWalkingList.add(currentMethodType);
                     currentMethodType = new NavigationMethodType();
+                    isTheCurrentMethodWalking = false;
+                    currentMethodType.setWalking(false);
+                    Log.e("origin is", trialResult.getNodesTraversed().get(i - 1).getName());
+                    currentMethodType.setOrigin(trialResult.getNodesTraversed().get(i - 1));
+                } else if (i == 1 && !trialResult.getNodesTraversed().get(i).getEdgeSelected().getBy().equals("walk")) {
+                    isTheCurrentMethodWalking = false;
+                    currentMethodType.setWalking(false);
+                    Log.e("origin is", trialResult.getNodesTraversed().get(0).getName());
+                    currentMethodType.setOrigin(trialResult.getNodesTraversed().get(0));
                 }
-                isTheCurrentMethodWalking = true;
-                currentMethodType.setWalking(true);
-                Log.e("origin is", trialResult.getNodesTraversed().get(i - 1).getName());
-                currentMethodType.setOrigin(trialResult.getNodesTraversed().get(i - 1));
-            } else if (isTheCurrentMethodWalking && !trialResult.getNodesTraversed().get(i).getEdgeSelected().getBy().equals("walk")) {
-                Log.e("dest is", trialResult.getNodesTraversed().get(i - 1).getName());
-                currentMethodType.setDest(trialResult.getNodesTraversed().get(i - 1));
-                isTheMethodWalkingList.add(currentMethodType);
-                currentMethodType = new NavigationMethodType();
-                isTheCurrentMethodWalking = false;
-                currentMethodType.setWalking(false);
-                Log.e("origin is", trialResult.getNodesTraversed().get(i - 1).getName());
-                currentMethodType.setOrigin(trialResult.getNodesTraversed().get(i - 1));
-            } else if (i == 1 && !trialResult.getNodesTraversed().get(i).getEdgeSelected().getBy().equals("walk")) {
-                isTheCurrentMethodWalking = false;
-                currentMethodType.setWalking(false);
-                Log.e("origin is", trialResult.getNodesTraversed().get(0).getName());
-                currentMethodType.setOrigin(trialResult.getNodesTraversed().get(0));
             }
-        }
-        currentMethodType.setDest(trialResult.getNodesTraversed().get(trialResult.getNodesTraversed().size() - 1));
-        isTheMethodWalkingList.add(currentMethodType);
+            currentMethodType.setDest(trialResult.getNodesTraversed().get(trialResult.getNodesTraversed().size() - 1));
+            isTheMethodWalkingList.add(currentMethodType);
 
-        List<NavigationPartialResults> listOfSegments = new ArrayList<>();
-        List<List<NavigationPartialResults>> listOfListOfSegments = new ArrayList(listOfSegments);
+            List<NavigationPartialResults> listOfSegments = new ArrayList<>();
 
-        int currentIndexToAdd = 0;
+            for (int i = 0; i < isTheMethodWalkingList.size(); i++) {
+                NavigationMethodType currentInstance = isTheMethodWalkingList.get(i);
+                Log.e("list detail is", currentInstance.isWalking() + " "
+                        + currentInstance.getOrigin().getName() + " " + currentInstance.getDest().getName());
+                if (currentInstance.isWalking()) {
+                    //this segment is walking
+                    Log.e("entered wawlking", "yes");
+                    NavigationPartialResults segmentResult = findShortestPath(currentInstance.getOrigin(),
+                            currentInstance.getDest(), false, true, isFirstTime);
+                    isFirstTime = false;
 
-        for (int i = 0; i < isTheMethodWalkingList.size(); i++) {
-            NavigationMethodType currentInstance = isTheMethodWalkingList.get(i);
-            Log.e("list detail is", currentInstance.isWalking() + " "
-                    + currentInstance.getOrigin().getName() + " " + currentInstance.getDest().getName());
-            if (currentInstance.isWalking()) {
-                //this segment is walking
-                Log.e("entered wawlking", "yes");
-                NavigationNodes navNodesWalking[] = new NavigationNodes[navNodes.length];
-                for (int j = 0; j < navNodes.length; j++) {
-                    navNodesWalking[j] = navNodes[j];
+                    listOfSegments.add(segmentResult);
+
+                } else if (!isWalkOnly) {
+                    //this segment is bus
+                    List<NavigationPartialResults> busSegmentResult = findBusRoute(currentInstance.getOrigin(),
+                            currentInstance.getDest(), context, isFirstTime);
+                    Log.e("bussegmentresult size", busSegmentResult.size() + "");
+                    isFirstTime = false;
+                    for (int j = 0; j < busSegmentResult.size(); j++) {
+                        listOfSegments.add(busSegmentResult.get(j));
+                    }
                 }
-                NavigationPartialResults segmentResult = findShortestPath(navNodes, currentInstance.getOrigin(),
-                        currentInstance.getDest(), false, true, isFirstTime);
-                isFirstTime = false;
+            }
 
-                listOfSegments.add(segmentResult);
+            fullRoute.setResultsConcatenated(listOfSegments);
 
-            } else if (!isWalkOnly) {
-                //this segment is bus
-                List<NavigationPartialResults> busSegmentResult = findBusRoute(navNodes,
-                        currentInstance.getOrigin(), currentInstance.getDest(), context, isFirstTime);
-                Log.e("bussegmentresult size", busSegmentResult.size() + "");
-                isFirstTime = false;
-                for (int j = 0; j < busSegmentResult.size(); j++) {
-                    listOfSegments.add(busSegmentResult.get(j));
+            for (int a = 0; a < fullRoute.getResultsConcatenated().size(); a++) {
+                for (int b = 0; b < fullRoute.getResultsConcatenated().get(a).getNodesTraversed().size(); b++) {
+                    Log.e("full route is", fullRoute.getResultsConcatenated().get(a).getNodesTraversed().get(b).getName() + " " + a + " " + b + " " + fullRoute.getResultsConcatenated().size());
                 }
-//                if (busSegmentResult.size() == 1) {
-////                    listOfListOfSegments.get(0).add(i, busSegmentResult.get(0));
-//                } else {
-//                    for (int j = 0; j < busSegmentResult.size() / 2; j++) {
-//                        if (listOfListOfSegments.size() < j + 1) {
-//                            listOfListOfSegments.add(new ArrayList<>());
-//                        }
-//                        listOfListOfSegments.get(j).add(i, busSegmentResult.get(j * 2));
-//                        listOfListOfSegments.get(j).add(i + 1, busSegmentResult.get(j * 2 + 1));
-//                    }
-//                }
             }
+            listResults.add(fullRoute);
+
         }
-
-        fullRoute.setResultsConcatenated(listOfSegments);
-
-        for (int a = 0; a < fullRoute.getResultsConcatenated().size(); a++) {
-            for (int b = 0; b < fullRoute.getResultsConcatenated().get(a).getNodesTraversed().size(); b++) {
-                Log.e("full route is", fullRoute.getResultsConcatenated().get(a).getNodesTraversed().get(b).getName() + " " + a + " " + b + " " + fullRoute.getResultsConcatenated().size());
-            }
-        }
-
-        listResults.add(fullRoute);
-
-//            //TODO: do stuff
-//
-
-
-        //TODO: sort list according to timings and characteristics
-
-//        Log.e("check inner", listResults.get(0).getTotalTimeTaken() + "");
 
         navFinished.onNavResultsComplete(listResults, 0);
 
     }
 
 
-    private List<NavigationPartialResults> findBusRoute(NavigationNodes[] navNodesBus, NavigationNodes originBusStop,
+    private List<NavigationPartialResults> findBusRoute(NavigationNodes originBusStop,
                                                   NavigationNodes destBusStop, Context context, boolean isFirstTime) {
 
-        NavigationPartialResults routeToTake = findShortestPath(navNodesBus, originBusStop, destBusStop, true, false, isFirstTime);
+        NavigationPartialResults routeToTake = findShortestPath(originBusStop, destBusStop, true, false, isFirstTime);
         Log.e("time before arrival info", routeToTake.getTimeForSegment() + "");
 
         String jsonBusInfo = loadJSONFromAsset("listOfBusStopsByService_full.json", context);
@@ -380,9 +370,13 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
             if (stopId.get(i).equals(originBusStop.getId())) {
                 originIndex = i;
                 Log.e("origin name", stopId.get(i));
-            } else if (stopId.get(i).equals(destBusStop.getId())) {
+            } else if (stopId.get(i).equals(destBusStop.getId())
+                    || destBusStop.getId().equals("KR-BT") && (stopId.get(i).contains("KTR") || stopId.get(i).equals("KR-BTE"))) {
                 destIndex = i;
                 Log.e("dest name", stopId.get(i));
+            }
+            if (originIndex >= 0 && destIndex >= 0 && destIndex > originIndex) {
+                Log.e("services compared are",aServiceAtStop.get(originIndex) + " " + aServiceAtStop.get(destIndex) + " " + originIndex + " " + destIndex);
             }
             if (originIndex >= 0 && destIndex >= 0 && destIndex > originIndex
                     && aServiceAtStop.get(originIndex).equals(aServiceAtStop.get(destIndex))) {
@@ -456,6 +450,8 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
         } else {
             //check how to transfer
 
+            int viableBuses2size = 0;
+
             Log.e("entered", " find transfer route");
 
             List<String> servicesAtDest = new ArrayList<>();
@@ -500,18 +496,40 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
                         for (int j = 0; j < stopId.size(); j++) {
                             if (stopId.get(j).equals(currentStop.getId())) {
                                 servicesAtIntermediateStop.add(aServiceAtStop.get(j));
+                                Log.e("transfer checking aServiceAtStop", aServiceAtStop.get(j));
                             }
                         }
                         for (int j = 0; j < servicesAtDest.size(); j++) {
                             for (int k = 0; k < servicesAtIntermediateStop.size(); k++) {
                                 if (servicesAtDest.get(j).equals(servicesAtIntermediateStop.get(k))) {
-                                    viableBuses2.add(servicesAtIntermediateStop.get(k));
-                                    Log.e("ViableBuses2Added", servicesAtIntermediateStop.get(k));
+                                    int transferOriginIndex = -1;
+                                    int transferDestIndex = -1;
+                                    Log.e("transfer 2nd check", servicesAtDest.get(j) + " " + servicesAtIntermediateStop.get(k));
+                                    for (int m = 0; m < stopId.size(); m++) {
+                                        Log.e("transfer 3rd check", currentStop.getId() + " " + stopId.get(m) + " " + servicesAtDest.get(j) + " " + aServiceAtStop.get(m));
+                                        if (currentStop.getId().equals(stopId.get(m)) && aServiceAtStop.get(m).equals(servicesAtDest.get(j))) {
+                                            transferOriginIndex = m;
+                                            Log.e("origin name", stopId.get(m));
+                                        } else if ((destBusStop.getId().equals(stopId.get(m))
+                                                || destBusStop.getId().equals("KR-BT") && (stopId.get(i).contains("KTR") || stopId.get(i).equals("KR-BTE"))) && aServiceAtStop.get(m).equals(servicesAtDest.get(j))) {
+                                            transferDestIndex = m;
+                                            Log.e("dest name", stopId.get(m));
+                                        }
+                                        if (transferOriginIndex >= 0 && transferDestIndex >= 0) {
+                                            break;
+                                        }
+                                    }
+                                    if (transferOriginIndex < transferDestIndex) {
+                                        viableBuses2.add(servicesAtIntermediateStop.get(k));
+                                        Log.e("ViableBuses2Added", servicesAtIntermediateStop.get(k));
+                                    }
                                 }
                             }
                         }
-                        if (viableBuses2.size() > 0) {
+
+                        if (viableBuses2.size() > 0 && viableBuses2.size() > viableBuses2size) {
                             //transfer route found
+                            viableBuses2size = viableBuses2.size();
                             int howManyServicesAreTheSame = 0;
                             Boolean areAllTheServicesTheSame = false;
                             for (int a = 0; a < transferConcat.size(); a += 2) {
@@ -566,11 +584,11 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
                                 routeAfterTransfer.setNodesTraversed(routeAfterTransfer.getAfterTransferNodesTraversed());
                                 transferConcat.add(routeBeforeTransfer);
                                 transferConcat.add(routeAfterTransfer);
-                                for (int k = 0; k < currentStop.getNavEdgesFromThisNode().size(); k++) {
-                                    if (currentStop.getNavEdgesFromThisNode().get(k).getTonumid() == currentStop.getNumid()) {
-                                        navNodesBus[currentStop.getNumid()].getNavEdgesFromThisNode().get(k).setUsable(false);
-                                    }
-                                }
+//                                for (int k = 0; k < currentStop.getNavEdgesFromThisNode().size(); k++) {
+//                                    if (currentStop.getNavEdgesFromThisNode().get(k).getTonumid() == currentStop.getNumid()) {
+//                                        navNodes[currentStop.getNumid()].getNavEdgesFromThisNode().get(k).setUsable(false);
+//                                    }
+//                                }
                                 break;
                             }
                         }
@@ -622,13 +640,13 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
 //    }
 
 
-    private NavigationPartialResults findShortestPath(NavigationNodes[] navNodesArray, NavigationNodes origin, 
+    private NavigationPartialResults findShortestPath(NavigationNodes origin,
                                                       NavigationNodes destination, boolean isTakingBus, boolean isWalking, boolean isFirstTime) {
 
-        for (int i = 0; i < navNodesArray.length && !isFirstTime; i++) {
-            if (navNodesArray[i] != null) {
-                navNodesArray[i].setPrevNode(null);
-                navNodesArray[i].setDiscovered(false);
+        for (int i = 0; i < navNodes.length && !isFirstTime; i++) {
+            if (navNodes[i] != null) {
+                navNodes[i].setPrevNode(null);
+                navNodes[i].setDiscovered(false);
             }
         }
 
@@ -669,6 +687,8 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
             return null;
         }
 
+        Log.e("findShortestPath", "no NPE");
+
 //        Stack<NavigationNodes> nodeStack = new Stack<>();
         NavigationNodes currentNode = destination;
         int totalTime = 0;
@@ -683,7 +703,7 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
             Log.e("current node is", pathToTake.get(b).getName());
         }
         for (int b = 1; b < pathToTake.size() - 1; b++) {
-            Log.e("path is", pathToTake.get(b + 1).getEdgeSelected().getFrom() + " " + pathToTake.get(b + 1).getEdgeSelected().getTo());
+            Log.e("path is", pathToTake.get(b).getEdgeSelected().getFrom() + " " + pathToTake.get(b).getEdgeSelected().getTo());
         }
         routeForSegment.setNodesTraversed(pathToTake);
         totalTime = destination.getWeightTillNow();
@@ -691,27 +711,6 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
         Log.e("total time", totalTime + "");
 
         return routeForSegment;
-//        int findBusStart = 0;
-//        while (pathToTake.get(findBusStart).getNumid() > 50) {
-//            findBusStart++;
-//        }
-//        String firstBusStop = pathToTake.get(findBusStart).getId();
-//        int findBusEnd = findBusStart;
-//        while (pathToTake.get(findBusEnd).getNumid() < 50) {
-//            findBusEnd++;
-//        }
-//        findBusEnd--;
-//        String lastBusStop = pathToTake.get(findBusEnd).getId();
-//        boolean isIncrementStart = true;
-//        while (findBusStart != findBusEnd) {
-//            findBusRoute(firstBusStop, lastBusStop);
-//            if (isIncrementStart) {
-//                findBusStart++;
-//            } else {
-//                findBusEnd--;
-//            }
-//        }
-
     }
 
     private boolean checkConditions2(boolean isTakingBus, boolean isWalking, NavigationEdges navEdge) {
@@ -828,13 +827,4 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
     public interface NavigationResultsFullyComplete {
         void onNavResultsComplete(List<NavigationResults> resultsList, int i);
     }
-
-    public interface BusNavComplete {
-        void onBusNavSuccess(NavigationPartialResults busNavResult);
-    }
-
-    private interface SingleCombiBusNavComplete {
-        void onSingleBusNavSuccess(NavigationResults singleBusNavResult);
-    }
-
 }

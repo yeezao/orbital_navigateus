@@ -21,7 +21,7 @@
     {
       "pickupname": "COM2",
       "routeid": "D1",
-      "busstopcode": "COM 2",
+      "busstopcode": "COM2",
       "lat": 1.2943065,
       "lng": 103.77375,
       "LongName": "COM 2",
@@ -111,7 +111,7 @@
     {
       "pickupname": "COM2",
       "routeid": "D1",
-      "busstopcode": "COM 2",
+      "busstopcode": "COM2",
       "lat": 1.2943548,
       "lng": 103.773605,
       "LongName": "COM 2",
@@ -386,150 +386,6 @@
       "lng": 103.7698,
       "LongName": "",
       "ShortName": ""
-    },
-    {
-      "pickupname": "BTC - Oei Tiong Ham Building",
-      "routeid": "BTC2",
-      "busstopcode": "BUKITTIMAH-BTC2",
-      "lat": 1.3197436,
-      "lng": 103.81793,
-      "LongName": "Oei Tiong Ham Building",
-      "ShortName": "OTH Bldg"
-    },
-    {
-      "pickupname": "Botanic Gardens MRT",
-      "routeid": "BTC2",
-      "busstopcode": "BG-MRT",
-      "lat": 1.3227,
-      "lng": 103.8151,
-      "LongName": "Botanic Garden MRT",
-      "ShortName": "BG MRT"
-    },
-    {
-      "pickupname": "Museum",
-      "routeid": "BTC2",
-      "busstopcode": "MUSEUM",
-      "lat": 1.3010374,
-      "lng": 103.7738,
-      "LongName": "Museum",
-      "ShortName": "Museum"
-    },
-    {
-      "pickupname": "EA",
-      "routeid": "BTC2",
-      "busstopcode": "BLK-EA-OPP",
-      "lat": 1.3004,
-      "lng": 103.7701,
-      "LongName": "EA",
-      "ShortName": "EA"
-    },
-    {
-      "pickupname": "Kent Ridge Bus Terminal (E)",
-      "routeid": "BTC2",
-      "busstopcode": "KR-BTE",
-      "lat": 1.2946,
-      "lng": 103.7698,
-      "LongName": "",
-      "ShortName": ""
-    },
-    {
-      "pickupname": "Kent Ridge Bus Terminal",
-      "routeid": "BTC2",
-      "busstopcode": "KR-BT",
-      "lat": 1.294167,
-      "lng": 103.76972,
-      "LongName": "Kent Ridge Bus Terminal",
-      "ShortName": "KR Bus Terminal"
-    },
-    {
-      "pickupname": "Kent Vale",
-      "routeid": "BTC2",
-      "busstopcode": "KV",
-      "lat": 1.3021,
-      "lng": 103.7691,
-      "LongName": "Kent Vale",
-      "ShortName": "KV"
-    },
-    {
-      "pickupname": "Museum",
-      "routeid": "BTC1",
-      "busstopcode": "MUSEUM",
-      "lat": 1.3010644,
-      "lng": 103.77375,
-      "LongName": "Museum",
-      "ShortName": "Museum"
-    },
-    {
-      "pickupname": "YIH",
-      "routeid": "BTC1",
-      "busstopcode": "YIH",
-      "lat": 1.2987,
-      "lng": 103.7743,
-      "LongName": "Yusof Ishak House",
-      "ShortName": "YIH"
-    },
-    {
-      "pickupname": "Central Library",
-      "routeid": "BTC1",
-      "busstopcode": "CENLIB",
-      "lat": 1.2964,
-      "lng": 103.7722,
-      "LongName": "Central Library",
-      "ShortName": "CLB"
-    },
-    {
-      "pickupname": "LT13",
-      "routeid": "BTC1",
-      "busstopcode": "LT13",
-      "lat": 1.2942812,
-      "lng": 103.77071,
-      "LongName": "LT 13",
-      "ShortName": "LT 13"
-    },
-    {
-      "pickupname": "AS5",
-      "routeid": "BTC1",
-      "busstopcode": "AS7",
-      "lat": 1.2934904,
-      "lng": 103.77183,
-      "LongName": "AS 5",
-      "ShortName": "AS 5"
-    },
-    {
-      "pickupname": "BIZ 2",
-      "routeid": "BTC1",
-      "busstopcode": "BIZ2",
-      "lat": 1.2933116,
-      "lng": 103.775116,
-      "LongName": "BIZ 2",
-      "ShortName": "BIZ 2"
-    },
-    {
-      "pickupname": "Prince George's Park",
-      "routeid": "BTC1",
-      "busstopcode": "PGPT",
-      "lat": 1.2918985,
-      "lng": 103.78038,
-      "LongName": "Prince George’s Park",
-      "ShortName": "PGP"
-    },
-    {
-      "pickupname": "College Green",
-      "routeid": "BTC1",
-      "busstopcode": "CGH",
-      "lat": 1.323333,
-      "lng": 103.81631,
-      "LongName": "College Green",
-      "ShortName": "College Green"
-    },
-    {
-      "pickupname": "BTC - Oei Tiong Ham Building",
-      "routeid": "BTC1",
-      "busstopcode": "BUKITTIMAH-BTC2",
-      "lat": 1.3197436,
-      "lng": 103.81793,
-      "LongName": "Oei Tiong Ham Building",
-      "ShortName": "OTH Bldg"
     },
     {
       "pickupname": "Opp HSSML",
@@ -1043,6 +899,150 @@
       "lng": 103.7805,
       "LongName": "Prince George’s Park",
       "ShortName": "PGP"
+    },
+    {
+      "pickupname": "BTC - Oei Tiong Ham Building",
+      "routeid": "BTC2",
+      "busstopcode": "BUKITTIMAH-BTC2",
+      "lat": 1.3197436,
+      "lng": 103.81793,
+      "LongName": "Oei Tiong Ham Building",
+      "ShortName": "OTH Bldg"
+    },
+    {
+      "pickupname": "Botanic Gardens MRT",
+      "routeid": "BTC2",
+      "busstopcode": "BG-MRT",
+      "lat": 1.3227,
+      "lng": 103.8151,
+      "LongName": "Botanic Garden MRT",
+      "ShortName": "BG MRT"
+    },
+    {
+      "pickupname": "Museum",
+      "routeid": "BTC2",
+      "busstopcode": "MUSEUM",
+      "lat": 1.3010374,
+      "lng": 103.7738,
+      "LongName": "Museum",
+      "ShortName": "Museum"
+    },
+    {
+      "pickupname": "EA",
+      "routeid": "BTC2",
+      "busstopcode": "BLK-EA-OPP",
+      "lat": 1.3004,
+      "lng": 103.7701,
+      "LongName": "EA",
+      "ShortName": "EA"
+    },
+    {
+      "pickupname": "Kent Ridge Bus Terminal (E)",
+      "routeid": "BTC2",
+      "busstopcode": "KR-BTE",
+      "lat": 1.2946,
+      "lng": 103.7698,
+      "LongName": "",
+      "ShortName": ""
+    },
+    {
+      "pickupname": "Kent Ridge Bus Terminal",
+      "routeid": "BTC2",
+      "busstopcode": "KR-BT",
+      "lat": 1.294167,
+      "lng": 103.76972,
+      "LongName": "Kent Ridge Bus Terminal",
+      "ShortName": "KR Bus Terminal"
+    },
+    {
+      "pickupname": "Kent Vale",
+      "routeid": "BTC2",
+      "busstopcode": "KV",
+      "lat": 1.3021,
+      "lng": 103.7691,
+      "LongName": "Kent Vale",
+      "ShortName": "KV"
+    },
+    {
+      "pickupname": "Museum",
+      "routeid": "BTC1",
+      "busstopcode": "MUSEUM",
+      "lat": 1.3010644,
+      "lng": 103.77375,
+      "LongName": "Museum",
+      "ShortName": "Museum"
+    },
+    {
+      "pickupname": "YIH",
+      "routeid": "BTC1",
+      "busstopcode": "YIH",
+      "lat": 1.2987,
+      "lng": 103.7743,
+      "LongName": "Yusof Ishak House",
+      "ShortName": "YIH"
+    },
+    {
+      "pickupname": "Central Library",
+      "routeid": "BTC1",
+      "busstopcode": "CENLIB",
+      "lat": 1.2964,
+      "lng": 103.7722,
+      "LongName": "Central Library",
+      "ShortName": "CLB"
+    },
+    {
+      "pickupname": "LT13",
+      "routeid": "BTC1",
+      "busstopcode": "LT13",
+      "lat": 1.2942812,
+      "lng": 103.77071,
+      "LongName": "LT 13",
+      "ShortName": "LT 13"
+    },
+    {
+      "pickupname": "AS5",
+      "routeid": "BTC1",
+      "busstopcode": "AS7",
+      "lat": 1.2934904,
+      "lng": 103.77183,
+      "LongName": "AS 5",
+      "ShortName": "AS 5"
+    },
+    {
+      "pickupname": "BIZ 2",
+      "routeid": "BTC1",
+      "busstopcode": "BIZ2",
+      "lat": 1.2933116,
+      "lng": 103.775116,
+      "LongName": "BIZ 2",
+      "ShortName": "BIZ 2"
+    },
+    {
+      "pickupname": "Prince George's Park",
+      "routeid": "BTC1",
+      "busstopcode": "PGPT",
+      "lat": 1.2918985,
+      "lng": 103.78038,
+      "LongName": "Prince George’s Park",
+      "ShortName": "PGP"
+    },
+    {
+      "pickupname": "College Green",
+      "routeid": "BTC1",
+      "busstopcode": "CGH",
+      "lat": 1.323333,
+      "lng": 103.81631,
+      "LongName": "College Green",
+      "ShortName": "College Green"
+    },
+    {
+      "pickupname": "BTC - Oei Tiong Ham Building",
+      "routeid": "BTC1",
+      "busstopcode": "BUKITTIMAH-BTC2",
+      "lat": 1.3197436,
+      "lng": 103.81793,
+      "LongName": "Oei Tiong Ham Building",
+      "ShortName": "OTH Bldg"
     }
   ]
 }

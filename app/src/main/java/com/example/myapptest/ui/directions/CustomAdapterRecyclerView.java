@@ -46,8 +46,7 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
 
     List<NavigationResults> resultsList;
 
-    NavigationResults navResultTest;
-    List<NavigationPartialResults> navTestResultSegment;
+
     NavController navController;
     float dpWidth;
 
@@ -59,9 +58,9 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
         this.navController = navController;
         this.dpWidth = dpWidth;
         Log.e("dpwidth is", dpWidth + "");
-        navResultTest = resultsList.get(0);
-        navTestResultSegment = navResultTest.getResultsConcatenated();
-        Log.e("check", navTestResultSegment.toString());
+//        navResultTest = resultsList.get(0);
+//        navTestResultSegment = navResultTest.getResultsConcatenated();
+//        Log.e("check", navTestResultSegment.toString());
     }
 
     @Override
@@ -78,6 +77,9 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
 
         Log.e("null?", holder + "");
 
+        NavigationResults navResultTest = resultsList.get(position);
+        List<NavigationPartialResults> navTestResultSegment = navResultTest.getResultsConcatenated();
+
         holder.navR_totaltime.setText(navResultTest.getTotalTimeTaken() + " min");
 
         Log.e("entered", "onbindviewholder");
@@ -93,8 +95,10 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
             if (navTestResultSegment.get(i) != null) {
                 NavigationPartialResults currentSegment = navTestResultSegment.get(i);
                 Log.e("current node starts at", currentSegment.getNodesTraversed().get(0).getName());
-
-                if (currentSegment.getViableBuses1().size() > 0) {
+                Log.e("checkcond", (i > 1 && i < navTestResultSegment.size() - 1
+                        && navTestResultSegment.get(i - 1).getViableBuses1().size() == 0
+                        && navTestResultSegment.get(i + 1).getViableBuses1().size() == 0) + " " + position);
+                if (currentSegment.getViableBuses1().size() > 0 && i < 3) {
                     onlyWalk = false;
                     holder.navRLayoutContainer2.setVisibility(View.VISIBLE);
                     if (currentSegment.getNodesTraversed().get(0).getName().equals(origin)) {
@@ -103,6 +107,10 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
                     if (dpWidth > 600) {
                         StringBuilder stringBuilder = new StringBuilder();
                         for (int j = 0; j < currentSegment.getViableBuses1().size(); j++) {
+                            if (j > 1) {
+                                stringBuilder.append("...");
+                                break;
+                            }
                             stringBuilder.append(currentSegment.getViableBuses1().get(j));
                             if (j < currentSegment.getViableBuses1().size() - 1) {
                                 stringBuilder.append("/");
@@ -157,15 +165,37 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
                         }
                     });
                     holder.recyclerviewItemHolder.setVisibility(View.VISIBLE);
-                } else if (currentSegment.getViableBuses2().size() > 0) {
+                } else if (currentSegment.getViableBuses2().size() > 0 ||
+                        (i > 1 && i < navTestResultSegment.size() - 1
+                                && navTestResultSegment.get(i - 1).getViableBuses1().size() == 0
+                                && navTestResultSegment.get(i + 1).getViableBuses1().size() == 0)) {
+                    Log.e("entered", position + " ues " + currentSegment.getViableBuses2().size());
                     onlyWalk = false;
                     holder.navRLayoutContainer4.setVisibility(View.VISIBLE);
+                    Log.e("checkvis", holder.navRLayoutContainer4.getVisibility() + "");
                     if (dpWidth > 800) {
                         StringBuilder stringBuilder = new StringBuilder();
-                        for (int j = 0; j < currentSegment.getViableBuses2().size(); j++) {
-                            stringBuilder.append(currentSegment.getViableBuses2().get(j));
-                            if (j < currentSegment.getViableBuses2().size() - 1) {
-                                stringBuilder.append("/");
+                        if (currentSegment.getViableBuses2().size() > 0) {
+                            for (int j = 0; j < currentSegment.getViableBuses2().size(); j++) {
+                                if (j > 1) {
+                                    stringBuilder.append("...");
+                                    break;
+                                }
+                                stringBuilder.append(currentSegment.getViableBuses2().get(j));
+                                if (j < currentSegment.getViableBuses2().size() - 1) {
+                                    stringBuilder.append("/");
+                                }
+                            }
+                        } else {
+                            for (int j = 0; j < currentSegment.getViableBuses1().size(); j++) {
+                                if (j > 1) {
+                                    stringBuilder.append("...");
+                                    break;
+                                }
+                                stringBuilder.append(currentSegment.getViableBuses1().get(j));
+                                if (j < currentSegment.getViableBuses1().size() - 1) {
+                                    stringBuilder.append("/");
+                                }
                             }
                         }
                         holder.navR_secondbusservices.setText(stringBuilder.toString());
@@ -184,9 +214,9 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
                     holder.navR_lastwalktime.setText(stringBuilder.toString());
                 } else if (currentSegment.getViableBuses1().size() == 0) {
                     holder.navRLayoutContainer3.setVisibility(View.VISIBLE);
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append(currentSegment.getTimeForSegment());
-                    holder.navR_midwalktime.setText(stringBuilder.toString());
+//                    StringBuilder stringBuilder = new StringBuilder();
+//                    stringBuilder.append(currentSegment.getTimeForSegment());
+//                    holder.navR_midwalktime.setText(stringBuilder.toString());
                 }
 //                 switch (i) {
 //                    case 0:
@@ -420,7 +450,7 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
     @Override
     //TODO: itemCount
     public int getItemCount() {
-        return 1;
+        return resultsList.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

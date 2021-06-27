@@ -92,7 +92,6 @@ public class SingleRouteListCustomAdapterRecyclerView extends RecyclerView.Adapt
         }
         if (position < navResultInSegments.size() && navResultInSegments.get(position) != null) {
             NavigationPartialResults currentSegment = navResultInSegments.get(position);
-            NavigationPartialResults previousSegment = new NavigationPartialResults();
             Log.e("current node starts at", currentSegment.getNodesTraversed().get(0).getName());
             if (currentSegment.getViableBuses1().size() == 0
                     && currentSegment.getNodesTraversed().get(0).getName().equals(origin)) {
@@ -133,6 +132,21 @@ public class SingleRouteListCustomAdapterRecyclerView extends RecyclerView.Adapt
             } else if (currentSegment.getViableBuses1().size() == 0
                     && currentSegment.getNodesTraversed().get(currentSegment.getNodesTraversed().size() - 1).getName().equals(dest)) {
                 //segment is lastwalk
+                holder.topText.setText("Alight at:");
+                holder.mainText.setText(currentSegment.getNodesTraversed().get(0).getName());
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("Walk ").append(currentSegment.getTimeForSegment());
+                if (currentSegment.getTimeForSegment() == 1) {
+                    stringBuilder.append(" minute");
+                } else if (currentSegment.getTimeForSegment() > 1) {
+                    stringBuilder.append(" minutes");
+                }
+                holder.lowestText.setText(stringBuilder.toString());
+                holder.circle.setImageResource(R.drawable.ic_baseline_directions_bus_36_large);
+                holder.human.setVisibility(View.VISIBLE);
+                holder.walkingMan.setVisibility(View.VISIBLE);
+            } else if (navResultInSegments.size() > 2 && position > 0 && position < navResultInSegments.size() - 1
+                    && currentSegment.getViableBuses1().size() == 0) {
                 holder.topText.setText("Alight at:");
                 holder.mainText.setText(currentSegment.getNodesTraversed().get(0).getName());
                 StringBuilder stringBuilder = new StringBuilder();
