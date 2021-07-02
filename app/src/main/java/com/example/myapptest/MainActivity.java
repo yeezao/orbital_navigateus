@@ -50,8 +50,6 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements SetArrivalNotificationsDialogFragment.ArrivalNotificationsDialogListenerForActivity {
 
-    private ActivityMainBinding binding;
-
     Fragment homeFragment = new HomeFragment();
     Fragment stopsServicesMasterFragment = new StopsServicesMasterFragment();
     Fragment directionsFragment = new DirectionsFragment();
@@ -70,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
 
         super.onCreate(savedInstanceState);
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         navView = findViewById(R.id.nav_view);
@@ -78,8 +76,6 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
         createNotificationChannel();
 
         getStringOfGroupStops();
-
-        BeginMonitoring();
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -365,6 +361,7 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
                 break;
             }
         }
+        BeginMonitoring();
         if (!stopRepeated && singleStopArrivalNotifications.isWatchingForArrival() && singleStopArrivalNotifications.getServicesBeingWatched().size() > 0) {
             arrivalNotificationsArray.add(singleStopArrivalNotifications);
             startNewMonitoring = true;
@@ -448,6 +445,7 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
                 if (returnInfo != null) {
                     ChangeNotification(returnInfo, singleStopArrivalNotificationForUpdate);
                     ChangeArrivalNotificationsArray(singleStopArrivalNotificationForUpdate);
+                    monitoringHandler.removeCallbacksAndMessages(0);
                 } else {
                     //?
                 }

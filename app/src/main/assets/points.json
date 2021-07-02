@@ -41,14 +41,6 @@
       "lon": 103.7717
     },
     {
-      "name": "AS5 (Bus Stop)",
-      "altname": "",
-      "id": "AS7",
-      "numid": 1,
-      "lat": 1.2935,
-      "lon": 103.7721
-    },
-    {
       "name": "AS6",
       "altname": "",
       "id": "AS6",
@@ -73,14 +65,6 @@
       "lon": 103.772
     },
     {
-      "name": "BIZ 2 (Bus Stop)",
-      "altname": "",
-      "id": "BIZ2",
-      "numid": 2,
-      "lat": 1.29334,
-      "lon": 103.7752
-    },
-    {
       "name": "BIZ1 / Mochtar Riady Building",
       "altname": "",
       "id": "BIZ1",
@@ -95,14 +79,6 @@
       "numid": 342,
       "lat": 1.293627,
       "lon": 103.7751
-    },
-    {
-      "name": "Botanic Gardens MRT (PUDO)",
-      "altname": "",
-      "id": "BG-MRT",
-      "numid": 3,
-      "lat": 1.3227,
-      "lon": 103.8151
     },
     {
       "name": "CAPT / College of Alice & Peter Tan",
@@ -137,14 +113,6 @@
       "lon": 103.7721
     },
     {
-      "name": "Central Library (Bus Stop)",
-      "altname": "CLB (Bus Stop)",
-      "id": "CENLIB",
-      "numid": 5,
-      "lat": 1.2964,
-      "lon": 103.7722
-    },
-    {
       "name": "Central Square (YIH)",
       "altname": "",
       "id": "CSYIH",
@@ -177,14 +145,6 @@
       "lon": 103.7732
     },
     {
-      "name": "College Green (Bus Stop)",
-      "altname": "",
-      "id": "CGH",
-      "numid": 6,
-      "lat": 1.323333,
-      "lon": 103.8163
-    },
-    {
       "name": "COM1",
       "altname": "",
       "id": "COM1",
@@ -199,14 +159,6 @@
       "numid": 332,
       "lat": 1.294481,
       "lon": 103.7741
-    },
-    {
-      "name": "COM2 (Bus Stop)",
-      "altname": "",
-      "id": "COM2",
-      "numid": 7,
-      "lat": 1.294285,
-      "lon": 103.7738
     },
     {
       "name": "COM3",
@@ -337,14 +289,6 @@
       "lon": 103.7708
     },
     {
-      "name": "EA (Bus Stop)",
-      "altname": "",
-      "id": "BLK-EA-OPP",
-      "numid": 8,
-      "lat": 1.3004,
-      "lon": 103.7701
-    },
-    {
       "name": "Elm College (Yale-NUS)",
       "altname": "",
       "id": "ELM",
@@ -433,14 +377,6 @@
       "lon": 103.7753
     },
     {
-      "name": "Information Technology (Bus Stop)",
-      "altname": "IT (Bus Stop)",
-      "id": "COMCEN",
-      "numid": 9,
-      "lat": 1.297376,
-      "lon": 103.7729
-    },
-    {
       "name": "Innovation 4.0",
       "altname": "",
       "id": "I4",
@@ -481,14 +417,6 @@
       "lon": 103.7806118
     },
     {
-      "name": "Kent Ridge Bus Terminal",
-      "altname": "KRT",
-      "id": "KR-BT",
-      "numid": 10,
-      "lat": 1.294167,
-      "lon": 103.7697
-    },
-    {
       "name": "Kent Ridge Hall",
       "altname": "KRH",
       "id": "KRH",
@@ -505,28 +433,12 @@
       "lon": 103.7844
     },
     {
-      "name": "Kent Ridge MRT (Bus Stop)",
-      "altname": "KR MRT",
-      "id": "KR-MRT",
-      "numid": 11,
-      "lat": 1.294833,
-      "lon": 103.7844
-    },
-    {
       "name": "Kent Vale",
       "altname": "KV",
       "id": "KVKV",
       "numid": 120,
       "lat": 1.3027,
       "lon": 103.7694
-    },
-    {
-      "name": "Kent Vale (Bus Stop)",
-      "altname": "KV",
-      "id": "KV",
-      "numid": 12,
-      "lat": 1.3021,
-      "lon": 103.7691
     },
     {
       "name": "LKCNHM / Lee Kong Chian Natural History Museum",
@@ -575,14 +487,6 @@
       "numid": 913,
       "lat": 1.29521,
       "lon": 103.7711
-    },
-    {
-      "name": "LT13 (Bus Stop)",
-      "altname": "",
-      "id": "LT13",
-      "numid": 13,
-      "lat": 1.294779,
-      "lon": 103.7706
     },
     {
       "name": "LT14",
@@ -703,14 +607,6 @@
       "numid": 927,
       "lat": 1.297262,
       "lon": 103.7809
-    },
-    {
-      "name": "LT27 (Bus Stop)",
-      "altname": "",
-      "id": "LT27",
-      "numid": 14,
-      "lat": 1.2974,
-      "lon": 103.781
     },
     {
       "name": "LT28",
@@ -977,14 +873,6 @@
       "lon": 103.7761
     },
     {
-      "name": "Museum (Bus Stop)",
-      "altname": "",
-      "id": "MUSEUM",
-      "numid": 15,
-      "lat": 1.301102,
-      "lon": 103.7737
-    },
-    {
       "name": "NUCOHS / Faculty of Dentistry",
       "altname": "NUCOHS",
       "id": "NUCOHS",
@@ -1025,100 +913,12 @@
       "lon": 103.7729672
     },
     {
-      "name": "Oei Tiong Ham Building (Bus Stop)",
-      "altname": "OTH Bldg",
-      "id": "BUKITTIMAH-BTC2",
-      "numid": 4,
-      "lat": 1.319744,
-      "lon": 103.8179
-    },
-    {
-      "name": "Opp HSSML (Bus Stop)",
-      "altname": "",
-      "id": "HSSML-OPP",
-      "numid": 16,
-      "lat": 1.292778,
-      "lon": 103.775
-    },
-    {
-      "name": "Opp Kent Ridge MRT (Bus Stop)",
-      "altname": "Opp KR MRT",
-      "id": "KR-MRT-OPP",
-      "numid": 17,
-      "lat": 1.294876,
-      "lon": 103.7846
-    },
-    {
-      "name": "Opp NUSS (Bus Stop)",
-      "altname": "",
-      "id": "NUSS-OPP",
-      "numid": 18,
-      "lat": 1.2933,
-      "lon": 103.7724
-    },
-    {
-      "name": "Opp SDE3 (Bus Stop)",
-      "altname": "",
-      "id": "",
-      "numid": 37,
-      "lat": 1.297866,
-      "lon": 103.7696
-    },
-    {
-      "name": "Opp TCOMS (Bus Stop)",
-      "altname": "",
-      "id": "PGP12-OPP",
-      "numid": 19,
-      "lat": 1.2938,
-      "lon": 103.777
-    },
-    {
-      "name": "Opp UHall (Bus Stop)",
-      "altname": "",
-      "id": "UHALL-OPP",
-      "numid": 20,
-      "lat": 1.2975,
-      "lon": 103.7782
-    },
-    {
-      "name": "Opp University Health Centre (Bus Stop)",
-      "altname": "Opp UHC",
-      "id": "STAFFCLUB-OPP",
-      "numid": 21,
-      "lat": 1.2988,
-      "lon": 103.7755
-    },
-    {
-      "name": "Opp YIH (Bus Stop)",
-      "altname": "",
-      "id": "YIH-OPP",
-      "numid": 22,
-      "lat": 1.298969,
-      "lon": 103.7742
-    },
-    {
       "name": "PGP House",
       "altname": "PGPH",
       "id": "PGPH",
       "numid": 995,
       "lat": 1.290912,
       "lon": 103.7806
-    },
-    {
-      "name": "PGP Hse 15 (Bus Stop)",
-      "altname": "",
-      "id": "PGP14-15",
-      "numid": 23,
-      "lat": 1.293056,
-      "lon": 103.7778
-    },
-    {
-      "name": "PGP Hse 7 (Bus Stop)",
-      "altname": "",
-      "id": "PGP7",
-      "numid": 24,
-      "lat": 1.2932,
-      "lon": 103.7778
     },
     {
       "name": "PGPR / PGP Residences",
@@ -1129,36 +929,12 @@
       "lon": 103.7825
     },
     {
-      "name": "Prince George's Park (Bus Stop)",
-      "altname": "PGP Terminal",
-      "id": "PGPT",
-      "numid": 25,
-      "lat": 1.2918,
-      "lon": 103.7805
-    },
-    {
-      "name": "Prince George's Park Residence (Bus Stop)",
-      "altname": "PGPR (Bus Stop)",
-      "id": "PGP",
-      "numid": 26,
-      "lat": 1.290999,
-      "lon": 103.781
-    },
-    {
       "name": "Raffles Hall",
       "altname": "RH",
       "id": "RH",
       "numid": 990,
       "lat": 1.30012,
       "lon": 103.7738
-    },
-    {
-      "name": "Raffles Hall (Bus Stop)",
-      "altname": "RH (Bus Stop)",
-      "id": "RAFFLES",
-      "numid": 27,
-      "lat": 1.301029,
-      "lon": 103.7727
     },
     {
       "name": "RC4 / Residential College 4",
@@ -1255,14 +1031,6 @@
       "numid": 420,
       "lat": 1.297776,
       "lon": 103.7806
-    },
-    {
-      "name": "S17 (Bus Stop)",
-      "altname": "",
-      "id": "S17",
-      "numid": 28,
-      "lat": 1.297477,
-      "lon": 103.7814
     },
     {
       "name": "S1A",
@@ -1385,14 +1153,6 @@
       "lon": 103.7705
     },
     {
-      "name": "SDE3 (Bus Stop)",
-      "altname": "",
-      "id": "",
-      "numid": 36,
-      "lat": 1.297821,
-      "lon": 103.7699
-    },
-    {
       "name": "SDE4",
       "altname": "",
       "id": "SDE4",
@@ -1423,14 +1183,6 @@
       "numid": 103,
       "lat": 1.304674,
       "lon": 103.7724
-    },
-    {
-      "name": "TCOMS (Bus Stop)",
-      "altname": "",
-      "id": "PGP12",
-      "numid": 29,
-      "lat": 1.293702,
-      "lon": 103.7765
     },
     {
       "name": "TCOMS / Technology Centre for Offshore & Marine",
@@ -1473,14 +1225,6 @@
       "lon": 103.7724
     },
     {
-      "name": "The Japanese Primary School",
-      "altname": "The Japanese Pri Sch",
-      "id": "JP-SCH-16151",
-      "numid": 30,
-      "lat": 1.300731,
-      "lon": 103.77
-    },
-    {
       "name": "Town Plaza",
       "altname": "TP",
       "id": "TOWNPLAZA",
@@ -1497,14 +1241,6 @@
       "lon": 103.7722
     },
     {
-      "name": "Uhall (Bus Stop)",
-      "altname": "",
-      "id": "UHALL",
-      "numid": 31,
-      "lat": 1.297223,
-      "lon": 103.7787
-    },
-    {
       "name": "UHall / University Hall",
       "altname": "",
       "id": "UNIHALL",
@@ -1519,22 +1255,6 @@
       "numid": 385,
       "lat": 1.299318,
       "lon": 103.7764
-    },
-    {
-      "name": "University Health Centre (Bus Stop)",
-      "altname": "UHC (Bus Stop)",
-      "id": "STAFFCLUB",
-      "numid": 32,
-      "lat": 1.2989,
-      "lon": 103.7761
-    },
-    {
-      "name": "University Town (Bus Stop)",
-      "altname": "Utown (Bus Stop)",
-      "id": "UTown",
-      "numid": 33,
-      "lat": 1.303622,
-      "lon": 103.7747
     },
     {
       "name": "USC / University Sports Centre",
@@ -1577,14 +1297,6 @@
       "lon": 103.7738
     },
     {
-      "name": "Ventus (Opp LT13) (Bus Stop)",
-      "altname": "Ventus",
-      "id": "LT13-OPP",
-      "numid": 34,
-      "lat": 1.2953,
-      "lon": 103.7706
-    },
-    {
       "name": "Ventus / UCI",
       "altname": "",
       "id": "UCI",
@@ -1617,12 +1329,300 @@
       "lon": 103.7721
     },
     {
+      "name": "AS5 (Bus Stop)",
+      "altname": "AS5",
+      "id": "AS7",
+      "numid": 1,
+      "lat": 1.2935,
+      "lon": 103.7721
+    },
+    {
+      "name": "BIZ 2 (Bus Stop)",
+      "altname": "BIZ2",
+      "id": "BIZ2",
+      "numid": 2,
+      "lat": 1.29334,
+      "lon": 103.7752
+    },
+    {
+      "name": "Botanic Gardens MRT (Pick-up/Drop-Off Point) (Bus Stop)",
+      "altname": "Botanic Gdns MRT",
+      "id": "BG-MRT",
+      "numid": 3,
+      "lat": 1.3227,
+      "lon": 103.8151
+    },
+    {
+      "name": "Oei Tiong Ham Building (Bus Stop)",
+      "altname": "OTH Bldg",
+      "id": "BUKITTIMAH-BTC2",
+      "numid": 4,
+      "lat": 1.319744,
+      "lon": 103.8179
+    },
+    {
+      "name": "Central Library (Bus Stop)",
+      "altname": "Central Lib",
+      "id": "CENLIB",
+      "numid": 5,
+      "lat": 1.2964,
+      "lon": 103.7722
+    },
+    {
+      "name": "College Green (Bus Stop)",
+      "altname": "College Green",
+      "id": "CGH",
+      "numid": 6,
+      "lat": 1.323333,
+      "lon": 103.8163
+    },
+    {
+      "name": "COM2 (Bus Stop)",
+      "altname": "COM2",
+      "id": "COM2",
+      "numid": 7,
+      "lat": 1.294285,
+      "lon": 103.7738
+    },
+    {
+      "name": "EA (Bus Stop)",
+      "altname": "EA (Bus Stop)",
+      "id": "BLK-EA-OPP",
+      "numid": 8,
+      "lat": 1.3004,
+      "lon": 103.7701
+    },
+    {
+      "name": "Information Technology (Bus Stop)",
+      "altname": "IT (Bus Stop)",
+      "id": "COMCEN",
+      "numid": 9,
+      "lat": 1.297376,
+      "lon": 103.7729
+    },
+    {
+      "name": "KRT / Kent Ridge Bus Terminal",
+      "altname": "Kent Ridge Bus Ter",
+      "id": "KR-BT",
+      "numid": 10,
+      "lat": 1.294167,
+      "lon": 103.7697
+    },
+    {
+      "name": "Kent Ridge MRT (Bus Stop)",
+      "altname": "Kent Ridge MRT",
+      "id": "KR-MRT",
+      "numid": 11,
+      "lat": 1.294833,
+      "lon": 103.7844
+    },
+    {
+      "name": "Kent Vale (Bus Stop)",
+      "altname": "Kent Vale",
+      "id": "KV",
+      "numid": 12,
+      "lat": 1.3021,
+      "lon": 103.7691
+    },
+    {
+      "name": "LT13 (Bus Stop)",
+      "altname": "LT13",
+      "id": "LT13",
+      "numid": 13,
+      "lat": 1.294779,
+      "lon": 103.7706
+    },
+    {
+      "name": "LT27 (Bus Stop)",
+      "altname": "LT27",
+      "id": "LT27",
+      "numid": 14,
+      "lat": 1.2974,
+      "lon": 103.781
+    },
+    {
+      "name": "Museum (Bus Stop)",
+      "altname": "Museum",
+      "id": "MUSEUM",
+      "numid": 15,
+      "lat": 1.301102,
+      "lon": 103.7737
+    },
+    {
+      "name": "Opp HSSML (Bus Stop)",
+      "altname": "Opp HSSML",
+      "id": "HSSML-OPP",
+      "numid": 16,
+      "lat": 1.292778,
+      "lon": 103.775
+    },
+    {
+      "name": "Opp Kent Ridge MRT (Bus Stop)",
+      "altname": "Opp Kent Ridge MRT",
+      "id": "KR-MRT-OPP",
+      "numid": 17,
+      "lat": 1.294876,
+      "lon": 103.7846
+    },
+    {
+      "name": "Opp NUSS (Bus Stop)",
+      "altname": "Opp NUSS",
+      "id": "NUSS-OPP",
+      "numid": 18,
+      "lat": 1.2933,
+      "lon": 103.7724
+    },
+    {
+      "name": "Opp TCOMS (Bus Stop)",
+      "altname": "Opp TCOMS",
+      "id": "PGP12-OPP",
+      "numid": 19,
+      "lat": 1.2938,
+      "lon": 103.777
+    },
+    {
+      "name": "Opp UHall (Bus Stop)",
+      "altname": "Opp Uhall",
+      "id": "UHALL-OPP",
+      "numid": 20,
+      "lat": 1.2975,
+      "lon": 103.7782
+    },
+    {
+      "name": "Opp University Health Centre (Bus Stop)",
+      "altname": "Opp UHC",
+      "id": "STAFFCLUB-OPP",
+      "numid": 21,
+      "lat": 1.2988,
+      "lon": 103.7755
+    },
+    {
+      "name": "Opp YIH (Bus Stop)",
+      "altname": "Opp YIH",
+      "id": "YIH-OPP",
+      "numid": 22,
+      "lat": 1.298969,
+      "lon": 103.7742
+    },
+    {
+      "name": "PGP Hse 15 (Bus Stop)",
+      "altname": "PGP Hse 15",
+      "id": "PGP14-15",
+      "numid": 23,
+      "lat": 1.293056,
+      "lon": 103.7778
+    },
+    {
+      "name": "PGP Hse 7 (Bus Stop)",
+      "altname": "PGP Hse 7",
+      "id": "PGP7",
+      "numid": 24,
+      "lat": 1.2932,
+      "lon": 103.7778
+    },
+    {
+      "name": "PGPT / Prince George's Park Bus Terminal",
+      "altname": "PGP Terminal",
+      "id": "PGPT",
+      "numid": 25,
+      "lat": 1.2918,
+      "lon": 103.7805
+    },
+    {
+      "name": "Prince George's Park Residence (Bus Stop)",
+      "altname": "PGPR",
+      "id": "PGP",
+      "numid": 26,
+      "lat": 1.290999,
+      "lon": 103.781
+    },
+    {
+      "name": "Raffles Hall (Bus Stop)",
+      "altname": "Raffles Hall",
+      "id": "RAFFLES",
+      "numid": 27,
+      "lat": 1.301029,
+      "lon": 103.7727
+    },
+    {
+      "name": "S17 (Bus Stop)",
+      "altname": "S17",
+      "id": "S17",
+      "numid": 28,
+      "lat": 1.297477,
+      "lon": 103.7814
+    },
+    {
+      "name": "TCOMS (Bus Stop)",
+      "altname": "TCOMS",
+      "id": "PGP12",
+      "numid": 29,
+      "lat": 1.293702,
+      "lon": 103.7765
+    },
+    {
+      "name": "The Japanese Primary School (Bus Stop)",
+      "altname": "The Japanese Pr Sch",
+      "id": "JP-SCH-16151",
+      "numid": 30,
+      "lat": 1.300731,
+      "lon": 103.77
+    },
+    {
+      "name": "Uhall (Bus Stop)",
+      "altname": "Uhall",
+      "id": "UHALL",
+      "numid": 31,
+      "lat": 1.297223,
+      "lon": 103.7787
+    },
+    {
+      "name": "University Health Centre (Bus Stop)",
+      "altname": "UHC",
+      "id": "STAFFCLUB",
+      "numid": 32,
+      "lat": 1.2989,
+      "lon": 103.7761
+    },
+    {
+      "name": "University Town (Bus Stop)",
+      "altname": "Utown",
+      "id": "UTown",
+      "numid": 33,
+      "lat": 1.303622,
+      "lon": 103.7747
+    },
+    {
+      "name": "Ventus (Opp LT13) (Bus Stop)",
+      "altname": "Ventus (Opp LT13)",
+      "id": "LT13-OPP",
+      "numid": 34,
+      "lat": 1.2953,
+      "lon": 103.7706
+    },
+    {
       "name": "Yusof Ishak House (Bus Stop)",
-      "altname": "YIH (Bus Stop)",
+      "altname": "Yusof Ishak Hse",
       "id": "YIH",
       "numid": 35,
       "lat": 1.2987,
       "lon": 103.7743
+    },
+    {
+      "name": "SDE3 (Bus Stop)",
+      "altname": "SDE3",
+      "id": "SDE3",
+      "numid": 36,
+      "lat": 1.297821,
+      "lon": 103.7699
+    },
+    {
+      "name": "Opp SDE3 (Bus Stop)",
+      "altname": "Opp SDE3",
+      "id": "SDE3-OPP",
+      "numid": 37,
+      "lat": 1.297866,
+      "lon": 103.7696
     }
   ]
 }

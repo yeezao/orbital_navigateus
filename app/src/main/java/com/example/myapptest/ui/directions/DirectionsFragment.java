@@ -12,7 +12,6 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.WindowMetrics;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
@@ -62,7 +61,9 @@ public class DirectionsFragment extends Fragment {
     AppCompatAutoCompleteTextView originInputEditor;
 //    TextView textViewIntermediate;
     RecyclerView resultRecyclerView;
-    List<NavigationResults> savedNavigationResults;
+    CustomAdapterRecyclerView customAdapterRecyclerView;
+    List<NavigationResults> savedNavigationResults = new ArrayList<>();
+    float dpWidth;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -72,7 +73,18 @@ public class DirectionsFragment extends Fragment {
 
         destInputEditor = view.findViewById(R.id.destInputEditor);
         originInputEditor = view.findViewById(R.id.originInputEditor);
+
         resultRecyclerView = view.findViewById(R.id.resultrecyclerView);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        resultRecyclerView.setLayoutManager(linearLayoutManager);
+        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        display.getMetrics(displayMetrics);
+        dpWidth = displayMetrics.widthPixels;
+        customAdapterRecyclerView = new CustomAdapterRecyclerView(
+                getActivity(), savedNavigationResults, originText, destText, navController, dpWidth);
+        resultRecyclerView.setAdapter(customAdapterRecyclerView);
+
         listOfBusStopsObject = ((MainActivity) getActivity()).getListOfAllStops();
         listOfBusStopsString = ((MainActivity) getActivity()).getFirstPassStopsList();
 //        textViewIntermediate = view.findViewById(R.id.textView6);
@@ -123,7 +135,6 @@ public class DirectionsFragment extends Fragment {
     }
 
     List<String> listOfNames;
-    List<String> listOfIds;
 
     private void SetAutoFillAdapter() {
         String loadLocationsForSearch = loadJSONFromAsset("points.json");
@@ -211,10 +222,8 @@ public class DirectionsFragment extends Fragment {
             inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
                     InputMethodManager.HIDE_NOT_ALWAYS);
             this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-            destInputEditor.setFocusable(false);
-            originInputEditor.setFocusable(false);
-            destInputEditor.setFocusable(true);
-            originInputEditor.setFocusable(true);
+            destInputEditor.setEnabled(false);
+            originInputEditor.setEnabled(false);
         } catch (NullPointerException e) {
             //do nothing, just move on
         }
@@ -231,19 +240,15 @@ public class DirectionsFragment extends Fragment {
                     Snackbar.LENGTH_LONG);
             snackbar.setAnchorView(R.id.nav_view);
             snackbar.show();
-
+            destInputEditor.setEnabled(true);
+            originInputEditor.setEnabled(true);
         } else if (originText.trim().length() > 0 && destText.trim().length() > 0) {
 
             goButtonForNav.setClickable(false);
-
-//            originId = listOfIds.get(listOfNames.indexOf(originText));
-//            destId = listOfIds.get(listOfNames.indexOf(destText));
+            resultRecyclerView.setVisibility(View.INVISIBLE);
+            numberOfCompletes = 0;
 
             navigationSearchInfo = new NavigationSearchInfo();
-
-//            navigationSearchInfo.setOriginDetails(listOfBusStopsObject.get(listOfNames.indexOf(originText)));
-//            Log.e("origin index is:", listOfNames.indexOf(originText) + "");
-//            navigationSearchInfo.setDestDetails(listOfBusStopsObject.get(listOfNames.indexOf(destText)));
 
             navigationSearchInfo.setOrigin(originText);
             navigationSearchInfo.setDest(destText);
@@ -261,40 +266,31 @@ public class DirectionsFragment extends Fragment {
             waitingForDirectionsResultProgressBar = view.findViewById(R.id.waiting_for_directions_result_progressBar);
             waitingForDirectionsResultProgressBar.setVisibility(View.VISIBLE);
 
-//            GetServicesAtStopDetailsOnline(originId, new VolleyCallBack() {
-//                @Override
-//                public void onSuccess() {
-//                    navigationSearchInfo.setOriginServiceDetails(servicesAllInfoAtStop);;
-//                    GetServicesAtStopDetailsOnline(destId, new VolleyCallBack() {
-//                        @Override
-//                        public void onSuccess() {
-//                            navigationSearchInfo.setDestServiceDetails(servicesAllInfoAtStop);
-//                            StartNavigation();
-//                        }
-//                    });
-//                }
-//            });
             NavigationGraph navGraph = new NavigationGraph();
             navGraph.CreateNavGraph(navigationSearchInfo, getContext());
             navGraph.startNavProcess(navigationSearchInfo, getActivity(), getContext(), new NavigationGraph.NavigationResultsFullyComplete() {
                 @Override
                 public void onNavResultsComplete(List<NavigationResults> navigationResults, int returnCode) {
-                    savedNavigationResults = navigationResults;
                     if (navigationResults != null && navigationResults.size() > 0) {
-                        displayNavResults(navigationResults, view);
+                        savedNavigationResults = navigationResults;
+                        customAdapterRecyclerView = new CustomAdapterRecyclerView(
+                                getActivity(), savedNavigationResults, originText, destText, navController, dpWidth);
+                        resultRecyclerView.setAdapter(customAdapterRecyclerView);
                         goButtonForNav.setClickable(true);
+                        waitingForDirectionsResultProgressBar.setVisibility(View.GONE);
+                        resultRecyclerView.setVisibility(View.VISIBLE);
 
                     } else {
                         if (returnCode == 1) {
                             Snackbar snackbar = Snackbar.make(view,
-                                    "Check that you've entered your origin and destination correctly." +
-                                            " Click the Help button for more info.",
+                                    "Check that your origin and destination are correctly selected." +
+                                            " Click Help for more info.",
                                     Snackbar.LENGTH_LONG);
                             snackbar.setAnchorView(R.id.nav_view);
                             snackbar.show();
                         } else if (returnCode == 2) {
                             Snackbar snackbar = Snackbar.make(view,
-                                    "We couldn't find any directions based on your search criteria." +
+                                    "We couldn't find any directions for your search criteria." +
                                             " Please adjust your criteria and try again.",
                                     Snackbar.LENGTH_LONG);
                             snackbar.setAnchorView(R.id.nav_view);
@@ -304,6 +300,8 @@ public class DirectionsFragment extends Fragment {
                         goButtonForNav.setClickable(true);
                         waitingForDirectionsResultProgressBar.setVisibility(View.GONE);
                     }
+                    destInputEditor.setEnabled(true);
+                    originInputEditor.setEnabled(true);
                 }
             });
 
@@ -313,24 +311,9 @@ public class DirectionsFragment extends Fragment {
                     Snackbar.LENGTH_LONG);
             snackbar.setAnchorView(R.id.nav_view);
             snackbar.show();
+            destInputEditor.setEnabled(true);
+            originInputEditor.setEnabled(true);
         }
-    }
-
-    private void displayNavResults(List<NavigationResults> navigationResults, View view) {
-        Display display = getActivity().getWindowManager().getDefaultDisplay();
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        display.getMetrics(displayMetrics);
-        float dpWidth = displayMetrics.widthPixels;
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        resultRecyclerView.setLayoutManager(linearLayoutManager);
-        CustomAdapterRecyclerView customAdapterRecyclerView =
-                new CustomAdapterRecyclerView(getActivity(), navigationResults, originText, destText, navController, dpWidth);
-        resultRecyclerView.setAdapter(customAdapterRecyclerView);
-
-        waitingForDirectionsResultProgressBar.setVisibility(View.GONE);
-        resultRecyclerView.setVisibility(View.VISIBLE);
-
-
     }
 
     ServiceInStopDetails serviceInfoAtStop;
@@ -508,6 +491,8 @@ public class DirectionsFragment extends Fragment {
         }
         return json;
     }
+
+    int numberOfCompletes = 0;
 
     public interface VolleyCallBack {
         void onSuccess();

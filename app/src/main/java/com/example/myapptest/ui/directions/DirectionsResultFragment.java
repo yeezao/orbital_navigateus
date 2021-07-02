@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -61,6 +62,7 @@ public class DirectionsResultFragment extends Fragment {
         singleNavResult = ((MainActivity) getActivity()).getNavResultSingle();
 
         this.setHasOptionsMenu(true);
+
 //        NavigationResults navList = DirectionsResultFragmentArgs.fromBundle(getArguments()).getGetListSingleRoute();
 
         // Inflate the layout for this fragment
@@ -76,7 +78,7 @@ public class DirectionsResultFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         singleResultRecyclerView.setLayoutManager(linearLayoutManager);
         SingleRouteListCustomAdapterRecyclerView singleRouteListCustomAdapterRecyclerView =
-                new SingleRouteListCustomAdapterRecyclerView(getActivity(), singleNavResult, origin, dest);
+                new SingleRouteListCustomAdapterRecyclerView(getActivity(), getContext(), singleNavResult, origin, dest, this.getChildFragmentManager());
         singleResultRecyclerView.setAdapter(singleRouteListCustomAdapterRecyclerView);
 
 //        waitingForDirectionsResultProgressBar.setVisibility(View.GONE);

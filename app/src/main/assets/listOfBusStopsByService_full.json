@@ -947,7 +947,7 @@
     },
     {
       "pickupname": "Kent Ridge Bus Terminal",
-      "routeid": "BTC2",
+      "routeid": "BTC1",
       "busstopcode": "KR-BT",
       "lat": 1.294167,
       "lng": 103.76972,
@@ -955,8 +955,17 @@
       "ShortName": "KR Bus Terminal"
     },
     {
+      "pickupname": "The Japanese Primary School",
+      "routeid": "BTC1",
+      "busstopcode": "JP-SCH-16151",
+      "lat": 1.300731,
+      "lng": 103.76997,
+      "LongName": "The Japanese Primary School",
+      "ShortName": "The Japanese Sch"
+    },
+    {
       "pickupname": "Kent Vale",
-      "routeid": "BTC2",
+      "routeid": "BTC1",
       "busstopcode": "KV",
       "lat": 1.3021,
       "lng": 103.7691,

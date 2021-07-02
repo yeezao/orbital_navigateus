@@ -28,6 +28,8 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,26 +43,15 @@ public class SetArrivalNotificationsDialogFragment extends DialogFragment {
     public static String TAG = "SetArrivalNotificationsDialogFragment";
 
     Spinner selectTimeSpinner;
-    
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//
-//        View view = inflater.inflate(R.layout.fragment_set_arrival_notifications, container, false);
-//
-//
-//
-//        return view;
-//    }
 
     ArrivalNotifications singleStopArrivalNotifications;
     Integer timeToWatch;
-//    ArrivalNotificationsDialogListener listener;
     ArrivalNotificationsDialogListenerForActivity listenerForActivity;
 
+    @NotNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        setRetainInstance(true);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.fragment_set_arrival_notifications, null);
@@ -150,7 +141,6 @@ public class SetArrivalNotificationsDialogFragment extends DialogFragment {
             }
         });
 
-        //TODO: implement listener for MaterialSwitch, to only populate chips when switch is checked.
         addChips(servicesChipGroup);
 
         return builder.create();
@@ -158,8 +148,6 @@ public class SetArrivalNotificationsDialogFragment extends DialogFragment {
 
     public void setSingleStopArrivalNotifications(ArrivalNotifications singleStopArrivalNotifications) {
         this.singleStopArrivalNotifications = singleStopArrivalNotifications;
-        Log.e("singleStopArrivalNotifications:", singleStopArrivalNotifications + "");
-        Log.e("testtest", singleStopArrivalNotifications.getServicesAtStop() + "");
     }
 
     private void addChips(ChipGroup servicesChipGroup) {

@@ -1,18 +1,21 @@
 package com.example.myapptest.ui.directions;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.LinearLayout.LayoutParams;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.AuthFailureError;
@@ -22,7 +25,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.myapptest.MainActivity;
 import com.example.myapptest.R;
 import com.example.myapptest.data.busstopinformation.ServiceInStopDetails;
 import com.example.myapptest.data.naviagationdata.NavigationNodes;
@@ -35,26 +37,34 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 public class SingleRouteListCustomAdapterRecyclerView extends RecyclerView.Adapter<SingleRouteListCustomAdapterRecyclerView.MyViewHolder> {
 
     Context context;
+    Activity activity;
     NavigationResults singleNavResult;
     List<NavigationPartialResults> navResultInSegments;
     String origin, dest;
 
-    public SingleRouteListCustomAdapterRecyclerView(Context context, NavigationResults singleNavResult, String origin, String dest) {
+    View view;
+
+    FragmentManager childFragmentManager;
+
+    public SingleRouteListCustomAdapterRecyclerView(Activity activity, Context context, NavigationResults singleNavResult, String origin, String dest, FragmentManager childFragmentManager) {
         this.context = context;
+        this.activity = activity;
         this.singleNavResult = singleNavResult;
         this.navResultInSegments = singleNavResult.getResultsConcatenated();
         this.origin = origin;
         this.dest = dest;
+        this.childFragmentManager = childFragmentManager;
+
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // inflate the item Layout
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.rowlayoutsinglenavresult, parent, false);
+        view = v;
         MyViewHolder vh = new MyViewHolder(v); // pass the view to View Holder
         return vh;
     }
@@ -63,36 +73,42 @@ public class SingleRouteListCustomAdapterRecyclerView extends RecyclerView.Adapt
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         // set the data in items
         
-        Log.e("entered", "onbindviewholder");
 
 //        holder.navR_firstArrow.setVisibility(View.VISIBLE);
 //        holder.recyclerviewItemHolder.setVisibility(View.GONE);
 
-        Log.e("null?", holder + "");
+        boolean isThisSegmentWalking;
 
         if (position > navResultInSegments.size()) {
-            holder.lowestText.setVisibility(View.GONE);
             holder.mainText.setVisibility(View.GONE);
-            holder.bottomText.setVisibility(View.GONE);
+            holder.takeServiceClickable.setVisibility(View.GONE);
             holder.topText.setVisibility(View.GONE);
             holder.circle.setVisibility(View.GONE);
             holder.stickBottom.setVisibility(View.GONE);
             holder.stickTop.setVisibility(View.GONE);
+            holder.elvReplacement.setVisibility(View.GONE);
+            holder.takeServiceClickable.setVisibility(View.GONE);
             return;
         }
 
         if (position == navResultInSegments.size()) {
             holder.stickBottom.setVisibility(View.INVISIBLE);
             holder.mainText.setText(dest);
+            holder.mainText.setTypeface(Typeface.DEFAULT_BOLD);
             holder.circle.setImageResource(R.drawable.ic_baseline_trip_origin_36_red_large);
+            holder.elvReplacement.setVisibility(View.GONE);
+            holder.takeServiceClickable.setVisibility(View.INVISIBLE);
+            if (navResultInSegments.get(navResultInSegments.size() - 1).getEdgeSequence().size() == 0) {
+                holder.stickTop.setBackgroundColor(ContextCompat.getColor(context, R.color.NUS_Orange));
+            }
         } else if (position == 0) {
             holder.stickTop.setVisibility(View.INVISIBLE);
             holder.mainText.setText(origin);
+            holder.mainText.setTypeface(Typeface.DEFAULT_BOLD);
             holder.circle.setImageResource(R.drawable.ic_baseline_trip_origin_36_green_large);
         }
         if (position < navResultInSegments.size() && navResultInSegments.get(position) != null) {
             NavigationPartialResults currentSegment = navResultInSegments.get(position);
-            Log.e("current node starts at", currentSegment.getNodesTraversed().get(0).getName());
             if (currentSegment.getViableBuses1().size() == 0
                     && currentSegment.getNodesTraversed().get(0).getName().equals(origin)) {
                 //segment is firstwalk/onlywalk
@@ -104,8 +120,9 @@ public class SingleRouteListCustomAdapterRecyclerView extends RecyclerView.Adapt
                 } else if (currentSegment.getTimeForSegment() > 1) {
                     stringBuilder.append(" minutes");
                 }
-                holder.lowestText.setText(stringBuilder.toString());
-                holder.walkingMan.setVisibility(View.VISIBLE);
+                holder.elvReplacementMaintext.setText(stringBuilder.toString());
+                setHolderELVChildren(context, currentSegment, holder, true);
+                holder.takeServiceClickable.setVisibility(View.GONE);
             } else if (position > 0 && currentSegment.getViableBuses2().size() > 0) {
                 //segment is 2ndbus
                 holder.topText.setText("Alight at:");
@@ -118,16 +135,24 @@ public class SingleRouteListCustomAdapterRecyclerView extends RecyclerView.Adapt
                         stringBuilder.append("/");
                     }
                 }
-                stringBuilder.append(" for ").append(currentSegment.getNodesTraversed().size() - 1);
-                if (currentSegment.getNodesTraversed().size() - 1 == 1) {
+                holder.bottomText.setText(stringBuilder.toString());
+                stringBuilder = new StringBuilder();
+                stringBuilder.append("Ride ").append(currentSegment.getNodeSequence().size() - 1);
+                if (currentSegment.getNodeSequence().size() - 1 == 1) {
                     stringBuilder.append(" stop");
                 } else {
                     stringBuilder.append(" stops");
                 }
-                holder.bottomText.setText(stringBuilder.toString());
+                stringBuilder.append(" (").append(currentSegment.getTimeForSegment()).append(" min)");
+                holder.elvReplacementMaintext.setText(stringBuilder);
                 holder.circle.setImageResource(R.drawable.ic_baseline_directions_bus_36_large);
                 holder.human.setVisibility(View.VISIBLE);
+                holder.stickBottom.setBackgroundColor(ContextCompat.getColor(context, R.color.NUS_Orange));
+                holder.stickTop.setBackgroundColor(ContextCompat.getColor(context, R.color.NUS_Orange));
+                setHolderELVChildren(context, currentSegment, holder, false);
                 holder.human.setImageResource(R.drawable.ic_baseline_swap_horiz_20);
+
+                displayBusArrivalInfo(holder, currentSegment.getNodesTraversed().get(0), currentSegment, position);
 
             } else if (currentSegment.getViableBuses1().size() == 0
                     && currentSegment.getNodesTraversed().get(currentSegment.getNodesTraversed().size() - 1).getName().equals(dest)) {
@@ -141,10 +166,12 @@ public class SingleRouteListCustomAdapterRecyclerView extends RecyclerView.Adapt
                 } else if (currentSegment.getTimeForSegment() > 1) {
                     stringBuilder.append(" minutes");
                 }
-                holder.lowestText.setText(stringBuilder.toString());
+                holder.elvReplacementMaintext.setText(stringBuilder.toString());
                 holder.circle.setImageResource(R.drawable.ic_baseline_directions_bus_36_large);
                 holder.human.setVisibility(View.VISIBLE);
-                holder.walkingMan.setVisibility(View.VISIBLE);
+                holder.takeServiceClickable.setVisibility(View.GONE);
+                holder.stickTop.setBackgroundColor(ContextCompat.getColor(context, R.color.NUS_Orange));
+                setHolderELVChildren(context, currentSegment, holder, true);
             } else if (navResultInSegments.size() > 2 && position > 0 && position < navResultInSegments.size() - 1
                     && currentSegment.getViableBuses1().size() == 0) {
                 holder.topText.setText("Alight at:");
@@ -156,10 +183,12 @@ public class SingleRouteListCustomAdapterRecyclerView extends RecyclerView.Adapt
                 } else if (currentSegment.getTimeForSegment() > 1) {
                     stringBuilder.append(" minutes");
                 }
-                holder.lowestText.setText(stringBuilder.toString());
+                holder.takeServiceClickable.setVisibility(View.GONE);
+                holder.stickTop.setBackgroundColor(ContextCompat.getColor(context, R.color.NUS_Orange));
+                holder.elvReplacementMaintext.setText(stringBuilder.toString());
                 holder.circle.setImageResource(R.drawable.ic_baseline_directions_bus_36_large);
                 holder.human.setVisibility(View.VISIBLE);
-                holder.walkingMan.setVisibility(View.VISIBLE);
+                setHolderELVChildren(context, currentSegment, holder, true);
             } else {
                 //segment is 1stbus
                 holder.mainText.setText(currentSegment.getNodesTraversed().get(0).getName());
@@ -171,40 +200,116 @@ public class SingleRouteListCustomAdapterRecyclerView extends RecyclerView.Adapt
                         stringBuilder.append("/");
                     }
                 }
-                stringBuilder.append(" for ").append(currentSegment.getNodesTraversed().size() - 1);
-                if (currentSegment.getNodesTraversed().size() - 1 == 1) {
+                holder.bottomText.setText(stringBuilder.toString());
+                stringBuilder = new StringBuilder();
+                stringBuilder.append("Ride ").append(currentSegment.getNodeSequence().size() - 1);
+                if (currentSegment.getNodeSequence().size() - 1 == 1) {
                     stringBuilder.append(" stop");
                 } else {
                     stringBuilder.append(" stops");
                 }
-                holder.bottomText.setText(stringBuilder.toString());
+                stringBuilder.append(" (").append(currentSegment.getTimeForSegment()).append(" min)");
+                holder.elvReplacementMaintext.setText(stringBuilder);
+                holder.stickBottom.setBackgroundColor(ContextCompat.getColor(context, R.color.NUS_Orange));
                 if (position > 0) {
                     holder.circle.setImageResource(R.drawable.ic_baseline_directions_bus_36_large);
                     holder.human.setVisibility(View.VISIBLE);
                     holder.human.setScaleX(-1);
                 }
-
+                setHolderELVChildren(context, currentSegment, holder, false);
+                displayBusArrivalInfo(holder, currentSegment.getNodesTraversed().get(0), currentSegment, position);
             }
-
         }
-//
-//        if (onlyWalk) {
-//            holder.navR_busArrivalTimingInfo.setVisibility(View.GONE);
-//            holder.recyclerviewItemHolder.setVisibility(View.VISIBLE);
-//        }
-
-//        holder.stop.setText(busStop.get(position));
-//        holder.route.setText(routeId.get(position));
-//        holder.code.setText(busStopCode.get(position));
-        // implement setOnClickListener event on item view
-
     }
 
+    private void displayBusArrivalInfo(MyViewHolder holder, NavigationNodes stop,
+                                       NavigationPartialResults currentSegment, final int position) {
+        getBusArrivalInfo(stop.getId(), new VolleyCallBack() {
+            @Override
+            public void onSuccess(List<ServiceInStopDetails> busStopArrivalInfo) {
+                //TODO: sort the list for the earliest arrival
+                //TODO: display the earliest arrival only
+            }
+        });
+        holder.takeServiceClickable.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO: open DialogFragment with service arrival info
+                Log.e("onclick", "fired");
+                SingleRouteSelectedBusWaitingTimeDialogFragment dialogFragment;
+                int timeTillThisSegment = 0;
+                if (position == 0 || position >= navResultInSegments.size()) {
+                    timeTillThisSegment = 0;
+                } else if (navResultInSegments.size() > 0) {
+                    for (int i = 0; i < position; i++) {
+                        timeTillThisSegment += navResultInSegments.get(i).getTimeForSegment();
+                    }
+                }
+                dialogFragment = SingleRouteSelectedBusWaitingTimeDialogFragment.newInstance(stop, currentSegment, context, timeTillThisSegment);
+                dialogFragment.show(childFragmentManager, SingleRouteSelectedBusWaitingTimeDialogFragment.TAG);
+            }
+        });
+    }
+
+    private void setHolderELVChildren(Context context, NavigationPartialResults currentSegment, MyViewHolder holder, boolean isWalking) {
+        int stopPoint = currentSegment.getNodesTraversed().size();
+        int startPoint = 0;
+        if (isWalking) {
+            holder.modeIcon.setImageResource(R.drawable.ic_baseline_directions_walk_16_navresult_small);
+            stopPoint = currentSegment.getEdgeSequence().size();
+            startPoint = 0;
+        } else {
+            holder.modeIcon.setImageResource(R.drawable.ic_baseline_directions_bus_16_navresult);
+            stopPoint = currentSegment.getNodeSequence().size() - 1;
+            startPoint = 1;
+        }
+        for (int i = startPoint; i < stopPoint; i++) {
+            TextView tv = new TextView(context);
+            tv.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            if (!isWalking) {
+                tv.setText(currentSegment.getNodeSequence().get(i).getName());
+            } else {
+                Log.e("edge is", currentSegment.getEdgeSequence().get(i).getEdgeDesc());
+                tv.setText(currentSegment.getEdgeSequence().get(i).getEdgeDesc());
+                tv.setLineSpacing(0, (float) 1.15);
+            }
+            if (i == 1) {
+                tv.setPadding(0, 25, 0, 0);
+            } else {
+                tv.setPadding(0, 35, 0, 0);
+            }
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
+            tv.setLineSpacing(0, (float) 1.1);
+            holder.elvChildren.addView(tv);
+        }
+
+        holder.elvReplacement.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (holder.elvChildren.getVisibility() == View.GONE) {
+                    holder.elvChildren.setVisibility(View.VISIBLE);
+                    holder.expandIcon.setImageResource(R.drawable.ic_baseline_keyboard_arrow_up_16);
+                } else {
+                    holder.elvChildren.setVisibility(View.GONE);
+                    holder.expandIcon.setImageResource(R.drawable.ic_baseline_keyboard_arrow_down_16);
+                }
+            }
+        });
+        if (!isWalking && currentSegment.getNodeSequence().size() <= 2) {
+            holder.elvReplacement.setClickable(false);
+            holder.expandIcon.setVisibility(View.GONE);
+            ConstraintLayout.LayoutParams layoutParams
+                    = (ConstraintLayout.LayoutParams) holder.elvReplacementMaintext.getLayoutParams();
+            layoutParams.leftMargin = 90;
+            layoutParams.topMargin = 5;
+            layoutParams.bottomMargin = 5;
+            holder.elvReplacementMaintext.setLayoutParams(layoutParams);
+        }
+    }
 
     @Override
     public int getItemCount() {
-        Log.e("itemSize", navResultInSegments.size() + 1 + "");
-        return navResultInSegments.size() + 2;
+        return navResultInSegments.size() + 1;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -212,35 +317,36 @@ public class SingleRouteListCustomAdapterRecyclerView extends RecyclerView.Adapt
 //        TextView navR_firstwalktime, navR_firstbusservices, navR_secondbusservices,
 //                navR_lastwalktime, navR_totaltime, navR_firstArrow, navR_busArrivalTimingInfo;
 //        LinearLayout recyclerviewItemHolder;
-        TextView topText, mainText, bottomText, lowestText;
+        TextView topText, mainText, bottomText, bottomText2;
         View stickTop, stickBottom;
-        ImageView circle, human, walkingMan;
+        ImageView circle, human;
+        ConstraintLayout constraintLayout10, takeServiceClickable;
+        ConstraintLayout elvReplacement;
+        LinearLayout elvChildren;
+        TextView elvReplacementMaintext;
+        ImageView expandIcon, modeIcon;
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
             // get the reference of item view's
-            topText = itemView.findViewById(R.id.textView10);
+            topText = itemView.findViewById(R.id.topText);
             mainText = itemView.findViewById(R.id.textView6);
-            bottomText = itemView.findViewById(R.id.textView7);
-            lowestText = itemView.findViewById(R.id.textView11);
+            bottomText = itemView.findViewById(R.id.bottomText);
             circle = itemView.findViewById(R.id.imageView7);
             human = itemView.findViewById(R.id.imageView8);
             stickTop = itemView.findViewById(R.id.view2Top);
             stickBottom = itemView.findViewById(R.id.view2Bottom);
-            walkingMan = itemView.findViewById(R.id.walkingManImageView);
-//            navRLayoutContainer1 = itemView.findViewById(R.id.navRLayoutContainer_1);
-//            navRLayoutContainer2 = itemView.findViewById(R.id.navRLayoutContainer_2);
-//            navRLayoutContainer3 = itemView.findViewById(R.id.navRLayoutContainer_3);
-//            navRLayoutContainer4 = itemView.findViewById(R.id.navRLayoutContainer_4);
-//            navR_firstwalktime = itemView.findViewById(R.id.navR_firstwalktime);
-//            navR_firstbusservices = itemView.findViewById(R.id.navR_firstbusServices);
-//            navR_secondbusservices = itemView.findViewById(R.id.navR_secondbusServices);
-//            navR_lastwalktime = itemView.findViewById(R.id.navR_lastwalktiming);
-//            navR_totaltime = itemView.findViewById(R.id.navR_totaltime);
-//            navR_firstArrow = itemView.findViewById(R.id.navR_nextDirection_1);
-//            navR_busArrivalTimingInfo = itemView.findViewById(R.id.busArrivalTimingInfo);
-//            recyclerviewItemHolder = itemView.findViewById(R.id.recyclerviewItemHolder);
+            constraintLayout10 = itemView.findViewById(R.id.constraintLayout10);
+
+            elvReplacement = itemView.findViewById(R.id.elvReplacement);
+            elvChildren = itemView.findViewById(R.id.elvChildren);
+            elvReplacementMaintext = itemView.findViewById(R.id.elv_replacement_maintext);
+            expandIcon = itemView.findViewById(R.id.listExpandImageView);
+            modeIcon = itemView.findViewById(R.id.walkingManImageView);
+
+            takeServiceClickable = itemView.findViewById(R.id.constraintLayout23);
+
 
 //            stop = (TextView) itemView.findViewById(R.id.name);
 //            route = (TextView) itemView.findViewById(R.id.email);
@@ -251,9 +357,9 @@ public class SingleRouteListCustomAdapterRecyclerView extends RecyclerView.Adapt
 
 
 
-    private void getBusArrivalInfo(NavigationNodes busNodeToCheck, final VolleyCallBack callback) {
+    private void getBusArrivalInfo(String stopId, final VolleyCallBack callback) {
 
-        String url = "https://nnextbus.nus.edu.sg/ShuttleService?busstopname=" + busNodeToCheck.getId();
+        String url = "https://nnextbus.nus.edu.sg/ShuttleService?busstopname=" + stopId;
 
         StringRequest stopStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
 

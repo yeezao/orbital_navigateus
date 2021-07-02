@@ -14,6 +14,7 @@ public class NavigationEdges {
     private boolean accessible;
     private List<String> services;
     private boolean usable = true;
+    private String edgeDesc;
 
     public String getFrom() {
         return from;
@@ -94,5 +95,14 @@ public class NavigationEdges {
     public void setUsable(boolean usable) {
         this.usable = usable;
     }
+
+    public String getEdgeDesc() {
+        return edgeDesc;
+    }
+
+    public void setEdgeDesc(String edgeDesc) {
+        this.edgeDesc = edgeDesc;
+    }
+
 
 }

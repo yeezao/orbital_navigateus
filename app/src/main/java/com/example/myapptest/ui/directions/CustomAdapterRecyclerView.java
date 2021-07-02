@@ -2,12 +2,12 @@ package com.example.myapptest.ui.directions;
 
 import android.content.Context;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -46,7 +46,6 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
 
     List<NavigationResults> resultsList;
 
-
     NavController navController;
     float dpWidth;
 
@@ -75,30 +74,30 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         // set the data in items
 
-        Log.e("null?", holder + "");
-
         NavigationResults navResultTest = resultsList.get(position);
         List<NavigationPartialResults> navTestResultSegment = navResultTest.getResultsConcatenated();
 
-        holder.navR_totaltime.setText(navResultTest.getTotalTimeTaken() + " min");
-
-        Log.e("entered", "onbindviewholder");
-
+        StringBuilder firstStringBuilder = new StringBuilder();
+        firstStringBuilder.append(navResultTest.getTotalTimeTaken()).append(" min");
+        holder.navR_totaltime.setText(firstStringBuilder.toString());
         holder.navR_firstArrow.setVisibility(View.VISIBLE);
-        holder.recyclerviewItemHolder.setVisibility(View.GONE);
+//        holder.recyclerviewItemHolder.setVisibility(View.GONE);
 
         boolean onlyWalk = true;
 
-
-
         for (int i = 0; i < navTestResultSegment.size(); i++) {
             if (navTestResultSegment.get(i) != null) {
+                holder.navR_busArrivalTimingInfo.setText("Updating bus arrival information & total duration...");
+                holder.navR_busArrivalTimingInfo.setVisibility(View.VISIBLE);
                 NavigationPartialResults currentSegment = navTestResultSegment.get(i);
                 Log.e("current node starts at", currentSegment.getNodesTraversed().get(0).getName());
                 Log.e("checkcond", (i > 1 && i < navTestResultSegment.size() - 1
                         && navTestResultSegment.get(i - 1).getViableBuses1().size() == 0
                         && navTestResultSegment.get(i + 1).getViableBuses1().size() == 0) + " " + position);
-                if (currentSegment.getViableBuses1().size() > 0 && i < 3) {
+                if (navTestResultSegment.size() >= 5) {
+                    holder.navRLayoutContainer3.setVisibility(View.VISIBLE);
+                }
+                if (currentSegment.getViableBuses1().size() > 0 && i < 2) {
                     onlyWalk = false;
                     holder.navRLayoutContainer2.setVisibility(View.VISIBLE);
                     if (currentSegment.getNodesTraversed().get(0).getName().equals(origin)) {
@@ -118,57 +117,121 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
                         }
                         holder.navR_firstbusservices.setText(stringBuilder.toString());
                     }
+                    int finalI = i;
                     getBusArrivalInfo(currentSegment.getNodesTraversed().get(0), new VolleyCallBack() {
                         @Override
                         public void onSuccess(List<ServiceInStopDetails> busStopArrivalInfo) {
                             int arrivaltime = 9999;
                             String service = "";
+                            int timeTillNow = 0;
+                            for (int j = 0; j < finalI; j++) {
+                                timeTillNow += navTestResultSegment.get(j).getTimeForSegment();
+                            }
+                            boolean isServicesAvailable = false;
                             for (ServiceInStopDetails temp : busStopArrivalInfo) {
                                 for (int i = 0; i < currentSegment.getViableBuses1().size(); i++) {
-                                    if (temp.getFirstArrival().charAt(0) != '-'
-                                            && (temp.getServiceNum().equals(currentSegment.getViableBuses1().get(i))
-                                            || (temp.getServiceNum().charAt(0) == 'C' && currentSegment.getViableBuses1().get(i).equals("C"))
-                                            || temp.getServiceNum().contains("D1") && currentSegment.getViableBuses1().get(i).equals("D1"))
-                                            && (temp.getFirstArrival().equals("Arr") || Integer.parseInt(temp.getFirstArrival()) < arrivaltime)) {
-                                        if (temp.getFirstArrival().equals("Arr")) {
-                                            arrivaltime = 0;
-                                        } else {
-                                            arrivaltime = Integer.parseInt(temp.getFirstArrival());
+                                    if (temp.getServiceNum().equals(currentSegment.getViableBuses1().get(i))
+                                            || (temp.getServiceNum().charAt(0) == 'C' && currentSegment.getViableBuses1().get(i).equals("C")) //to be deprecated on new ISB network
+                                            || (temp.getServiceNum().equals("D1(To UTown)") //for COM2 bus stop - D1 twd UTown
+                                            && currentSegment.getViableBuses1().get(i).equals("D1")
+                                            && currentSegment.getNodesTraversed().get(1).getId().equals("LT13-OPP"))
+                                            || (temp.getServiceNum().equals("D1(To BIZ2)") //for COM2 bus stop - D1 twd BIZ2
+                                            && currentSegment.getViableBuses1().get(i).equals("D1")
+                                            && currentSegment.getNodesTraversed().get(1).getId().equals("BIZ2"))) {
+                                        if (temp.getFirstArrival().charAt(0) != '-') {
+                                            Log.e("entered", "condition");
+                                            if ((temp.getFirstArrival().equals("Arr") && timeTillNow == 0)
+                                                    || (!temp.getFirstArrival().equals("Arr") && (Integer.parseInt(temp.getFirstArrival()) < arrivaltime)
+                                                    && Integer.parseInt(temp.getFirstArrival()) > timeTillNow)) {
+                                                if (temp.getFirstArrival().equals("Arr")) {
+                                                    arrivaltime = 0;
+                                                } else {
+                                                    arrivaltime = Integer.parseInt(temp.getFirstArrival());
+                                                }
+                                                service = temp.getServiceNum();
+                                            } else {
+                                                isServicesAvailable = true;
+                                            }
                                         }
-                                        service = temp.getServiceNum();
+                                        if (temp.getSecondArrival().charAt(0) != '-') {
+                                            if ((temp.getSecondArrival().equals("Arr") && timeTillNow == 0)
+                                                    || (!temp.getSecondArrival().equals("Arr") && (Integer.parseInt(temp.getSecondArrival()) < arrivaltime)
+                                                    && Integer.parseInt(temp.getSecondArrival()) > timeTillNow)) {
+                                                if (temp.getSecondArrival().equals("Arr")) {
+                                                    arrivaltime = 0;
+                                                } else {
+                                                    arrivaltime = Integer.parseInt(temp.getSecondArrival());
+                                                }
+                                                service = temp.getServiceNum();
+                                            } else {
+                                                isServicesAvailable = true;
+                                            }
+                                        }
                                     }
                                 }
-
                             }
 
                             StringBuilder anotherStringBuilder = new StringBuilder();
+                            int newTotalTime = 0;
                             if (arrivaltime == 9999) {
+                                if (isServicesAvailable) {
+                                    anotherStringBuilder.append("No estimate available for ")
+                                            .append(currentSegment.getNodesTraversed().get(0).getAltname())
+                                            .append("");
+                                } else {
+                                    anotherStringBuilder.append("No bus services operating from ")
+                                            .append(currentSegment.getNodesTraversed().get(0).getAltname()).append(" now");
+                                }
                                 arrivaltime = 0;
-                                anotherStringBuilder.append("No bus services are operating from ")
-                                        .append(currentSegment.getNodesTraversed().get(0).getName()).append(" now");
                             } else {
                                 anotherStringBuilder.append(service);
                                 if (arrivaltime == 0) {
                                     anotherStringBuilder.append(" is arriving at ")
-                                            .append(currentSegment.getNodesTraversed().get(0).getName()).append(" now");
+                                            .append(currentSegment.getNodesTraversed().get(0).getAltname()).append(" now");
                                 } else {
                                     anotherStringBuilder.append(" will arrive at ")
-                                            .append(currentSegment.getNodesTraversed().get(0).getName())
+                                            .append(currentSegment.getNodesTraversed().get(0).getAltname())
                                             .append(" in ").append(arrivaltime).append(" min");
                                 }
+                                newTotalTime = navResultTest.getTotalTimeTaken() - timeTillNow + arrivaltime;
+                                navResultTest.setTotalTimeTaken(newTotalTime);
 
                             }
-                            holder.navR_busArrivalTimingInfo.setText(anotherStringBuilder.toString());
-                            holder.navR_busArrivalTimingInfo.setVisibility(View.VISIBLE);
+                            String stringToSet = anotherStringBuilder.toString();
+                            Handler handler = new Handler();
+                            int finalNewTotalTime = newTotalTime;
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    holder.navR_busArrivalTimingInfo.setText(stringToSet);
+                                    holder.navR_busArrivalTimingInfo.setVisibility(View.VISIBLE);
+                                    if (finalNewTotalTime != 0) {
+                                        StringBuilder yetAnotherStringBuilder = new StringBuilder();
+                                        yetAnotherStringBuilder.append(finalNewTotalTime).append(" min");
+                                        holder.navR_totaltime.setText(yetAnotherStringBuilder.toString());
+                                    }
+                                }
+                            }, 800);
+                        }
 
+                        @Override
+                        public void onFailure() {
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    holder.navR_busArrivalTimingInfo.setText("Connection to server failed");
+                                    holder.navR_busArrivalTimingInfo.setVisibility(View.VISIBLE);
+                                }
+                            }, 800);
 
                         }
                     });
                     holder.recyclerviewItemHolder.setVisibility(View.VISIBLE);
                 } else if (currentSegment.getViableBuses2().size() > 0 ||
                         (i > 1 && i < navTestResultSegment.size() - 1
-                                && navTestResultSegment.get(i - 1).getViableBuses1().size() == 0
-                                && navTestResultSegment.get(i + 1).getViableBuses1().size() == 0)) {
+                                && navTestResultSegment.get(i - 1).getViableBuses1().size() == 0) ||
+                        (currentSegment.getViableBuses1().size() > 0 && currentSegment.getEdgeSequence().size() == 0)) {
                     Log.e("entered", position + " ues " + currentSegment.getViableBuses2().size());
                     onlyWalk = false;
                     holder.navRLayoutContainer4.setVisibility(View.VISIBLE);
@@ -177,7 +240,7 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
                         StringBuilder stringBuilder = new StringBuilder();
                         if (currentSegment.getViableBuses2().size() > 0) {
                             for (int j = 0; j < currentSegment.getViableBuses2().size(); j++) {
-                                if (j > 1) {
+                                if (j > 0 && currentSegment.getViableBuses2().size() > 2) {
                                     stringBuilder.append("...");
                                     break;
                                 }
@@ -188,17 +251,95 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
                             }
                         } else {
                             for (int j = 0; j < currentSegment.getViableBuses1().size(); j++) {
-                                if (j > 1) {
+                                if (j > 0 && currentSegment.getViableBuses1().size() > 1 && navTestResultSegment.size() > 4) {
+                                    stringBuilder.append("...");
+                                    break;
+                                } else if (j > 1 && currentSegment.getViableBuses1().size() > 2) {
                                     stringBuilder.append("...");
                                     break;
                                 }
                                 stringBuilder.append(currentSegment.getViableBuses1().get(j));
-                                if (j < currentSegment.getViableBuses1().size() - 1) {
+                                if (navTestResultSegment.size() > 4 && j < currentSegment.getViableBuses1().size() - 1) {
+                                    stringBuilder.append("/");
+                                } else if (j < currentSegment.getViableBuses1().size() - 1) {
                                     stringBuilder.append("/");
                                 }
                             }
                         }
                         holder.navR_secondbusservices.setText(stringBuilder.toString());
+                        int finalI = i;
+                        getBusArrivalInfo(currentSegment.getNodesTraversed().get(0), new VolleyCallBack() {
+                            @Override
+                            public void onSuccess(List<ServiceInStopDetails> busStopArrivalInfo) {
+                                int arrivaltime = 9999;
+                                String service = "";
+                                int timeTillNow = 0;
+                                for (int j = 0; j < finalI; j++) {
+                                    timeTillNow += navTestResultSegment.get(j).getTimeForSegment();
+                                }
+                                boolean isServicesAvailable = false;
+                                for (ServiceInStopDetails temp : busStopArrivalInfo) {
+                                    for (int i = 0; i < currentSegment.getViableBuses1().size(); i++) {
+                                        if (temp.getServiceNum().equals(currentSegment.getViableBuses1().get(i))
+                                                || (temp.getServiceNum().charAt(0) == 'C' && currentSegment.getViableBuses1().get(i).equals("C")) //to be deprecated on new ISB network
+                                                || (temp.getServiceNum().equals("D1(To UTown)") //for COM2 bus stop - D1 twd UTown
+                                                && currentSegment.getViableBuses1().get(i).equals("D1")
+                                                && currentSegment.getNodesTraversed().get(1).getId().equals("LT13-OPP"))
+                                                || (temp.getServiceNum().equals("D1(To BIZ2)") //for COM2 bus stop - D1 twd BIZ2
+                                                && currentSegment.getViableBuses1().get(i).equals("D1")
+                                                && currentSegment.getNodesTraversed().get(1).getId().equals("BIZ2"))) {
+                                            if (temp.getFirstArrival().charAt(0) != '-') {
+                                                Log.e("entered", "condition");
+                                                if ((temp.getFirstArrival().equals("Arr") && timeTillNow == 0)
+                                                        || (!temp.getFirstArrival().equals("Arr") && (Integer.parseInt(temp.getFirstArrival()) < arrivaltime)
+                                                        && Integer.parseInt(temp.getFirstArrival()) > timeTillNow)) {
+                                                    if (temp.getFirstArrival().equals("Arr")) {
+                                                        arrivaltime = 0;
+                                                    } else {
+                                                        arrivaltime = Integer.parseInt(temp.getFirstArrival());
+                                                    }
+                                                    service = temp.getServiceNum();
+                                                } else {
+                                                    isServicesAvailable = true;
+                                                }
+                                            }
+                                            if (temp.getSecondArrival().charAt(0) != '-') {
+                                                if ((temp.getSecondArrival().equals("Arr") && timeTillNow == 0)
+                                                        || (!temp.getSecondArrival().equals("Arr") && (Integer.parseInt(temp.getSecondArrival()) < arrivaltime)
+                                                        && Integer.parseInt(temp.getSecondArrival()) > timeTillNow)) {
+                                                    if (temp.getSecondArrival().equals("Arr")) {
+                                                        arrivaltime = 0;
+                                                    } else {
+                                                        arrivaltime = Integer.parseInt(temp.getSecondArrival());
+                                                    }
+                                                    service = temp.getServiceNum();
+                                                } else {
+                                                    isServicesAvailable = true;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                                StringBuilder anotherStringBuilder = new StringBuilder();
+                                int newTotalTime = 0;
+                                if (arrivaltime < 9999) {
+                                    newTotalTime = navResultTest.getTotalTimeTaken() - timeTillNow + arrivaltime;
+                                    navResultTest.setTotalTimeTaken(newTotalTime);
+                                }
+                                String stringToSet = anotherStringBuilder.toString();
+                                int finalNewTotalTime = newTotalTime;
+                                if (finalNewTotalTime != 0) {
+                                    StringBuilder yetAnotherStringBuilder = new StringBuilder();
+                                    yetAnotherStringBuilder.append(finalNewTotalTime).append(" min");
+                                    holder.navR_totaltime.setText(yetAnotherStringBuilder.toString());
+                                }
+                            }
+
+                            @Override
+                            public void onFailure() {
+                            }
+                        });
                     }
                 } else if (currentSegment.getViableBuses1().size() == 0 && currentSegment.getNodesTraversed().get(0).getName().equals(origin)) {
                     holder.navRLayoutContainer1.setVisibility(View.VISIBLE);
@@ -212,198 +353,9 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
                     stringBuilder.append(currentSegment.getTimeForSegment());
                     Log.e("string is", stringBuilder.toString());
                     holder.navR_lastwalktime.setText(stringBuilder.toString());
-                } else if (currentSegment.getViableBuses1().size() == 0) {
+                } else if (currentSegment.getViableBuses1().size() == 0 || navTestResultSegment.size() >= 5) {
                     holder.navRLayoutContainer3.setVisibility(View.VISIBLE);
-//                    StringBuilder stringBuilder = new StringBuilder();
-//                    stringBuilder.append(currentSegment.getTimeForSegment());
-//                    holder.navR_midwalktime.setText(stringBuilder.toString());
                 }
-//                 switch (i) {
-//                    case 0:
-//                        if (currentSegment.getViableBuses1().size() > 0) {
-//                            onlyWalk = false;
-//                            holder.navRLayoutContainer2.setVisibility(View.VISIBLE);
-//                            holder.navR_firstArrow.setVisibility(View.GONE);
-//                            StringBuilder stringBuilder = new StringBuilder();
-//                            for (int j = 0; j < currentSegment.getViableBuses1().size(); j++) {
-//                                stringBuilder.append(currentSegment.getViableBuses1().get(j));
-//                                if (j < currentSegment.getViableBuses1().size() - 1) {
-//                                    stringBuilder.append("/");
-//                                }
-//                            }
-//                            holder.navR_firstbusservices.setText(stringBuilder.toString());
-//                            getBusArrivalInfo(currentSegment.getNodesTraversed().get(0), new VolleyCallBack() {
-//                                @Override
-//                                public void onSuccess(List<ServiceInStopDetails> busStopArrivalInfo) {
-//                                    int arrivaltime = 9999;
-//                                    String service = "";
-//                                    for (ServiceInStopDetails temp: busStopArrivalInfo) {
-//                                        for (int i = 0; i < currentSegment.getViableBuses1().size(); i++) {
-//                                            if (temp.getFirstArrival().charAt(0) != '-'
-//                                                    && (temp.getServiceNum().equals(currentSegment.getViableBuses1().get(i))
-//                                                    || (temp.getServiceNum().charAt(0) == 'C' && currentSegment.getViableBuses1().get(i).equals("C"))
-//                                                    || temp.getServiceNum().contains("D1") && currentSegment.getViableBuses1().get(i).equals("D1"))
-//                                                    && (temp.getFirstArrival().equals("Arr") || Integer.parseInt(temp.getFirstArrival()) < arrivaltime)) {
-//                                                if (temp.getFirstArrival().equals("Arr")) {
-//                                                    arrivaltime = 0;
-//                                                } else {
-//                                                    arrivaltime = Integer.parseInt(temp.getFirstArrival());
-//                                                }
-//                                                service = temp.getServiceNum();
-//                                            }
-//                                        }
-//
-//                                    }
-//
-//                                    StringBuilder anotherStringBuilder = new StringBuilder();
-//                                    if (arrivaltime == 9999) {
-//                                        arrivaltime = 0;
-//                                        anotherStringBuilder.append("No bus services are operating from ")
-//                                                .append(currentSegment.getNodesTraversed().get(0).getName()).append(" now");
-//                                    } else {
-//                                        anotherStringBuilder.append(service);
-//                                        if (arrivaltime == 0) {
-//                                            anotherStringBuilder.append(" is arriving at ")
-//                                                    .append(currentSegment.getNodesTraversed().get(0).getName()).append(" now");
-//                                        } else {
-//                                            anotherStringBuilder.append(" will arrive at ")
-//                                                    .append(currentSegment.getNodesTraversed().get(0).getName())
-//                                                    .append(" in ").append(arrivaltime).append(" min");
-//                                        }
-//
-//                                    }
-//                                    holder.navR_busArrivalTimingInfo.setText(anotherStringBuilder.toString());
-//                                    holder.recyclerviewItemHolder.setVisibility(View.VISIBLE);
-//                                    holder.navR_busArrivalTimingInfo.setVisibility(View.VISIBLE);
-//
-//
-//                                }
-//                            });
-//                            if (currentSegment.getViableBuses2().size() > 0) {
-//                                holder.navRLayoutContainer4.setVisibility(View.VISIBLE);
-//                                stringBuilder = new StringBuilder();
-//                                for (int j = 0; j < currentSegment.getViableBuses2().size(); j++) {
-//                                    stringBuilder.append(currentSegment.getViableBuses2().get(j));
-//                                    if (j < currentSegment.getViableBuses2().size() - 1) {
-//                                        stringBuilder.append("/");
-//                                    }
-//                                }
-//                                holder.navR_secondbusservices.setText(stringBuilder.toString());
-//                            }
-//                        } else {
-//                            holder.navRLayoutContainer1.setVisibility(View.VISIBLE);
-//                            StringBuilder stringBuilder = new StringBuilder();
-//                            stringBuilder.append(currentSegment.getTimeForSegment());
-//                            holder.navR_firstwalktime.setText(stringBuilder.toString());
-//                            Log.e("check time just before set 0", currentSegment.getTimeForSegment() + "");
-//                        }
-//                        break;
-//                    case 1:
-//                        Log.e("checl", dest + " " + currentSegment.getNodesTraversed().get(currentSegment.getNodesTraversed().size() - 1).getName());
-//                        Log.e("checl timing", currentSegment.getTimeForSegment() + "");
-//
-//                        if (holder.navRLayoutContainer1.getVisibility() == View.VISIBLE) {
-//                            onlyWalk = false;
-//                            holder.navRLayoutContainer2.setVisibility(View.VISIBLE);
-//                            StringBuilder stringBuilder = new StringBuilder();
-//                            for (int j = 0; j < currentSegment.getViableBuses1().size(); j++) {
-//                                stringBuilder.append(currentSegment.getViableBuses1().get(j));
-//                                if (j < currentSegment.getViableBuses1().size() - 1) {
-//                                    stringBuilder.append("/");
-//                                }
-//                            }
-//                            holder.navR_firstbusservices.setText(stringBuilder.toString());
-//                            getBusArrivalInfo(currentSegment.getNodesTraversed().get(0), new VolleyCallBack() {
-//                                @Override
-//                                public void onSuccess(List<ServiceInStopDetails> busStopArrivalInfo) {
-//                                    int arrivaltime = 9999;
-//                                    String service = "";
-//                                    for (ServiceInStopDetails temp: busStopArrivalInfo) {
-//                                        for (int i = 0; i < currentSegment.getViableBuses1().size(); i++) {
-//                                            if (temp.getFirstArrival().charAt(0) != '-'
-//                                                    && (temp.getServiceNum().equals(currentSegment.getViableBuses1().get(i))
-//                                                    || (temp.getServiceNum().charAt(0) == 'C' && currentSegment.getViableBuses1().get(i).equals("C"))
-//                                                    || temp.getServiceNum().contains("D1") && currentSegment.getViableBuses1().get(i).equals("D1"))
-//                                                    && (temp.getFirstArrival().equals("Arr") || Integer.parseInt(temp.getFirstArrival()) < arrivaltime)) {
-//                                                if (temp.getFirstArrival().equals("Arr")) {
-//                                                    arrivaltime = 0;
-//                                                } else {
-//                                                    arrivaltime = Integer.parseInt(temp.getFirstArrival());
-//                                                }
-//                                                service = temp.getServiceNum();
-//                                            }
-//                                        }
-//
-//                                    }
-//
-//                                    StringBuilder anotherStringBuilder = new StringBuilder();
-//                                    if (arrivaltime == 9999) {
-//                                        arrivaltime = 0;
-//                                        anotherStringBuilder.append("No bus services are operating from ")
-//                                                .append(currentSegment.getNodesTraversed().get(0).getName()).append(" now");
-//                                    } else {
-//                                        anotherStringBuilder.append(service);
-//                                        if (arrivaltime == 0) {
-//                                            anotherStringBuilder.append(" is arriving at ")
-//                                                    .append(currentSegment.getNodesTraversed().get(0).getName()).append(" now");
-//                                        } else {
-//                                            anotherStringBuilder.append(" will arrive at ")
-//                                                    .append(currentSegment.getNodesTraversed().get(0).getName())
-//                                                    .append(" in ").append(arrivaltime).append(" min");
-//                                        }
-//                                    }
-//                                    holder.navR_busArrivalTimingInfo.setText(anotherStringBuilder.toString());
-//                                    holder.recyclerviewItemHolder.setVisibility(View.VISIBLE);
-//                                    holder.navR_busArrivalTimingInfo.setVisibility(View.VISIBLE);
-//
-//                                }
-//                            });
-//                            if (currentSegment.getViableBuses2().size() > 0) {
-//                                holder.navRLayoutContainer4.setVisibility(View.VISIBLE);
-//                                stringBuilder = new StringBuilder();
-//                                for (int j = 0; j < currentSegment.getViableBuses2().size(); j++) {
-//                                    stringBuilder.append(currentSegment.getViableBuses2().get(j));
-//                                    if (j < currentSegment.getViableBuses2().size() - 1) {
-//                                        stringBuilder.append("/");
-//                                    }
-//                                }
-//                                holder.navR_secondbusservices.setText(stringBuilder.toString());
-//                            }
-//                        } else if (currentSegment.getViableBuses2().size() == 0 && currentSegment.getViableBuses1().size() == 0
-//                                && currentSegment.getNodesTraversed().get(currentSegment.getNodesTraversed().size() - 1).getName().equals(dest)) {
-//                            holder.navRLayoutContainer5.setVisibility(View.VISIBLE);
-//                            StringBuilder stringBuilder = new StringBuilder();
-//                            stringBuilder.append(currentSegment.getTimeForSegment());
-//                            holder.navR_lastwalktime.setText(stringBuilder.toString());
-//                        }
-//                        break;
-//                    case 2:
-//                        if (currentSegment.getViableBuses2().size() > 0) {
-//                            onlyWalk = false;
-//                            holder.navRLayoutContainer4.setVisibility(View.VISIBLE);
-//                            StringBuilder stringBuilder = new StringBuilder();
-//                            for (int j = 0; j < currentSegment.getViableBuses2().size(); j++) {
-//                                stringBuilder.append(currentSegment.getViableBuses2().get(j));
-//                                if (j < currentSegment.getViableBuses2().size() - 1) {
-//                                    stringBuilder.append("/");
-//                                }
-//                            }
-//                            holder.navR_firstbusservices.setText(stringBuilder.toString());
-//                        } else {
-//                            holder.navRLayoutContainer5.setVisibility(View.VISIBLE);
-//                            StringBuilder stringBuilder = new StringBuilder();
-//                            stringBuilder.append(currentSegment.getTimeForSegment());
-//                            holder.navR_lastwalktime.setText(stringBuilder.toString());
-//                            Log.e("check time just before set 2", currentSegment.getTimeForSegment() + "");
-//                        }
-//                        break;
-//                    case 3:
-//                        holder.navRLayoutContainer5.setVisibility(View.VISIBLE);
-//                        StringBuilder stringBuilder = new StringBuilder();
-//                        stringBuilder.append(currentSegment.getTimeForSegment());
-//                        holder.navR_firstwalktime.setText(stringBuilder.toString());
-//                        break;
-//                }
 
                 if (onlyWalk) {
                     holder.navR_busArrivalTimingInfo.setVisibility(View.GONE);
@@ -536,6 +488,7 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
             public void onErrorResponse(VolleyError error) {
                 // TODO: Handle error
                 Log.e("volley API error", "" + error);
+                callback.onFailure();
             }
 
         }) {
@@ -557,6 +510,6 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
 
     public interface VolleyCallBack {
         void onSuccess(List<ServiceInStopDetails> busStopArrivalInfo);
+        void onFailure();
     }
-
 }

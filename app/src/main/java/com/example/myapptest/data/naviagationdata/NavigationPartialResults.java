@@ -14,6 +14,8 @@ public class NavigationPartialResults {
     private NavigationNodes transferStop;
     private List<NavigationNodes> beforeTransferNodesTraversed = new ArrayList<>();
     private List<NavigationNodes> afterTransferNodesTraversed = new ArrayList<>();
+    private List<NavigationEdges> edgeSequence = new ArrayList<>();
+    private List<NavigationNodes> nodeSequence = new ArrayList<>();
 
     public int getTimeForSegment() {
         return timeForSegment;
@@ -111,6 +113,27 @@ public class NavigationPartialResults {
     public void addViableBuses2(String viableBus2) {
         this.viableBuses2.add(viableBus2);
     }
+
+    public List<NavigationEdges> getEdgeSequence() {
+        return edgeSequence;
+    }
+
+    public void setEdgeSequence(List<NavigationEdges> edgeSequence) {
+        this.edgeSequence = edgeSequence;
+    }
+
+    public void addEdgeSequence(NavigationEdges singleEdge) {
+        this.edgeSequence.add(singleEdge);
+    }
+
+    public List<NavigationNodes> getNodeSequence() {
+        return nodeSequence;
+    }
+
+    public void setNodeSequence(List<NavigationNodes> nodeSequence) {
+        this.nodeSequence = nodeSequence;
+    }
+
 
 
 }

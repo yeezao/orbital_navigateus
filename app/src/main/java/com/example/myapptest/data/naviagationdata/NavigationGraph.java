@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
@@ -53,6 +54,8 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
     boolean mustBeAccessible = false;
     boolean isWalkOnly = false;
 
+    int numberOfAttempts = 0;
+
     public void CreateNavGraph(@NotNull NavigationSearchInfo navigationSearchInfo, Context context) {
         try {
             JSONObject rawNavNodes = new JSONObject(loadJSONFromAsset("points.json", context));
@@ -79,7 +82,6 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
                 navNodes[arrayIndex] = tempNavNodes;
                 if (arrayIndex < 50) {
                     listOfAllBusStops.add(tempNavNodes);
-                    Log.e("latlon", tempNavNodes.getName() + " " + tempNavNodes.getLat() + " " + tempNavNodes.getLon());
                 }
             }
 
@@ -95,7 +97,7 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
                     tempNavEdge1.setTonumid(edgeDetail.getInt("tonumid"));
                     tempNavEdge1.setBy(tptType);
                     tempNavEdge1.setDuration(edgeDetail.getInt("duration"));
-
+                    tempNavEdge1.setEdgeDesc(edgeDetail.getString("edgeDesc1"));
 
                     if (!(tptType.equals("walk"))) {
     //                    JSONArray serviceArray = edgeDetail.getJSONArray("services");
@@ -130,6 +132,7 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
                         tempNavEdge2.setSheltered(sheltered);
                         tempNavEdge2.setAccessible(accessible);
                         tempNavEdge2.setServices(null);
+                        tempNavEdge2.setEdgeDesc(edgeDetail.getString("edgeDesc2"));
                         List<NavigationEdges> tempListNavEdge2 = navNodes[arrayIndex2].getNavEdgesFromThisNode();
                         if (tempListNavEdge2 == null) {
                             tempListNavEdge2 = new ArrayList<>();
@@ -177,6 +180,13 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
     }
 
     List<NavigationResults> listResults = new ArrayList<>();
+    List<NavigationResults> returnListResults = new ArrayList<>();
+    List<NavigationNodes> listOfFirstStopsInSegment = new ArrayList<>();
+
+    int c = 0;
+    boolean routeHasNoBus = true;
+
+    boolean deleteLastEdge = true;
 
     public void startNavProcess(NavigationSearchInfo navigationSearchInfo, Activity activity, Context context, final NavigationResultsFullyComplete navFinished) {
 
@@ -213,24 +223,33 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
             return;
         }
 
-        for (int c = 0; c < 3; c++) {
+        for (c = 0; c < 4; c++) {
 
             boolean isFirstTime = true;
             NavigationResults fullRoute = new NavigationResults();
 
-            if (c > 0) {
+            if (c > 0 && listResults.size() > 0) {
 
-                for (int i = 0; i < navNodes.length; i++) {
-                    if (navNodes[i] != null) {
-                        navNodes[i].setPrevNode(null);
-                        navNodes[i].setDiscovered(false);
-                        navNodes[i].setWeightTillNow(999);
+                for (NavigationNodes navNode : navNodes) {
+                    if (navNode != null) {
+                        navNode.setPrevNode(null);
+                        navNode.setDiscovered(false);
+                        navNode.setWeightTillNow(999);
                     }
                 }
 
-                if (listResults.get(c - 1).getResultsConcatenated().size() > 1) {
+                if (c == 3 && !routeHasNoBus) {
+                    isWalkOnly = true;
+                } else if (c == 3) {
+                    break;
+                } else if (isWalkOnly && !mustBeSheltered) {
+//                    mustBeSheltered = true;
+                    break;
+                } else if (isWalkOnly || listResults.get(listResults.size() - 1).getResultsConcatenated().size() < 1) {
+                    break;
+                } else if (listResults.get(listResults.size() - 1).getResultsConcatenated().size() == 1 && deleteLastEdge) {
                     NavigationPartialResults segmentToOperate =
-                            listResults.get(c - 1).getResultsConcatenated().get(listResults.get(c - 1).getResultsConcatenated().size() - 2);
+                            listResults.get(listResults.size() - 1).getResultsConcatenated().get(0);
                     NavigationNodes nodeToOperate = segmentToOperate.getNodesTraversed().get(segmentToOperate.getNodesTraversed().size() - 1);
                     NavigationNodes nodeToOperateStart = segmentToOperate.getNodesTraversed().get(segmentToOperate.getNodesTraversed().size() - 2);
                     List<NavigationEdges> edgeList = navNodes[nodeToOperateStart.getNumid()].getNavEdgesFromThisNode();
@@ -241,27 +260,107 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
                             NavigationEdges navEdgeToOperate = edgeList.get(d);
                             navEdgeToOperate.setUsable(false);
                             edgeList.set(d, navEdgeToOperate);
-                            navNodes[nodeToOperate.getNumid()].setNavEdgesFromThisNode(edgeList);
+                            navNodes[nodeToOperateStart.getNumid()].setNavEdgesFromThisNode(edgeList);
                             Log.e("edge deleted", navEdgeToOperate.getFrom() + " " + navEdgeToOperate.getTo());
                             break;
                         }
                     }
-                } else if (isWalkOnly && !mustBeSheltered) {
-//                    mustBeSheltered = true;
-                    break;
-                } else if (isWalkOnly || listResults.get(c - 1).getResultsConcatenated().size() <= 1) {
-                    break;
+                } else if (listResults.get(listResults.size() - 1).getResultsConcatenated().size() == 1) {
+                    NavigationPartialResults segmentToOperate =
+                            listResults.get(listResults.size() - 1).getResultsConcatenated().get(0);
+                    NavigationNodes nodeToOperate = segmentToOperate.getNodesTraversed().get(1);
+                    NavigationNodes nodeToOperateStart = segmentToOperate.getNodesTraversed().get(0);
+                    List<NavigationEdges> edgeList = navNodes[nodeToOperateStart.getNumid()].getNavEdgesFromThisNode();
+                    Log.e("edges start and end", nodeToOperateStart.getName() + " " + nodeToOperate.getName());
+                    for (int d = 0; d < edgeList.size(); d++) {
+                        Log.e("check edge", edgeList.get(d).getBy() + " " + edgeList.get(d).getTo() + " " + nodeToOperate.getName());
+                        if (edgeList.get(d).getTonumid() == nodeToOperate.getNumid()) {
+                            NavigationEdges navEdgeToOperate = edgeList.get(d);
+                            navEdgeToOperate.setUsable(false);
+                            edgeList.set(d, navEdgeToOperate);
+                            navNodes[nodeToOperateStart.getNumid()].setNavEdgesFromThisNode(edgeList);
+                            Log.e("edge deleted", navEdgeToOperate.getFrom() + " " + navEdgeToOperate.getTo());
+                            break;
+                        }
+                    }
+                } else if (listResults.get(listResults.size() - 1).getResultsConcatenated().size() > 1 && deleteLastEdge) {
+                    NavigationPartialResults segmentToOperate =
+                            listResults.get(listResults.size() - 1).getResultsConcatenated().get(listResults.get(listResults.size() - 1).getResultsConcatenated().size() - 2);
+                    NavigationNodes nodeToOperate = segmentToOperate.getNodesTraversed().get(segmentToOperate.getNodesTraversed().size() - 1);
+                    NavigationNodes nodeToOperateStart = segmentToOperate.getNodesTraversed().get(segmentToOperate.getNodesTraversed().size() - 2);
+                    List<NavigationEdges> edgeList = navNodes[nodeToOperateStart.getNumid()].getNavEdgesFromThisNode();
+                    Log.e("edges start and end", nodeToOperateStart.getName() + " " + nodeToOperate.getName());
+                    for (int d = 0; d < edgeList.size(); d++) {
+                        Log.e("check edge", edgeList.get(d).getBy() + " " + edgeList.get(d).getTo() + " " + nodeToOperate.getName());
+                        if (edgeList.get(d).getTonumid() == nodeToOperate.getNumid()) {
+                            NavigationEdges navEdgeToOperate = edgeList.get(d);
+                            navEdgeToOperate.setUsable(false);
+                            edgeList.set(d, navEdgeToOperate);
+                            navNodes[nodeToOperateStart.getNumid()].setNavEdgesFromThisNode(edgeList);
+                            Log.e("edge deleted", navEdgeToOperate.getFrom() + " " + navEdgeToOperate.getTo());
+                            break;
+                        }
+                    }
+                } else if (listResults.get(listResults.size() - 1).getResultsConcatenated().size() > 1) {
+                    Log.e("entered", "delete first edge");
+                    NavigationPartialResults segmentToOperate =
+                            listResults.get(listResults.size() - 1).getResultsConcatenated().get(listResults.get(listResults.size() - 1).getResultsConcatenated().size() - 2);
+                    NavigationNodes nodeToOperate = segmentToOperate.getNodesTraversed().get(1);
+                    NavigationNodes nodeToOperateStart = segmentToOperate.getNodesTraversed().get(0);
+                    List<NavigationEdges> edgeList = navNodes[nodeToOperateStart.getNumid()].getNavEdgesFromThisNode();
+                    Log.e("edges start and end", nodeToOperateStart.getName() + " " + nodeToOperate.getName());
+                    for (int d = 0; d < edgeList.size(); d++) {
+                        Log.e("check edge", edgeList.get(d).getBy() + " " + edgeList.get(d).getTo() + " " + nodeToOperate.getName());
+                        if (edgeList.get(d).getTonumid() == nodeToOperate.getNumid()) {
+                            NavigationEdges navEdgeToOperate = edgeList.get(d);
+                            navEdgeToOperate.setUsable(false);
+                            edgeList.set(d, navEdgeToOperate);
+                            navNodes[nodeToOperateStart.getNumid()].setNavEdgesFromThisNode(edgeList);
+                            Log.e("edge deleted", navEdgeToOperate.getFrom() + " " + navEdgeToOperate.getTo());
+                            break;
+                        }
+                    }
                 }
 
             }
 
-            NavigationPartialResults trialResult = findShortestPath(origin, destination, false, false, isFirstTime);
-            if (trialResult == null || trialResult.getTimeForSegment() > 900 || trialResult.getNodesTraversed().size() == 0) {
+            NavigationPartialResults trialResult = findShortestPath(origin, destination, false, false, true);
+
+            if (trialResult == null || trialResult.getTimeForSegment() > 900
+                    || trialResult.getNodesTraversed().size() <= 1 || numberOfAttempts >= 10) {
+                Log.e("entered null", "331");
                 if (listResults.size() == 0) {
                     navFinished.onNavResultsComplete(null, 2);
                 } else {
-                    navFinished.onNavResultsComplete(listResults, 0);
+                    for (NavigationResults temp : listResults) {
+                        if (temp.isShowResult()) {
+                            Log.e("copied over bc route failed", "yes");
+                            returnListResults.add(temp);
+                        }
+                    }
+
+                    navFinished.onNavResultsComplete(returnListResults, 0);
                 }
+                return;
+            }
+            if (isWalkOnly && trialResult.getNodesTraversed().size() > 0) {
+                List<NavigationPartialResults> listOfSegments = new ArrayList<>();
+                for (int j = 1; trialResult != null && j < trialResult.getNodesTraversed().size(); j++) {
+                    trialResult.addEdgeSequence(trialResult.getNodesTraversed().get(j).getEdgeSelected());
+                }
+                listOfSegments.add(trialResult);
+                fullRoute.setResultsConcatenated(listOfSegments);
+                fullRoute.setTotalTimeTaken(trialResult.getTimeForSegment());
+                listResults.add(fullRoute);
+
+                for (NavigationResults temp : listResults) {
+                    if (temp.isShowResult()) {
+                        Log.e("copied over bc walk only", "yes");
+                        returnListResults.add(temp);
+                    }
+                }
+
+                navFinished.onNavResultsComplete(returnListResults, 0);
                 return;
             }
             fullRoute.setTotalTimeTaken(trialResult.getTimeForSegment());
@@ -269,6 +368,7 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
             List<NavigationMethodType> isTheMethodWalkingList = new ArrayList<>();
             boolean isTheCurrentMethodWalking = false;
             NavigationMethodType currentMethodType = new NavigationMethodType();
+            routeHasNoBus = true;
 
             //determine route walk/bus order
             for (int i = 1; i < trialResult.getNodesTraversed().size(); i++) {
@@ -305,6 +405,7 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
             isTheMethodWalkingList.add(currentMethodType);
 
             List<NavigationPartialResults> listOfSegments = new ArrayList<>();
+            boolean addToList = true;
 
             for (int i = 0; i < isTheMethodWalkingList.size(); i++) {
                 NavigationMethodType currentInstance = isTheMethodWalkingList.get(i);
@@ -315,6 +416,9 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
                     Log.e("entered wawlking", "yes");
                     NavigationPartialResults segmentResult = findShortestPath(currentInstance.getOrigin(),
                             currentInstance.getDest(), false, true, isFirstTime);
+                    for (int j = 1; segmentResult != null && j < segmentResult.getNodesTraversed().size(); j++) {
+                        segmentResult.addEdgeSequence(segmentResult.getNodesTraversed().get(j).getEdgeSelected());
+                    }
                     isFirstTime = false;
 
                     listOfSegments.add(segmentResult);
@@ -325,27 +429,85 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
                             currentInstance.getDest(), context, isFirstTime);
                     Log.e("bussegmentresult size", busSegmentResult.size() + "");
                     isFirstTime = false;
-                    for (int j = 0; j < busSegmentResult.size(); j++) {
-                        listOfSegments.add(busSegmentResult.get(j));
+                    if (busSegmentResult.size() == 0 || busSegmentResult.get(0) == null) {
+                        addToList = false;
+                        Log.e("break", "yes");
+                        listOfSegments.clear();
+                        break;
                     }
+                    routeHasNoBus = false;
+                    listOfSegments.addAll(busSegmentResult);
                 }
             }
 
             fullRoute.setResultsConcatenated(listOfSegments);
+            fullRoute.setFirstRunResult(trialResult);
 
-            for (int a = 0; a < fullRoute.getResultsConcatenated().size(); a++) {
+
+            for (int a = 0; fullRoute.getResultsConcatenated() != null && a < fullRoute.getResultsConcatenated().size(); a++) {
                 for (int b = 0; b < fullRoute.getResultsConcatenated().get(a).getNodesTraversed().size(); b++) {
                     Log.e("full route is", fullRoute.getResultsConcatenated().get(a).getNodesTraversed().get(b).getName() + " " + a + " " + b + " " + fullRoute.getResultsConcatenated().size());
                 }
             }
-            listResults.add(fullRoute);
+
+
+
+            boolean isStopOrderExactlyTheSame = true;
+            boolean operated = false;
+            List<NavigationPartialResults> previousResultListOfSegments;
+            if (addToList && listResults.size() > 0) {
+                previousResultListOfSegments = listResults.get(listResults.size() - 1).getResultsConcatenated();
+                if (fullRoute.getResultsConcatenated().size() == previousResultListOfSegments.size()) {
+                    for (int a = 0; a < fullRoute.getResultsConcatenated().size(); a++) {
+                        if (previousResultListOfSegments.get(a).getNodesTraversed().get(0).getNumid()
+                                != fullRoute.getResultsConcatenated().get(a).getNodesTraversed().get(0).getNumid()) {
+                            isStopOrderExactlyTheSame = false;
+                        }
+                    }
+                    if (isStopOrderExactlyTheSame) {
+                        Log.e("full entered", "stoporderexactlythesame");
+                        fullRoute.setShowResult(false);
+                        listResults.add(fullRoute);
+                        c--;
+                        deleteLastEdge = false;
+                        operated = true;
+                    }
+                }
+            }
+            if (!operated) {
+                if (addToList && resultToRemove != c) {
+                    deleteLastEdge = true;
+                    listResults.add(fullRoute);
+                } else if (addToList) {
+                    fullRoute.setShowResult(false);
+                    deleteLastEdge = false;
+                    listResults.add(fullRoute);
+                    c--;
+                    if (stopsAlreadyTransferred.size() > 0) {
+                        stopsAlreadyTransferred.remove(stopsAlreadyTransferred.size() - 1);
+                    }
+                    Log.e("entered", "setShowResultFalse");
+                }
+            }
+            resultToRemove = -1;
+            numberOfAttempts++;
+            Log.e("check boolean", deleteLastEdge + "");
 
         }
+        for (NavigationResults temp : listResults) {
+            if (temp.isShowResult()) {
+                Log.e("copied over for all passed", "yes");
+                returnListResults.add(temp);
+            }
+        }
 
-        navFinished.onNavResultsComplete(listResults, 0);
+        navFinished.onNavResultsComplete(returnListResults, 0);
 
     }
 
+    List<Integer> stopsAlreadyTransferred = new ArrayList<>();
+    int resultToRemove = -1;
+    List<String> directServicesAlreadyEntered = new ArrayList<>();
 
     private List<NavigationPartialResults> findBusRoute(NavigationNodes originBusStop,
                                                   NavigationNodes destBusStop, Context context, boolean isFirstTime) {
@@ -370,8 +532,7 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
             if (stopId.get(i).equals(originBusStop.getId())) {
                 originIndex = i;
                 Log.e("origin name", stopId.get(i));
-            } else if (stopId.get(i).equals(destBusStop.getId())
-                    || destBusStop.getId().equals("KR-BT") && (stopId.get(i).contains("KTR") || stopId.get(i).equals("KR-BTE"))) {
+            } else if (checkDestCondition(stopId.get(i), destBusStop.getId())) {
                 destIndex = i;
                 Log.e("dest name", stopId.get(i));
             }
@@ -379,7 +540,9 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
                 Log.e("services compared are",aServiceAtStop.get(originIndex) + " " + aServiceAtStop.get(destIndex) + " " + originIndex + " " + destIndex);
             }
             if (originIndex >= 0 && destIndex >= 0 && destIndex > originIndex
-                    && aServiceAtStop.get(originIndex).equals(aServiceAtStop.get(destIndex))) {
+                    && aServiceAtStop.get(originIndex).equals(aServiceAtStop.get(destIndex))
+                    && routeToTake.getNodesTraversed().size() - 1 <= destIndex - originIndex + 2
+                    && routeToTake.getNodesTraversed().size() - 1 >= destIndex - originIndex - 2) { //TODO: +-2 is hardcoded due to route detours (D1/D2/A1/A2)
                 Log.e("viable service", aServiceAtStop.get(originIndex) + " " + stopId.get(originIndex) + " " + stopId.get(destIndex));
                 routeToTake.addViableBuses1(aServiceAtStop.get(originIndex));
                 originIndex = -1;
@@ -387,70 +550,53 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
             }
         }
 
-//        if (routeToTake.getViableBuses1().size() == 0) {
-//            return null;
-//        }
+        boolean checkAlreadyEntered = false;
 
         //no transfer required - a direct bus exists
-        if (routeToTake.getViableBuses1().size() > 0) {
-            transferConcat.add(routeToTake);
-//            getListOfChildServices(activity, originBusStop.getId(), new VolleyCallBack() {
-//                @Override
-//                public void onSuccess(List<ServiceInStopDetails> servicesAllInfoAtStop) {
-//                    List<Integer> serviceWaitTimes = new ArrayList<>();
-//                    for (int i = 0; i < servicesAllInfoAtStop.size(); i++) {
-//                        for (int j = 0; j < routeToTake.getViableBuses1().size(); j++) {
-//                            if (servicesAllInfoAtStop.get(i).getServiceNum().equals(routeToTake.getViableBuses1().get(j))) {
-//                                if (servicesAllInfoAtStop.get(i).getFirstArrival().equals("-")) {
-//                                    serviceWaitTimes.add(-1);
-//                                } else if ((servicesAllInfoAtStop.get(i).getFirstArrival().equals("Arr"))
-//                                        && timeSoFar < Integer.parseInt(servicesAllInfoAtStop.get(i).getSecondArrival())) {
-//                                    serviceWaitTimes.add(Integer.parseInt(servicesAllInfoAtStop.get(i).getSecondArrival()));
-//                                } else if (timeSoFar < Integer.parseInt(servicesAllInfoAtStop.get(i).getSecondArrival())) {
-//                                    serviceWaitTimes.add(Integer.parseInt(servicesAllInfoAtStop.get(i).getSecondArrival()));
-//                                } else if (timeSoFar < Integer.parseInt(servicesAllInfoAtStop.get(i).getFirstArrival())) {
-//                                    serviceWaitTimes.add(Integer.parseInt(servicesAllInfoAtStop.get(i).getFirstArrival()));
-//                                } else {
-//                                    serviceWaitTimes.add(-1);
-//                                }
-//                            }
-//                        }
+        if (routeToTake.getViableBuses1().size() > 0 && directServicesAlreadyEntered.size() > 0) {
+//            for (int i = 0; i < routeToTake.getViableBuses1().size(); i++) {
+//                for (int j = 0; j < directServicesAlreadyEntered.size(); j++) {
+//                    if (routeToTake.getViableBuses1().get(i).equals(directServicesAlreadyEntered.get(j))) {
+//                        checkAlreadyEntered = true;
 //                    }
-//                    for (int i = 0; i < serviceWaitTimes.size(); i++) {
-//                        for (int j = i + 1; j < serviceWaitTimes.size(); j++) {
-//                            if (serviceWaitTimes.get(i) == -1) {
-//
-//                            } else if (serviceWaitTimes.get(j) < serviceWaitTimes.get(i)) {
-//                                Collections.swap(serviceWaitTimes, i, j);
-//                            }
-//                        }
-//
-//                    }
-//                    boolean busSet = false;
-//                    for (int i = 0; i < serviceWaitTimes.size(); i++) {
-//                        if (serviceWaitTimes.get(i) != -1) {
-//                            routeToTake.setBusToWaitForIndiv(routeToTake.getViableBuses1().get(i), 0);
-//                            routeToTake.setBusWaitingTime1Indiv(serviceWaitTimes.get(i), 0);
-//                            routeToTake.setTimeForSegment(routeToTake.getTimeForSegment() + serviceWaitTimes.get(i));
-//                            routeToTake.setTransferStop(null);
-//                            busSet = true;
-//                        }
-//                    }
-//                    if (!busSet) {
-//                        routeToTake.setBusToWaitForIndiv(null, 0);
-//                        routeToTake.setBusWaitingTime1Indiv(-1, 0);
-//                        routeToTake.setTransferStop(null);
-//                    }
-//
-//                    busNavComplete.onBusNavSuccess(routeToTake);
-//
-//
 //                }
-//            });
+//            }
+        } else if (routeToTake.getViableBuses1().size() > 0 && directServicesAlreadyEntered.size() == 0) {
+            checkAlreadyEntered = false;
+        }
+
+        Log.e("checkAlreadyEntered", checkAlreadyEntered + "");
+//        if (checkAlreadyEntered) {
+//            transferConcat.add(null);
+//            Log.e("null", "added");
+//            return transferConcat;
+//        }
+        if (routeToTake.getViableBuses1().size() > 0 && !checkAlreadyEntered) {
+
+            Log.e("direct route exists", "yes");
+
+            boolean stopAlreadyTransfered = false;
+            for (Integer temp: stopsAlreadyTransferred) {
+                if (c > 1 && temp == routeToTake.getNodesTraversed().get(0).getNumid()) {
+                    resultToRemove = c;
+                    stopAlreadyTransfered = true;
+                    break;
+                }
+            }
+            if (!stopAlreadyTransfered) {
+                stopsAlreadyTransferred.add(routeToTake.getNodesTraversed().get(0).getNumid());
+            }
+            directServicesAlreadyEntered.addAll(routeToTake.getViableBuses1());
+            routeToTake.setNodeSequence(remakeStopList(stopId,
+                    aServiceAtStop, routeToTake.getViableBuses1(), originBusStop, destBusStop));
+
+            transferConcat.add(routeToTake);
+
         } else {
             //check how to transfer
 
             int viableBuses2size = 0;
+            int viableBuses1size = 0;
 
             Log.e("entered", " find transfer route");
 
@@ -459,144 +605,200 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
             for (int i = 0; i < stopId.size(); i++) {
                 if (stopId.get(i).equals(originBusStop.getId())) {
                     servicesAtOrigin.add(aServiceAtStop.get(i));
-                } else if (stopId.get(i).equals(destBusStop.getId())) {
+                    Log.e("origin service added", aServiceAtStop.get(i));
+                } else if (checkDestCondition(stopId.get(i), destBusStop.getId())) {
                     servicesAtDest.add(aServiceAtStop.get(i));
+                    Log.e("dest service added", aServiceAtStop.get(i));
                 }
             }
-            List<String> viableBuses1 = new ArrayList<>();
-            List<String> viableBuses2 = new ArrayList<>();
-            List<String> servicesAtIntermediateStop = new ArrayList<>();
-            List<NavigationNodes> nodesTraversedBeforeTransfer = new ArrayList<>();
+
+
             List<Integer> transferStopNumIds = new ArrayList<>();
+            List<NavigationNodes> nodesTraversedBeforeTransfer = new ArrayList<>();
 
-//            for (int h = 0; h < 2; h++) {
+            boolean transferPointAlreadySet = false;
 
-                for (int i = 0; i < routeToTake.getNodesTraversed().size(); i++) {
+            for (int i = 0; i < routeToTake.getNodesTraversed().size(); i++) {
 
-                    int timeBeforeTransfer = 0;
+                int timeBeforeTransfer = 0;
 
-                    NavigationNodes currentStop = routeToTake.getNodesTraversed().get(i);
+                NavigationNodes currentStop = routeToTake.getNodesTraversed().get(i);
 
-                    boolean hasStopBeenTransferredBefore = false;
-                    for (int j = 0; j < transferStopNumIds.size(); j++) {
-                        if (currentStop.getNumid() == transferStopNumIds.get(j)) {
-                            hasStopBeenTransferredBefore = true;
+                boolean hasStopBeenTransferredBefore = false;
+                for (int j = 0; j < transferStopNumIds.size(); j++) {
+                    if (currentStop.getNumid() == transferStopNumIds.get(j)) {
+                        hasStopBeenTransferredBefore = true;
+                    }
+                }
+                List<String> servicesAtIntermediateStop = new ArrayList<>();
+                nodesTraversedBeforeTransfer.add(currentStop);
+
+                if (!hasStopBeenTransferredBefore && i != 0 && i != routeToTake.getNodesTraversed().size() - 1) {
+
+                    servicesAtIntermediateStop.clear();
+                    List<String> viableBuses1 = new ArrayList<>();
+                    List<String> viableBuses2 = new ArrayList<>();
+//                    Log.e("currentstop is", currentStop.getName() + " " + nodesTraversedBeforeTransfer.size());
+                    timeBeforeTransfer = currentStop.getWeightTillNow();
+                    for (int j = 0; j < stopId.size(); j++) {
+                        if (stopId.get(j).equals(currentStop.getId())) {
+                            servicesAtIntermediateStop.add(aServiceAtStop.get(j));
+//                            Log.e("transfer checking aServiceAtStop", aServiceAtStop.get(j));
+                        }
+                    }
+                    for (int j = 0; j < servicesAtDest.size(); j++) {
+                        for (int k = 0; k < servicesAtIntermediateStop.size(); k++) {
+                            if (servicesAtDest.get(j).equals(servicesAtIntermediateStop.get(k))) {
+                                int transferOriginIndex = -1;
+                                int transferDestIndex = -1;
+//                                Log.e("transfer 2nd check", servicesAtDest.get(j) + " " + servicesAtIntermediateStop.get(k));
+                                for (int m = 0; m < stopId.size(); m++) {
+//                                    Log.e("transfer 3rd check", currentStop.getId() + " " + destBusStop.getId() + " " + stopId.get(m) + " " + servicesAtDest.get(j) + " " + aServiceAtStop.get(m));
+                                    if (currentStop.getId().equals(stopId.get(m)) && aServiceAtStop.get(m).equals(servicesAtDest.get(j))) {
+                                        transferOriginIndex = m;
+//                                        Log.e("origin name", stopId.get(m) + " " + transferOriginIndex);
+                                    } else if (checkDestCondition(stopId.get(m), destBusStop.getId()) && aServiceAtStop.get(m).equals(servicesAtDest.get(j))) {
+                                        transferDestIndex = m;
+//                                        Log.e("dest name", stopId.get(m) + " " + transferDestIndex);
+                                    }
+                                    if (transferOriginIndex >= 0 && transferDestIndex >= 0 && transferDestIndex > transferOriginIndex) {
+                                        break;
+                                    }
+                                }
+//                                Log.e("sizes", (routeToTake.getNodesTraversed().size() - i + " ") + (transferDestIndex - transferOriginIndex + ""));
+                                if (transferOriginIndex < transferDestIndex
+//                                        && (!transferPointAlreadySet || !servicesAtIntermediateStop.get(k).contains("BTC"))
+                                        && routeToTake.getNodesTraversed().size() - i >= transferDestIndex - transferOriginIndex - 2 &&
+                                        routeToTake.getNodesTraversed().size() - i <= transferDestIndex - transferOriginIndex + 2) {
+                                    boolean isServiceAlreadyInside = false;
+                                    for (int m = 0; m < viableBuses2.size(); m++) {
+                                        if (servicesAtIntermediateStop.get(k).equals(viableBuses2.get(m))) {
+                                            isServiceAlreadyInside = true;
+                                        }
+                                    }
+                                    if (!isServiceAlreadyInside) {
+                                        viableBuses2.add(servicesAtIntermediateStop.get(k));
+//                                        Log.e("ViableBuses2Added", servicesAtIntermediateStop.get(k));
+                                    }
+
+                                }
+                            }
                         }
                     }
 
-                    nodesTraversedBeforeTransfer.add(currentStop);
+                    if (viableBuses2.size() > 0 && viableBuses2.size() > viableBuses2size) {
 
-                    if (!hasStopBeenTransferredBefore && i != 0 && i != routeToTake.getNodesTraversed().size() - 1) {
-
-                        servicesAtIntermediateStop.clear();
-                        viableBuses1.clear();
-                        viableBuses2.clear();
-                        Log.e("currentstop is", currentStop.getName() + " " + nodesTraversedBeforeTransfer.size());
-                        timeBeforeTransfer = currentStop.getWeightTillNow();
-                        for (int j = 0; j < stopId.size(); j++) {
-                            if (stopId.get(j).equals(currentStop.getId())) {
-                                servicesAtIntermediateStop.add(aServiceAtStop.get(j));
-                                Log.e("transfer checking aServiceAtStop", aServiceAtStop.get(j));
-                            }
-                        }
-                        for (int j = 0; j < servicesAtDest.size(); j++) {
+                        for (int j = 0; j < servicesAtOrigin.size(); j++) {
                             for (int k = 0; k < servicesAtIntermediateStop.size(); k++) {
-                                if (servicesAtDest.get(j).equals(servicesAtIntermediateStop.get(k))) {
+                                Log.e("match", servicesAtOrigin.get(j) + " " + servicesAtIntermediateStop.get(k));
+                                if (servicesAtOrigin.get(j).equals(servicesAtIntermediateStop.get(k))) {
                                     int transferOriginIndex = -1;
                                     int transferDestIndex = -1;
-                                    Log.e("transfer 2nd check", servicesAtDest.get(j) + " " + servicesAtIntermediateStop.get(k));
+                                    Log.e("transfer 2nd2nd check", servicesAtOrigin.get(j) + " " + servicesAtIntermediateStop.get(k));
                                     for (int m = 0; m < stopId.size(); m++) {
-                                        Log.e("transfer 3rd check", currentStop.getId() + " " + stopId.get(m) + " " + servicesAtDest.get(j) + " " + aServiceAtStop.get(m));
-                                        if (currentStop.getId().equals(stopId.get(m)) && aServiceAtStop.get(m).equals(servicesAtDest.get(j))) {
-                                            transferOriginIndex = m;
-                                            Log.e("origin name", stopId.get(m));
-                                        } else if ((destBusStop.getId().equals(stopId.get(m))
-                                                || destBusStop.getId().equals("KR-BT") && (stopId.get(i).contains("KTR") || stopId.get(i).equals("KR-BTE"))) && aServiceAtStop.get(m).equals(servicesAtDest.get(j))) {
+                                        Log.e("transfer 3rd3rd check", currentStop.getId() + " " + originBusStop.getId() + " " + stopId.get(m) + " " + servicesAtOrigin.get(j) + " " + aServiceAtStop.get(m));
+                                        if (checkDestCondition(stopId.get(m), currentStop.getId()) && aServiceAtStop.get(m).equals(servicesAtOrigin.get(j))) {
                                             transferDestIndex = m;
-                                            Log.e("dest name", stopId.get(m));
+                                            Log.e("transfer dest name", stopId.get(m));
+                                        } else if (originBusStop.getId().equals(stopId.get(m)) && aServiceAtStop.get(m).equals(servicesAtOrigin.get(j))) {
+                                            transferOriginIndex = m;
+                                            Log.e("transfer origin name", stopId.get(m));
                                         }
-                                        if (transferOriginIndex >= 0 && transferDestIndex >= 0) {
+                                        if (transferOriginIndex >= 0 && transferDestIndex >= 0 && transferDestIndex > transferOriginIndex) {
                                             break;
                                         }
                                     }
-                                    if (transferOriginIndex < transferDestIndex) {
-                                        viableBuses2.add(servicesAtIntermediateStop.get(k));
-                                        Log.e("ViableBuses2Added", servicesAtIntermediateStop.get(k));
+                                    if (transferOriginIndex < transferDestIndex && i + 1 >= transferDestIndex - transferOriginIndex - 2 &&
+                                            i + 1 <= transferDestIndex - transferOriginIndex + 2) {
+                                        boolean isServiceAlreadyInside = false;
+                                        for (int m = 0; m < viableBuses1.size(); m++) {
+                                            if (servicesAtIntermediateStop.get(k).equals(viableBuses1.get(m))) {
+                                                isServiceAlreadyInside = true;
+//                                                Log.e("ViableBuses1AlreadyInside", servicesAtIntermediateStop.get(k));
+                                            }
+                                        }
+                                        if (!isServiceAlreadyInside) {
+                                            viableBuses1.add(servicesAtIntermediateStop.get(k));
+//                                            Log.e("ViableBuses1Added", servicesAtIntermediateStop.get(k));
+                                        }
                                     }
                                 }
                             }
                         }
+                        Log.e("vB1 + vB2", currentStop.getName() + " " + viableBuses1.size() + " " + viableBuses2.size() + " / " + viableBuses1size + " " + viableBuses2size);
 
-                        if (viableBuses2.size() > 0 && viableBuses2.size() > viableBuses2size) {
-                            //transfer route found
-                            viableBuses2size = viableBuses2.size();
-                            int howManyServicesAreTheSame = 0;
-                            Boolean areAllTheServicesTheSame = false;
-                            for (int a = 0; a < transferConcat.size(); a += 2) {
-                                for (int b = 0; b < viableBuses2.size(); b++) {
-                                    for (int c = 0; c < transferConcat.get(a + 1).getViableBuses2().size(); c++) {
-                                        if (transferConcat.get(a + 1).getViableBuses2().get(c).equals(viableBuses2.get(b))) {
-                                            howManyServicesAreTheSame++;
-                                        }
-                                    }
-                                }
-                                if (howManyServicesAreTheSame == transferConcat.get(a + 1).getViableBuses2().size()) {
-                                    areAllTheServicesTheSame = true;
+                        if (viableBuses1.size() > 0 && viableBuses1.size() >= viableBuses1size) {
+                            for (int j = 0; j < stopsAlreadyTransferred.size(); j++) {
+                                if (stopsAlreadyTransferred.get(j) == currentStop.getNumid()) {
+                                    resultToRemove = c;
                                     break;
                                 }
                             }
-                            if (!areAllTheServicesTheSame) {
+                            //transfer route found
+                            transferPointAlreadySet = true;
+                            stopsAlreadyTransferred.add(currentStop.getNumid());
+                            Log.e("transfer route found at", currentStop.getName());
+                            viableBuses1size = viableBuses1.size();
+                            viableBuses2size = viableBuses2.size();
 
-                                //for transfer use
-                                NavigationPartialResults routeBeforeTransfer = new NavigationPartialResults();
-                                NavigationPartialResults routeAfterTransfer = new NavigationPartialResults();
+                            //for transfer use
+                            transferConcat.clear();
+                            NavigationPartialResults routeBeforeTransfer = new NavigationPartialResults();
+                            NavigationPartialResults routeAfterTransfer = new NavigationPartialResults();
 
-                                transferStopNumIds.add(currentStop.getNumid());
-                                routeBeforeTransfer.setBeforeTransferNodesTraversed(nodesTraversedBeforeTransfer);
-                                routeBeforeTransfer.setNodesTraversed(nodesTraversedBeforeTransfer);
-                                Log.e("routeBeforeTransfer size", routeBeforeTransfer.getNodesTraversed().size() + "");
-                                routeAfterTransfer.setTransferStop(currentStop);
-                                routeAfterTransfer.setViableBuses2(viableBuses2);
-                                Log.e("transfer stop is", currentStop.getName());
-                                for (int k = 0; k < servicesAtOrigin.size(); k++) {
-                                    for (int m = 0; m < servicesAtIntermediateStop.size(); m++) {
-                                        if (servicesAtOrigin.get(k).equals(servicesAtIntermediateStop.get(m))) {
-                                            boolean isAlreadyInList = false;
-                                            for (int n = 0; n < viableBuses1.size(); n++) {
-                                                Log.e("check equality", viableBuses1.get(n) + " " + servicesAtIntermediateStop.get(m));
-                                                if (viableBuses1.get(n).equals(servicesAtIntermediateStop.get(m))) {
-                                                    isAlreadyInList = true;
-                                                }
-                                            }
-                                            if (!isAlreadyInList) {
-                                                viableBuses1.add(servicesAtIntermediateStop.get(m));
-                                                Log.e("ViableBuses1Added", servicesAtIntermediateStop.get(m));
-                                            }
-                                        }
-                                    }
-                                }
-                                routeBeforeTransfer.setViableBuses1(viableBuses1);
-                                for (int k = i; k < routeToTake.getNodesTraversed().size(); k++) {
-                                    routeAfterTransfer.setAfterTransferNodesTraversedIndiv(routeToTake.getNodesTraversed().get(k));
-                                    routeAfterTransfer.setTimeForSegment(routeToTake.getNodesTraversed().get(k).getWeightTillNow()
-                                            - routeToTake.getNodesTraversed().get(i).getWeightTillNow());
-                                }
-                                routeAfterTransfer.setNodesTraversed(routeAfterTransfer.getAfterTransferNodesTraversed());
-                                transferConcat.add(routeBeforeTransfer);
-                                transferConcat.add(routeAfterTransfer);
+                            transferStopNumIds.add(currentStop.getNumid());
+
+                            List<NavigationNodes> nodesBeforeTransferToInsert = new ArrayList<>(nodesTraversedBeforeTransfer);
+                            routeBeforeTransfer.setBeforeTransferNodesTraversed(nodesBeforeTransferToInsert);
+                            routeBeforeTransfer.setNodesTraversed(nodesBeforeTransferToInsert);
+                            routeBeforeTransfer.setTimeForSegment(currentStop.getWeightTillNow());
+                            routeBeforeTransfer.setViableBuses1(viableBuses1);
+                            routeBeforeTransfer.setNodeSequence(remakeStopList(stopId,
+                                    aServiceAtStop, routeBeforeTransfer.getViableBuses1(), originBusStop, currentStop));
+
+                            routeAfterTransfer.setTransferStop(currentStop);
+                            routeAfterTransfer.setViableBuses2(viableBuses2);
+                            for (int k = i; k < routeToTake.getNodesTraversed().size(); k++) {
+                                routeAfterTransfer.setAfterTransferNodesTraversedIndiv(routeToTake.getNodesTraversed().get(k));
+                                routeAfterTransfer.setTimeForSegment(routeToTake.getNodesTraversed().get(k).getWeightTillNow()
+                                        - routeToTake.getNodesTraversed().get(i).getWeightTillNow());
+                            }
+                            routeAfterTransfer.setNodesTraversed(routeAfterTransfer.getAfterTransferNodesTraversed());
+                            routeAfterTransfer.setNodeSequence(remakeStopList(stopId,
+                                    aServiceAtStop, routeAfterTransfer.getViableBuses2(), currentStop, destBusStop));
+
+                            transferConcat.add(routeBeforeTransfer);
+                            transferConcat.add(routeAfterTransfer);
+                        }
+
+//                        int howManyServicesAreTheSame = 0;
+//                        Boolean areAllTheServicesTheSame = false;
+//                        for (int a = 0; a < transferConcat.size(); a += 2) {
+//                            for (int b = 0; b < viableBuses2.size(); b++) {
+//                                for (int c = 0; c < transferConcat.get(a + 1).getViableBuses2().size(); c++) {
+//                                    if (transferConcat.get(a + 1).getViableBuses2().get(c).equals(viableBuses2.get(b))) {
+//                                        howManyServicesAreTheSame++;
+//                                    }
+//                                }
+//                            }
+//                            if (howManyServicesAreTheSame == transferConcat.get(a + 1).getViableBuses2().size()) {
+//                                areAllTheServicesTheSame = true;
+//                                break;
+//                            }
+//                        }
+//                        if (!areAllTheServicesTheSame) {
+
+
 //                                for (int k = 0; k < currentStop.getNavEdgesFromThisNode().size(); k++) {
 //                                    if (currentStop.getNavEdgesFromThisNode().get(k).getTonumid() == currentStop.getNumid()) {
 //                                        navNodes[currentStop.getNumid()].getNavEdgesFromThisNode().get(k).setUsable(false);
 //                                    }
 //                                }
-                                break;
-                            }
-                        }
+//                                break;
+//                        }
                     }
                 }
-//            }
-
-
+            }
 
         }
 
@@ -605,6 +807,62 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
     }
 
     private void checkIfTransferIsRequired(List<ServiceInStopDetails> originStopInfo, List<ServiceInStopDetails> destStopInfo) {
+
+    }
+
+    private boolean checkDestCondition(String stopId, String fixedStop) {
+        if ((fixedStop.equals(stopId)
+                || (fixedStop.equals("KR-BT") && (stopId.contains("KTR") || stopId.equals("KR-BTE")))
+                || (fixedStop.equals("PGPT") && stopId.contains("PGPE")))) {
+            return true;
+        }
+        return false;
+    }
+
+    private List<NavigationNodes> remakeStopList(List<String> stopId, List<String> aServiceAtStop, List<String> busList, NavigationNodes firstStop, NavigationNodes lastStop) {
+
+        List<NavigationNodes> maxNodesTraversed = new ArrayList<>();
+        int maxNodesTraversedSize = 0;
+        for (int a = 0; a < busList.size(); a++) {
+            List<NavigationNodes> checkThisService = new ArrayList<>();
+            boolean startAdding = false;
+            for (int j = 0; j < stopId.size(); j++) {
+                if (busList.get(a).equals(aServiceAtStop.get(j))) {
+                    Log.e("remaking service being checked", busList.get(a));
+                    if (stopId.get(j).equals(firstStop.getId())) {
+                        Log.e("start adding here", stopId.get(j) + " " + firstStop.getId());
+                        startAdding = true;
+                        checkThisService.clear();
+                    } else if (j > 0 && aServiceAtStop.get(j - 1).equals(aServiceAtStop.get(j))
+                            && checkDestCondition(stopId.get(j), lastStop.getId())) {
+                        startAdding = false;
+                        for (int k = 0; k < listOfAllBusStops.size(); k++) {
+                            if (checkDestCondition(stopId.get(j), listOfAllBusStops.get(k).getId())) {
+                                Log.e("remaking final stop being added", listOfAllBusStops.get(k).getName());
+                                checkThisService.add(listOfAllBusStops.get(k));
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                    if (startAdding) {
+                        for (int k = 0; k < listOfAllBusStops.size(); k++) {
+                            if (checkDestCondition(stopId.get(j), listOfAllBusStops.get(k).getId())) {
+//                                                    Log.e("remaking stop being added", listOfAllBusStops.get(k).getName());
+                                checkThisService.add(listOfAllBusStops.get(k));
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            if (checkThisService.size() > maxNodesTraversedSize) {
+                maxNodesTraversed = checkThisService;
+                maxNodesTraversedSize = checkThisService.size();
+            }
+        }
+
+        return maxNodesTraversed;
 
     }
 
@@ -672,7 +930,7 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
                 for (int a = 0; a < extractedNode.getNavEdgesFromThisNode().size(); a++) {
                     NavigationEdges neighbourEdge = extractedNode.getNavEdgesFromThisNode().get(a);
                     NavigationNodes neighbourNode = navNodes[neighbourEdge.getTonumid()];
-                    if (!neighbourNode.isDiscovered() && neighbourEdge.isUsable()) {
+                    if (!neighbourNode.isDiscovered() && neighbourEdge.isUsable() && (!isWalkOnly || (neighbourEdge.getBy().equals("walk")))) {
                         if (neighbourNode.getWeightTillNow() > extractedNode.getWeightTillNow() + neighbourEdge.getDuration()) {
                             neighbourNode.setWeightTillNow(extractedNode.getWeightTillNow() + neighbourEdge.getDuration());
                             neighbourNode.setPrevNode(extractedNode);
@@ -687,8 +945,6 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
             return null;
         }
 
-        Log.e("findShortestPath", "no NPE");
-
 //        Stack<NavigationNodes> nodeStack = new Stack<>();
         NavigationNodes currentNode = destination;
         int totalTime = 0;
@@ -696,14 +952,14 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
         while (currentNode != null) {
 //            nodeStack.push(currentNode);
             pathToTake.add(0, currentNode);
-            Log.e("current node reversed", currentNode.getName());
+//            Log.e("current node reversed", currentNode.getName());
             currentNode = currentNode.getPrevNode();
         }
         for (int b = 0; b < pathToTake.size(); b++) {
             Log.e("current node is", pathToTake.get(b).getName());
         }
         for (int b = 1; b < pathToTake.size() - 1; b++) {
-            Log.e("path is", pathToTake.get(b).getEdgeSelected().getFrom() + " " + pathToTake.get(b).getEdgeSelected().getTo());
+//            Log.e("path is", pathToTake.get(b).getEdgeSelected().getFrom() + " " + pathToTake.get(b).getEdgeSelected().getTo());
         }
         routeForSegment.setNodesTraversed(pathToTake);
         totalTime = destination.getWeightTillNow();

@@ -8,7 +8,9 @@
      "by": "D1",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "COM2",
@@ -18,7 +20,9 @@
      "by": "D1",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "AS7",
@@ -28,7 +32,9 @@
      "by": "B1",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "LT13",
@@ -38,7 +44,9 @@
      "by": "A1",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "CENLIB",
@@ -48,7 +56,9 @@
      "by": "A1",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "YIH",
@@ -58,7 +68,9 @@
      "by": "A1",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "BIZ2",
@@ -68,7 +80,9 @@
      "by": "A1",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "PGP12-OPP",
@@ -78,7 +92,9 @@
      "by": "A1",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "PGP7",
@@ -88,7 +104,9 @@
      "by": "A1",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "PGPT",
@@ -98,7 +116,9 @@
      "by": "BTC1",
      "duration": 15,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "CGH",
@@ -108,7 +128,9 @@
      "by": "BTC1",
      "duration": 5,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "BUKITTIMAH-BTC2",
@@ -118,7 +140,9 @@
      "by": "BTC2",
      "duration": 4,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "BG-MRT",
@@ -128,7 +152,9 @@
      "by": "BTC2",
      "duration": 15,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "MUSEUM",
@@ -138,7 +164,9 @@
      "by": "BTC2",
      "duration": 4,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "EA",
@@ -148,7 +176,9 @@
      "by": "B2",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "STAFFCLUB-OPP",
@@ -158,7 +188,9 @@
      "by": "A1",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "Utown",
@@ -168,7 +200,9 @@
      "by": "D1",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "MUSEUM",
@@ -178,7 +212,9 @@
      "by": "D1",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "Utown",
@@ -188,7 +224,9 @@
      "by": "D2",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "KV",
@@ -198,7 +236,9 @@
      "by": "BTC1",
      "duration": 4,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "KR-BT",
@@ -208,7 +248,9 @@
      "by": "B1",
      "duration": 5,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "KR-BT",
@@ -218,7 +260,9 @@
      "by": "C",
      "duration": 4,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "JP-SCH-16151",
@@ -228,7 +272,9 @@
      "by": "BTC1",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "UTown",
@@ -238,7 +284,9 @@
      "by": "B2",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "RAFFLES",
@@ -248,7 +296,9 @@
      "by": "B2",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "UHALL",
@@ -258,7 +308,9 @@
      "by": "A1",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "LT27",
@@ -268,7 +320,9 @@
      "by": "A1",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "KR-MRT",
@@ -278,7 +332,9 @@
      "by": "A1",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "PGPT",
@@ -288,7 +344,9 @@
      "by": "A1",
      "duration": 7,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "PGP12-OPP",
@@ -298,7 +356,9 @@
      "by": "D2",
      "duration": 4,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "STAFFCLUB-OPP",
@@ -308,7 +368,9 @@
      "by": "C",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "MUSEUM",
@@ -318,7 +380,9 @@
      "by": "A2",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "STAFFCLUB",
@@ -328,7 +392,9 @@
      "by": "A2",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "UHALL-OPP",
@@ -338,7 +404,9 @@
      "by": "A2",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "S17",
@@ -348,7 +416,9 @@
      "by": "A2",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "KR-MRT-OPP",
@@ -358,7 +428,9 @@
      "by": "A2",
      "duration": 8,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "PGP",
@@ -368,7 +440,9 @@
      "by": "D2",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "PGP",
@@ -378,7 +452,9 @@
      "by": "A2",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "PGP14-15",
@@ -388,7 +464,9 @@
      "by": "A2",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "PGP12",
@@ -398,7 +476,9 @@
      "by": "A2",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "HSSML-OPP",
@@ -408,7 +488,9 @@
      "by": "A2",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "NUSS-OPP",
@@ -418,7 +500,9 @@
      "by": "A2",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "COM2",
@@ -428,7 +512,9 @@
      "by": "A2",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "NUSS-OPP",
@@ -438,7 +524,9 @@
      "by": "B2",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "LT13-OPP",
@@ -448,7 +536,9 @@
      "by": "A2",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "COMCEN",
@@ -458,7 +548,9 @@
      "by": "A2",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "YIH-OPP",
@@ -468,7 +560,9 @@
      "by": "A2",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "YIH-OPP",
@@ -478,7 +572,9 @@
      "by": "B1",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "S17",
@@ -488,7 +584,9 @@
      "by": "C",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "RC4",
@@ -498,7 +596,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "Follow signs and the sheltered walkway to CAPT Basement Level.",
+     "edgeDesc2": "Follow signs and the sheltered walkway to RC4 Basement Level."
    },
    {
      "from": "RC4",
@@ -508,7 +608,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "CAPT",
@@ -518,7 +620,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "n",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "CAPT",
@@ -528,7 +632,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "Follow signs and walk past Utown Auditorium 2 and Chua Thian Poh Hall to Cinnamon College.",
+     "edgeDesc2": "Follow signs and walk past Chua Thian Poh Hall and Utown Auditorium 2 to Cinnamon College."
    },
    {
      "from": "CAPT",
@@ -538,7 +644,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "n",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "CENDANA",
@@ -548,7 +656,9 @@
      "by": "walk",
      "duration": 4,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "ELM",
@@ -558,7 +668,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "SAGA",
@@ -568,7 +680,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "SAGA",
@@ -578,7 +692,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "USP",
@@ -588,7 +704,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "Walk along the sheltered pathway next to the glass panels to Tembusu College.",
+     "edgeDesc2": "From Tembusu Level 1, walk along the sheltered pathway next to the glass panels to Cinnamon College."
    },
    {
      "from": "TEMBU",
@@ -598,7 +716,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "From the Tembusu Drop-Off Point, walk past the Tembusu MPH and follow the sheltered pathway to UTR Level 2.",
+     "edgeDesc2": "From the UTR Drop-Off Point at Level 2, follow the sheltered pathway beside the road to Tembusu College."
    },
    {
      "from": "TEMBU",
@@ -606,9 +726,11 @@
      "to": "UTR",
      "tonumid": 105,
      "by": "walk",
-     "duration": 2,
+     "duration": 1,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "Walk down the stairs at the Tembusu entrance. Walk past the Tembusu College Office and follow the sheltered pathway to UTR.",
+     "edgeDesc2": "Follow the sheltered pathway to Tembusu College Basement Level."
    },
    {
      "from": "UTR",
@@ -618,7 +740,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "From UTR Level 1, follow the sheltered pathway to Town Plaza.",
+     "edgeDesc2": "Follow the sheltered pathway to Utown Residence."
    },
    {
      "from": "TEMBU",
@@ -628,7 +752,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "TEMBU",
@@ -638,7 +764,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "UTR",
@@ -648,7 +776,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "ERC",
@@ -658,7 +788,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "SRC",
@@ -668,7 +800,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "TOWNPLAZA",
@@ -678,7 +812,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "TOWNPLAZA",
@@ -688,7 +824,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "TOWNPLAZA",
@@ -698,7 +836,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "Follow the sheltered pathway to Utown (Bus Stop).",
+     "edgeDesc2": "Follow the sheltered pathway to Town Plaza."
    },
    {
      "from": "ERC",
@@ -708,7 +848,9 @@
      "by": "walk",
      "duration": 5,
      "sheltered": "n",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "COMCEN",
@@ -718,7 +860,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "COMCEN",
@@ -728,7 +872,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "COMCEN",
@@ -738,7 +884,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "COMCEN",
@@ -748,7 +896,9 @@
      "by": "walk",
      "duration": 4,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "CELC",
@@ -758,7 +908,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "CENLIB",
@@ -768,7 +920,9 @@
      "by": "walk",
      "duration": 5,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "CENLIB",
@@ -778,7 +932,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "CENLIB",
@@ -788,7 +944,9 @@
      "by": "walk",
      "duration": 8,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "YIH",
@@ -798,7 +956,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "n",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "COMCEN",
@@ -808,7 +968,9 @@
      "by": "walk",
      "duration": 4,
      "sheltered": "n",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "COMCEN",
@@ -818,7 +980,9 @@
      "by": "walk",
      "duration": 4,
      "sheltered": "n",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "RAFFLES",
@@ -828,7 +992,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "n",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "RAFFLES",
@@ -838,7 +1004,9 @@
      "by": "walk",
      "duration": 5,
      "sheltered": "n",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "RAFFLES",
@@ -848,7 +1016,9 @@
      "by": "walk",
      "duration": 5,
      "sheltered": "n",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "E5A",
@@ -858,7 +1028,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "n",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "EW2",
@@ -868,7 +1040,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "n",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "EW2",
@@ -878,7 +1052,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "n",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "E3A",
@@ -888,7 +1064,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "BLK-EA-OPP",
@@ -898,7 +1076,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "JP-SCH-16151",
@@ -908,7 +1088,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "YIH-OPP",
@@ -918,7 +1100,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "n",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "E7",
@@ -928,7 +1112,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "n",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "E7",
@@ -938,7 +1124,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "n",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "COMCEN",
@@ -948,7 +1136,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "MUSEUM",
@@ -958,7 +1148,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "MUSEUM",
@@ -968,7 +1160,9 @@
      "by": "walk",
      "duration": 8,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "E5",
@@ -978,7 +1172,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "E4",
@@ -988,7 +1184,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "E4",
@@ -998,7 +1196,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "EA",
@@ -1008,7 +1208,9 @@
      "by": "walk",
      "duration": 4,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "EA",
@@ -1018,7 +1220,9 @@
      "by": "walk",
      "duration": 5,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "E1A",
@@ -1028,7 +1232,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "E2",
@@ -1038,7 +1244,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "E2",
@@ -1048,7 +1256,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "E4",
@@ -1058,7 +1268,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "EA",
@@ -1068,7 +1280,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "E1A",
@@ -1078,7 +1292,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "n",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "E1A",
@@ -1088,7 +1304,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "n",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "E3",
@@ -1098,7 +1316,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "E1A",
@@ -1108,7 +1328,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "n",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "E1",
@@ -1118,7 +1340,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "E2",
@@ -1128,7 +1352,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "E4",
@@ -1138,7 +1364,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "n",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "LT7",
@@ -1148,7 +1376,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "E3",
@@ -1158,7 +1388,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "E1",
@@ -1168,7 +1400,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "E4",
@@ -1178,7 +1412,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "IT",
@@ -1188,7 +1424,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "n",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "EW1",
@@ -1198,7 +1436,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "n",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "CENLIB",
@@ -1208,7 +1448,9 @@
      "by": "walk",
      "duration": 7,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "COMCEN",
@@ -1218,7 +1460,9 @@
      "by": "walk",
      "duration": 8,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "SDE4",
@@ -1228,7 +1472,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "SDE3",
@@ -1238,7 +1484,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "SDE1",
@@ -1248,7 +1496,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "LT13-OPP",
@@ -1258,7 +1508,9 @@
      "by": "walk",
      "duration": 5,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "LT13",
@@ -1268,7 +1520,9 @@
      "by": "walk",
      "duration": 7,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "STAFFCLUB-OPP",
@@ -1278,7 +1532,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "STAFFCLUB-OPP",
@@ -1288,7 +1544,9 @@
      "by": "walk",
      "duration": 4,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "STAFFCLUB",
@@ -1298,7 +1556,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "STAFFCLUB",
@@ -1308,7 +1568,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "STAFFCLUB",
@@ -1318,7 +1580,9 @@
      "by": "walk",
      "duration": 4,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "COMCEN",
@@ -1328,7 +1592,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "COMCEN",
@@ -1338,7 +1604,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "LT3",
@@ -1348,7 +1616,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "COMCEN",
@@ -1358,7 +1628,9 @@
      "by": "walk",
      "duration": 4,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "CENLIB",
@@ -1368,7 +1640,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "COMCEN",
@@ -1378,7 +1652,9 @@
      "by": "walk",
      "duration": 5,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "CLBL1",
@@ -1388,7 +1664,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "CLBL6",
@@ -1398,7 +1676,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "CLBL1",
@@ -1408,7 +1688,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "CLBL6",
@@ -1418,7 +1700,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "CLBL6",
@@ -1428,7 +1712,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "CENLIB",
@@ -1438,7 +1724,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "AS6",
@@ -1448,7 +1736,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "AS6",
@@ -1458,7 +1748,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "AS8",
@@ -1468,7 +1760,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "AS1",
@@ -1478,7 +1772,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "LT9",
@@ -1488,7 +1784,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "AS1",
@@ -1498,7 +1796,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "AS1",
@@ -1508,7 +1808,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "LT10",
@@ -1518,7 +1820,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "LT10",
@@ -1528,7 +1832,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "AS2",
@@ -1538,7 +1844,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "AS3",
@@ -1548,7 +1856,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "AS3",
@@ -1558,7 +1868,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "AS4",
@@ -1568,7 +1880,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "AS5",
@@ -1578,7 +1892,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "AS3",
@@ -1588,7 +1904,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "AS3",
@@ -1598,7 +1916,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "LT13BS",
@@ -1608,7 +1928,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "n",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "LT13",
@@ -1618,7 +1940,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "LT13",
@@ -1628,7 +1952,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "LT13BS",
@@ -1638,7 +1964,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "AS2",
@@ -1648,7 +1976,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "LT13-OPP",
@@ -1658,7 +1988,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "DECK",
@@ -1668,7 +2000,9 @@
      "by": "walk",
      "duration": 5,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "AS6",
@@ -1678,7 +2012,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "LT14",
@@ -1688,7 +2024,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "LT15",
@@ -1698,7 +2036,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "LT13BS",
@@ -1708,7 +2048,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "AS7BS",
@@ -1718,7 +2060,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "n",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "AS7BS",
@@ -1728,7 +2072,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "YIH",
@@ -1738,7 +2084,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "Walk down the stairs behind the bus stop, through the underpass, and up the stairs at the end of the underpass",
+     "edgeDesc2": "Walk down the stairs behind the bus stop, through the underpass, and up the stairs at the end of the underpass"
    },
    {
      "from": "STAFFCLUB",
@@ -1748,7 +2096,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "BIZ2",
@@ -1758,7 +2108,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "AS7BS",
@@ -1768,7 +2120,9 @@
      "by": "walk",
      "duration": 5,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "COM1",
@@ -1778,7 +2132,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "COM2BS",
@@ -1788,7 +2144,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "n",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "COM2BS",
@@ -1798,7 +2156,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "COM2BS",
@@ -1808,7 +2168,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "LT13-OPP",
@@ -1818,7 +2180,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "VENTUS",
@@ -1828,7 +2192,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "VENTUS",
@@ -1838,7 +2204,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "YIH-OPP",
@@ -1848,7 +2216,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "n",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "YIHBS",
@@ -1858,7 +2228,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "YIHBS",
@@ -1868,7 +2240,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "YIH-OPP",
@@ -1878,7 +2252,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "n",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "PGPRBS",
@@ -1888,7 +2264,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "PGPT",
@@ -1898,7 +2276,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "PGPT",
@@ -1908,7 +2288,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "KR-MRT-OPP",
@@ -1918,7 +2300,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "Walk down the slope behind the bus stop and follow signs for Kent Ridge MRT.",
+     "edgeDesc2": "Follow signs for Bus Stop 4 and walk through the underpass."
    },
    {
      "from": "KR-MRT",
@@ -1928,7 +2312,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "Walk down the slope behind the bus stop and follow signs for Kent Ridge MRT.",
+     "edgeDesc2": "Follow signs for Bus Stop 3 and walk up the slope."
    },
    {
      "from": "KRMRT",
@@ -1938,7 +2324,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "NUHMB",
@@ -1948,7 +2336,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "S17BS",
@@ -1958,7 +2348,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "LT27BS",
@@ -1968,7 +2360,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "LT28",
@@ -1978,7 +2372,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "LT28",
@@ -1988,7 +2384,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "LT27",
@@ -1998,7 +2396,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "LT27",
@@ -2008,7 +2408,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "Frontier",
@@ -2018,7 +2420,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "Frontier",
@@ -2028,7 +2432,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "S9",
@@ -2038,7 +2444,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "S9",
@@ -2048,7 +2456,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "S8",
@@ -2058,7 +2468,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "S7",
@@ -2068,7 +2480,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "S11",
@@ -2078,7 +2492,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "S12",
@@ -2088,7 +2504,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "S12",
@@ -2098,7 +2516,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "S12",
@@ -2108,7 +2528,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "Uhall",
@@ -2118,7 +2540,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "Uhall",
@@ -2128,7 +2552,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "OppUhallBS",
@@ -2138,7 +2564,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "OppUhallBS",
@@ -2148,7 +2576,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "OppUhallBS",
@@ -2158,7 +2588,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "Uhall",
@@ -2168,7 +2600,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "S7(L4)",
@@ -2178,7 +2612,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "S1A",
@@ -2188,7 +2624,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "S1",
@@ -2198,7 +2636,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "S1",
@@ -2208,7 +2648,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "S1",
@@ -2218,7 +2660,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "S3",
@@ -2228,7 +2672,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "S4",
@@ -2238,7 +2684,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "S4",
@@ -2248,7 +2696,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "S4",
@@ -2258,7 +2708,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "S4",
@@ -2268,7 +2720,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "S4",
@@ -2278,7 +2732,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "S5",
@@ -2288,7 +2744,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "S5",
@@ -2298,7 +2756,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "S5",
@@ -2308,7 +2768,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "n",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "S10",
@@ -2318,7 +2780,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "Frontier",
@@ -2328,7 +2792,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "Frontier",
@@ -2338,7 +2804,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "S16",
@@ -2348,7 +2816,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "S16",
@@ -2358,7 +2828,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "n",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "S15",
@@ -2368,7 +2840,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "S17",
@@ -2378,7 +2852,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "S17",
@@ -2388,7 +2864,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "S17",
@@ -2398,7 +2876,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "S17BS",
@@ -2408,7 +2888,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "LT27BS",
@@ -2418,7 +2900,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "MD9",
@@ -2428,7 +2912,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "MD10",
@@ -2438,7 +2924,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "MD10",
@@ -2448,7 +2936,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "MD7",
@@ -2458,7 +2948,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "MD11",
@@ -2468,7 +2960,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "MD7",
@@ -2478,7 +2972,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "MD4",
@@ -2488,7 +2984,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "MD4",
@@ -2498,7 +2996,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "MD3",
@@ -2508,7 +3008,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "MD1",
@@ -2518,7 +3020,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "S9",
@@ -2528,7 +3032,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "n",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "MD1",
@@ -2538,7 +3044,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "MD3",
@@ -2548,7 +3056,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "MD6",
@@ -2558,7 +3068,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "n",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "MD2",
@@ -2568,7 +3080,9 @@
      "by": "walk",
      "duration": 4,
      "sheltered": "n",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "CeLS",
@@ -2578,7 +3092,9 @@
      "by": "walk",
      "duration": 9,
      "sheltered": "n",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "CeLS",
@@ -2588,7 +3104,9 @@
      "by": "walk",
      "duration": 6,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "CeLS",
@@ -2598,7 +3116,9 @@
      "by": "walk",
      "duration": 6,
      "sheltered": "n",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "CeLS",
@@ -2608,7 +3128,9 @@
      "by": "walk",
      "duration": 6,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "Frontier",
@@ -2618,7 +3140,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "n",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "LT27BS",
@@ -2628,7 +3152,9 @@
      "by": "walk",
      "duration": 7,
      "sheltered": "n",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "NUHMB",
@@ -2638,7 +3164,9 @@
      "by": "walk",
      "duration": 5,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "BIZ2BS",
@@ -2648,7 +3176,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "BIZ2BS",
@@ -2658,7 +3188,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "BIZ2BS",
@@ -2668,7 +3200,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "n",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "HSSML",
@@ -2678,7 +3212,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "BIZ2BS",
@@ -2688,7 +3224,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "HSSAUD",
@@ -2698,7 +3236,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "BIZ2BS",
@@ -2708,7 +3248,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "BIZ2",
@@ -2718,7 +3260,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "COM2",
@@ -2728,7 +3272,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "COM2",
@@ -2738,7 +3284,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "COM2",
@@ -2748,7 +3296,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "COM1",
@@ -2758,7 +3308,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "KR-BT",
@@ -2768,7 +3320,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "AS3",
@@ -2778,7 +3332,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "AS5",
@@ -2788,7 +3344,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "NUSS-OPP",
@@ -2798,7 +3356,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "NUSSKRG",
@@ -2808,7 +3368,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "SFAH",
@@ -2818,27 +3380,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
-   },
-   {
-     "from": "EH(KRT)",
-     "fromnumid": 998,
-     "to": "EH(FRONT)",
-     "tonumid": 991,
-     "by": "walk",
-     "duration": 2,
-     "sheltered": "y",
-     "accessible": "n"
-   },
-   {
-     "from": "KE7(PGPT)",
-     "fromnumid": 996,
-     "to": "KE7(MAIN)",
-     "tonumid": 997,
-     "by": "walk",
-     "duration": 2,
-     "sheltered": "y",
-     "accessible": "n"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "STAFFCLUB-OPP",
@@ -2848,7 +3392,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "HSSMLBS",
@@ -2858,7 +3404,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "n",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "BIZ2",
@@ -2868,7 +3416,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "HSSMLBS",
@@ -2878,7 +3428,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "KRH",
@@ -2888,7 +3440,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "NUSS-OPP",
@@ -2898,7 +3452,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "n",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "TH",
@@ -2908,7 +3464,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "STAFFCLUB",
@@ -2918,7 +3476,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "UHC",
@@ -2928,7 +3488,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "UHC",
@@ -2938,7 +3500,9 @@
      "by": "walk",
      "duration": 4,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "STAFFCLUB",
@@ -2948,7 +3512,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "STAFFCLUB-OPP",
@@ -2958,7 +3524,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "UHC",
@@ -2968,7 +3536,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "USC",
@@ -2978,7 +3548,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "USC",
@@ -2988,7 +3560,9 @@
      "by": "walk",
      "duration": 3,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "STAFFCLUB-OPP",
@@ -2998,7 +3572,9 @@
      "by": "walk",
      "duration": 4,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "STAFFCLUB-OPP",
@@ -3008,7 +3584,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "RVRC-YIH",
@@ -3018,7 +3596,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "LT3",
@@ -3026,9 +3606,11 @@
      "to": "YIH",
      "tonumid": 380,
      "by": "walk",
-     "duration": 3,
+     "duration": 4,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "LKCNHM",
@@ -3038,7 +3620,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "NUSM",
@@ -3048,7 +3632,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "NUSM",
@@ -3058,7 +3644,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "n"
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "NUSM",
@@ -3068,7 +3656,9 @@
      "by": "walk",
      "duration": 1,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "UCC",
@@ -3078,7 +3668,9 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "n",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    },
    {
      "from": "UCC",
@@ -3088,7 +3680,33 @@
      "by": "walk",
      "duration": 2,
      "sheltered": "y",
-     "accessible": "y"
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
+   },
+   {
+     "from": "LT3",
+     "fromnumid": 903,
+     "to": "E5",
+     "tonumid": 209,
+     "by": "walk",
+     "duration": 3,
+     "sheltered": "y",
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
+   },
+   {
+     "from": "LT4",
+     "fromnumid": 904,
+     "to": "E5",
+     "tonumid": 209,
+     "by": "walk",
+     "duration": 3,
+     "sheltered": "y",
+     "accessible": "n",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
    }
  ]
 }
