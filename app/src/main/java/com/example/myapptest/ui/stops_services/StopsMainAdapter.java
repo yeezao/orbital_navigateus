@@ -2,6 +2,7 @@ package com.example.myapptest.ui.stops_services;
 
 import android.content.Context;
 import android.os.Handler;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -147,11 +148,13 @@ public class StopsMainAdapter extends BaseExpandableListAdapter {
             //for list_item_nus (NUS only)
             if (child.getFirstArrivalLive() != null) {
                 TextView textViewTime1 = convertView.findViewById(R.id.list_child_timing1);
-
+                TextView textViewTime2 = convertView.findViewById(R.id.list_child_timing2);
                 ImageView imageViewLive1Time = convertView.findViewById(R.id.live_timing_imageview);
+                ImageView imageViewLive2Time = convertView.findViewById(R.id.live_timing_imageview_2);
 //            TextView textViewTime1Live = convertView.findViewById(R.id.list_child_timing1_live);
                 if (child.getFirstArrival().charAt(0) == '-') {
                     textViewTime1.setText("No Service");
+                    textViewTime1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
                     textViewTime1.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
                     textViewTime1.setTextColor(ContextCompat.getColor(context, R.color.grey));
                     imageViewLive1Time.setVisibility(ImageView.INVISIBLE);
@@ -180,8 +183,7 @@ public class StopsMainAdapter extends BaseExpandableListAdapter {
                     }
                 }
 
-                TextView textViewTime2 = convertView.findViewById(R.id.list_child_timing2);
-                ImageView imageViewLive2Time = convertView.findViewById(R.id.live_timing_imageview_2);
+
 
 //            TextView textViewTime2Live = convertView.findViewById(R.id.list_child_timing2_live);
                 if (child.getFirstArrival().charAt(0) == '-') {

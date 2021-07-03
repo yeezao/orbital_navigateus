@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/list_child"
-        android:layout_width="135dp"
+        android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="1dp"
@@ -27,8 +27,9 @@
 
     <TextView
         android:id="@+id/list_child_timing1"
-        android:layout_width="100dp"
+        android:layout_width="90dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="1dp"
         android:layout_marginBottom="1dp"
         android:paddingLeft="10dp"
@@ -44,7 +45,7 @@
 
     <TextView
         android:id="@+id/list_child_timing2"
-        android:layout_width="100dp"
+        android:layout_width="90dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:layout_marginTop="1dp"
@@ -81,7 +82,7 @@
         android:layout_width="13dp"
         android:layout_height="13dp"
         android:layout_marginTop="1dp"
-        android:layout_marginEnd="40dp"
+        android:layout_marginEnd="20dp"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="@+id/list_child_timing1"
         app:layout_constraintEnd_toEndOf="@+id/list_child_timing1"
@@ -93,7 +94,7 @@
         android:layout_width="13dp"
         android:layout_height="13dp"
         android:layout_marginTop="1dp"
-        android:layout_marginEnd="40dp"
+        android:layout_marginEnd="20dp"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="@+id/list_child_timing2"
         app:layout_constraintEnd_toEndOf="@+id/list_child_timing2"

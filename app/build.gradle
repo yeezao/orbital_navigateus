@@ -10,8 +10,8 @@ android {
         applicationId "com.example.myapptest"
         minSdkVersion 24
         targetSdkVersion 30
-        versionCode 18
-        versionName "0.4.2"
+        versionCode 23
+        versionName "0.5"
         setProperty("archivesBaseName", "n(avigate)us-$versionName")
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

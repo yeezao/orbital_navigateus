@@ -7,7 +7,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -73,12 +75,17 @@ public class DirectionsResultFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        display.getMetrics(displayMetrics);
+        float dpWidth = displayMetrics.widthPixels;
+
         RecyclerView singleResultRecyclerView = view.findViewById(R.id.singleresultrecyclerView);
         singleResultRecyclerView.setClickable(false);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         singleResultRecyclerView.setLayoutManager(linearLayoutManager);
         SingleRouteListCustomAdapterRecyclerView singleRouteListCustomAdapterRecyclerView =
-                new SingleRouteListCustomAdapterRecyclerView(getActivity(), getContext(), singleNavResult, origin, dest, this.getChildFragmentManager());
+                new SingleRouteListCustomAdapterRecyclerView(getActivity(), getContext(), singleNavResult, origin, dest, this.getChildFragmentManager(), dpWidth);
         singleResultRecyclerView.setAdapter(singleRouteListCustomAdapterRecyclerView);
 
 //        waitingForDirectionsResultProgressBar.setVisibility(View.GONE);

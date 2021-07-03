@@ -5,7 +5,9 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -44,9 +46,13 @@ public class SetArrivalNotificationsDialogFragment extends DialogFragment {
     Integer timeToWatch;
     ArrivalNotificationsDialogListenerForActivity listenerForActivity;
 
+    float dpWidth;
+
     @NotNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+        setRetainInstance(true);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
@@ -75,6 +81,11 @@ public class SetArrivalNotificationsDialogFragment extends DialogFragment {
 
             }
         });
+
+        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        display.getMetrics(displayMetrics);
+        dpWidth = displayMetrics.widthPixels;
 
         View containerForSettings = view.findViewById(R.id.containerForChipGroup);
         View containerForFavourites = view.findViewById(R.id.containerForFavouritesChipGroup);
@@ -163,6 +174,8 @@ public class SetArrivalNotificationsDialogFragment extends DialogFragment {
                 if (isChecked) {
                     singleStopArrivalNotifications.setFavourite(true);
                     containerForFavourites.setVisibility(View.VISIBLE);
+                    if (dpWidth > 700) {
+                    }
                 } else {
                     singleStopArrivalNotifications.setFavourite(false);
                     containerForFavourites.setVisibility(View.GONE);
