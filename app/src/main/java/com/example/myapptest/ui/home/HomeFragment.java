@@ -1,52 +1,83 @@
 package com.example.myapptest.ui.home;
 
-import android.app.ActionBar;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Half;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ExpandableListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.ProcessLifecycleOwner;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.myapptest.MainActivity;
 import com.example.myapptest.R;
-import com.google.android.material.appbar.AppBarLayout;
+import com.example.myapptest.data.LocationServices;
+import com.example.myapptest.data.busstopinformation.ArrivalNotifications;
+import com.example.myapptest.data.busstopinformation.NextbusAPIs;
+import com.example.myapptest.data.busstopinformation.ServiceInStopDetails;
+import com.example.myapptest.data.busstopinformation.StopList;
+import com.example.myapptest.favourites.FavouriteStop;
+import com.example.myapptest.ui.stops_services.SetArrivalNotificationsDialogFragment;
+import com.example.myapptest.ui.stops_services.StopsMainAdapter;
+import com.example.myapptest.ui.stops_services.StopsServicesFragment;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements LocationServices.LocationFound {
 
-    public HomeFragment() {
-        setRetainInstance(true);
-    }
+    public HomeFragment() {}
 
-//    private HomeViewModel homeViewModel;
-//    private FragmentHomeBinding binding;
+    ExpandableListView expandableListView;
+    List<StopList> listGroup;
+    HashMap<StopList, List<ServiceInStopDetails>> listItem;
+    StopsMainAdapter adapter;
+
+    List<StopList> listOfAllStopsToDisplayInFavourites;
+
+    ProgressBar homeFavouritesProgressBar;
+    TextView textViewUpdating;
+
+    boolean isFirstRun = true;
+
+    LocationServices locationServices = new LocationServices();
+
+    View rootView;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        rootView = inflater.inflate(R.layout.fragment_home, container, false);
         setHasOptionsMenu(true);
 
-        return view;
+        expandableListView = (ExpandableListView) rootView.findViewById(R.id.expandable_listview_home);
+        listGroup = new ArrayList<>();
+        listItem = new HashMap<>();
+        adapter = new StopsMainAdapter(getContext(), listGroup, listItem);
+        expandableListView.setAdapter(adapter);
+
+        homeFavouritesProgressBar = rootView.findViewById(R.id.progressBarHomeELV);
+        textViewUpdating = rootView.findViewById(R.id.textViewUpdating);
+
+        return rootView;
 
     }
 
@@ -58,6 +89,7 @@ public class HomeFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.home_toolbar_menu, menu);
     }
+
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -72,7 +104,305 @@ public class HomeFragment extends Fragment {
             }
         });
 
-//        getStringOfGroupStops(view);
+        setExpandableListView();
 
     }
+
+    private void setExpandableListView() {
+
+        List<FavouriteStop> listOfFavouriteStops = MainActivity.favouriteDatabase.favouriteStopCRUD().getFavoriteData();
+        if (listOfFavouriteStops.size() == 0) {
+            homeFavouritesProgressBar.setVisibility(View.INVISIBLE);
+        }
+        listOfAllStopsToDisplayInFavourites = new ArrayList<>();
+        for (int i = 0; i < listOfFavouriteStops.size(); i++) {
+            FavouriteStop currentFavStop = listOfFavouriteStops.get(i);
+            StopList newStopList = new StopList();
+            newStopList.setStopName(currentFavStop.getStopName());
+            newStopList.setStopId(currentFavStop.getStopId());
+            newStopList.setStopLatitude(currentFavStop.getLatitude());
+            newStopList.setStopLongitude(currentFavStop.getLongitude());
+            newStopList.setListOfServicesFavourited(FavouriteStop.fromString(listOfFavouriteStops.get(i).getServicesFavourited()));
+            listOfAllStopsToDisplayInFavourites.add(newStopList);
+        }
+        initListData(listOfAllStopsToDisplayInFavourites);
+//        NextbusAPIs.callStopsList(getActivity(), getContext(), new NextbusAPIs.VolleyCallBackAllStops() {
+//            @Override
+//            public void onSuccessAllStops(List<StopList> listOfAllStops) {
+//                for (int i = 0; i < listOfFavouriteStops.size(); i++) {
+//                    for (int j = 0; j < listOfAllStops.size(); j++) {
+//                        if (listOfFavouriteStops.get(i).getStopId().equals(listOfAllStops.get(j).getStopId())) {
+//                            StopList newStopList = listOfAllStops.get(j);
+//                            newStopList.setListOfServicesFavourited(FavouriteStop.fromString(listOfFavouriteStops.get(i).getServicesFavourited()));
+//                            listOfAllStopsToDisplayInFavourites.add(newStopList);
+//                        }
+//                    }
+//                }
+//                initListData(listOfAllStopsToDisplayInFavourites);
+////                locationServices.checkLocationPermission(getActivity(), getContext(), HomeFragment.this);
+//            }
+//        });
+
+    }
+
+    final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+    boolean isLocationPermissionGranted = false;
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    isLocationPermissionGranted = true;
+                } else {
+                    isLocationPermissionGranted = false;
+                }
+                locationServices.getUserLocationAndStopList();
+                return;
+            }
+        }
+    }
+
+    @Override
+    public void onLocationSecured(Location userLocation) {
+        initListData(listOfAllStopsToDisplayInFavourites);
+    }
+
+    Handler timeRefreshHandler = new Handler(Looper.getMainLooper());
+
+    private void initListData(List<StopList> listOfAllStops) {
+//        //TODO: sort list of stops by distance
+//        boolean didOrderChange = false;
+//        Log.e("userLocation in initListData is: ", "" + userLocation);
+//        if (userLocation != null && (userLocation.getLatitude() != 0 && userLocation.getLongitude() != 0) && isLocationPermissionGranted) {
+//            for (int i = 0; i < listOfAllStops.size(); i++) {
+//                Location stopLocation = new Location("");
+//                stopLocation.setLongitude(listOfAllStops.get(i).getStopLongitude());
+//                stopLocation.setLatitude(listOfAllStops.get(i).getStopLatitude());
+//                float distanceToUser = userLocation.distanceTo(stopLocation);
+//                listOfAllStops.get(i).setDistanceFromUser(distanceToUser);
+//            }
+//            for (int i = 0; i < listOfAllStops.size(); i++) {
+//                int nearestToUserIndex = i;
+//                for (int j = i + 1; j < listOfAllStops.size(); j++) {
+//                    if (listOfAllStops.get(j).getDistanceFromUser() < listOfAllStops.get(nearestToUserIndex).getDistanceFromUser()) {
+//                        nearestToUserIndex = j;
+//                    }
+//                }
+//                if (nearestToUserIndex != i) {
+//                    didOrderChange = true;
+//                    Collections.swap(listOfAllStops, i, nearestToUserIndex);
+//                }
+//            }
+//            if (didOrderChange) {
+//                for (int i = 0; i < listOfAllStops.size(); i++) {
+//                    expandableListView.collapseGroup(i);
+//                }
+//            }
+//        }
+        listGroup.clear();
+        for (int i = 0; i < listOfAllStops.size(); i++) {
+//            Log.e("stop caption:", captions.get(i));
+//            Log.e("i is: ", "" + i);
+            StopList stopList = new StopList();
+            listGroup.add(listOfAllStops.get(i));
+        }
+        adapter.notifyDataSetChanged();
+        expandableListView.setVisibility(View.VISIBLE);
+        homeFavouritesProgressBar.setVisibility(View.INVISIBLE);
+        expandableListViewListeners();
+
+        if (!isFirstRun) {
+            adapter.notifyDataSetChanged();
+            refreshTimings(true, rootView);
+        } else if (ProcessLifecycleOwner.get().getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
+            isFirstRun = false;
+            timeRefreshHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    refreshTimings(false, rootView);
+                    timeRefreshHandler.postDelayed(this, 15000);
+                }
+            }, 15000);
+        }
+
+    }
+
+    private void refreshTimings(boolean isOnClick, @NotNull View view) {
+        boolean anyExpanded = false;
+        textViewUpdating.setVisibility(View.VISIBLE);
+        homeFavouritesProgressBar.setVisibility(View.VISIBLE);
+
+        final int[] numberOfGroupsExpanded = {0};
+        for (int i = 0; i < listOfAllStopsToDisplayInFavourites.size(); i++) {
+            if (expandableListView.isGroupExpanded(i)) {
+                numberOfGroupsExpanded[0]++;
+            }
+        }
+        if (numberOfGroupsExpanded[0] == 0) {
+            textViewUpdating.setVisibility(View.INVISIBLE);
+            homeFavouritesProgressBar.setVisibility(View.INVISIBLE);
+        }
+        for (int i = 0; numberOfGroupsExpanded[0] > 0 && i < listOfAllStopsToDisplayInFavourites.size(); i++) {
+            if (expandableListView.isGroupExpanded(i)) {
+                anyExpanded = true;
+                int finalI = i;
+                NextbusAPIs.callSingleStopInfo(getActivity(), getContext(), listOfAllStopsToDisplayInFavourites.get(i).getStopId()
+                        , i, true, new NextbusAPIs.VolleyCallBackSingleStop() {
+                    @Override
+                    public void onSuccessSingleStop(List<ServiceInStopDetails> servicesAllInfoAtStop) {
+                        List<ServiceInStopDetails> listOfServicesToAdd = new ArrayList<>();
+                        for (int j = 0; j < listOfAllStopsToDisplayInFavourites.get(finalI).getListOfServicesFavourited().size(); j++) {
+                            for (int k = 0; k < servicesAllInfoAtStop.size(); k++) {
+                                if (listOfAllStopsToDisplayInFavourites.get(finalI).getListOfServicesFavourited()
+                                        .get(j).equals(servicesAllInfoAtStop.get(k).getServiceNum())) {
+                                    listOfServicesToAdd.add(servicesAllInfoAtStop.get(k));
+                                }
+                            }
+                        }
+                        listItem.remove(listGroup.get(finalI));
+                        listItem.put(listGroup.get(finalI), listOfServicesToAdd);
+                        adapter.notifyDataSetChanged();
+                        numberOfGroupsExpanded[0]--;
+                        if (numberOfGroupsExpanded[0] == 0) {
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    homeFavouritesProgressBar.setVisibility(View.INVISIBLE);
+                                    textViewUpdating.setVisibility(View.INVISIBLE);
+                                }
+                            }, 1500);
+                        }
+                    }
+                });
+            }
+        }
+    }
+
+    List<ArrivalNotifications> arrivalNotificationsArray = new ArrayList<>();
+    ArrivalNotifications singleStopArrivalNotification;
+
+    private void expandableListViewListeners() {
+        expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                if (expandableListView.isGroupExpanded(groupPosition)) {
+                    expandableListView.collapseGroup(groupPosition);
+                } else {
+                    homeFavouritesProgressBar.setVisibility(View.VISIBLE);
+                    NextbusAPIs.callSingleStopInfo(getActivity(), getContext(), listOfAllStopsToDisplayInFavourites.get(groupPosition).getStopId(),
+                            groupPosition, true, new NextbusAPIs.VolleyCallBackSingleStop() {
+                        @Override
+                        public void onSuccessSingleStop(List<ServiceInStopDetails> servicesAllInfoAtStop) {
+                            List<ServiceInStopDetails> listOfServicesToAdd = new ArrayList<>();
+                            for (int j = 0; j < listOfAllStopsToDisplayInFavourites.get(groupPosition).getListOfServicesFavourited().size(); j++) {
+                                for (int i = 0; i < servicesAllInfoAtStop.size(); i++) {
+                                    if (listOfAllStopsToDisplayInFavourites.get(groupPosition).getListOfServicesFavourited()
+                                            .get(j).equals(servicesAllInfoAtStop.get(i).getServiceNum())) {
+                                        listOfServicesToAdd.add(servicesAllInfoAtStop.get(i));
+                                    }
+                                }
+                            }
+                            listItem.remove(listGroup.get(groupPosition));
+                            listItem.put(listGroup.get(groupPosition), listOfServicesToAdd);
+                            adapter.notifyDataSetChanged();
+                            Handler handler = new Handler();
+                            expandableListView.expandGroup(groupPosition, true);
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    homeFavouritesProgressBar.setVisibility(View.INVISIBLE);
+                                }
+                            }, 600);
+                        }
+                    });
+                }
+                return true;
+            }
+        });
+
+        expandableListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                homeFavouritesProgressBar.setVisibility(View.VISIBLE);
+                int groupPosition = ExpandableListView.getPackedPositionGroup(id);
+                if (ExpandableListView.getPackedPositionType(id) == ExpandableListView.PACKED_POSITION_TYPE_GROUP) {
+                    SetArrivalNotificationsDialogFragment dialogFragment;
+                    boolean isStopBeingWatched = false;
+                    arrivalNotificationsArray = ((MainActivity) getActivity()).getArrivalNotificationsArray();
+                    for (int i = 0; arrivalNotificationsArray != null && i < arrivalNotificationsArray.size(); i++) {
+                        if (arrivalNotificationsArray.get(i).getStopId().equals(listOfAllStopsToDisplayInFavourites.get(groupPosition).getStopId())
+                                && arrivalNotificationsArray.get(i).isWatchingForArrival()) {
+                            Log.e("entered", "yes i  entered");
+                            isStopBeingWatched = true;
+                            singleStopArrivalNotification = new ArrivalNotifications();
+                            singleStopArrivalNotification.setStopId(arrivalNotificationsArray.get(i).getStopId());
+                            singleStopArrivalNotification.setStopName(arrivalNotificationsArray.get(i).getStopName());
+                            singleStopArrivalNotification.setLatitude(arrivalNotificationsArray.get(i).getLatitude());
+                            singleStopArrivalNotification.setLongitude(arrivalNotificationsArray.get(i).getLongitude());
+                            singleStopArrivalNotification.setWatchingForArrival(true);
+                            singleStopArrivalNotification.setServicesBeingWatched(arrivalNotificationsArray.get(i).getServicesBeingWatched());
+                            singleStopArrivalNotification = updateFavouritesInfo(singleStopArrivalNotification);
+                            dialogFragment = SetArrivalNotificationsDialogFragment.newInstance(singleStopArrivalNotification);
+//                            dialogFragment.setArrivalNotificationsDialogListener(StopsServicesFragment.this);
+                            dialogFragment.show(getChildFragmentManager(), SetArrivalNotificationsDialogFragment.TAG);
+                            homeFavouritesProgressBar.setVisibility(View.INVISIBLE);
+                            break;
+                        }
+                    }
+                    if (!isStopBeingWatched) {
+                        singleStopArrivalNotification = new ArrivalNotifications();
+                        singleStopArrivalNotification.setStopId(listOfAllStopsToDisplayInFavourites.get(groupPosition).getStopId());
+                        singleStopArrivalNotification.setStopName(listOfAllStopsToDisplayInFavourites.get(groupPosition).getStopName());
+                        singleStopArrivalNotification.setLatitude(listOfAllStopsToDisplayInFavourites.get(groupPosition).getStopLatitude());
+                        singleStopArrivalNotification.setLongitude(listOfAllStopsToDisplayInFavourites.get(groupPosition).getStopLongitude());
+                        singleStopArrivalNotification.setWatchingForArrival(false);
+                        singleStopArrivalNotification = updateFavouritesInfo(singleStopArrivalNotification);
+                        NextbusAPIs.callSingleStopInfo(getActivity(), getContext(), listOfAllStopsToDisplayInFavourites.get(groupPosition).getStopId(),
+                                groupPosition, true, new NextbusAPIs.VolleyCallBackSingleStop() {
+                            @Override
+                            public void onSuccessSingleStop(List<ServiceInStopDetails> servicesAllInfoAtStop) {
+                                singleStopArrivalNotification.setServicesAtStop(servicesAllInfoAtStop);
+                                SetArrivalNotificationsDialogFragment dialogFragment = SetArrivalNotificationsDialogFragment.newInstance(singleStopArrivalNotification);
+//                                    dialogFragment.setArrivalNotificationsDialogListener(StopsServicesFragment.this);
+//                                    dialogFragment.setTargetFragment(StopsServicesFragment.this, 0);
+                                dialogFragment.show(getChildFragmentManager(), SetArrivalNotificationsDialogFragment.TAG);
+                                Handler handler = new Handler();
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        homeFavouritesProgressBar.setVisibility(View.INVISIBLE);
+                                    }
+                                }, 600);
+                            }
+                        });
+
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
+    private ArrivalNotifications updateFavouritesInfo(ArrivalNotifications singleStopArrivalNotification) {
+
+        if (MainActivity.favouriteDatabase.favouriteStopCRUD().isFavorite(singleStopArrivalNotification.getStopId()) == 1) {
+            singleStopArrivalNotification.setFavourite(true);
+            FavouriteStop favouriteStop = MainActivity.favouriteDatabase.favouriteStopCRUD().getFavoriteDataSingle(singleStopArrivalNotification.getStopId());
+            singleStopArrivalNotification.setServicesFavourited(FavouriteStop.fromString(favouriteStop.getServicesFavourited()));
+        }
+        return singleStopArrivalNotification;
+    }
+
+
+
+
+
 }

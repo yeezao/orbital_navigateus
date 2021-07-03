@@ -1,5 +1,6 @@
 package com.example.myapptest;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -20,11 +21,14 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.myapptest.data.busstopinformation.ArrivalNotifications;
+import com.example.myapptest.data.busstopinformation.NextbusAPIs;
 import com.example.myapptest.data.busstopinformation.ServiceInStopDetails;
 import com.example.myapptest.data.busstopinformation.StopList;
 import com.example.myapptest.data.naviagationdata.NavigationResults;
 import com.example.myapptest.data.naviagationdata.NavigationSearchInfo;
 import com.example.myapptest.databinding.ActivityMainBinding;
+import com.example.myapptest.favourites.FavouriteDatabase;
+import com.example.myapptest.favourites.FavouriteStop;
 import com.example.myapptest.ui.directions.DirectionsFragment;
 import com.example.myapptest.ui.home.HomeFragment;
 import com.example.myapptest.ui.stops_services.SetArrivalNotificationsDialogFragment;
@@ -40,7 +44,9 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.room.Room;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.jayway.jsonpath.JsonPath;
 
 import java.util.ArrayList;
@@ -57,7 +63,11 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
     Fragment active;
     BottomNavigationView navView;
 
+    Activity mainActivity;
+
     NavController navController;
+
+    public static FavouriteDatabase favouriteDatabase;
 
     //    private final StopsServicesMasterFragment stopsServicesMasterFragment = new StopsServicesMasterFragment();
 //    private final DirectionsFragment directionsFragment = new DirectionsFragment();
@@ -68,6 +78,8 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
 
         super.onCreate(savedInstanceState);
 
+        mainActivity = this;
+
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -76,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
         createNotificationChannel();
 
         getStringOfGroupStops();
+        BeginMonitoring();
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -87,14 +100,62 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
-        //TODO: need to remove all FragmentTransaction code
-//        fm.beginTransaction().add(R.id.nav_host_fragment_activity_main, directionsFragment, "3").hide(directionsFragment).commit();
-//        fm.beginTransaction().add(R.id.nav_host_fragment_activity_main, stopsServicesMasterFragment, "2").hide(stopsServicesMasterFragment).commit();
-//        fm.beginTransaction().add(R.id.nav_host_fragment_activity_main, homeFragment, "1").commit();
+        favouriteDatabase = Room.databaseBuilder(getApplicationContext(), FavouriteDatabase.class, "myfavdb").allowMainThreadQueries().build();
+
         active = homeFragment;
 
         navView.setOnNavigationItemReselectedListener(mOnNavigationItemReselectedListener);
-//        navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        List<FavouriteStop> listOfFavouriteStops = MainActivity.favouriteDatabase.favouriteStopCRUD().getFavoriteData();
+        if (listOfFavouriteStops.size() > 0) {
+            NextbusAPIs.callStopsList(this, this.getApplicationContext(), new NextbusAPIs.VolleyCallBackAllStops() {
+                @Override
+                public void onSuccessAllStops(List<StopList> listOfAllStops) {
+                    for (int i = 0; i < listOfFavouriteStops.size(); i++) {
+                        for (int j = 0; j < listOfAllStops.size(); j++) {
+                            if (listOfFavouriteStops.get(i).getStopId().equals(listOfAllStops.get(j).getStopId())) {
+                                StopList currentStop = listOfAllStops.get(j);
+                                FavouriteStop favouriteStop = new FavouriteStop();
+                                favouriteStop.setStopName(currentStop.getStopName());
+                                favouriteStop.setStopId(currentStop.getStopId());
+                                favouriteStop.setLatitude(currentStop.getStopLatitude());
+                                favouriteStop.setLongitude(currentStop.getStopLongitude());
+                                int finalI = i;
+                                NextbusAPIs.callSingleStopInfo(mainActivity, getApplicationContext(), currentStop.getStopId(),
+                                        0, true, new NextbusAPIs.VolleyCallBackSingleStop() {
+                                    @Override
+                                    public void onSuccessSingleStop(List<ServiceInStopDetails> servicesAllInfoAtStop) {
+                                        boolean areAnyServicesNotPresent = false;
+                                        for (int k = 0; k < FavouriteStop.fromString(listOfFavouriteStops.get(finalI).getServicesFavourited()).size(); k++) {
+                                            for (int m = 0; m < servicesAllInfoAtStop.size(); m++) {
+                                                if (servicesAllInfoAtStop.get(m).getServiceNum()
+                                                        .contains(FavouriteStop.fromString(listOfFavouriteStops.get(finalI).getServicesFavourited()).get(k))) {
+                                                    break;
+                                                }
+                                                if (m == servicesAllInfoAtStop.size() - 1) {
+                                                    areAnyServicesNotPresent = true;
+                                                }
+                                            }
+                                        }
+                                        if (areAnyServicesNotPresent) {
+                                            List<String> servicesNums = new ArrayList<>();
+                                            for (int k = 0; k < servicesAllInfoAtStop.size(); k++) {
+                                                servicesNums.add(servicesAllInfoAtStop.get(k).getServiceNum());
+                                            }
+                                            favouriteStop.setServicesFavourited(FavouriteStop.fromArrayList(servicesNums));
+                                        } else {
+                                            favouriteStop.setServicesFavourited(listOfFavouriteStops.get(finalI).getServicesFavourited());
+                                        }
+                                        MainActivity.favouriteDatabase.favouriteStopCRUD().updateData(favouriteStop);
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }
+            });
+
+        }
 
     }
 
@@ -322,6 +383,32 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
         boolean stopRepeated = false;
         boolean startNewMonitoring = false;
 
+        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
+                "You'll see your changes to Favourites the next time you return to the Homepage.",
+                Snackbar.LENGTH_LONG);
+        snackbar.setAnchorView(R.id.nav_view);
+        snackbar.show();
+
+        //for favourite adding
+        if (singleStopArrivalNotifications.isFavourite()) {
+            FavouriteStop favouriteStop = new FavouriteStop();
+            favouriteStop.setStopId(singleStopArrivalNotifications.getStopId());
+            favouriteStop.setStopName(singleStopArrivalNotifications.getStopName());
+            favouriteStop.setServicesFavourited(FavouriteStop.fromArrayList(singleStopArrivalNotifications.getServicesFavourited()));
+            favouriteStop.setLatitude(singleStopArrivalNotifications.getLatitude());
+            favouriteStop.setLongitude(singleStopArrivalNotifications.getLongitude());
+            if (favouriteDatabase.favouriteStopCRUD().isFavorite(favouriteStop.getStopId()) == 1) {
+                favouriteDatabase.favouriteStopCRUD().updateData(favouriteStop);
+            } else {
+                favouriteDatabase.favouriteStopCRUD().addData(favouriteStop);
+            }
+        } else {
+            FavouriteStop favouriteStop = new FavouriteStop();
+            favouriteStop.setStopId(singleStopArrivalNotifications.getStopId());
+            favouriteDatabase.favouriteStopCRUD().delete(favouriteStop);
+        }
+
+        //for arrival monitoring checks
         List<ServiceInStopDetails> forBoolListCheck = singleStopArrivalNotifications.getServicesAtStop();
         List<Boolean> boolList = new ArrayList<>();
         int i = 0;
@@ -361,7 +448,6 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
                 break;
             }
         }
-        BeginMonitoring();
         if (!stopRepeated && singleStopArrivalNotifications.isWatchingForArrival() && singleStopArrivalNotifications.getServicesBeingWatched().size() > 0) {
             arrivalNotificationsArray.add(singleStopArrivalNotifications);
             startNewMonitoring = true;

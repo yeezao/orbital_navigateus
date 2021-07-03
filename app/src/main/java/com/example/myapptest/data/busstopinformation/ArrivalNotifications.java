@@ -19,6 +19,8 @@ public class ArrivalNotifications {
     private List<ServiceInStopDetails> servicesAtStop;
     private int timeToWatch;
     private List<Boolean> beginWatching;
+    private double latitude;
+    private double longitude;
 
     public String getStopName() {
         return stopName;
@@ -50,6 +52,10 @@ public class ArrivalNotifications {
 
     public void setServicesFavourited(List<String> servicesFavourited) {
         this.servicesFavourited = servicesFavourited;
+    }
+
+    public void addServicesFavourited(String serviceFavourited) {
+        this.servicesFavourited.add(serviceFavourited);
     }
 
     public boolean isWatchingForArrival() {
@@ -91,6 +97,22 @@ public class ArrivalNotifications {
 
     public void setBeginWatching(List<Boolean> beginWatching) {
         this.beginWatching = beginWatching;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
 

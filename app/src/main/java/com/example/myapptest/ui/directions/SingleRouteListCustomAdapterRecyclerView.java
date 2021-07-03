@@ -131,8 +131,15 @@ public class SingleRouteListCustomAdapterRecyclerView extends RecyclerView.Adapt
                 stringBuilder.append("Take service ");
                 for (int i = 0; i < currentSegment.getViableBuses2().size(); i++) {
                     stringBuilder.append(currentSegment.getViableBuses2().get(i));
+                    if (currentSegment.getViableBuses2().get(i).contains("D1") && currentSegment.getNodeSequence().get(0).getId().equals("COM2")) {
+                        if (currentSegment.getNodeSequence().get(1).getId().equals("LT13-OPP")) {
+                            stringBuilder.append(" (to UTown)");
+                        } else if (currentSegment.getNodeSequence().get(1).getId().equals("BIZ2")) {
+                            stringBuilder.append(" (to BIZ2)");
+                        }
+                    }
                     if (i < currentSegment.getViableBuses2().size() - 1) {
-                        stringBuilder.append("/");
+                        stringBuilder.append(" / ");
                     }
                 }
                 holder.bottomText.setText(stringBuilder.toString());
@@ -196,8 +203,15 @@ public class SingleRouteListCustomAdapterRecyclerView extends RecyclerView.Adapt
                 stringBuilder.append("Take service ");
                 for (int i = 0; i < currentSegment.getViableBuses1().size(); i++) {
                     stringBuilder.append(currentSegment.getViableBuses1().get(i));
+                    if (currentSegment.getViableBuses1().get(i).contains("D1") && currentSegment.getNodeSequence().get(0).getId().equals("COM2")) {
+                        if (currentSegment.getNodeSequence().get(1).getId().equals("LT13-OPP")) {
+                            stringBuilder.append(" (to UTown)");
+                        } else if (currentSegment.getNodeSequence().get(1).getId().equals("BIZ2")) {
+                            stringBuilder.append(" (to BIZ2)");
+                        }
+                    }
                     if (i < currentSegment.getViableBuses1().size() - 1) {
-                        stringBuilder.append("/");
+                        stringBuilder.append(" / ");
                     }
                 }
                 holder.bottomText.setText(stringBuilder.toString());

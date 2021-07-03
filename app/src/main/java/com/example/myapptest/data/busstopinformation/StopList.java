@@ -1,5 +1,7 @@
 package com.example.myapptest.data.busstopinformation;
 
+import java.util.List;
+
 public class StopList {
 
     private String stopName;
@@ -11,6 +13,7 @@ public class StopList {
     private String stopLinkage;
     private Float distanceFromUser;
     private int stopNumId;
+    private List<String> listOfServicesFavourited;
 
     public StopList() {
     }
@@ -85,6 +88,14 @@ public class StopList {
 
     public void setStopNumId(int stopNumId) {
         this.stopNumId = stopNumId;
+    }
+
+    public List<String> getListOfServicesFavourited() {
+        return listOfServicesFavourited;
+    }
+
+    public void setListOfServicesFavourited(List<String> listOfServicesFavourited) {
+        this.listOfServicesFavourited = listOfServicesFavourited;
     }
 
 

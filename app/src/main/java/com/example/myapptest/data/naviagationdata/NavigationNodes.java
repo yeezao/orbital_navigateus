@@ -14,7 +14,6 @@ public class NavigationNodes {
     private NavigationNodes prevNode;
     private int weightTillNow = 999;
     private List<NavigationEdges> navEdgesFromThisNode;
-    private Float distanceFromSource;
     private NavigationEdges edgeSelected;
 
     public String getName() {
@@ -95,14 +94,6 @@ public class NavigationNodes {
 
     public void setNavEdgesFromThisNode(List<NavigationEdges> navEdgesFromThisNode) {
         this.navEdgesFromThisNode = navEdgesFromThisNode;
-    }
-
-    public Float getDistanceFromSource() {
-        return distanceFromSource;
-    }
-
-    public void setDistanceFromSource(Float distanceFromSource) {
-        this.distanceFromSource = distanceFromSource;
     }
 
     public NavigationEdges getEdgeSelected() {

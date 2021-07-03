@@ -11,6 +11,7 @@ public class NavigationResults implements Parcelable {
     private int totalTimeTaken = 0;
     private List<NavigationPartialResults> resultsConcatenated;
     private boolean showResult = true;
+    private int displayTotalTimeTaken = 0;
 
     protected NavigationResults(Parcel in) {
         totalTimeTaken = in.readInt();
@@ -66,6 +67,14 @@ public class NavigationResults implements Parcelable {
 
     public void setFirstRunResult(NavigationPartialResults firstRunResult) {
         this.firstRunResult = firstRunResult;
+    }
+
+    public int getDisplayTotalTimeTaken() {
+        return displayTotalTimeTaken;
+    }
+
+    public void setDisplayTotalTimeTaken(int displayTotalTimeTaken) {
+        this.displayTotalTimeTaken = displayTotalTimeTaken;
     }
 
 

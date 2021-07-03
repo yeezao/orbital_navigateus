@@ -180,19 +180,19 @@ public class SingleRouteSelectedBusWaitingTimeDialogFragment extends DialogFragm
         if (temp.getServiceNum().contains("D1")) {
             if (temp.getServiceNum().contains("UTown")) {
                 instanceOfStopArrivalInfo.setService("D1");
-                instanceOfStopArrivalInfo.setServiceDesc("UTown");
+                instanceOfStopArrivalInfo.setServiceDesc("to UTown");
             } else if (temp.getServiceNum().contains("BIZ")) {
                 instanceOfStopArrivalInfo.setService("D1");
-                instanceOfStopArrivalInfo.setServiceDesc("BIZ2");
+                instanceOfStopArrivalInfo.setServiceDesc("to BIZ2");
             } else {
                 instanceOfStopArrivalInfo.setService(temp.getServiceNum());
 //                instanceOfStopArrivalInfo.setServiceDesc(currentSegment.getNodeSequence().get(currentSegment.getNodeSequence().size() - 1).getAltname());
-                instanceOfStopArrivalInfo.setServiceDesc("");
+                instanceOfStopArrivalInfo.setServiceDesc("to " + currentSegment.getNodeSequence().get(currentSegment.getNodeSequence().size() - 1).getAltname());
             }
         } else {
             instanceOfStopArrivalInfo.setService(temp.getServiceNum());
 //                instanceOfStopArrivalInfo.setServiceDesc(currentSegment.getNodeSequence().get(currentSegment.getNodeSequence().size() - 1).getAltname());
-            instanceOfStopArrivalInfo.setServiceDesc("");
+            instanceOfStopArrivalInfo.setServiceDesc("to " + currentSegment.getNodeSequence().get(currentSegment.getNodeSequence().size() - 1).getAltname());
         }
         instanceOfStopArrivalInfo.setArrivalTime(arrivalTime);
         instanceOfStopArrivalInfo.setLive(isLive);

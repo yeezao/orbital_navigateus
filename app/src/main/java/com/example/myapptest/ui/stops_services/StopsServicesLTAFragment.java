@@ -19,11 +19,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.myapptest.R;
 import com.example.myapptest.data.busstopinformation.ServiceInStopDetails;
-import com.example.myapptest.data.busstopinformation.StopDetails;
 import com.example.myapptest.data.busstopinformation.StopList;
 import com.jayway.jsonpath.JsonPath;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -58,9 +56,6 @@ public class StopsServicesLTAFragment extends Fragment {
 
 
     }
-
-    List<StopDetails> listStopsInstance = null;
-
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

@@ -136,7 +136,13 @@ public class StopsMainAdapter extends BaseExpandableListAdapter {
             }
 
             TextView textViewService = convertView.findViewById(R.id.list_child);
-            textViewService.setText(child.getServiceNum());
+            if (child.getServiceNum().contains("BIZ")) {
+                textViewService.setText("D1 (BIZ2)");
+            } else if (child.getServiceNum().contains("own")) {
+                textViewService.setText("D1 (Utown)");
+            } else {
+                textViewService.setText(child.getServiceNum());
+            }
 
             //for list_item_nus (NUS only)
             if (child.getFirstArrivalLive() != null) {

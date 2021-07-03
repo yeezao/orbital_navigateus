@@ -1,6 +1,7 @@
 package com.example.myapptest.ui.directions;
 
 import android.content.Context;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,13 +50,16 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
     NavController navController;
     float dpWidth;
 
-    public CustomAdapterRecyclerView(Context context, List<NavigationResults> resultsList, String origin, String dest, NavController navController, float dpWidth) {
+    boolean afterSearch;
+
+    public CustomAdapterRecyclerView(Context context, List<NavigationResults> resultsList, String origin, String dest, NavController navController, float dpWidth, boolean afterSearch) {
         this.context = context;
         this.resultsList = resultsList;
         this.origin = origin;
         this.dest = dest;
         this.navController = navController;
         this.dpWidth = dpWidth;
+        this.afterSearch = afterSearch;
         Log.e("dpwidth is", dpWidth + "");
 //        navResultTest = resultsList.get(0);
 //        navTestResultSegment = navResultTest.getResultsConcatenated();
@@ -84,6 +88,8 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
 //        holder.recyclerviewItemHolder.setVisibility(View.GONE);
 
         boolean onlyWalk = true;
+
+        setVia(holder, navTestResultSegment);
 
         for (int i = 0; i < navTestResultSegment.size(); i++) {
             if (navTestResultSegment.get(i) != null) {
@@ -193,9 +199,12 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
                                             .append(currentSegment.getNodesTraversed().get(0).getAltname())
                                             .append(" in ").append(arrivaltime).append(" min");
                                 }
-                                newTotalTime = navResultTest.getTotalTimeTaken() - timeTillNow + arrivaltime;
-                                navResultTest.setTotalTimeTaken(newTotalTime);
+                                if (afterSearch) {
+                                    newTotalTime = navResultTest.getTotalTimeTaken() - timeTillNow + arrivaltime;
+                                    navResultTest.setDisplayTotalTimeTaken(newTotalTime);
+                                } else {
 
+                                }
                             }
                             String stringToSet = anotherStringBuilder.toString();
                             Handler handler = new Handler();
@@ -325,7 +334,7 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
                                 int newTotalTime = 0;
                                 if (arrivaltime < 9999) {
                                     newTotalTime = navResultTest.getTotalTimeTaken() - timeTillNow + arrivaltime;
-                                    navResultTest.setTotalTimeTaken(newTotalTime);
+                                    navResultTest.setDisplayTotalTimeTaken(newTotalTime);
                                 }
                                 String stringToSet = anotherStringBuilder.toString();
                                 int finalNewTotalTime = newTotalTime;
@@ -365,9 +374,6 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
             }
         }
 
-//        holder.stop.setText(busStop.get(position));
-//        holder.route.setText(routeId.get(position));
-//        holder.code.setText(busStopCode.get(position));
         // implement setOnClickListener event on item view.
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -392,10 +398,46 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
 //                activity.getSupportFragmentManager().beginTransaction()
 //                        .replace(R.id.fragmentViewDirections, directionsResultFragment).addToBackStack(null).commit();
 
-//                Toast.makeText(context, busStop.get(position), Toast.LENGTH_SHORT).show();
             }
         });
 
+    }
+
+    private void setVia(MyViewHolder holder, List<NavigationPartialResults> navTestResultSegment) {
+        if (navTestResultSegment.size() > 2) {
+            holder.navR_via.setVisibility(View.VISIBLE);
+            StringBuilder stringBuilder = new StringBuilder();
+            if (navTestResultSegment.size() > 3 && navTestResultSegment.get(1).getNodeSequence().size() > 0 && navTestResultSegment.get(3).getNodeSequence().size() > 0) {
+                stringBuilder.append("via ")
+                        .append(navTestResultSegment.get(1).getNodeSequence().get(navTestResultSegment.get(1).getNodeSequence().size() - 1).getAltname())
+                        .append(", ")
+                        .append(navTestResultSegment.get(3).getNodeSequence().get(0).getAltname());
+            } else if (navTestResultSegment.size() >= 3 && navTestResultSegment.get(2).getNodeSequence().size() > 0 && navTestResultSegment.get(0).getNodeSequence().size() > 0) {
+                stringBuilder.append("via ")
+                        .append(navTestResultSegment.get(0).getNodeSequence().get(navTestResultSegment.get(0).getNodeSequence().size() - 1).getAltname())
+                        .append(", ")
+                        .append(navTestResultSegment.get(2).getNodeSequence().get(0).getAltname());
+            } else if (navTestResultSegment.size() > 3 && navTestResultSegment.get(2).getNodeSequence().size() > 0 && navTestResultSegment.get(1).getNodeSequence().size() > 0) {
+                stringBuilder.append("via ")
+                        .append(navTestResultSegment.get(1).getNodeSequence().get(navTestResultSegment.get(1).getNodeSequence().size() - 1).getAltname())
+                        .append(", ")
+                        .append(navTestResultSegment.get(2).getNodeSequence().get(navTestResultSegment.get(2).getNodeSequence().size() - 1).getAltname());
+            } else if (navTestResultSegment.size() > 2 && navTestResultSegment.get(0).getNodeSequence().size() > 0 && navTestResultSegment.get(1).getNodeSequence().size() > 0) {
+                stringBuilder.append("via ")
+                        .append(navTestResultSegment.get(0).getNodeSequence().get(navTestResultSegment.get(0).getNodeSequence().size() - 1).getAltname())
+                        .append(", ")
+                        .append(navTestResultSegment.get(1).getNodeSequence().get(navTestResultSegment.get(1).getNodeSequence().size() - 1).getAltname());
+            } else if (navTestResultSegment.get(1).getNodeSequence().size() > 0) {
+                stringBuilder.append("via ").append(navTestResultSegment.get(1).getNodeSequence().get(navTestResultSegment.get(1).getNodeSequence().size() - 1).getAltname());
+//            } else if (navTestResultSegment.size() == 3 && navTestResultSegment.get(1).getNodeSequence().size() > 0) {
+//                stringBuilder.append("via ").append(navTestResultSegment.get(1).getNodeSequence().get(0).getName());
+            } else {
+                holder.navR_via.setVisibility(View.GONE);
+            }
+            holder.navR_via.setText(stringBuilder.toString());
+        } else {
+            holder.navR_via.setVisibility(View.GONE);
+        }
     }
 
 
@@ -407,7 +449,7 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         ConstraintLayout navRLayoutContainer1, navRLayoutContainer2, navRLayoutContainer3, navRLayoutContainer4, navRLayoutContainer5;
-        TextView navR_firstwalktime, navR_firstbusservices, navR_secondbusservices,
+        TextView navR_firstwalktime, navR_firstbusservices, navR_secondbusservices, navR_via,
                 navR_lastwalktime, navR_midwalktime, navR_totaltime, navR_firstArrow, navR_busArrivalTimingInfo;
         LinearLayout recyclerviewItemHolder;
 
@@ -420,6 +462,7 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
             navRLayoutContainer3 = itemView.findViewById(R.id.navRLayoutContainer_3);
             navRLayoutContainer4 = itemView.findViewById(R.id.navRLayoutContainer_4);
             navRLayoutContainer5 = itemView.findViewById(R.id.navRLayoutContainer_5);
+
             navR_firstwalktime = itemView.findViewById(R.id.navR_firstwalktime);
             navR_firstbusservices = itemView.findViewById(R.id.navR_firstbusServices);
             navR_secondbusservices = itemView.findViewById(R.id.navR_secondbusServices);
@@ -427,8 +470,12 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
             navR_totaltime = itemView.findViewById(R.id.navR_totaltime);
             navR_firstArrow = itemView.findViewById(R.id.navR_nextDirection_1);
             navR_midwalktime = itemView.findViewById(R.id.navR_midwalktime);
+            navR_via = itemView.findViewById(R.id.textView_via);
+
             navR_busArrivalTimingInfo = itemView.findViewById(R.id.busArrivalTimingInfo);
             recyclerviewItemHolder = itemView.findViewById(R.id.recyclerviewItemHolder);
+
+
 
 //            stop = (TextView) itemView.findViewById(R.id.name);
 //            route = (TextView) itemView.findViewById(R.id.email);

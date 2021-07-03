@@ -1,24 +1,20 @@
 package com.example.myapptest.ui.stops_services;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import androidx.core.content.ContextCompat;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
@@ -80,12 +76,12 @@ public class SetArrivalNotificationsDialogFragment extends DialogFragment {
             }
         });
 
-        ChipGroup servicesChipGroup = view.findViewById(R.id.setServicesToWatchChipGroup);
-
-//        String[] list = this.getResources().getStringArray(R.array.chooseTimeSpinner_array);
+        View containerForSettings = view.findViewById(R.id.containerForChipGroup);
+        View containerForFavourites = view.findViewById(R.id.containerForFavouritesChipGroup);
+        ChipGroup servicesChipGroup = view.findViewById(R.id.setServicesForAlertsChipGroup);
+        ChipGroup favouritesChipGroup = view.findViewById(R.id.setFavouritesChipGroup);
 
         builder.setView(view)
-//                .setTitle(singleStopArrivalNotifications.getStopName())
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         //positive button action
@@ -102,6 +98,24 @@ public class SetArrivalNotificationsDialogFragment extends DialogFragment {
                             singleStopArrivalNotifications.setServicesBeingWatched(servicesBeingWatched);
 
                         }
+                        if (singleStopArrivalNotifications.isFavourite()) {
+                            boolean anyServicesChecked = false;
+                            List<String> servicesToFavourite = new ArrayList<>();
+                            for (int i = 0; i < singleStopArrivalNotifications.getServicesAtStop().size(); i++) {
+                                Chip chip = (Chip) favouritesChipGroup.getChildAt(i);
+                                if (chip.isChecked()) {
+                                    servicesToFavourite.add((String) chip.getText());
+                                    anyServicesChecked = true;
+                                }
+                            }
+                            if (!anyServicesChecked) {
+                                for (int i = 0; i < singleStopArrivalNotifications.getServicesAtStop().size(); i++) {
+                                    Chip chip = (Chip) favouritesChipGroup.getChildAt(i);
+                                    servicesToFavourite.add((String) chip.getText());
+                                }
+                            }
+                            singleStopArrivalNotifications.setServicesFavourited(servicesToFavourite);
+                        }
                         Log.e("timeToWatch is:", timeToWatch + "");
 
                         listenerForActivity.onDialogPositiveClick(singleStopArrivalNotifications);
@@ -110,15 +124,12 @@ public class SetArrivalNotificationsDialogFragment extends DialogFragment {
                 })
                 .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // User cancelled the dialog
+                        // User cancelled the dialog, therefore do nothing
                     }
                 });
 
-        View containerForSettings = view.findViewById(R.id.containerForChipGroup);
-
-
+        
         SwitchMaterial switchActivateWatch = view.findViewById(R.id.switch_activateWatch);
-        Log.e("ssan watch", singleStopArrivalNotifications.isWatchingForArrival() + "");
         switchActivateWatch.setChecked(singleStopArrivalNotifications.isWatchingForArrival());
         if (!singleStopArrivalNotifications.isWatchingForArrival()) {
             containerForSettings.setVisibility(View.GONE);
@@ -141,7 +152,26 @@ public class SetArrivalNotificationsDialogFragment extends DialogFragment {
             }
         });
 
-        addChips(servicesChipGroup);
+        SwitchMaterial switchActivateFavourites = view.findViewById(R.id.switch_activateFavourites);
+        switchActivateFavourites.setChecked(singleStopArrivalNotifications.isFavourite());
+        if (!singleStopArrivalNotifications.isFavourite()) {
+            containerForFavourites.setVisibility(View.GONE);
+        }
+        switchActivateFavourites.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    singleStopArrivalNotifications.setFavourite(true);
+                    containerForFavourites.setVisibility(View.VISIBLE);
+                } else {
+                    singleStopArrivalNotifications.setFavourite(false);
+                    containerForFavourites.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        addChipsAlerts(servicesChipGroup);
+        addChipsFavourites(favouritesChipGroup);
 
         return builder.create();
     }
@@ -150,26 +180,50 @@ public class SetArrivalNotificationsDialogFragment extends DialogFragment {
         this.singleStopArrivalNotifications = singleStopArrivalNotifications;
     }
 
-    private void addChips(ChipGroup servicesChipGroup) {
+    //TODO: combine the 2 methods below into 1 (if feasible)
+    private void addChipsFavourites(ChipGroup favouritesChipGroup) {
+        for (int i = 0; i < singleStopArrivalNotifications.getServicesAtStop().size(); i++) {
+            Chip chip = (Chip) getLayoutInflater().inflate(R.layout.chip_arrival, favouritesChipGroup, false);
+            chip.setText(singleStopArrivalNotifications.getServicesAtStop().get(i).getServiceNum());
+//                chip.setCheckedIconVisible(true);
+            boolean chipChecked = false;
+            for (int j = 0; singleStopArrivalNotifications.getServicesFavourited() != null
+                    && j < singleStopArrivalNotifications.getServicesFavourited().size() && !chipChecked; j++) {
+                if (singleStopArrivalNotifications.getServicesFavourited().get(j)
+                        .equals(singleStopArrivalNotifications.getServicesAtStop().get(i).getServiceNum())) {
+                    chip.setChecked(singleStopArrivalNotifications.getServicesFavourited().get(j)
+                            .equals(singleStopArrivalNotifications.getServicesAtStop().get(i).getServiceNum()));
+                    chipChecked = true;
+                }
+            }
+            chip.setEnsureMinTouchTargetSize(false);
+            chip.setCheckable(true);
+//                chip.setTextColor(ContextCompat.getColor(this.getContext(), R.color.black));
+            chip.setCheckedIconTintResource(R.color.NUS_Orange);
+            favouritesChipGroup.addView(chip);
+        }
+    }
+
+    private void addChipsAlerts(ChipGroup servicesChipGroup) {
         for (int i = 0; i < singleStopArrivalNotifications.getServicesAtStop().size(); i++) {
             Chip chip = (Chip) getLayoutInflater().inflate(R.layout.chip_arrival, servicesChipGroup, false);
-                chip.setText(singleStopArrivalNotifications.getServicesAtStop().get(i).getServiceNum());
+            chip.setText(singleStopArrivalNotifications.getServicesAtStop().get(i).getServiceNum());
 //                chip.setCheckedIconVisible(true);
-                boolean chipChecked = false;
-                for (int j = 0; singleStopArrivalNotifications.getServicesBeingWatched() != null
-                        && j < singleStopArrivalNotifications.getServicesBeingWatched().size() && !chipChecked; j++) {
-                    if (singleStopArrivalNotifications.getServicesBeingWatched().get(j)
-                            .equals(singleStopArrivalNotifications.getServicesAtStop().get(i).getServiceNum())) {
-                        chip.setChecked(singleStopArrivalNotifications.getServicesBeingWatched().get(j)
-                                .equals(singleStopArrivalNotifications.getServicesAtStop().get(i).getServiceNum()));
-                        chipChecked = true;
-                    }
+            boolean chipChecked = false;
+            for (int j = 0; singleStopArrivalNotifications.getServicesBeingWatched() != null
+                    && j < singleStopArrivalNotifications.getServicesBeingWatched().size() && !chipChecked; j++) {
+                if (singleStopArrivalNotifications.getServicesBeingWatched().get(j)
+                        .equals(singleStopArrivalNotifications.getServicesAtStop().get(i).getServiceNum())) {
+                    chip.setChecked(singleStopArrivalNotifications.getServicesBeingWatched().get(j)
+                            .equals(singleStopArrivalNotifications.getServicesAtStop().get(i).getServiceNum()));
+                    chipChecked = true;
                 }
-                chip.setEnsureMinTouchTargetSize(false);
-                chip.setCheckable(true);
+            }
+            chip.setEnsureMinTouchTargetSize(false);
+            chip.setCheckable(true);
 //                chip.setTextColor(ContextCompat.getColor(this.getContext(), R.color.black));
-                chip.setCheckedIconTintResource(R.color.NUS_Orange);
-                servicesChipGroup.addView(chip);
+            chip.setCheckedIconTintResource(R.color.NUS_Orange);
+            servicesChipGroup.addView(chip);
         }
     }
 //

@@ -19,12 +19,14 @@ import android.widget.ExpandableListView;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ProcessLifecycleOwner;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -35,9 +37,11 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.myapptest.MainActivity;
 import com.example.myapptest.R;
+import com.example.myapptest.data.LocationServices;
 import com.example.myapptest.data.busstopinformation.ArrivalNotifications;
 import com.example.myapptest.data.busstopinformation.ServiceInStopDetails;
 import com.example.myapptest.data.busstopinformation.StopList;
+import com.example.myapptest.favourites.FavouriteStop;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.jayway.jsonpath.JsonPath;
@@ -297,12 +301,20 @@ public class StopsServicesFragment extends Fragment {
                     SetArrivalNotificationsDialogFragment dialogFragment;
                     boolean isStopBeingWatched = false;
                     arrivalNotificationsArray = ((MainActivity) getActivity()).getArrivalNotificationsArray();
-                    for (int i = 0; i < arrivalNotificationsArray.size(); i++) {
+                    for (int i = 0; arrivalNotificationsArray != null && i < arrivalNotificationsArray.size(); i++) {
                         if (arrivalNotificationsArray.get(i).getStopId().equals(listOfAllStops.get(groupPosition).getStopId())
                                 && arrivalNotificationsArray.get(i).isWatchingForArrival()) {
                             Log.e("entered", "yes i  entered");
                             isStopBeingWatched = true;
-                            dialogFragment = SetArrivalNotificationsDialogFragment.newInstance(arrivalNotificationsArray.get(i));
+                            singleStopArrivalNotification = new ArrivalNotifications();
+                            singleStopArrivalNotification.setStopId(arrivalNotificationsArray.get(i).getStopId());
+                            singleStopArrivalNotification.setStopName(arrivalNotificationsArray.get(i).getStopName());
+                            singleStopArrivalNotification.setLatitude(arrivalNotificationsArray.get(i).getLatitude());
+                            singleStopArrivalNotification.setLongitude(arrivalNotificationsArray.get(i).getLongitude());
+                            singleStopArrivalNotification.setWatchingForArrival(true);
+                            singleStopArrivalNotification.setServicesBeingWatched(arrivalNotificationsArray.get(i).getServicesBeingWatched());
+                            singleStopArrivalNotification = updateFavouritesInfo(singleStopArrivalNotification);
+                            dialogFragment = SetArrivalNotificationsDialogFragment.newInstance(singleStopArrivalNotification);
 //                            dialogFragment.setArrivalNotificationsDialogListener(StopsServicesFragment.this);
                             dialogFragment.show(getChildFragmentManager(), SetArrivalNotificationsDialogFragment.TAG);
                             break;
@@ -313,7 +325,10 @@ public class StopsServicesFragment extends Fragment {
                         singleStopArrivalNotification = new ArrivalNotifications();
                         singleStopArrivalNotification.setStopId(listOfAllStops.get(groupPosition).getStopId());
                         singleStopArrivalNotification.setStopName(listOfAllStops.get(groupPosition).getStopName());
+                        singleStopArrivalNotification.setLatitude(listOfAllStops.get(groupPosition).getStopLatitude());
+                        singleStopArrivalNotification.setLongitude(listOfAllStops.get(groupPosition).getStopLongitude());
                         singleStopArrivalNotification.setWatchingForArrival(false);
+                        singleStopArrivalNotification = updateFavouritesInfo(singleStopArrivalNotification);
                         if (listItem.get(listGroup.get(groupPosition)) != null) {
                             Log.e("listitem this pos is:", listItem.get(listGroup.get(groupPosition)) + "");
                             singleStopArrivalNotification.setServicesAtStop(listItem.get(listGroup.get(groupPosition)));
@@ -402,6 +417,16 @@ public class StopsServicesFragment extends Fragment {
 //        super.onPause();
 //
 //    }
+
+    private ArrivalNotifications updateFavouritesInfo(ArrivalNotifications singleStopArrivalNotification) {
+
+        if (MainActivity.favouriteDatabase.favouriteStopCRUD().isFavorite(singleStopArrivalNotification.getStopId()) == 1) {
+            singleStopArrivalNotification.setFavourite(true);
+            FavouriteStop favouriteStop = MainActivity.favouriteDatabase.favouriteStopCRUD().getFavoriteDataSingle(singleStopArrivalNotification.getStopId());
+            singleStopArrivalNotification.setServicesFavourited(FavouriteStop.fromString(favouriteStop.getServicesFavourited()));
+        }
+        return singleStopArrivalNotification;
+    }
 
     int i;
 
@@ -569,12 +594,12 @@ public class StopsServicesFragment extends Fragment {
         Log.e("isfirstrun is:" , "" + isFirstRun);
 
 
-        if (isFirstRun == false) {
+        if (!isFirstRun) {
             adapter.notifyDataSetChanged();
             refreshTimings(true, viewForFragment);
             stopsNUSMainLoadingProgressBar.setVisibility(View.INVISIBLE);
         } else {
-            arrivalNotificationsArray = new ArrayList<>();
+//            arrivalNotificationsArray = new ArrayList<>();
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
@@ -591,9 +616,9 @@ public class StopsServicesFragment extends Fragment {
                     @Override
                     public void run() {
                         refreshTimings(false, viewForFragment);
-                        timeRefreshHandler.postDelayed(this, 20000);
+                        timeRefreshHandler.postDelayed(this, 10000);
                     }
-                }, 20000);
+                }, 10000);
             }
         }
         isFirstRun = false;

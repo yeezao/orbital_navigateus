@@ -532,7 +532,7 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
             if (stopId.get(i).equals(originBusStop.getId())) {
                 originIndex = i;
                 Log.e("origin name", stopId.get(i));
-            } else if (checkDestCondition(stopId.get(i), destBusStop.getId())) {
+            } else if (checkDestCondition(stopId.get(i), destBusStop.getId(), originIndex >= 0)) {
                 destIndex = i;
                 Log.e("dest name", stopId.get(i));
             }
@@ -606,7 +606,7 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
                 if (stopId.get(i).equals(originBusStop.getId())) {
                     servicesAtOrigin.add(aServiceAtStop.get(i));
                     Log.e("origin service added", aServiceAtStop.get(i));
-                } else if (checkDestCondition(stopId.get(i), destBusStop.getId())) {
+                } else if (checkDestCondition(stopId.get(i), destBusStop.getId(), true)) {
                     servicesAtDest.add(aServiceAtStop.get(i));
                     Log.e("dest service added", aServiceAtStop.get(i));
                 }
@@ -657,7 +657,7 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
                                     if (currentStop.getId().equals(stopId.get(m)) && aServiceAtStop.get(m).equals(servicesAtDest.get(j))) {
                                         transferOriginIndex = m;
 //                                        Log.e("origin name", stopId.get(m) + " " + transferOriginIndex);
-                                    } else if (checkDestCondition(stopId.get(m), destBusStop.getId()) && aServiceAtStop.get(m).equals(servicesAtDest.get(j))) {
+                                    } else if (checkDestCondition(stopId.get(m), destBusStop.getId(), transferOriginIndex >= 0) && aServiceAtStop.get(m).equals(servicesAtDest.get(j))) {
                                         transferDestIndex = m;
 //                                        Log.e("dest name", stopId.get(m) + " " + transferDestIndex);
                                     }
@@ -697,7 +697,7 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
                                     Log.e("transfer 2nd2nd check", servicesAtOrigin.get(j) + " " + servicesAtIntermediateStop.get(k));
                                     for (int m = 0; m < stopId.size(); m++) {
                                         Log.e("transfer 3rd3rd check", currentStop.getId() + " " + originBusStop.getId() + " " + stopId.get(m) + " " + servicesAtOrigin.get(j) + " " + aServiceAtStop.get(m));
-                                        if (checkDestCondition(stopId.get(m), currentStop.getId()) && aServiceAtStop.get(m).equals(servicesAtOrigin.get(j))) {
+                                        if (checkDestCondition(stopId.get(m), currentStop.getId(), transferOriginIndex >= 0) && aServiceAtStop.get(m).equals(servicesAtOrigin.get(j))) {
                                             transferDestIndex = m;
                                             Log.e("transfer dest name", stopId.get(m));
                                         } else if (originBusStop.getId().equals(stopId.get(m)) && aServiceAtStop.get(m).equals(servicesAtOrigin.get(j))) {
@@ -810,8 +810,8 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
 
     }
 
-    private boolean checkDestCondition(String stopId, String fixedStop) {
-        if ((fixedStop.equals(stopId)
+    private boolean checkDestCondition(String stopId, String fixedStop, boolean originSet) {
+        if (originSet && (fixedStop.equals(stopId)
                 || (fixedStop.equals("KR-BT") && (stopId.contains("KTR") || stopId.equals("KR-BTE")))
                 || (fixedStop.equals("PGPT") && stopId.contains("PGPE")))) {
             return true;
@@ -834,10 +834,10 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
                         startAdding = true;
                         checkThisService.clear();
                     } else if (j > 0 && aServiceAtStop.get(j - 1).equals(aServiceAtStop.get(j))
-                            && checkDestCondition(stopId.get(j), lastStop.getId())) {
+                            && checkDestCondition(stopId.get(j), lastStop.getId(), startAdding)) {
                         startAdding = false;
                         for (int k = 0; k < listOfAllBusStops.size(); k++) {
-                            if (checkDestCondition(stopId.get(j), listOfAllBusStops.get(k).getId())) {
+                            if (checkDestCondition(stopId.get(j), listOfAllBusStops.get(k).getId(), true)) {
                                 Log.e("remaking final stop being added", listOfAllBusStops.get(k).getName());
                                 checkThisService.add(listOfAllBusStops.get(k));
                                 break;
@@ -847,7 +847,7 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
                     }
                     if (startAdding) {
                         for (int k = 0; k < listOfAllBusStops.size(); k++) {
-                            if (checkDestCondition(stopId.get(j), listOfAllBusStops.get(k).getId())) {
+                            if (checkDestCondition(stopId.get(j), listOfAllBusStops.get(k).getId(), true)) {
 //                                                    Log.e("remaking stop being added", listOfAllBusStops.get(k).getName());
                                 checkThisService.add(listOfAllBusStops.get(k));
                                 break;

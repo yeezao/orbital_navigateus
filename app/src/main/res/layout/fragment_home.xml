@@ -4,37 +4,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.HomeFragment"
     android:background="@color/white"
-    >
+    tools:context=".ui.home.HomeFragment">
 
-<!--    <ImageView-->
-<!--        android:id="@+id/imageButtonClickForMore"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginEnd="20dp"-->
-<!--        android:background="?android:attr/selectableItemBackgroundBorderless"-->
-<!--        android:clickable="true"-->
-<!--        android:focusable="true"-->
-<!--        android:elevation="10dp"-->
-<!--        android:src="@drawable/ic_baseline_more_vert_24"-->
-<!--        app:layout_constraintBottom_toBottomOf="@+id/appBarLayout"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="@+id/appBarLayout" />-->
+    <!--    <ImageView-->
+    <!--        android:id="@+id/imageButtonClickForMore"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginEnd="20dp"-->
+    <!--        android:background="?android:attr/selectableItemBackgroundBorderless"-->
+    <!--        android:clickable="true"-->
+    <!--        android:focusable="true"-->
+    <!--        android:elevation="10dp"-->
+    <!--        android:src="@drawable/ic_baseline_more_vert_24"-->
+    <!--        app:layout_constraintBottom_toBottomOf="@+id/appBarLayout"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="@+id/appBarLayout" />-->
 
-<!--    <TextView-->
-<!--        android:id="@+id/textView2"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="20dp"-->
-<!--        android:elevation="10dp"-->
-<!--        android:fontFamily="sans-serif-medium"-->
-<!--        android:text="Home"-->
-<!--        android:textColor="@color/white"-->
-<!--        android:textSize="22sp"-->
-<!--        app:layout_constraintBottom_toBottomOf="@+id/appBarLayout"-->
-<!--        app:layout_constraintStart_toStartOf="@+id/appBarLayout"-->
-<!--        app:layout_constraintTop_toTopOf="@+id/appBarLayout" />-->
+    <!--    <TextView-->
+    <!--        android:id="@+id/textView2"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="20dp"-->
+    <!--        android:elevation="10dp"-->
+    <!--        android:fontFamily="sans-serif-medium"-->
+    <!--        android:text="Home"-->
+    <!--        android:textColor="@color/white"-->
+    <!--        android:textSize="22sp"-->
+    <!--        app:layout_constraintBottom_toBottomOf="@+id/appBarLayout"-->
+    <!--        app:layout_constraintStart_toStartOf="@+id/appBarLayout"-->
+    <!--        app:layout_constraintTop_toTopOf="@+id/appBarLayout" />-->
 
     <View
         android:id="@+id/view"
@@ -65,36 +64,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="200dp"
         android:text="Favourites"
         android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintStart_toEndOf="@+id/imageView3"
         app:layout_constraintTop_toBottomOf="@+id/view" />
-
-    <TextView
-        android:id="@+id/recentStops_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="184dp"
-        android:text="Recently Viewed"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        app:layout_constraintStart_toEndOf="@+id/imageView4"
-        app:layout_constraintTop_toBottomOf="@+id/favourites_label" />
-
-    <TextView
-        android:id="@+id/recentRoutes2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="120dp"
-        android:text="Nearby Stops"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        app:layout_constraintStart_toEndOf="@+id/imageView5"
-        app:layout_constraintTop_toBottomOf="@+id/recentStops_label" />
 
     <ImageView
         android:id="@+id/imageView3"
@@ -105,26 +80,6 @@
         app:layout_constraintBottom_toBottomOf="@+id/favourites_label"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/favourites_label" />
-
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:src="@drawable/ic_baseline_access_time_24"
-        app:layout_constraintBottom_toBottomOf="@+id/recentStops_label"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/recentStops_label" />
-
-    <ImageView
-        android:id="@+id/imageView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:src="@drawable/ic_baseline_my_location_24"
-        app:layout_constraintBottom_toBottomOf="@+id/recentRoutes2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/recentRoutes2" />
 
     <ImageButton
         android:id="@+id/home_searchButton"
@@ -137,15 +92,72 @@
         app:layout_constraintStart_toEndOf="@+id/home_search"
         app:layout_constraintTop_toTopOf="@+id/home_search" />
 
-    <TextView
-        android:id="@+id/textView_timingTest"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text='Nothing here at the moment. \nClick into the "Stops &amp; Services" tab for functionality.'
-        android:textAlignment="center"
-        app:layout_constraintBottom_toTopOf="@+id/recentStops_label"
+    <View
+        android:id="@+id/viewDividerELVHome"
+        android:layout_width="match_parent"
+        android:layout_height="0.7dp"
+        android:layout_marginTop="15dp"
+        android:background="@color/grey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageView3" />
+
+
+    <ExpandableListView
+        android:id="@+id/expandable_listview_home"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/viewDividerELVHome">
+
+    </ExpandableListView>
+
+    <ProgressBar
+        android:id="@+id/progressBarHomeELV"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/favourites_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/favourites_label" />
+
+    <TextView
+        android:id="@+id/textViewUpdating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:text="Updating..."
+        android:textSize="12dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/progressBarHomeELV"
+        app:layout_constraintEnd_toStartOf="@+id/progressBarHomeELV"
+        app:layout_constraintTop_toTopOf="@+id/progressBarHomeELV" />
+
+    <ImageView
+        android:id="@+id/imageViewServiceAlert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:src="@drawable/ic_baseline_error_24"
+        app:layout_constraintBottom_toBottomOf="@+id/serviceAlerts_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/serviceAlerts_label" />
+
+    <TextView
+        android:id="@+id/serviceAlerts_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="30dp"
+        android:text="Service Updates"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@+id/imageView3"
         app:layout_constraintTop_toBottomOf="@+id/view" />
 
 

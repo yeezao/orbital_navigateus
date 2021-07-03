@@ -82,7 +82,7 @@ public class DirectionsFragment extends Fragment {
         display.getMetrics(displayMetrics);
         dpWidth = displayMetrics.widthPixels;
         customAdapterRecyclerView = new CustomAdapterRecyclerView(
-                getActivity(), savedNavigationResults, originText, destText, navController, dpWidth);
+                getActivity(), savedNavigationResults, originText, destText, navController, dpWidth, false);
         resultRecyclerView.setAdapter(customAdapterRecyclerView);
 
         listOfBusStopsObject = ((MainActivity) getActivity()).getListOfAllStops();
@@ -274,7 +274,7 @@ public class DirectionsFragment extends Fragment {
                     if (navigationResults != null && navigationResults.size() > 0) {
                         savedNavigationResults = navigationResults;
                         customAdapterRecyclerView = new CustomAdapterRecyclerView(
-                                getActivity(), savedNavigationResults, originText, destText, navController, dpWidth);
+                                getActivity(), savedNavigationResults, originText, destText, navController, dpWidth, true);
                         resultRecyclerView.setAdapter(customAdapterRecyclerView);
                         goButtonForNav.setClickable(true);
                         waitingForDirectionsResultProgressBar.setVisibility(View.GONE);
