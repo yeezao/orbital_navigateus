@@ -76,7 +76,8 @@ public class StopsServicesFragment extends Fragment {
     List<ArrivalNotifications> arrivalNotificationsArray = new ArrayList<>();
     ArrivalNotifications singleStopArrivalNotification;
 
-
+    FloatingActionButton floatingGetLocationButton;
+    ProgressBar refreshLocationProgressBar;
 
     ProgressBar stopsNUSMainLoadingProgressBar;
 
@@ -87,6 +88,7 @@ public class StopsServicesFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
         View view = inflater.inflate(R.layout.fragment_stops_services, container, false);
 
         view.findViewById(R.id.StopsNUSMainLoadingProgressBar).setVisibility(View.VISIBLE);
@@ -103,6 +105,9 @@ public class StopsServicesFragment extends Fragment {
 
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         secondLocationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+
+        floatingGetLocationButton = view.findViewById(R.id.floating_refresh_location_button);
+        refreshLocationProgressBar = view.findViewById(R.id.progressBar_refreshLocation);
 
         checkLocationPermission();
 
@@ -304,7 +309,7 @@ public class StopsServicesFragment extends Fragment {
                     for (int i = 0; arrivalNotificationsArray != null && i < arrivalNotificationsArray.size(); i++) {
                         if (arrivalNotificationsArray.get(i).getStopId().equals(listOfAllStops.get(groupPosition).getStopId())
                                 && arrivalNotificationsArray.get(i).isWatchingForArrival()) {
-                            Log.e("entered", "yes i  entered");
+                            Log.e("entered", "yes i  entered " + arrivalNotificationsArray.get(i).getStopId());
                             isStopBeingWatched = true;
                             singleStopArrivalNotification = new ArrivalNotifications();
                             singleStopArrivalNotification.setStopId(arrivalNotificationsArray.get(i).getStopId());
@@ -313,6 +318,7 @@ public class StopsServicesFragment extends Fragment {
                             singleStopArrivalNotification.setLongitude(arrivalNotificationsArray.get(i).getLongitude());
                             singleStopArrivalNotification.setWatchingForArrival(true);
                             singleStopArrivalNotification.setServicesBeingWatched(arrivalNotificationsArray.get(i).getServicesBeingWatched());
+                            singleStopArrivalNotification.setServicesAtStop(arrivalNotificationsArray.get(i).getServicesAtStop());
                             singleStopArrivalNotification = updateFavouritesInfo(singleStopArrivalNotification);
                             dialogFragment = SetArrivalNotificationsDialogFragment.newInstance(singleStopArrivalNotification);
 //                            dialogFragment.setArrivalNotificationsDialogListener(StopsServicesFragment.this);
@@ -358,32 +364,29 @@ public class StopsServicesFragment extends Fragment {
 //        Button refreshButton = view.findViewById(R.id.floating_refresh_button);
 //        refreshButton.setOnClickListener(new View.OnClickListener());
 
-//        FloatingActionButton floatingGetLocationButton = view.findViewById(R.id.floating_refresh_location_button);
-//        ProgressBar refreshLocationProgressBar = view.findViewById(R.id.progressBar_refreshLocation);
-
         floatingRefreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                floatingGetLocationButton.setClickable(false);
+                floatingRefreshButton.setImageResource(R.drawable.ic_outline_cancel_24);
+                refreshTimingProgressBar.setVisibility(View.VISIBLE);
+                refreshTimingProgressBar.bringToFront();
+                floatingRefreshButton.setClickable(false);
+                Log.e("refresh button", "clicked");
+                floatingGetLocationButton.setClickable(false);
                 if (searchingLocation && isFirstRun) {
                     locationManager.removeUpdates(gpsLocationListener);
                     secondLocationManager.removeUpdates(networkLocationListener);
                     searchingLocation = false;
-                    floatingRefreshButton.setClickable(false);
                     getListOfGroupStops();
                 } else if (searchingLocation) {
                     locationManager.removeUpdates(gpsLocationListener);
                     secondLocationManager.removeUpdates(networkLocationListener);
-                    floatingRefreshButton.setClickable(false);
                     searchingLocation = false;
                     refreshTimings(true, view);
                 } else {
-                    floatingRefreshButton.setImageResource(R.drawable.ic_outline_cancel_24);
-                    refreshTimingProgressBar.setVisibility(View.VISIBLE);
-                    refreshTimingProgressBar.bringToFront();
                     progressBarInvisible = false;
                     isFirstRun = false;
-                    checkLocationPermission();
+//                    checkLocationPermission();
                     refreshTimings(true, view);
                 }
 
@@ -393,18 +396,21 @@ public class StopsServicesFragment extends Fragment {
 //        if (ProcessLifecycleOwner.get().getLifecycle().getCurrentState().equals(Lifecycle.Event.ON_RESUME))
 
 
-//        floatingGetLocationButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                floatingRefreshButton.setClickable(false);
-//                floatingGetLocationButton.setClickable(false);
-//                isFirstRun = false;
-//                refreshLocationProgressBar.setVisibility(View.VISIBLE);
-//                refreshLocationProgressBar.bringToFront();
-//                checkLocationPermission();
-//
-//            }
-//        });
+        floatingGetLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                floatingRefreshButton.setClickable(false);
+                floatingGetLocationButton.setClickable(false);
+                isFirstRun = false;
+                refreshLocationProgressBar.setVisibility(View.VISIBLE);
+                refreshLocationProgressBar.bringToFront();
+                checkLocationPermission();
+
+            }
+        });
+
+        floatingGetLocationButton.setClickable(false);
+
 
     }
 
@@ -596,15 +602,21 @@ public class StopsServicesFragment extends Fragment {
 
         if (!isFirstRun) {
             adapter.notifyDataSetChanged();
-            refreshTimings(true, viewForFragment);
+            floatingGetLocationButton.setClickable(true);
+            floatingRefreshButton.setClickable(true);
+//            refreshTimings(true, viewForFragment);
             stopsNUSMainLoadingProgressBar.setVisibility(View.INVISIBLE);
+            refreshLocationProgressBar.setVisibility(View.INVISIBLE);
         } else {
+            isFirstRun = false;
 //            arrivalNotificationsArray = new ArrayList<>();
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     stopsNUSMainLoadingProgressBar.setVisibility(View.INVISIBLE);
+                    floatingGetLocationButton.setClickable(true);
+                    refreshLocationProgressBar.setVisibility(View.INVISIBLE);
                     floatingRefreshButton.setImageResource(R.drawable.ic_baseline_refresh_24);
                     floatingRefreshButton.setClickable(true);
 //                    getActivity().findViewById(R.id.floating_refresh_location_button).setClickable(true);
@@ -621,7 +633,6 @@ public class StopsServicesFragment extends Fragment {
                 }, 10000);
             }
         }
-        isFirstRun = false;
 
     }
 

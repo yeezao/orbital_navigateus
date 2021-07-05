@@ -6,11 +6,12 @@ import java.util.List;
 public class NavigationPartialResults {
 
     private int timeForSegment;
+    private int timeAtEndOfSegment = 0;
     private List<NavigationNodes> nodesTraversed = new ArrayList<>();
     private String[] busToWaitFor = new String[2];
     private List<String> viableBuses1 = new ArrayList<>();
     private List<String> viableBuses2 = new ArrayList<>();
-    private int[] busWaitingTime1 = new int[2];
+    private int busWaitingTime = 0;
     private NavigationNodes transferStop;
     private List<NavigationNodes> beforeTransferNodesTraversed = new ArrayList<>();
     private List<NavigationNodes> afterTransferNodesTraversed = new ArrayList<>();
@@ -23,6 +24,14 @@ public class NavigationPartialResults {
 
     public void setTimeForSegment(int timeForSegment) {
         this.timeForSegment = timeForSegment;
+    }
+
+    public int getTimeAtEndOfSegment() {
+        return timeAtEndOfSegment;
+    }
+
+    public void setTimeAtEndOfSegment(int timeAtEndOfSegment) {
+        this.timeAtEndOfSegment = timeAtEndOfSegment;
     }
 
     public List<NavigationNodes> getNodesTraversed() {
@@ -45,16 +54,12 @@ public class NavigationPartialResults {
         this.busToWaitFor[index] = busToWaitFor;
     }
 
-    public int[] getBusWaitingTime1() {
-        return busWaitingTime1;
+    public int getBusWaitingTime() {
+        return busWaitingTime;
     }
 
-    public void setBusWaitingTime1(int[] busWaitingTime1) {
-        this.busWaitingTime1 = busWaitingTime1;
-    }
-
-    public void setBusWaitingTime1Indiv(int busWaitingTime1, int index) {
-        this.busWaitingTime1[index] = busWaitingTime1;
+    public void setBusWaitingTime(int busWaitingTime1) {
+        this.busWaitingTime = busWaitingTime1;
     }
 
     public NavigationNodes getTransferStop() {

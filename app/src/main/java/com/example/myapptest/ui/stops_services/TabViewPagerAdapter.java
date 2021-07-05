@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TabViewPagerAdapter extends FragmentPagerAdapter {
+
     private final List<Fragment> mFragmentList = new ArrayList<>();
     private final List<String> mFragmentTitleList = new ArrayList<>();
 
@@ -42,7 +43,7 @@ public class TabViewPagerAdapter extends FragmentPagerAdapter {
 //    }
 
     @StringRes
-    private static final int[] TAB_TITLES = new int[]{R.string.stops, R.string.lta_stops, R.string.services};
+    private static final int[] TAB_TITLES = new int[]{R.string.stops, R.string.services};
 
     public TabViewPagerAdapter(Context context, FragmentManager fm) {
         super(fm);
@@ -60,11 +61,11 @@ public class TabViewPagerAdapter extends FragmentPagerAdapter {
             case 0:
                 fragment = new StopsServicesFragment();
                 break;
+//            case 1:
+//                fragment = new StopsServicesLTAFragment();
+//                break;
             case 1:
-                fragment = new StopsServicesLTAFragment();
-                break;
-            case 2:
-                fragment = new StopsServices2Fragment();
+                fragment = new StopsServicesServicesFragment();
                 break;
 
         }
@@ -77,9 +78,9 @@ public class TabViewPagerAdapter extends FragmentPagerAdapter {
         switch (position) {
             case 0:
                 return "NUS Stops";
+//            case 1:
+//                return "LTA Stops";
             case 1:
-                return "LTA Stops";
-            case 2:
                 return "NUS Routes";
 
         }
@@ -89,6 +90,6 @@ public class TabViewPagerAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         // Show 2 total pages.
-        return 3;
+        return 2;
     }
 }

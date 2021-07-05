@@ -154,7 +154,7 @@ public class StopsMainAdapter extends BaseExpandableListAdapter {
 //            TextView textViewTime1Live = convertView.findViewById(R.id.list_child_timing1_live);
                 if (child.getFirstArrival().charAt(0) == '-') {
                     textViewTime1.setText("No Service");
-                    textViewTime1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+                    textViewTime1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
                     textViewTime1.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
                     textViewTime1.setTextColor(ContextCompat.getColor(context, R.color.grey));
                     imageViewLive1Time.setVisibility(ImageView.INVISIBLE);

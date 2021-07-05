@@ -83,6 +83,7 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
 
         StringBuilder firstStringBuilder = new StringBuilder();
         firstStringBuilder.append(navResultTest.getTotalTimeTaken()).append(" min");
+        navResultTest.setDisplayTotalTimeTaken(navResultTest.getTotalTimeTaken());
         holder.navR_totaltime.setText(firstStringBuilder.toString());
         holder.navR_firstArrow.setVisibility(View.VISIBLE);
 //        holder.recyclerviewItemHolder.setVisibility(View.GONE);
@@ -93,7 +94,7 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
 
         for (int i = 0; i < navTestResultSegment.size(); i++) {
             if (navTestResultSegment.get(i) != null) {
-                holder.navR_busArrivalTimingInfo.setText("Updating bus arrival information & total duration...");
+                holder.navR_busArrivalTimingInfo.setText("Updating bus arrival info & total duration...");
                 holder.navR_busArrivalTimingInfo.setVisibility(View.VISIBLE);
                 NavigationPartialResults currentSegment = navTestResultSegment.get(i);
                 Log.e("current node starts at", currentSegment.getNodesTraversed().get(0).getName());
@@ -132,6 +133,7 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
                             int timeTillNow = 0;
                             for (int j = 0; j < finalI; j++) {
                                 timeTillNow += navTestResultSegment.get(j).getTimeForSegment();
+                                timeTillNow += navTestResultSegment.get(j).getBusWaitingTime();
                             }
                             boolean isServicesAvailable = false;
                             for (ServiceInStopDetails temp : busStopArrivalInfo) {
@@ -185,7 +187,7 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
                                             .append(currentSegment.getNodesTraversed().get(0).getAltname())
                                             .append("");
                                 } else {
-                                    anotherStringBuilder.append("No bus services operating from ")
+                                    anotherStringBuilder.append("No suitable services from ")
                                             .append(currentSegment.getNodesTraversed().get(0).getAltname()).append(" now");
                                 }
                                 arrivaltime = 0;
@@ -195,17 +197,14 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
                                     anotherStringBuilder.append(" is arriving at ")
                                             .append(currentSegment.getNodesTraversed().get(0).getAltname()).append(" now");
                                 } else {
-                                    anotherStringBuilder.append(" will arrive at ")
+                                    anotherStringBuilder.append(" arriving at ")
                                             .append(currentSegment.getNodesTraversed().get(0).getAltname())
                                             .append(" in ").append(arrivaltime).append(" min");
                                 }
-                                if (afterSearch) {
-                                    newTotalTime = navResultTest.getTotalTimeTaken() - timeTillNow + arrivaltime;
-                                    navResultTest.setDisplayTotalTimeTaken(newTotalTime);
-                                } else {
-
-                                }
+                                newTotalTime = navResultTest.getDisplayTotalTimeTaken() - timeTillNow + arrivaltime;
+                                navResultTest.setDisplayTotalTimeTaken(newTotalTime);
                             }
+                            currentSegment.setTimeAtEndOfSegment(newTotalTime);
                             String stringToSet = anotherStringBuilder.toString();
                             Handler handler = new Handler();
                             int finalNewTotalTime = newTotalTime;
@@ -284,7 +283,10 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
                                 String service = "";
                                 int timeTillNow = 0;
                                 for (int j = 0; j < finalI; j++) {
-                                    timeTillNow += navTestResultSegment.get(j).getTimeForSegment();
+                                    if (navTestResultSegment.get(j).getTimeAtEndOfSegment() != 0) {
+                                        timeTillNow += navTestResultSegment.get(j).getTimeForSegment();
+                                        timeTillNow += navTestResultSegment.get(j).getBusWaitingTime();
+                                    }
                                 }
                                 boolean isServicesAvailable = false;
                                 for (ServiceInStopDetails temp : busStopArrivalInfo) {
@@ -333,16 +335,16 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
                                 StringBuilder anotherStringBuilder = new StringBuilder();
                                 int newTotalTime = 0;
                                 if (arrivaltime < 9999) {
-                                    newTotalTime = navResultTest.getTotalTimeTaken() - timeTillNow + arrivaltime;
+                                    newTotalTime = navResultTest.getDisplayTotalTimeTaken() - timeTillNow + arrivaltime;
                                     navResultTest.setDisplayTotalTimeTaken(newTotalTime);
                                 }
-                                String stringToSet = anotherStringBuilder.toString();
                                 int finalNewTotalTime = newTotalTime;
                                 if (finalNewTotalTime != 0) {
                                     StringBuilder yetAnotherStringBuilder = new StringBuilder();
                                     yetAnotherStringBuilder.append(finalNewTotalTime).append(" min");
                                     holder.navR_totaltime.setText(yetAnotherStringBuilder.toString());
                                 }
+                                currentSegment.setTimeAtEndOfSegment(newTotalTime);
                             }
 
                             @Override

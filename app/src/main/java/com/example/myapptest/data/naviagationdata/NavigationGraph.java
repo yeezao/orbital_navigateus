@@ -810,6 +810,7 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
 
     }
 
+    //TODO: hardcoded exceptions need to be changed when new ISB network begins
     private boolean checkDestCondition(String stopId, String fixedStop, boolean originSet) {
         if (originSet && (fixedStop.equals(stopId)
                 || (fixedStop.equals("KR-BT") && (stopId.contains("KTR") || stopId.equals("KR-BTE")))

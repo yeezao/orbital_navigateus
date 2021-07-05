@@ -8,10 +8,10 @@ android {
 
     defaultConfig {
         applicationId "com.example.myapptest"
-        minSdkVersion 24
+        minSdkVersion 26
         targetSdkVersion 30
         versionCode 23
-        versionName "0.5"
+        versionName "0.5.1"
         setProperty("archivesBaseName", "n(avigate)us-$versionName")
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

@@ -97,13 +97,13 @@ public class SingleStopBusArrivalCustomAdapterRecyclerView extends RecyclerView.
         if (serviceToDisplay.isLive()) {
             holder.liveTiming.setVisibility(View.VISIBLE);
         }
-        if (!serviceToDisplay.isCanCatch()) {
-            int grey = ContextCompat.getColor(context, R.color.grey);
-            holder.serviceNum.setBackgroundColor(grey);
-            holder.serviceDesc.setTextColor(grey);
-            holder.arrivalTime.setTextColor(grey);
-            holder.liveTiming.setImageResource(R.drawable.ic_wifi_signal_grey);
-        }
+//        if (!serviceToDisplay.isCanCatch()) {
+//            int grey = ContextCompat.getColor(context, R.color.grey);
+//            holder.serviceNum.setBackgroundColor(grey);
+//            holder.serviceDesc.setTextColor(grey);
+//            holder.arrivalTime.setTextColor(grey);
+//            holder.liveTiming.setImageResource(R.drawable.ic_wifi_signal_grey);
+//        }
 
     }
 

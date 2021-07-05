@@ -5,7 +5,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Half;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,10 +14,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.solver.state.State;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ProcessLifecycleOwner;
@@ -26,19 +28,18 @@ import androidx.lifecycle.ProcessLifecycleOwner;
 import com.example.myapptest.MainActivity;
 import com.example.myapptest.R;
 import com.example.myapptest.data.LocationServices;
+import com.example.myapptest.data.busnetworkinformation.NetworkTickerTapes;
 import com.example.myapptest.data.busstopinformation.ArrivalNotifications;
-import com.example.myapptest.data.busstopinformation.NextbusAPIs;
+import com.example.myapptest.data.NextbusAPIs;
 import com.example.myapptest.data.busstopinformation.ServiceInStopDetails;
 import com.example.myapptest.data.busstopinformation.StopList;
 import com.example.myapptest.favourites.FavouriteStop;
 import com.example.myapptest.ui.stops_services.SetArrivalNotificationsDialogFragment;
 import com.example.myapptest.ui.stops_services.StopsMainAdapter;
-import com.example.myapptest.ui.stops_services.StopsServicesFragment;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -104,7 +105,61 @@ public class HomeFragment extends Fragment implements LocationServices.LocationF
             }
         });
 
+        checkServiceStatus();
         setExpandableListView();
+
+    }
+
+    private void checkServiceStatus() {
+
+        ProgressBar tickerTapesPB = rootView.findViewById(R.id.serviceStatusProgressBar);
+        ImageView tickerTapesStatusIcon = rootView.findViewById(R.id.imageViewServiceStatusIcon);
+        TextView tickerTapesText = rootView.findViewById(R.id.textViewServiceStatusDesc);
+        ConstraintLayout serviceStatusHomeContainer = rootView.findViewById(R.id.serviceStatusHomeContainer);
+
+        NextbusAPIs.callListOfTickerTapes(getActivity(), getContext(), new NextbusAPIs.VolleyCallBackTickerTapesList() {
+            @Override
+            public void onSuccessTickerTapes(List<NetworkTickerTapes> networkTickerTapesList) {
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        tickerTapesPB.setVisibility(View.GONE);
+                        tickerTapesStatusIcon.setVisibility(View.VISIBLE);
+                        if (networkTickerTapesList.size() == 0) {
+                            tickerTapesStatusIcon.setImageResource(R.drawable.ic_baseline_service_ok_24);
+                            tickerTapesText.setText("Good service on all routes. Have a great day! :)");
+                        } else {
+                            tickerTapesStatusIcon.setImageResource(R.drawable.ic_baseline_service_disruption_24);
+                            StringBuilder stringBuilder = new StringBuilder();
+                            stringBuilder.append(networkTickerTapesList.size()).append(" active service alert(s). Tap here for info.");
+                            tickerTapesText.setText(stringBuilder.toString());
+                            serviceStatusHomeContainer.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    //TODO: open dialog with recyclerview here
+                                }
+                            });
+                        }
+                    }
+                }, 1000);
+
+            }
+
+            @Override
+            public void onFailureTickerTapes() {
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        tickerTapesPB.setVisibility(View.GONE);
+                        tickerTapesStatusIcon.setVisibility(View.VISIBLE);
+                        tickerTapesStatusIcon.setImageResource(R.drawable.ic_baseline_service_unknown_24);
+                        tickerTapesText.setText("We couldn't connect to NUS servers.");
+                    }
+                }, 1000);
+            }
+        });
 
     }
 
@@ -176,35 +231,6 @@ public class HomeFragment extends Fragment implements LocationServices.LocationF
     Handler timeRefreshHandler = new Handler(Looper.getMainLooper());
 
     private void initListData(List<StopList> listOfAllStops) {
-//        //TODO: sort list of stops by distance
-//        boolean didOrderChange = false;
-//        Log.e("userLocation in initListData is: ", "" + userLocation);
-//        if (userLocation != null && (userLocation.getLatitude() != 0 && userLocation.getLongitude() != 0) && isLocationPermissionGranted) {
-//            for (int i = 0; i < listOfAllStops.size(); i++) {
-//                Location stopLocation = new Location("");
-//                stopLocation.setLongitude(listOfAllStops.get(i).getStopLongitude());
-//                stopLocation.setLatitude(listOfAllStops.get(i).getStopLatitude());
-//                float distanceToUser = userLocation.distanceTo(stopLocation);
-//                listOfAllStops.get(i).setDistanceFromUser(distanceToUser);
-//            }
-//            for (int i = 0; i < listOfAllStops.size(); i++) {
-//                int nearestToUserIndex = i;
-//                for (int j = i + 1; j < listOfAllStops.size(); j++) {
-//                    if (listOfAllStops.get(j).getDistanceFromUser() < listOfAllStops.get(nearestToUserIndex).getDistanceFromUser()) {
-//                        nearestToUserIndex = j;
-//                    }
-//                }
-//                if (nearestToUserIndex != i) {
-//                    didOrderChange = true;
-//                    Collections.swap(listOfAllStops, i, nearestToUserIndex);
-//                }
-//            }
-//            if (didOrderChange) {
-//                for (int i = 0; i < listOfAllStops.size(); i++) {
-//                    expandableListView.collapseGroup(i);
-//                }
-//            }
-//        }
         listGroup.clear();
         for (int i = 0; i < listOfAllStops.size(); i++) {
 //            Log.e("stop caption:", captions.get(i));
@@ -280,6 +306,11 @@ public class HomeFragment extends Fragment implements LocationServices.LocationF
                             }, 1500);
                         }
                     }
+
+                    @Override
+                    public void onFailureAllStops() {
+                        //TODO: display failed to load snackbar
+                    }
                 });
             }
         }
@@ -321,7 +352,12 @@ public class HomeFragment extends Fragment implements LocationServices.LocationF
                                 }
                             }, 600);
                         }
-                    });
+
+                        @Override
+                        public void onFailureAllStops() {
+                            //TODO: display failed to load snackback
+                        }
+                            });
                 }
                 return true;
             }
@@ -381,7 +417,12 @@ public class HomeFragment extends Fragment implements LocationServices.LocationF
                                     }
                                 }, 600);
                             }
-                        });
+
+                            @Override
+                            public void onFailureAllStops() {
+                                //TODO: display failed to load snackback
+                            }
+                                });
 
                     }
                     return true;

@@ -32,17 +32,15 @@
         <action
             android:id="@+id/action_navigation_stops_services_to_navigation_directions"
             app:destination="@id/navigation_directions" />
+        <action
+            android:id="@+id/action_navigation_stops_services_master_to_stopsServicesSingleServiceSelectedFragment"
+            app:destination="@id/stopsServicesSingleServiceSelectedFragment"
+            app:enterAnim="@animator/slide_in_right"
+            app:popExitAnim="@android:anim/slide_out_right" />
         <!--        <action-->
 <!--            android:id="@+id/action_navigation_stops_services_master_to_navigation_stops_services_stops"-->
 <!--            app:destination="@id/navigation_stops_services_stops" />-->
     </fragment>
-
-<!--    <fragment-->
-<!--        android:id="@+id/navigation_stops_services_stops"-->
-<!--        android:name="com.example.myapptest.ui.stops_services.StopsServicesFragment"-->
-<!--        android:label="Stops &amp; Services (Stops)"-->
-<!--        tools:layout="@layout/fragment_stops_services">-->
-<!--    </fragment>-->
 
     <fragment
         android:id="@+id/navigation_directions"
@@ -62,6 +60,7 @@
             app:popExitAnim="@android:anim/slide_out_right" />
 
     </fragment>
+
     <fragment
         android:id="@+id/navigation_directionsResultFragment"
         android:name="com.example.myapptest.ui.directions.DirectionsResultFragment"
@@ -69,13 +68,23 @@
         tools:layout="@layout/fragment_directions_result">
     </fragment>
 
-    <!--    <fragment-->
-<!--        android:id="@+id/navigation_directions_result"-->
-<!--        android:name="com.example.myapptest.ui.directions.DirectionsResultFragment"-->
-<!--        android:label="Directions (Results)"-->
-<!--        tools:layout="@layout/fragment_directions_result" >-->
-<!--        <action-->
-<!--            android:id="@+id/action_navigation_directions_to_navigation_directions_result"-->
-<!--            app:destination="@id/navigation_directions_result" />-->
-<!--    </fragment>-->
+    <fragment
+        android:id="@+id/stopsServicesSingleServiceSelectedFragment"
+        android:name="com.example.myapptest.ui.stops_services.StopsServicesSingleServiceSelectedFragment"
+        android:label="Service Route"
+        tools:layout="@layout/fragment_single_service_selected" >
+        <argument
+            android:name="ServiceNum"
+            app:argType="string" />
+        <argument
+            android:name="ServiceDesc"
+            app:argType="string" />
+        <argument
+            android:name="ServiceStatus"
+            app:argType="integer" />
+        <argument
+            android:name="serviceFullRoute"
+            app:argType="string" />
+    </fragment>
+
 </navigation>

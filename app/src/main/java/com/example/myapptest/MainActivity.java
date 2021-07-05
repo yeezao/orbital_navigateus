@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.Service;
 import android.media.AudioAttributes;
 import android.net.Uri;
 import android.os.Build;
@@ -21,7 +20,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.myapptest.data.busstopinformation.ArrivalNotifications;
-import com.example.myapptest.data.busstopinformation.NextbusAPIs;
+import com.example.myapptest.data.NextbusAPIs;
 import com.example.myapptest.data.busstopinformation.ServiceInStopDetails;
 import com.example.myapptest.data.busstopinformation.StopList;
 import com.example.myapptest.data.naviagationdata.NavigationResults;
@@ -148,10 +147,19 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
                                         }
                                         MainActivity.favouriteDatabase.favouriteStopCRUD().updateData(favouriteStop);
                                     }
-                                });
+
+                                            @Override
+                                            public void onFailureAllStops() {
+
+                                            }
+                                        });
                             }
                         }
                     }
+                }
+
+                @Override
+                public void onFailureAllStops() {
                 }
             });
 
@@ -439,7 +447,7 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
         NotificationCompat.Builder persistentBuilder = new NotificationCompat.Builder(this, getString(R.string.arrivalnotifications_monitoring_notif_id));
         Log.e("entered", "yes in activity");
         for (i = 0; i < arrivalNotificationsArray.size(); i++) {
-            if (singleStopArrivalNotifications.getStopId() == arrivalNotificationsArray.get(i).getStopId()
+            if (singleStopArrivalNotifications.getStopId().equals(arrivalNotificationsArray.get(i).getStopId())
                     && singleStopArrivalNotifications.isWatchingForArrival() && singleStopArrivalNotifications.getServicesBeingWatched().size() > 0) {
                 arrivalNotificationsArray.set(i, singleStopArrivalNotifications);
                 Log.e("stopname repeated is" , singleStopArrivalNotifications.getStopName());
@@ -451,7 +459,7 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
         if (!stopRepeated && singleStopArrivalNotifications.isWatchingForArrival() && singleStopArrivalNotifications.getServicesBeingWatched().size() > 0) {
             arrivalNotificationsArray.add(singleStopArrivalNotifications);
             startNewMonitoring = true;
-            Log.e("stopname new is" , singleStopArrivalNotifications.getStopId());
+            Log.e("stopname new is" , singleStopArrivalNotifications.getStopId() + " " + singleStopArrivalNotifications.getServicesBeingWatched());
         }
         if (startNewMonitoring) {
             persistentBuilder.setContentTitle("Monitoring " + singleStopArrivalNotifications.getStopName() + "...")
