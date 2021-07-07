@@ -1,12 +1,10 @@
 package com.example.myapptest.data;
 
 import android.app.Activity;
-import android.app.Service;
 import android.content.Context;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.Network;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -19,8 +17,6 @@ import com.example.myapptest.data.busnetworkinformation.NetworkTickerTapes;
 import com.example.myapptest.data.busrouteinformation.ServiceInfo;
 import com.example.myapptest.data.busstopinformation.ServiceInStopDetails;
 import com.example.myapptest.data.busstopinformation.StopList;
-import com.example.myapptest.ui.stops_services.StopsServicesFragment;
-import com.google.android.material.chip.ChipGroup;
 import com.jayway.jsonpath.JsonPath;
 
 import java.util.ArrayList;
@@ -134,7 +130,7 @@ public class NextbusAPIs {
             public void onErrorResponse(VolleyError error) {
                 // TODO: Handle error
                 Log.e("volley API error", "" + error);
-                callback.onFailureAllStops();
+                callback.onFailureSingleStop();
             }
 
         }) {
@@ -331,7 +327,7 @@ public class NextbusAPIs {
 
     public interface VolleyCallBackSingleStop {
         void onSuccessSingleStop(List<ServiceInStopDetails> servicesAllInfoAtStop);
-        void onFailureAllStops();
+        void onFailureSingleStop();
     }
 
     public interface VolleyCallBackServiceList {

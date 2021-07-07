@@ -86,6 +86,19 @@
         app:layout_constraintTop_toTopOf="@+id/floating_refresh_location_button"
         android:indeterminateTint="@color/NUS_Blue"/>
 
+    <ProgressBar
+        android:id="@+id/singleStopClickedProgressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:indeterminate="true"
+        android:progressTint="@color/NUS_Orange"
+        android:translationY="-8dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ExpandableListView
         android:id="@+id/expandable_listview_nus_stops"
         android:layout_width="match_parent"
@@ -94,8 +107,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintTop_toBottomOf="@+id/textView_container2">
 
     </ExpandableListView>
 
@@ -110,11 +122,23 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <TextView
+        android:id="@+id/textView_container2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#DFDFDF"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/bottombar_info_imageview"
         android:layout_width="13dp"
         android:layout_height="13dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginEnd="8dp"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/textView"
@@ -125,12 +149,35 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:text="indicates that the timing provided is LIVE"
+        android:layout_marginEnd="15dp"
+        android:text="indicates a LIVE estimate."
         android:textColor="@color/black"
+        android:textSize="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/textView_container"
         app:layout_constraintTop_toTopOf="@+id/textView_container" />
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:textColor="@color/black"
+        android:textSize="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView_container" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="38dp"
+        android:textColor="@color/black"
+        android:textSize="12dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/expandable_listview_nus_stops"
+        app:layout_constraintStart_toStartOf="@+id/textView_container"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

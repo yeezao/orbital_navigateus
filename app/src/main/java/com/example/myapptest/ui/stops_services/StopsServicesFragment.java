@@ -1,7 +1,7 @@
 package com.example.myapptest.ui.stops_services;
 
 import android.Manifest;
-import android.app.Dialog;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -17,16 +17,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ProcessLifecycleOwner;
-import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -35,13 +32,15 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.myapptest.ExpandableListViewStandardCode;
 import com.example.myapptest.MainActivity;
 import com.example.myapptest.R;
-import com.example.myapptest.data.LocationServices;
+import com.example.myapptest.data.NextbusAPIs;
 import com.example.myapptest.data.busstopinformation.ArrivalNotifications;
 import com.example.myapptest.data.busstopinformation.ServiceInStopDetails;
 import com.example.myapptest.data.busstopinformation.StopList;
 import com.example.myapptest.favourites.FavouriteStop;
+import com.example.myapptest.ui.StopsMainAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.jayway.jsonpath.JsonPath;
@@ -77,9 +76,7 @@ public class StopsServicesFragment extends Fragment {
     ArrivalNotifications singleStopArrivalNotification;
 
     FloatingActionButton floatingGetLocationButton;
-    ProgressBar refreshLocationProgressBar;
-
-    ProgressBar stopsNUSMainLoadingProgressBar;
+    ProgressBar refreshLocationProgressBar, stopsNUSMainLoadingProgressBar, singleStopClickedProgressBar;
 
 
 
@@ -96,6 +93,7 @@ public class StopsServicesFragment extends Fragment {
         floatingRefreshButton = view.findViewById(R.id.floating_refresh_button);
         floatingRefreshButton.setImageResource(R.drawable.ic_outline_cancel_24);
         stopsNUSMainLoadingProgressBar = view.findViewById(R.id.StopsNUSMainLoadingProgressBar);
+        singleStopClickedProgressBar = view.findViewById(R.id.singleStopClickedProgressBar);
 
         expandableListView = (ExpandableListView) view.findViewById(R.id.expandable_listview_nus_stops);
         listGroup = new ArrayList<>();
@@ -162,10 +160,10 @@ public class StopsServicesFragment extends Fragment {
                 locationManager.removeUpdates(gpsLocationListener);
                 Log.e("userLocation is: ", "" + userLocation);
                 searchingLocation = false;
-                if (isFirstRun == true) {
+                if (isFirstRun) {
                     getListOfGroupStops();
                 } else {
-                    initListData();
+                    initListData(listOfAllStops);
                 }
             }
         }
@@ -189,10 +187,10 @@ public class StopsServicesFragment extends Fragment {
                 secondLocationManager.removeUpdates(networkLocationListener);
                 Log.e("userLocation is: ", "" + userLocation);
                 searchingLocation = false;
-                if (isFirstRun == true) {
+                if (isFirstRun) {
                     getListOfGroupStops();
                 } else {
-                    initListData();
+                    initListData(listOfAllStops);
                 }
             }
         }
@@ -233,10 +231,10 @@ public class StopsServicesFragment extends Fragment {
                 snackbar.setAnchorView(R.id.nav_view);
                 snackbar.show();
                 searchingLocation = false;
-                if (isFirstRun == true) {
+                if (isFirstRun) {
                     getListOfGroupStops();
                 } else {
-                    initListData();
+                    initListData(listOfAllStops);
                 }
             }
 
@@ -250,10 +248,10 @@ public class StopsServicesFragment extends Fragment {
                     Snackbar.LENGTH_LONG);
             snackbar.setAnchorView(R.id.textView_container);
             snackbar.show();
-            if (isFirstRun == true) {
+            if (isFirstRun) {
                 getListOfGroupStops();
             } else {
-                initListData();
+                initListData(listOfAllStops);
             }
         }
 
@@ -276,21 +274,19 @@ public class StopsServicesFragment extends Fragment {
                 if (expandableListView.isGroupExpanded(groupPosition)) {
                     expandableListView.collapseGroup(groupPosition);
                 } else {
-//                    refreshTimingProgressBar.setVisibility(View.VISIBLE);
-//                    refreshTimingProgressBar.bringToFront();
-//                    refreshTimingProgressBar.setClickable(false);
+                    singleStopClickedProgressBar.setVisibility(View.VISIBLE);
                     getListOfChildServices(groupPosition, true, new VolleyCallBack() {
                         @Override
                         public void onSuccess() {
                             expandableListView.expandGroup(groupPosition, true);
-//                            refreshTimingProgressBar.setClickable(true);
-//                            Handler handler = new Handler();
-//                            handler.postDelayed(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    refreshTimingProgressBar.setVisibility(View.INVISIBLE);
-//                                }
-//                            }, 200);
+                            refreshTimingProgressBar.setClickable(true);
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    singleStopClickedProgressBar.setVisibility(View.GONE);
+                                }
+                            }, 600);
                         }
                     });
                 }
@@ -319,12 +315,11 @@ public class StopsServicesFragment extends Fragment {
                             singleStopArrivalNotification.setWatchingForArrival(true);
                             singleStopArrivalNotification.setServicesBeingWatched(arrivalNotificationsArray.get(i).getServicesBeingWatched());
                             singleStopArrivalNotification.setServicesAtStop(arrivalNotificationsArray.get(i).getServicesAtStop());
-                            singleStopArrivalNotification = updateFavouritesInfo(singleStopArrivalNotification);
+                            ExpandableListViewStandardCode.updateFavouritesInfo(singleStopArrivalNotification);
                             dialogFragment = SetArrivalNotificationsDialogFragment.newInstance(singleStopArrivalNotification);
 //                            dialogFragment.setArrivalNotificationsDialogListener(StopsServicesFragment.this);
                             dialogFragment.show(getChildFragmentManager(), SetArrivalNotificationsDialogFragment.TAG);
                             break;
-                            //TODO: break, pull existing watch info to programmatically set toggles/checkboxes and do not instantiate new singleStopArrivalNotification
                         }
                     }
                     if (!isStopBeingWatched) {
@@ -334,7 +329,7 @@ public class StopsServicesFragment extends Fragment {
                         singleStopArrivalNotification.setLatitude(listOfAllStops.get(groupPosition).getStopLatitude());
                         singleStopArrivalNotification.setLongitude(listOfAllStops.get(groupPosition).getStopLongitude());
                         singleStopArrivalNotification.setWatchingForArrival(false);
-                        singleStopArrivalNotification = updateFavouritesInfo(singleStopArrivalNotification);
+                        ExpandableListViewStandardCode.updateFavouritesInfo(singleStopArrivalNotification);
                         if (listItem.get(listGroup.get(groupPosition)) != null) {
                             Log.e("listitem this pos is:", listItem.get(listGroup.get(groupPosition)) + "");
                             singleStopArrivalNotification.setServicesAtStop(listItem.get(listGroup.get(groupPosition)));
@@ -361,9 +356,6 @@ public class StopsServicesFragment extends Fragment {
             }
         });
 
-//        Button refreshButton = view.findViewById(R.id.floating_refresh_button);
-//        refreshButton.setOnClickListener(new View.OnClickListener());
-
         floatingRefreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -371,11 +363,13 @@ public class StopsServicesFragment extends Fragment {
                 refreshTimingProgressBar.setVisibility(View.VISIBLE);
                 refreshTimingProgressBar.bringToFront();
                 floatingRefreshButton.setClickable(false);
+                floatingGetLocationButton.setClickable(false);
                 Log.e("refresh button", "clicked");
                 floatingGetLocationButton.setClickable(false);
                 if (searchingLocation && isFirstRun) {
                     locationManager.removeUpdates(gpsLocationListener);
                     secondLocationManager.removeUpdates(networkLocationListener);
+                    refreshTimingProgressBar.setVisibility(View.INVISIBLE);
                     searchingLocation = false;
                     getListOfGroupStops();
                 } else if (searchingLocation) {
@@ -393,69 +387,78 @@ public class StopsServicesFragment extends Fragment {
             }
         });
 
-//        if (ProcessLifecycleOwner.get().getLifecycle().getCurrentState().equals(Lifecycle.Event.ON_RESUME))
-
-
         floatingGetLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                floatingRefreshButton.setClickable(false);
-                floatingGetLocationButton.setClickable(false);
-                isFirstRun = false;
-                refreshLocationProgressBar.setVisibility(View.VISIBLE);
-                refreshLocationProgressBar.bringToFront();
-                checkLocationPermission();
-
+                if (searchingLocation) {
+                    locationManager.removeUpdates(gpsLocationListener);
+                    secondLocationManager.removeUpdates(networkLocationListener);
+                    searchingLocation = false;
+                    floatingGetLocationButton.setImageResource(R.drawable.ic_baseline_my_location_24);
+                    refreshLocationProgressBar.setVisibility(View.INVISIBLE);
+                    floatingRefreshButton.setClickable(true);
+                    floatingGetLocationButton.setClickable(true);
+                } else {
+                    floatingGetLocationButton.setImageResource(R.drawable.ic_outline_cancel_24);
+                    searchingLocation = true;
+                    floatingRefreshButton.setClickable(false);
+                    isFirstRun = false;
+                    refreshLocationProgressBar.setVisibility(View.VISIBLE);
+                    refreshLocationProgressBar.bringToFront();
+                    checkLocationPermission();
+                }
             }
         });
 
         floatingGetLocationButton.setClickable(false);
 
-
     }
 
     Handler timeRefreshHandler = new Handler(Looper.getMainLooper());
 
-
-//    @Override
-//    public void onPause() {
-//        ProcessLifecycleOwner
-//        super.onPause();
-//
-//    }
-
-    private ArrivalNotifications updateFavouritesInfo(ArrivalNotifications singleStopArrivalNotification) {
-
-        if (MainActivity.favouriteDatabase.favouriteStopCRUD().isFavorite(singleStopArrivalNotification.getStopId()) == 1) {
-            singleStopArrivalNotification.setFavourite(true);
-            FavouriteStop favouriteStop = MainActivity.favouriteDatabase.favouriteStopCRUD().getFavoriteDataSingle(singleStopArrivalNotification.getStopId());
-            singleStopArrivalNotification.setServicesFavourited(FavouriteStop.fromString(favouriteStop.getServicesFavourited()));
-        }
-        return singleStopArrivalNotification;
-    }
-
     int i;
 
+    /**
+     * Executes one attempt to pull stop information from NUS servers for each parent in the
+     * ExpandableListView that is expanded. When all stops that are expanded have been refreshed,
+     * method {@link StopsServicesFragment#setRefreshCircleInvisible(ProgressBar, int)} is called to
+     * set ProgressBar to invisible, only if refresh was user-initiated.
+     *
+     * @param isOnClick to determine if refrehs is user-initiated
+     * @param view parent view of fragment
+     */
     private void refreshTimings(boolean isOnClick, @NotNull View view) {
         ProgressBar refreshTimingProgressBar = view.findViewById(R.id.progressBar_refreshTiming);
+        final int[] numExpanded = {0};
+        for (int j = 0; j < listOfAllStops.size(); j++) {
+            if (expandableListView.isGroupExpanded(j)) {
+                numExpanded[0]++;
+            }
+        }
         for (i = 0; i < listOfAllStops.size(); i++) {
             if (expandableListView.isGroupExpanded(i)) {
                 getListOfChildServices(i, true, new VolleyCallBack() {
                     @Override
                     public void onSuccess() {
-//                        if (i == listOfAllStops.size() - 1) {
-//                            progressBarInvisible = true;
-//                            setRefreshCircleInvisible(refreshTimingProgressBar, 800);
-//                        }
+                        numExpanded[0]--;
+                        if (numExpanded[0] == 0) {
+                            if (!searchingLocation && isOnClick) {
+                                setRefreshCircleInvisible(refreshTimingProgressBar, 800);
+                            }
+                        }
                     }
                 });
             }
         }
-        if (!searchingLocation && isOnClick) {
-            setRefreshCircleInvisible(refreshTimingProgressBar, 800);
-        }
+
     }
 
+    /**
+     * Sets the ProgressBar around the refresh FloatingActionButton to View.INVISIBLE
+     *
+     * @param refreshTimingProgressBar ProgressBar that displays when user clicks to refresh time
+     * @param delay delay duration for handler runnable
+     */
     private void setRefreshCircleInvisible(ProgressBar refreshTimingProgressBar, int delay) {
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -464,6 +467,7 @@ public class StopsServicesFragment extends Fragment {
                 adapter.notifyDataSetChanged();
                 if (getContext() != null) {
                     floatingRefreshButton.setClickable(true);
+                    floatingGetLocationButton.setClickable(true);
                     refreshTimingProgressBar.setVisibility(View.INVISIBLE);
                     floatingRefreshButton.setImageResource(R.drawable.ic_baseline_refresh_24);
                 }
@@ -475,15 +479,13 @@ public class StopsServicesFragment extends Fragment {
 
     //for getting full list of stops (parent only)
     List<StopList> listOfAllStops;
-    StopList listOfStops;
-    List<String> listOfNames;
-    List<String> listOfIds;
-    List<Double> listOfLat;
-    List<Double> listOfLong;
-
     List<StopList> listOfStopsRetrieved;
 
-
+    /**
+     * Attempts to retrieve the list of stops (as a {@link List<StopList>} from {@link MainActivity}. If failed,
+     * proceeds to {@link StopsServicesFragment#RePullStopsList()} to retrieve list again from servers. If
+     * successful, proceeds to {@link StopsServicesFragment#initListData(List)}.
+     */
     private void getListOfGroupStops() {
 
         floatingRefreshButton.setClickable(false);
@@ -493,7 +495,7 @@ public class StopsServicesFragment extends Fragment {
             if (listOfStopsRetrieved != null) {
                 ((MainActivity) getActivity()).setListOfAllStops(listOfStopsRetrieved);
                 listOfAllStops = listOfStopsRetrieved;
-                initListData();
+                initListData(listOfAllStops);
             } else {
                 RePullStopsList();
             }
@@ -502,64 +504,41 @@ public class StopsServicesFragment extends Fragment {
         }
     }
 
+    /**
+     * Calls the NextBusAPI to pull list of all stops using
+     * {@link NextbusAPIs#callStopsList(Activity, Context, NextbusAPIs.VolleyCallBackAllStops)}. If successfully
+     * pulled, method continues to {@link StopsServicesFragment#initListData(List)}.
+     */
     private void RePullStopsList() {
-        String url = "https://nnextbus.nus.edu.sg/BusStops";
-        Log.e("im here in RePullStopsList", "yes");
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-
+        NextbusAPIs.callStopsList(getActivity(), getContext(), new NextbusAPIs.VolleyCallBackAllStops() {
             @Override
-            public void onResponse(String response) {
-                AddStopsToList(response);
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                // TODO: Handle error
-                Log.e("volley API error", "" + error);
+            public void onSuccessAllStops(List<StopList> listOfAllStops) {
+                ((MainActivity) getActivity()).setListOfAllStops(listOfAllStops);
+                initListData(listOfAllStops);
             }
 
-
-        }) {
-
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("Content-Type", "application/json; charset=UTF-8");
-                params.put("Authorization", getActivity().getString(R.string.auth_header));
-                return params;
+            public void onFailureAllStops() {
+                //TODO: show snackbar
             }
-        };
+        });
 
-        if (this.getContext() != null) {
-            RequestQueue requestQueue = Volley.newRequestQueue(this.getContext());
-            requestQueue.add(stringRequest);
-        }
-    }
-
-    private void AddStopsToList(String response) {
-        listOfAllStops = new ArrayList<>();
-        listOfNames = JsonPath.read(response, "$.BusStopsResult.busstops[*].caption");
-        listOfIds = JsonPath.read(response, "$.BusStopsResult.busstops[*].name");
-        listOfLong = JsonPath.read(response, "$.BusStopsResult.busstops[*].longitude");
-        listOfLat = JsonPath.read(response, "$.BusStopsResult.busstops[*].latitude");
-        for (int i = 0; i < listOfNames.size(); i++) {
-            listOfStops = new StopList();
-            listOfStops.setStopName(listOfNames.get(i));
-            listOfStops.setStopId(listOfIds.get(i));
-            listOfStops.setStopLongitude(listOfLong.get(i));
-            listOfStops.setStopLatitude(listOfLat.get(i));
-            listOfAllStops.add(listOfStops);
-        }
-        ((MainActivity) getActivity()).setListOfAllStops(listOfAllStops);
-        initListData();
     }
 
     int j;
     boolean didOrderChange = false;
 
-    private void initListData() {
+    /**
+     * Sorts {@link StopsServicesFragment#listOfAllStops} by distance from user (if location was
+     * successfully found), then adds {@link StopsServicesFragment#listOfAllStops} to {@link StopsServicesFragment#listGroup}.
+     * Then, all ProgressBars are set to {@link View#INVISIBLE}, all FloatingActionButtons are set to clickable, and if
+     * {@link StopsServicesFragment#isFirstRun} is true, the auto-refresh handler {@link StopsServicesFragment#timeRefreshHandler} is
+     * started.
+     *
+     * @param listOfAllStops list of StopList objects, each being a stop in the network
+     */
+    private void initListData(List<StopList> listOfAllStops) {
 
         //TODO: sort list of stops by distance
         Log.e("userLocation in initListData is: ", "" + userLocation);
@@ -589,6 +568,11 @@ public class StopsServicesFragment extends Fragment {
                 }
             }
             didOrderChange = false;
+            TextView sortOrder = viewForFragment.findViewById(R.id.textView13);
+            sortOrder.setText("Sorted by distance");
+        } else {
+            TextView sortOrder = viewForFragment.findViewById(R.id.textView13);
+            sortOrder.setText("Sorted by A-Z");
         }
         listGroup.clear();
         for (i = 0; i < listOfAllStops.size(); i++) {
@@ -607,6 +591,7 @@ public class StopsServicesFragment extends Fragment {
 //            refreshTimings(true, viewForFragment);
             stopsNUSMainLoadingProgressBar.setVisibility(View.INVISIBLE);
             refreshLocationProgressBar.setVisibility(View.INVISIBLE);
+            floatingGetLocationButton.setImageResource(R.drawable.ic_baseline_my_location_24);
         } else {
             isFirstRun = false;
 //            arrivalNotificationsArray = new ArrayList<>();

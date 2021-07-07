@@ -1,10 +1,13 @@
 package com.example.myapptest;
 
+import android.content.Context;
 import android.view.View;
 
 import com.example.myapptest.data.busstopinformation.StopList;
 import com.jayway.jsonpath.JsonPath;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +38,16 @@ public class StandardCode {
 
     }
 
+
+    /**
+     * Method to check: if stopId is a terminal stopId, modify it to the starting stopId
+     *
+     * NOTE: this is hardcoded, and needs to be modified whenever the ISB network changes
+     *
+     * @param stopId stopId to be checked
+     * @return stopId - modified (if conditions true) or unmodified stopId
+     */
+    //TODO: this needs to be modified when new bus network is up
     public static String StopIdExceptionsWithReturn(String stopId) {
         if (stopId.contains("PGPE")) {
             return "PGPT";
@@ -43,5 +56,32 @@ public class StandardCode {
         }
         return stopId;
     }
+
+
+    /**
+     * Method to retrieve local JSON file
+     *
+     * @param context
+     * @param fileName
+     * @return json - Retrieved file in JSON format
+     */
+    public static String loadJSONFromAsset(Context context,  String fileName) {
+        String json = null;
+        try {
+            InputStream is = context.getAssets().open(fileName);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
+
+    }
+
+
 
 }

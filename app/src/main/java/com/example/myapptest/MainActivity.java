@@ -25,6 +25,8 @@ import com.example.myapptest.data.busstopinformation.ServiceInStopDetails;
 import com.example.myapptest.data.busstopinformation.StopList;
 import com.example.myapptest.data.naviagationdata.NavigationResults;
 import com.example.myapptest.data.naviagationdata.NavigationSearchInfo;
+import com.example.myapptest.data.tutorial.IsFirstRuns;
+import com.example.myapptest.data.tutorial.IsFirstRunsDatabase;
 import com.example.myapptest.databinding.ActivityMainBinding;
 import com.example.myapptest.favourites.FavouriteDatabase;
 import com.example.myapptest.favourites.FavouriteStop;
@@ -67,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
     NavController navController;
 
     public static FavouriteDatabase favouriteDatabase;
+    public static IsFirstRunsDatabase isFirstRunsDatabase;
 
     //    private final StopsServicesMasterFragment stopsServicesMasterFragment = new StopsServicesMasterFragment();
 //    private final DirectionsFragment directionsFragment = new DirectionsFragment();
@@ -86,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
         navView.bringToFront();
         createNotificationChannel();
 
-        getStringOfGroupStops();
+//        getStringOfGroupStops();
         BeginMonitoring();
 
         // Passing each menu ID as a set of Ids because each
@@ -100,10 +103,16 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
         NavigationUI.setupWithNavController(binding.navView, navController);
 
         favouriteDatabase = Room.databaseBuilder(getApplicationContext(), FavouriteDatabase.class, "myfavdb").allowMainThreadQueries().build();
+        isFirstRunsDatabase = Room.databaseBuilder(getApplicationContext(), IsFirstRunsDatabase.class, "isFirstRundb").allowMainThreadQueries().build();
 
         active = homeFragment;
 
         navView.setOnNavigationItemReselectedListener(mOnNavigationItemReselectedListener);
+
+        if (isFirstRunsDatabase.isFirstRunsCRUD().isFirstRunPresent() == 0) {
+            IsFirstRuns isFirstRuns = new IsFirstRuns();
+            isFirstRunsDatabase.isFirstRunsCRUD().addData(isFirstRuns);
+        }
 
         List<FavouriteStop> listOfFavouriteStops = MainActivity.favouriteDatabase.favouriteStopCRUD().getFavoriteData();
         if (listOfFavouriteStops.size() > 0) {
@@ -148,11 +157,11 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
                                         MainActivity.favouriteDatabase.favouriteStopCRUD().updateData(favouriteStop);
                                     }
 
-                                            @Override
-                                            public void onFailureAllStops() {
+                                    @Override
+                                    public void onFailureSingleStop() {
 
-                                            }
-                                        });
+                                    }
+                                });
                             }
                         }
                     }
@@ -160,6 +169,7 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
 
                 @Override
                 public void onFailureAllStops() {
+
                 }
             });
 
@@ -386,16 +396,17 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
     List<ArrivalNotifications> arrivalNotificationsArray = new ArrayList<>();
     Handler monitoringHandler;
 
+
+    /**
+     * This method is returned from SetArrivalNotificationsDialogFragment, when the user clicks "OK".
+     * It updates the favourites and arrival alerts data.
+     *
+     * @param singleStopArrivalNotifications Object with newly set favourites and arrival alerts data
+     */
     @Override
     public void onDialogPositiveClick(ArrivalNotifications singleStopArrivalNotifications) {
         boolean stopRepeated = false;
         boolean startNewMonitoring = false;
-
-        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
-                "You'll see your changes to Favourites the next time you return to the Homepage.",
-                Snackbar.LENGTH_LONG);
-        snackbar.setAnchorView(R.id.nav_view);
-        snackbar.show();
 
         //for favourite adding
         if (singleStopArrivalNotifications.isFavourite()) {
@@ -406,13 +417,45 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
             favouriteStop.setLatitude(singleStopArrivalNotifications.getLatitude());
             favouriteStop.setLongitude(singleStopArrivalNotifications.getLongitude());
             if (favouriteDatabase.favouriteStopCRUD().isFavorite(favouriteStop.getStopId()) == 1) {
+                boolean isServicesTheSame = true;
+                List<String> listOfPreviousFavourites = FavouriteStop.fromString(
+                        favouriteDatabase.favouriteStopCRUD().getFavoriteDataSingle(favouriteStop.getStopId()).getServicesFavourited());
+                if (listOfPreviousFavourites.size() != singleStopArrivalNotifications.getServicesFavourited().size()) {
+                    isServicesTheSame = false;
+                } else {
+                    for (int i = 0; i < listOfPreviousFavourites.size(); i++) {
+                        if (listOfPreviousFavourites.get(i).equals(singleStopArrivalNotifications.getServicesFavourited().get(i))) {
+                            isServicesTheSame = false;
+                            break;
+                        }
+                    }
+                }
+                if (!isServicesTheSame) {
+                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
+                            "You'll see your changes to Favourites the next time you return to the Homepage.",
+                            Snackbar.LENGTH_LONG);
+                    snackbar.setAnchorView(R.id.nav_view);
+                    snackbar.show();
+                }
                 favouriteDatabase.favouriteStopCRUD().updateData(favouriteStop);
             } else {
                 favouriteDatabase.favouriteStopCRUD().addData(favouriteStop);
+                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
+                        "You'll see your changes to Favourites the next time you return to the Homepage.",
+                        Snackbar.LENGTH_LONG);
+                snackbar.setAnchorView(R.id.nav_view);
+                snackbar.show();
             }
         } else {
             FavouriteStop favouriteStop = new FavouriteStop();
             favouriteStop.setStopId(singleStopArrivalNotifications.getStopId());
+            if (favouriteDatabase.favouriteStopCRUD().isFavorite(favouriteStop.getStopId()) == 1) {
+                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
+                        "You'll see your changes to Favourites the next time you return to the Homepage.",
+                        Snackbar.LENGTH_LONG);
+                snackbar.setAnchorView(R.id.nav_view);
+                snackbar.show();
+            }
             favouriteDatabase.favouriteStopCRUD().delete(favouriteStop);
         }
 
@@ -830,7 +873,6 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
     public String getDest() {
         return dest;
     }
-
 
     public interface VolleyCallBack {
         void onSuccess();

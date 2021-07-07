@@ -9,9 +9,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
@@ -19,23 +19,22 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.solver.state.State;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ProcessLifecycleOwner;
 
+import com.example.myapptest.ExpandableListViewStandardCode;
 import com.example.myapptest.MainActivity;
 import com.example.myapptest.R;
 import com.example.myapptest.data.LocationServices;
 import com.example.myapptest.data.busnetworkinformation.NetworkTickerTapes;
-import com.example.myapptest.data.busstopinformation.ArrivalNotifications;
 import com.example.myapptest.data.NextbusAPIs;
 import com.example.myapptest.data.busstopinformation.ServiceInStopDetails;
 import com.example.myapptest.data.busstopinformation.StopList;
+import com.example.myapptest.data.tutorial.IsFirstRuns;
 import com.example.myapptest.favourites.FavouriteStop;
-import com.example.myapptest.ui.stops_services.SetArrivalNotificationsDialogFragment;
-import com.example.myapptest.ui.stops_services.StopsMainAdapter;
+import com.example.myapptest.ui.StopsMainAdapter;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -63,6 +62,8 @@ public class HomeFragment extends Fragment implements LocationServices.LocationF
 
     View rootView;
 
+
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -78,6 +79,11 @@ public class HomeFragment extends Fragment implements LocationServices.LocationF
         homeFavouritesProgressBar = rootView.findViewById(R.id.progressBarHomeELV);
         textViewUpdating = rootView.findViewById(R.id.textViewUpdating);
 
+        List<IsFirstRuns> isFirstRuns = MainActivity.isFirstRunsDatabase.isFirstRunsCRUD().getIsFirstRuns();
+        if (isFirstRuns.get(0).isFirstRunHomeFrag()) {
+            //TODO: load HelpDialogFragment
+        }
+
         return rootView;
 
     }
@@ -91,6 +97,10 @@ public class HomeFragment extends Fragment implements LocationServices.LocationF
         inflater.inflate(R.menu.home_toolbar_menu, menu);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull @NotNull MenuItem item) {
+        return super.onOptionsItemSelected(item);
+    }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -181,23 +191,6 @@ public class HomeFragment extends Fragment implements LocationServices.LocationF
             listOfAllStopsToDisplayInFavourites.add(newStopList);
         }
         initListData(listOfAllStopsToDisplayInFavourites);
-//        NextbusAPIs.callStopsList(getActivity(), getContext(), new NextbusAPIs.VolleyCallBackAllStops() {
-//            @Override
-//            public void onSuccessAllStops(List<StopList> listOfAllStops) {
-//                for (int i = 0; i < listOfFavouriteStops.size(); i++) {
-//                    for (int j = 0; j < listOfAllStops.size(); j++) {
-//                        if (listOfFavouriteStops.get(i).getStopId().equals(listOfAllStops.get(j).getStopId())) {
-//                            StopList newStopList = listOfAllStops.get(j);
-//                            newStopList.setListOfServicesFavourited(FavouriteStop.fromString(listOfFavouriteStops.get(i).getServicesFavourited()));
-//                            listOfAllStopsToDisplayInFavourites.add(newStopList);
-//                        }
-//                    }
-//                }
-//                initListData(listOfAllStopsToDisplayInFavourites);
-////                locationServices.checkLocationPermission(getActivity(), getContext(), HomeFragment.this);
-//            }
-//        });
-
     }
 
     final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
@@ -241,17 +234,19 @@ public class HomeFragment extends Fragment implements LocationServices.LocationF
         adapter.notifyDataSetChanged();
         expandableListView.setVisibility(View.VISIBLE);
         homeFavouritesProgressBar.setVisibility(View.INVISIBLE);
-        expandableListViewListeners();
+        ExpandableListViewStandardCode.expandableListViewListeners(expandableListView, listGroup, listItem,
+                adapter, listOfAllStopsToDisplayInFavourites, getChildFragmentManager(), getActivity(), getContext(), true);
+//        expandableListViewListeners();
 
         if (!isFirstRun) {
             adapter.notifyDataSetChanged();
-            refreshTimings(true, rootView);
+            refreshTimingsWithFavourites(true, rootView);
         } else if (ProcessLifecycleOwner.get().getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
             isFirstRun = false;
             timeRefreshHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    refreshTimings(false, rootView);
+                    refreshTimingsWithFavourites(false, rootView);
                     timeRefreshHandler.postDelayed(this, 15000);
                 }
             }, 15000);
@@ -259,7 +254,7 @@ public class HomeFragment extends Fragment implements LocationServices.LocationF
 
     }
 
-    private void refreshTimings(boolean isOnClick, @NotNull View view) {
+    private void refreshTimingsWithFavourites(boolean isOnClick, @NotNull View view) {
         boolean anyExpanded = false;
         textViewUpdating.setVisibility(View.VISIBLE);
         homeFavouritesProgressBar.setVisibility(View.VISIBLE);
@@ -308,142 +303,12 @@ public class HomeFragment extends Fragment implements LocationServices.LocationF
                     }
 
                     @Override
-                    public void onFailureAllStops() {
+                    public void onFailureSingleStop() {
                         //TODO: display failed to load snackbar
                     }
                 });
             }
         }
     }
-
-    List<ArrivalNotifications> arrivalNotificationsArray = new ArrayList<>();
-    ArrivalNotifications singleStopArrivalNotification;
-
-    private void expandableListViewListeners() {
-        expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-            @Override
-            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                if (expandableListView.isGroupExpanded(groupPosition)) {
-                    expandableListView.collapseGroup(groupPosition);
-                } else {
-                    homeFavouritesProgressBar.setVisibility(View.VISIBLE);
-                    NextbusAPIs.callSingleStopInfo(getActivity(), getContext(), listOfAllStopsToDisplayInFavourites.get(groupPosition).getStopId(),
-                            groupPosition, true, new NextbusAPIs.VolleyCallBackSingleStop() {
-                        @Override
-                        public void onSuccessSingleStop(List<ServiceInStopDetails> servicesAllInfoAtStop) {
-                            List<ServiceInStopDetails> listOfServicesToAdd = new ArrayList<>();
-                            for (int j = 0; j < listOfAllStopsToDisplayInFavourites.get(groupPosition).getListOfServicesFavourited().size(); j++) {
-                                for (int i = 0; i < servicesAllInfoAtStop.size(); i++) {
-                                    if (listOfAllStopsToDisplayInFavourites.get(groupPosition).getListOfServicesFavourited()
-                                            .get(j).equals(servicesAllInfoAtStop.get(i).getServiceNum())) {
-                                        listOfServicesToAdd.add(servicesAllInfoAtStop.get(i));
-                                    }
-                                }
-                            }
-                            listItem.remove(listGroup.get(groupPosition));
-                            listItem.put(listGroup.get(groupPosition), listOfServicesToAdd);
-                            adapter.notifyDataSetChanged();
-                            Handler handler = new Handler();
-                            expandableListView.expandGroup(groupPosition, true);
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    homeFavouritesProgressBar.setVisibility(View.INVISIBLE);
-                                }
-                            }, 600);
-                        }
-
-                        @Override
-                        public void onFailureAllStops() {
-                            //TODO: display failed to load snackback
-                        }
-                            });
-                }
-                return true;
-            }
-        });
-
-        expandableListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                homeFavouritesProgressBar.setVisibility(View.VISIBLE);
-                int groupPosition = ExpandableListView.getPackedPositionGroup(id);
-                if (ExpandableListView.getPackedPositionType(id) == ExpandableListView.PACKED_POSITION_TYPE_GROUP) {
-                    SetArrivalNotificationsDialogFragment dialogFragment;
-                    boolean isStopBeingWatched = false;
-                    arrivalNotificationsArray = ((MainActivity) getActivity()).getArrivalNotificationsArray();
-                    for (int i = 0; arrivalNotificationsArray != null && i < arrivalNotificationsArray.size(); i++) {
-                        if (arrivalNotificationsArray.get(i).getStopId().equals(listOfAllStopsToDisplayInFavourites.get(groupPosition).getStopId())
-                                && arrivalNotificationsArray.get(i).isWatchingForArrival()) {
-                            Log.e("entered", "yes i  entered");
-                            isStopBeingWatched = true;
-                            singleStopArrivalNotification = new ArrivalNotifications();
-                            singleStopArrivalNotification.setStopId(arrivalNotificationsArray.get(i).getStopId());
-                            singleStopArrivalNotification.setStopName(arrivalNotificationsArray.get(i).getStopName());
-                            singleStopArrivalNotification.setLatitude(arrivalNotificationsArray.get(i).getLatitude());
-                            singleStopArrivalNotification.setLongitude(arrivalNotificationsArray.get(i).getLongitude());
-                            singleStopArrivalNotification.setWatchingForArrival(true);
-                            singleStopArrivalNotification.setServicesBeingWatched(arrivalNotificationsArray.get(i).getServicesBeingWatched());
-                            singleStopArrivalNotification = updateFavouritesInfo(singleStopArrivalNotification);
-                            dialogFragment = SetArrivalNotificationsDialogFragment.newInstance(singleStopArrivalNotification);
-//                            dialogFragment.setArrivalNotificationsDialogListener(StopsServicesFragment.this);
-                            dialogFragment.show(getChildFragmentManager(), SetArrivalNotificationsDialogFragment.TAG);
-                            homeFavouritesProgressBar.setVisibility(View.INVISIBLE);
-                            break;
-                        }
-                    }
-                    if (!isStopBeingWatched) {
-                        singleStopArrivalNotification = new ArrivalNotifications();
-                        singleStopArrivalNotification.setStopId(listOfAllStopsToDisplayInFavourites.get(groupPosition).getStopId());
-                        singleStopArrivalNotification.setStopName(listOfAllStopsToDisplayInFavourites.get(groupPosition).getStopName());
-                        singleStopArrivalNotification.setLatitude(listOfAllStopsToDisplayInFavourites.get(groupPosition).getStopLatitude());
-                        singleStopArrivalNotification.setLongitude(listOfAllStopsToDisplayInFavourites.get(groupPosition).getStopLongitude());
-                        singleStopArrivalNotification.setWatchingForArrival(false);
-                        singleStopArrivalNotification = updateFavouritesInfo(singleStopArrivalNotification);
-                        NextbusAPIs.callSingleStopInfo(getActivity(), getContext(), listOfAllStopsToDisplayInFavourites.get(groupPosition).getStopId(),
-                                groupPosition, true, new NextbusAPIs.VolleyCallBackSingleStop() {
-                            @Override
-                            public void onSuccessSingleStop(List<ServiceInStopDetails> servicesAllInfoAtStop) {
-                                singleStopArrivalNotification.setServicesAtStop(servicesAllInfoAtStop);
-                                SetArrivalNotificationsDialogFragment dialogFragment = SetArrivalNotificationsDialogFragment.newInstance(singleStopArrivalNotification);
-//                                    dialogFragment.setArrivalNotificationsDialogListener(StopsServicesFragment.this);
-//                                    dialogFragment.setTargetFragment(StopsServicesFragment.this, 0);
-                                dialogFragment.show(getChildFragmentManager(), SetArrivalNotificationsDialogFragment.TAG);
-                                Handler handler = new Handler();
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        homeFavouritesProgressBar.setVisibility(View.INVISIBLE);
-                                    }
-                                }, 600);
-                            }
-
-                            @Override
-                            public void onFailureAllStops() {
-                                //TODO: display failed to load snackback
-                            }
-                                });
-
-                    }
-                    return true;
-                }
-                return false;
-            }
-        });
-    }
-
-    private ArrivalNotifications updateFavouritesInfo(ArrivalNotifications singleStopArrivalNotification) {
-
-        if (MainActivity.favouriteDatabase.favouriteStopCRUD().isFavorite(singleStopArrivalNotification.getStopId()) == 1) {
-            singleStopArrivalNotification.setFavourite(true);
-            FavouriteStop favouriteStop = MainActivity.favouriteDatabase.favouriteStopCRUD().getFavoriteDataSingle(singleStopArrivalNotification.getStopId());
-            singleStopArrivalNotification.setServicesFavourited(FavouriteStop.fromString(favouriteStop.getServicesFavourited()));
-        }
-        return singleStopArrivalNotification;
-    }
-
-
-
-
 
 }

@@ -1,4 +1,4 @@
-package com.example.myapptest.ui.stops_services;
+package com.example.myapptest.ui;
 
 import android.content.Context;
 import android.os.Handler;
@@ -23,9 +23,9 @@ import java.util.List;
 
 public class StopsMainAdapter extends BaseExpandableListAdapter {
 
-    Context context;
-    List<StopList> listGroup;
-    HashMap<StopList, List<ServiceInStopDetails>> listItem;
+        Context context;
+        List<StopList> listGroup;
+        HashMap<StopList, List<ServiceInStopDetails>> listItem;
 
     public StopsMainAdapter(Context context, List<StopList> listGroup, HashMap<StopList, List<ServiceInStopDetails>>
             listItem){
@@ -137,13 +137,8 @@ public class StopsMainAdapter extends BaseExpandableListAdapter {
             }
 
             TextView textViewService = convertView.findViewById(R.id.list_child);
-            if (child.getServiceNum().contains("BIZ")) {
-                textViewService.setText("D1 (BIZ2)");
-            } else if (child.getServiceNum().contains("own")) {
-                textViewService.setText("D1 (Utown)");
-            } else {
-                textViewService.setText(child.getServiceNum());
-            }
+            textViewService.setText(child.getServiceNum());
+
 
             //for list_item_nus (NUS only)
             if (child.getFirstArrivalLive() != null) {

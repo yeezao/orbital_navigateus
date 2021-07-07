@@ -20,6 +20,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.myapptest.R;
 import com.example.myapptest.data.busstopinformation.ServiceInStopDetails;
 import com.example.myapptest.data.busstopinformation.StopList;
+import com.example.myapptest.ui.StopsMainAdapter;
 import com.jayway.jsonpath.JsonPath;
 
 import java.util.ArrayList;
