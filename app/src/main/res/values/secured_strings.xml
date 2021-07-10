@@ -1,4 +1,4 @@
 <resources>
     <string name="auth_header">Basic TlVTbmV4dGJ1czoxM2RMP3pZLDNmZVdSXiJU</string>
-
+    <string name="google_maps_key">AIzaSyAbsv-eJzgRPnVl07mzA4Cwt9Qi3okizJg</string>
 </resources>
