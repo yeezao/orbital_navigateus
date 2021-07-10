@@ -214,6 +214,10 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
     NotificationManager notificationManager;
     Uri soundUri;
 
+    /**
+     * Creates notification channels (as required by Android)
+     * for arrival alerts and persistent arrival notifications
+     */
     private void createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
@@ -398,7 +402,7 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
 
 
     /**
-     * This method is returned from SetArrivalNotificationsDialogFragment, when the user clicks "OK".
+     * This method is a callback from SetArrivalNotificationsDialogFragment, when the user clicks "OK".
      * It updates the favourites and arrival alerts data.
      *
      * @param singleStopArrivalNotifications Object with newly set favourites and arrival alerts data
@@ -528,6 +532,11 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
         //do nothing
     }
 
+    /**
+     * This method is called once when the app starts. It initializes the handler that checks
+     * for arrival data every 10 seconds. It leads into the {@link MainActivity#DoMonitoring()} method
+     * which is called (once every 10 seconds) only when at least one active arrival alert is present.
+     */
     private void BeginMonitoring() {
         monitoringHandler = new Handler();
         monitoringHandler.postDelayed(new Runnable() {
@@ -540,6 +549,10 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
         }, 10000);
     }
 
+    /**
+     * Checks which arrival alert is active, and if active, calls the
+     * {@link MainActivity#updateMonitoringAndNotification(ArrivalNotifications, int) method.}
+     */
     private void DoMonitoring() {
         try {
             if (arrivalNotificationsArray.size() > 0) {
@@ -554,6 +567,16 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
         }
     }
 
+    /**
+     * Calls the NUS server to check for arrival data at the specified stop from the {@link ArrivalNotifications} object that
+     * is passed in.  It then compares each service from the pulled data against services saved for monitoring. Afterward, it
+     * calls the {@link MainActivity#DetermineMonitoringThresholdReached(ArrivalNotifications, List)} method to determine if the
+     * monitoring threshold is reached, and if so, calls the {@link MainActivity#ChangeNotification(List, ArrivalNotifications)} and
+     * {@link MainActivity#ChangeArrivalNotificationsArray(ArrivalNotifications)} methods.
+     *
+     * @param singleStopArrivalNotificationForUpdate the object containing the arrival notifications data for the selected stop to be compared
+     * @param index the index of the stop to be compared within the {@link  MainActivity#arrivalNotificationsArray} array
+     */
     public void updateMonitoringAndNotification(ArrivalNotifications singleStopArrivalNotificationForUpdate, int index) {
         Log.e("entered", "updatemonitoringandnotification");
         getChildTimings(singleStopArrivalNotificationForUpdate.getStopId(), new MainActivity.VolleyCallBack() {
@@ -564,8 +587,11 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
                 int j = 0;
                 while (i < singleStopArrivalNotificationForUpdate.getServicesBeingWatched().size()
                         && j < singleStopArrivalNotificationForUpdate.getServicesAtStop().size()) {
+                    //check if service from most recent data pull is a service being monitored
                     if (singleStopArrivalNotificationForUpdate.getServicesAtStop().get(j).getServiceNum()
                             .equals(singleStopArrivalNotificationForUpdate.getServicesBeingWatched().get(i))) {
+                        //check if service has an estimate time, is not at "Arr" timing, and has an arrival time greater than the set monitoring threshold.
+                        //If true, it sets the monitoring boolean value to true
                         if (!arrivalNotificationsArray.get(index).getBeginWatching().get(i) && !monitoringAllServicesAtStop.get(j).getFirstArrival().equals("-")
                                 && !monitoringAllServicesAtStop.get(j).getFirstArrival().equals("Arr")
                                 && Integer.parseInt(monitoringAllServicesAtStop.get(j).getFirstArrival()) >= singleStopArrivalNotificationForUpdate.getTimeToWatch()){
@@ -582,7 +608,7 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
                 if (returnInfo != null) {
                     ChangeNotification(returnInfo, singleStopArrivalNotificationForUpdate);
                     ChangeArrivalNotificationsArray(singleStopArrivalNotificationForUpdate);
-                    monitoringHandler.removeCallbacksAndMessages(0);
+//                    monitoringHandler.removeCallbacksAndMessages(0);
                 } else {
                     //?
                 }
@@ -590,6 +616,12 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
         });
     }
 
+    /**
+     *
+     *
+     * @param returnInfo
+     * @param singleStopNotificationForUpdate
+     */
     private void ChangeNotification(List<String> returnInfo, ArrivalNotifications singleStopNotificationForUpdate) {
         NotificationCompat.Builder regularBuilder = new NotificationCompat.Builder(this, getString(R.string.arrivalnotifications_triggered_notif_id));
         Log.e("entered", "changenotification");

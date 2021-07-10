@@ -274,7 +274,6 @@ public class SingleRouteListCustomAdapterRecyclerView extends RecyclerView.Adapt
         if (isWalking) {
             holder.modeIcon.setImageResource(R.drawable.ic_baseline_directions_walk_16_navresult_small);
             stopPoint = currentSegment.getEdgeSequence().size();
-            startPoint = 0;
         } else {
             holder.modeIcon.setImageResource(R.drawable.ic_baseline_directions_bus_16_navresult);
             stopPoint = currentSegment.getNodeSequence().size() - 1;
@@ -287,7 +286,13 @@ public class SingleRouteListCustomAdapterRecyclerView extends RecyclerView.Adapt
                 tv.setText(currentSegment.getNodeSequence().get(i).getName());
             } else {
                 Log.e("edge is", currentSegment.getEdgeSequence().get(i).getEdgeDesc());
-                tv.setText(currentSegment.getEdgeSequence().get(i).getEdgeDesc());
+                if (currentSegment.getEdgeSequence().get(i).getEdgeDesc().equals("-")) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append("Walk through/past ").append(currentSegment.getNodeSequence().get(i + 1).getName());
+                    tv.setText(stringBuilder.toString());
+                } else {
+                    tv.setText(currentSegment.getEdgeSequence().get(i).getEdgeDesc());
+                }
                 tv.setLineSpacing(0, (float) 1.15);
             }
             if (i == 1) {

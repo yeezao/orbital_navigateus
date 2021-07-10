@@ -40,6 +40,7 @@ import com.example.myapptest.data.busstopinformation.ArrivalNotifications;
 import com.example.myapptest.data.busstopinformation.ServiceInStopDetails;
 import com.example.myapptest.data.busstopinformation.StopList;
 import com.example.myapptest.favourites.FavouriteStop;
+import com.example.myapptest.ui.BusLocationDisplayDialogFragment;
 import com.example.myapptest.ui.StopsMainAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -52,6 +53,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class StopsServicesFragment extends Fragment {
 
@@ -412,6 +414,23 @@ public class StopsServicesFragment extends Fragment {
 
         floatingGetLocationButton.setClickable(false);
 
+        expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+
+                Log.e("clicklistener", "yes");
+
+                if (listItem.get(listGroup.get(groupPosition)) != null) {
+                    String serviceNum = listItem.get(listGroup.get(groupPosition)).get(childPosition).getServiceNum();
+                    String stopName = listGroup.get(groupPosition).getStopName();
+                    BusLocationDisplayDialogFragment dialogFragment = BusLocationDisplayDialogFragment.newInstance(serviceNum, stopName);
+                    dialogFragment.show(Objects.requireNonNull(getChildFragmentManager()), BusLocationDisplayDialogFragment.TAG);
+                }
+
+                return true;
+            }
+        });
+
     }
 
     Handler timeRefreshHandler = new Handler(Looper.getMainLooper());
@@ -424,7 +443,7 @@ public class StopsServicesFragment extends Fragment {
      * method {@link StopsServicesFragment#setRefreshCircleInvisible(ProgressBar, int)} is called to
      * set ProgressBar to invisible, only if refresh was user-initiated.
      *
-     * @param isOnClick to determine if refrehs is user-initiated
+     * @param isOnClick to determine if refresh is user-initiated
      * @param view parent view of fragment
      */
     private void refreshTimings(boolean isOnClick, @NotNull View view) {
@@ -435,19 +454,23 @@ public class StopsServicesFragment extends Fragment {
                 numExpanded[0]++;
             }
         }
-        for (i = 0; i < listOfAllStops.size(); i++) {
-            if (expandableListView.isGroupExpanded(i)) {
-                getListOfChildServices(i, true, new VolleyCallBack() {
-                    @Override
-                    public void onSuccess() {
-                        numExpanded[0]--;
-                        if (numExpanded[0] == 0) {
-                            if (!searchingLocation && isOnClick) {
-                                setRefreshCircleInvisible(refreshTimingProgressBar, 800);
+        if (numExpanded[0] == 0) {
+            setRefreshCircleInvisible(refreshTimingProgressBar, 800);
+        } else {
+            for (i = 0; i < listOfAllStops.size(); i++) {
+                if (expandableListView.isGroupExpanded(i)) {
+                    getListOfChildServices(i, true, new VolleyCallBack() {
+                        @Override
+                        public void onSuccess() {
+                            numExpanded[0]--;
+                            if (numExpanded[0] == 0) {
+                                if (!searchingLocation && isOnClick) {
+                                    setRefreshCircleInvisible(refreshTimingProgressBar, 800);
+                                }
                             }
                         }
-                    }
-                });
+                    });
+                }
             }
         }
 

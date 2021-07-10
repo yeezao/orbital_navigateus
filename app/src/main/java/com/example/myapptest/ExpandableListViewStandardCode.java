@@ -14,6 +14,7 @@ import com.example.myapptest.data.busstopinformation.ArrivalNotifications;
 import com.example.myapptest.data.busstopinformation.ServiceInStopDetails;
 import com.example.myapptest.data.busstopinformation.StopList;
 import com.example.myapptest.favourites.FavouriteStop;
+import com.example.myapptest.ui.BusLocationDisplayDialogFragment;
 import com.example.myapptest.ui.stops_services.SetArrivalNotificationsDialogFragment;
 import com.example.myapptest.ui.StopsMainAdapter;
 import com.google.android.material.snackbar.Snackbar;
@@ -44,7 +45,7 @@ public class ExpandableListViewStandardCode {
      */
     public static void expandableListViewListeners(ExpandableListView expandableListView,
                                                    List<StopList> listGroup,
-                                                   HashMap<StopList, List<ServiceInStopDetails>>listItem,
+                                                   HashMap<StopList, List<ServiceInStopDetails>> listItem,
                                                    StopsMainAdapter adapter,
                                                    List<StopList> listOfStops, FragmentManager childFragmentManager,
                                                    Activity activity, Context context, boolean accountFavourites) {
@@ -163,9 +164,16 @@ public class ExpandableListViewStandardCode {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
 
+                Log.e("clicklistener", "yes");
 
+                if (listItem.get(listGroup.get(groupPosition)) != null) {
+                    String serviceNum = listItem.get(listGroup.get(groupPosition)).get(childPosition).getServiceNum();
+                    String stopName = listGroup.get(groupPosition).getStopName();
+                    BusLocationDisplayDialogFragment dialogFragment = BusLocationDisplayDialogFragment.newInstance(serviceNum, stopName);
+                    dialogFragment.show(childFragmentManager, BusLocationDisplayDialogFragment.TAG);
+                }
 
-                return false;
+                return true;
             }
         });
     }

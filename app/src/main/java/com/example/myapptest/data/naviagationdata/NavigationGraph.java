@@ -345,8 +345,11 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
             }
             if (isWalkOnly && trialResult.getNodesTraversed().size() > 0) {
                 List<NavigationPartialResults> listOfSegments = new ArrayList<>();
-                for (int j = 1; trialResult != null && j < trialResult.getNodesTraversed().size(); j++) {
+                for (int j = 1; j < trialResult.getNodesTraversed().size(); j++) {
                     trialResult.addEdgeSequence(trialResult.getNodesTraversed().get(j).getEdgeSelected());
+                }
+                for (int j = 0; j < trialResult.getNodesTraversed().size() - 1; j++) {
+                    trialResult.addNodeSequence(trialResult.getNodesTraversed().get(j));
                 }
                 listOfSegments.add(trialResult);
                 fullRoute.setResultsConcatenated(listOfSegments);
@@ -418,6 +421,9 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
                             currentInstance.getDest(), false, true, isFirstTime);
                     for (int j = 1; segmentResult != null && j < segmentResult.getNodesTraversed().size(); j++) {
                         segmentResult.addEdgeSequence(segmentResult.getNodesTraversed().get(j).getEdgeSelected());
+                    }
+                    for (int j = 0; segmentResult != null && j < segmentResult.getNodesTraversed().size() - 1; j++) {
+                        segmentResult.addNodeSequence(segmentResult.getNodesTraversed().get(j));
                     }
                     isFirstTime = false;
 

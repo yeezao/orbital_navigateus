@@ -139,6 +139,8 @@ public class NavigationPartialResults {
         this.nodeSequence = nodeSequence;
     }
 
+    public void addNodeSequence(NavigationNodes singleNode) {this.nodeSequence.add(singleNode);}
+
 
 
 }

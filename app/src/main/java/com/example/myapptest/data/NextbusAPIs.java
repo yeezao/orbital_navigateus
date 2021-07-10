@@ -14,6 +14,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.myapptest.MainActivity;
 import com.example.myapptest.R;
 import com.example.myapptest.data.busnetworkinformation.NetworkTickerTapes;
+import com.example.myapptest.data.busrouteinformation.BusLocationInfo;
 import com.example.myapptest.data.busrouteinformation.ServiceInfo;
 import com.example.myapptest.data.busstopinformation.ServiceInStopDetails;
 import com.example.myapptest.data.busstopinformation.StopList;
@@ -264,7 +265,6 @@ public class NextbusAPIs {
         }
     }
 
-
     public static void callListOfTickerTapes(Activity activity, Context context, final VolleyCallBackTickerTapesList callback) {
 
         String url = "https://nnextbus.nus.edu.sg/TickerTapes";
@@ -320,6 +320,59 @@ public class NextbusAPIs {
         }
     }
 
+    public static void callActiveBuses(String serviceNum, Activity activity, Context context, final VolleyCallBackActiveBusList callback) {
+
+        String url = mainUrl + "ActiveBus?route_code=" + serviceNum;
+
+        StringRequest stopStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+
+                List<String> plateNum = JsonPath.read(response, "$.ActiveBusResult.activebus[*].vehplate");
+                List<Double> lat = JsonPath.read(response, "$.ActiveBusResult.activebus[*].lat");
+                List<Double> lng = JsonPath.read(response, "$.ActiveBusResult.activebus[*].lng");;
+
+                List<BusLocationInfo> busLocationInfoList = new ArrayList<>();
+
+                for (int i = 0; i < plateNum.size(); i++) {
+                    BusLocationInfo busLocationInfo = new BusLocationInfo();
+                    busLocationInfo.setServicePlate(plateNum.get(i));
+                    busLocationInfo.setBusLocation(lat.get(i), lng.get(i));
+                    busLocationInfoList.add(busLocationInfo);
+                }
+
+                callback.onSuccessActiveBus(busLocationInfoList);
+
+            }
+
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // TODO: Handle error
+                Log.e("volley API error", "" + error);
+                callback.onFailureActiveBus();
+            }
+
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/json; charset=UTF-8");
+                params.put("Authorization", activity.getString(R.string.auth_header));
+                return params;
+            }
+        };
+
+        if (context != null) {
+            RequestQueue stopRequestQueue = Volley.newRequestQueue(context);
+            stopRequestQueue.add(stopStringRequest);
+        }
+    }
+
+
     public interface VolleyCallBackAllStops {
         void onSuccessAllStops(List<StopList> listOfAllStops);
         void onFailureAllStops();
@@ -344,6 +397,11 @@ public class NextbusAPIs {
     public interface VolleyCallBackTickerTapesList {
         void onSuccessTickerTapes(List<NetworkTickerTapes> networkTickerTapesList);
         void onFailureTickerTapes();
+    }
+
+    public interface VolleyCallBackActiveBusList {
+        void onSuccessActiveBus(List<BusLocationInfo> busLocationInfoList);
+        void onFailureActiveBus();
     }
 
 }

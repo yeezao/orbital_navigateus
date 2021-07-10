@@ -31,11 +31,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SetArrivalNotificationsDialogFragment#} factory method to
- * create an instance of this fragment.
- */
 public class SetArrivalNotificationsDialogFragment extends DialogFragment {
 
     public static String TAG = "SetArrivalNotificationsDialogFragment";
