@@ -25,8 +25,6 @@ import com.example.myapptest.data.busstopinformation.ServiceInStopDetails;
 import com.example.myapptest.data.busstopinformation.StopList;
 import com.example.myapptest.data.naviagationdata.NavigationResults;
 import com.example.myapptest.data.naviagationdata.NavigationSearchInfo;
-import com.example.myapptest.data.tutorial.IsFirstRuns;
-import com.example.myapptest.data.tutorial.IsFirstRunsDatabase;
 import com.example.myapptest.databinding.ActivityMainBinding;
 import com.example.myapptest.favourites.FavouriteDatabase;
 import com.example.myapptest.favourites.FavouriteStop;
@@ -69,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
     NavController navController;
 
     public static FavouriteDatabase favouriteDatabase;
-    public static IsFirstRunsDatabase isFirstRunsDatabase;
+//    public static IsFirstRunsDatabase isFirstRunsDatabase;
 
     //    private final StopsServicesMasterFragment stopsServicesMasterFragment = new StopsServicesMasterFragment();
 //    private final DirectionsFragment directionsFragment = new DirectionsFragment();
@@ -103,16 +101,16 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
         NavigationUI.setupWithNavController(binding.navView, navController);
 
         favouriteDatabase = Room.databaseBuilder(getApplicationContext(), FavouriteDatabase.class, "myfavdb").allowMainThreadQueries().build();
-        isFirstRunsDatabase = Room.databaseBuilder(getApplicationContext(), IsFirstRunsDatabase.class, "isFirstRundb").allowMainThreadQueries().build();
+//        isFirstRunsDatabase = Room.databaseBuilder(getApplicationContext(), IsFirstRunsDatabase.class, "isFirstRundb").allowMainThreadQueries().build();
 
         active = homeFragment;
 
         navView.setOnNavigationItemReselectedListener(mOnNavigationItemReselectedListener);
 
-        if (isFirstRunsDatabase.isFirstRunsCRUD().isFirstRunPresent() == 0) {
-            IsFirstRuns isFirstRuns = new IsFirstRuns();
-            isFirstRunsDatabase.isFirstRunsCRUD().addData(isFirstRuns);
-        }
+//        if (isFirstRunsDatabase.isFirstRunsCRUD().isFirstRunPresent() == 0) {
+//            IsFirstRuns isFirstRuns = new IsFirstRuns();
+//            isFirstRunsDatabase.isFirstRunsCRUD().addData(isFirstRuns);
+//        }
 
         List<FavouriteStop> listOfFavouriteStops = MainActivity.favouriteDatabase.favouriteStopCRUD().getFavoriteData();
         if (listOfFavouriteStops.size() > 0) {

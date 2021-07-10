@@ -32,7 +32,6 @@ import com.example.myapptest.data.busnetworkinformation.NetworkTickerTapes;
 import com.example.myapptest.data.NextbusAPIs;
 import com.example.myapptest.data.busstopinformation.ServiceInStopDetails;
 import com.example.myapptest.data.busstopinformation.StopList;
-import com.example.myapptest.data.tutorial.IsFirstRuns;
 import com.example.myapptest.favourites.FavouriteStop;
 import com.example.myapptest.ui.StopsMainAdapter;
 
@@ -79,10 +78,10 @@ public class HomeFragment extends Fragment implements LocationServices.LocationF
         homeFavouritesProgressBar = rootView.findViewById(R.id.progressBarHomeELV);
         textViewUpdating = rootView.findViewById(R.id.textViewUpdating);
 
-        List<IsFirstRuns> isFirstRuns = MainActivity.isFirstRunsDatabase.isFirstRunsCRUD().getIsFirstRuns();
-        if (isFirstRuns.get(0).isFirstRunHomeFrag()) {
-            //TODO: load HelpDialogFragment
-        }
+//        List<IsFirstRuns> isFirstRuns = MainActivity.isFirstRunsDatabase.isFirstRunsCRUD().getIsFirstRuns();
+//        if (isFirstRuns.get(0).isFirstRunHomeFrag()) {
+//            //TODO: load HelpDialogFragment
+//        }
 
         return rootView;
 

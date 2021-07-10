@@ -23,9 +23,13 @@ import com.example.myapptest.data.NextbusAPIs;
 import com.example.myapptest.data.busrouteinformation.BusLocationInfo;
 import com.example.myapptest.data.busstopinformation.ArrivalNotifications;
 import com.example.myapptest.ui.stops_services.SetArrivalNotificationsDialogFragment;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -43,11 +47,11 @@ public class BusLocationDisplayDialogFragment extends DialogFragment implements 
     String serviceNumToCheck, stopNameString;
     public static String TAG = "BusLocationDisplayDialogFragment";
 
-    private GoogleMap mMap;
+    private GoogleMap map;
 
     private final Handler handler = new Handler();
 
-    private SupportMapFragment mapFragment;
+    private MapView mapView;
 
     @NotNull
     @Override
@@ -66,20 +70,39 @@ public class BusLocationDisplayDialogFragment extends DialogFragment implements 
             }
         });
 
-        if (mapFragment == null) {
-            mapFragment = SupportMapFragment.newInstance();
-            mapFragment.getMapAsync(new OnMapReadyCallback() {
-                @Override
-                public void onMapReady(@NonNull @NotNull GoogleMap googleMap) {
+        // Gets the MapView from the XML layout and creates it
+        mapView = (MapView) view.findViewById(R.id.mapview);
+        mapView.onCreate(savedInstanceState);
 
-                    Log.e("entered", "onMapReady");
+        // Gets to GoogleMap from the MapView and does initialization stuff
+        mapView.getMapAsync(this);
+//        map.getUiSettings().setMyLocationButtonEnabled(false);
 
-                    mMap=googleMap;
-                    LatLng marker = new LatLng(1.289545, 103.849972);
+        // Needs to call MapsInitializer before doing any CameraUpdateFactory calls
+        MapsInitializer.initialize(this.getActivity());
 
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker, 13));
+        // Updates the location and zoom of the MapView
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(43.1, -87.9), 10);
+//        map.animateCamera(cameraUpdate);
 
-                    mMap.addMarker(new MarkerOptions().title("Hello Google Maps!").position(marker));
+        TextView stopName = view.findViewById(R.id.busLocationStopName);
+        stopName.setText(stopNameString);
+
+//
+//        if (mapFragment == null) {
+//            mapFragment = SupportMapFragment.newInstance();
+//            mapFragment.getMapAsync(new OnMapReadyCallback() {
+//                @Override
+//                public void onMapReady(@NonNull @NotNull GoogleMap googleMap) {
+//
+//                    Log.e("entered", "onMapReady");
+//
+//                    mMap=googleMap;
+//                    LatLng marker = new LatLng(1.289545, 103.849972);
+//
+//                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker, 13));
+//
+//                    mMap.addMarker(new MarkerOptions().title("Hello Google Maps!").position(marker));
 
 //                    mMap = googleMap;
 //                    CameraPosition googlePlex = CameraPosition.builder()
@@ -119,12 +142,10 @@ public class BusLocationDisplayDialogFragment extends DialogFragment implements 
 //                            handler.postDelayed(this, 5000);
 //                        }
 //                    }, 0);
-                }
-            });
-        }
+//                }
+//            });
+//        }
 
-        TextView stopName = view.findViewById(R.id.busLocationStopName);
-        stopName.setText(stopNameString);
 //
 //        SupportMapFragment mapFragment = (SupportMapFragment) getFragmentManager().findFragmentById(R.id.mapNearBy);
 //        mapFragment.getMapAsync(BusLocationDisplayDialogFragment.this);
@@ -136,7 +157,7 @@ public class BusLocationDisplayDialogFragment extends DialogFragment implements 
 
     @Override
     public void onMapReady(@NonNull @NotNull GoogleMap googleMap) {
-        mMap = googleMap;
+        map = googleMap;
         CameraPosition googlePlex = CameraPosition.builder()
                 .target(new LatLng(1.3840, 103.7470))
                 .zoom(7)
@@ -144,7 +165,11 @@ public class BusLocationDisplayDialogFragment extends DialogFragment implements 
                 .tilt(45)
                 .build();
 
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(googlePlex), 500, null);
+        map.addMarker(new MarkerOptions()
+                        .position(new LatLng(1.3840, 103.7470))
+                        .title("TEST"));
+
+        map.animateCamera(CameraUpdateFactory.newCameraPosition(googlePlex), 500, null);
 
         handler.postDelayed(new Runnable() {
             @Override
@@ -154,7 +179,7 @@ public class BusLocationDisplayDialogFragment extends DialogFragment implements 
                     public void onSuccessActiveBus(List<BusLocationInfo> busLocationInfoList) {
                         if (busLocationInfoList.size() > 0) {
                             for (int i = 0; i < busLocationInfoList.size(); i++) {
-                                mMap.addMarker(new MarkerOptions()
+                                map.addMarker(new MarkerOptions()
                                         .position(busLocationInfoList.get(i).getBusLocation())
                                         .title(busLocationInfoList.get(i).getServicePlate())
                                         .icon(generateBitmapDescriptorFromRes(getContext(), R.drawable.ic_baseline_directions_bus_24))); // add the marker to Map
@@ -175,6 +200,24 @@ public class BusLocationDisplayDialogFragment extends DialogFragment implements 
 
     private void pullBusLocationsOnline() {
 
+    }
+
+    @Override
+    public void onResume() {
+        mapView.onResume();
+        super.onResume();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mapView.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mapView.onLowMemory();
     }
 
     @Override

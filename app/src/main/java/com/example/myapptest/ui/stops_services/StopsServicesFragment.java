@@ -563,6 +563,8 @@ public class StopsServicesFragment extends Fragment {
      */
     private void initListData(List<StopList> listOfAllStops) {
 
+        this.listOfAllStops = listOfAllStops;
+
         //TODO: sort list of stops by distance
         Log.e("userLocation in initListData is: ", "" + userLocation);
         if (userLocation != null && (userLocation.getLatitude() != 0 && userLocation.getLongitude() != 0) && isLocationPermissionGranted) {
@@ -653,6 +655,8 @@ public class StopsServicesFragment extends Fragment {
     List<String> secondArrivalLive;
 
     private void getListOfChildServices(int groupPosition, boolean isOnClick, final VolleyCallBack callback) {
+
+        Log.e("null check for", listOfAllStops + "");
 
         String url = "https://nnextbus.nus.edu.sg/ShuttleService?busstopname=" + listOfAllStops.get(groupPosition).getStopId();
 
