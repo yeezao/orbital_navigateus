@@ -169,7 +169,7 @@ public class ExpandableListViewStandardCode {
                 if (listItem.get(listGroup.get(groupPosition)) != null) {
                     String serviceNum = listItem.get(listGroup.get(groupPosition)).get(childPosition).getServiceNum();
                     String stopName = listGroup.get(groupPosition).getStopName();
-                    BusLocationDisplayDialogFragment dialogFragment = BusLocationDisplayDialogFragment.newInstance(serviceNum, stopName);
+                    BusLocationDisplayDialogFragment dialogFragment = BusLocationDisplayDialogFragment.newInstance(serviceNum, stopName, listGroup.get(groupPosition));
                     dialogFragment.show(childFragmentManager, BusLocationDisplayDialogFragment.TAG);
                 }
 

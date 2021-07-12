@@ -81,6 +81,8 @@ public class SingleRouteListCustomAdapterRecyclerView extends RecyclerView.Adapt
 
         boolean isThisSegmentWalking;
 
+        Log.e("position is", position + "");
+
         if (position > navResultInSegments.size()) {
             holder.mainText.setVisibility(View.GONE);
             holder.takeServiceClickable.setVisibility(View.GONE);
@@ -269,11 +271,10 @@ public class SingleRouteListCustomAdapterRecyclerView extends RecyclerView.Adapt
     }
 
     private void setHolderELVChildren(Context context, NavigationPartialResults currentSegment, MyViewHolder holder, boolean isWalking) {
-        int stopPoint = currentSegment.getNodesTraversed().size();
+        int stopPoint = currentSegment.getNodesTraversed().size() - 1;
         int startPoint = 0;
         if (isWalking) {
             holder.modeIcon.setImageResource(R.drawable.ic_baseline_directions_walk_16_navresult_small);
-            stopPoint = currentSegment.getEdgeSequence().size();
         } else {
             holder.modeIcon.setImageResource(R.drawable.ic_baseline_directions_bus_16_navresult);
             stopPoint = currentSegment.getNodeSequence().size() - 1;
@@ -288,14 +289,14 @@ public class SingleRouteListCustomAdapterRecyclerView extends RecyclerView.Adapt
                 Log.e("edge is", currentSegment.getEdgeSequence().get(i).getEdgeDesc());
                 if (currentSegment.getEdgeSequence().get(i).getEdgeDesc().equals("-")) {
                     StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("Walk through/past ").append(currentSegment.getNodeSequence().get(i + 1).getName());
+                    stringBuilder.append("Walk through/past ").append(currentSegment.getNodeSequence().get(i).getName());
                     tv.setText(stringBuilder.toString());
                 } else {
                     tv.setText(currentSegment.getEdgeSequence().get(i).getEdgeDesc());
                 }
                 tv.setLineSpacing(0, (float) 1.15);
             }
-            if (i == 1) {
+            if (i == startPoint) {
                 tv.setPadding(0, 25, 0, 0);
             } else {
                 tv.setPadding(0, 35, 0, 0);

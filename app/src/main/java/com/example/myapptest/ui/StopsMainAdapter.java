@@ -23,9 +23,9 @@ import java.util.List;
 
 public class StopsMainAdapter extends BaseExpandableListAdapter {
 
-        Context context;
-        List<StopList> listGroup;
-        HashMap<StopList, List<ServiceInStopDetails>> listItem;
+    Context context;
+    List<StopList> listGroup;
+    HashMap<StopList, List<ServiceInStopDetails>> listItem;
 
     public StopsMainAdapter(Context context, List<StopList> listGroup, HashMap<StopList, List<ServiceInStopDetails>>
             listItem){
@@ -44,8 +44,12 @@ public class StopsMainAdapter extends BaseExpandableListAdapter {
 //        if (this.listItem.get(this.listGroup.get(groupPosition)) == null) {
 //            return getChildrenCountOnline(groupPosition);
 //        }
-//        return 10;
-        return this.listItem.get(this.listGroup.get(groupPosition)).size();
+//        return 10;\
+        try {
+            return this.listItem.get(this.listGroup.get(groupPosition)).size();
+        } catch (NullPointerException e) {
+            return 0;
+        }
     }
 
     @Override

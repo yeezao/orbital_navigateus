@@ -156,7 +156,7 @@ public class StopsServicesFragment extends Fragment {
         @Override
         public void onLocationChanged(@NonNull Location location) {
             Log.e("network location is: ", location + "");
-            if (location.getAccuracy() < 30) {
+            if (location.getAccuracy() < 60) {
                 userLocation = location;
                 secondLocationManager.removeUpdates(this);
                 locationManager.removeUpdates(gpsLocationListener);
@@ -183,7 +183,7 @@ public class StopsServicesFragment extends Fragment {
         @Override
         public void onLocationChanged(@NonNull Location location) {
             Log.e("gps location is: ", location + "");
-            if (location.getAccuracy() < 30) {
+            if (location.getAccuracy() < 60) {
                 userLocation = location;
                 locationManager.removeUpdates(this);
                 secondLocationManager.removeUpdates(networkLocationListener);
@@ -423,7 +423,7 @@ public class StopsServicesFragment extends Fragment {
                 if (listItem.get(listGroup.get(groupPosition)) != null) {
                     String serviceNum = listItem.get(listGroup.get(groupPosition)).get(childPosition).getServiceNum();
                     String stopName = listGroup.get(groupPosition).getStopName();
-                    BusLocationDisplayDialogFragment dialogFragment = BusLocationDisplayDialogFragment.newInstance(serviceNum, stopName);
+                    BusLocationDisplayDialogFragment dialogFragment = BusLocationDisplayDialogFragment.newInstance(serviceNum, stopName, listGroup.get(groupPosition));
                     dialogFragment.show(Objects.requireNonNull(getChildFragmentManager()), BusLocationDisplayDialogFragment.TAG);
                 }
 
@@ -434,7 +434,6 @@ public class StopsServicesFragment extends Fragment {
     }
 
     Handler timeRefreshHandler = new Handler(Looper.getMainLooper());
-
     int i;
 
     /**

@@ -9,9 +9,13 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,6 +26,8 @@ import com.example.myapptest.R;
 import com.example.myapptest.data.NextbusAPIs;
 import com.example.myapptest.data.busrouteinformation.BusLocationInfo;
 import com.example.myapptest.data.busstopinformation.ArrivalNotifications;
+import com.example.myapptest.data.busstopinformation.ServiceInStopDetails;
+import com.example.myapptest.data.busstopinformation.StopList;
 import com.example.myapptest.ui.stops_services.SetArrivalNotificationsDialogFragment;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.maps.CameraUpdate;
@@ -44,7 +50,10 @@ import java.util.List;
 
 public class BusLocationDisplayDialogFragment extends DialogFragment implements OnMapReadyCallback {
 
-    String serviceNumToCheck, stopNameString;
+    String serviceNumToCheck;
+    String stopNameString;
+    String fullServiceNumToCheck;
+    StopList busStop = new StopList();
     public static String TAG = "BusLocationDisplayDialogFragment";
 
     private GoogleMap map;
@@ -52,6 +61,10 @@ public class BusLocationDisplayDialogFragment extends DialogFragment implements 
     private final Handler handler = new Handler();
 
     private MapView mapView;
+    
+    TextView serviceNum, serviceFirstArrival, serviceSecondArrival;
+    ImageView serviceFirstArrivalLive, serviceSecondArrivalLive;
+    ProgressBar loadingStopInfoProgressBar;
 
     @NotNull
     @Override
@@ -66,7 +79,7 @@ public class BusLocationDisplayDialogFragment extends DialogFragment implements 
         builder.setView(view).setNegativeButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                handler.removeCallbacksAndMessages(null);
             }
         });
 
@@ -87,87 +100,139 @@ public class BusLocationDisplayDialogFragment extends DialogFragment implements 
 
         TextView stopName = view.findViewById(R.id.busLocationStopName);
         stopName.setText(stopNameString);
+        
+        serviceNum = view.findViewById(R.id.list_child);
+        serviceNum.setText(fullServiceNumToCheck);
 
-//
-//        if (mapFragment == null) {
-//            mapFragment = SupportMapFragment.newInstance();
-//            mapFragment.getMapAsync(new OnMapReadyCallback() {
-//                @Override
-//                public void onMapReady(@NonNull @NotNull GoogleMap googleMap) {
-//
-//                    Log.e("entered", "onMapReady");
-//
-//                    mMap=googleMap;
-//                    LatLng marker = new LatLng(1.289545, 103.849972);
-//
-//                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker, 13));
-//
-//                    mMap.addMarker(new MarkerOptions().title("Hello Google Maps!").position(marker));
+        serviceFirstArrival = view.findViewById(R.id.list_child_timing1);
+        serviceSecondArrival = view.findViewById(R.id.list_child_timing2);
+        serviceFirstArrivalLive = view.findViewById(R.id.live_timing_imageview);
+        serviceSecondArrivalLive = view.findViewById(R.id.live_timing_imageview_2);
+        loadingStopInfoProgressBar = view.findViewById(R.id.singleServiceMapProgressBar);
 
-//                    mMap = googleMap;
-//                    CameraPosition googlePlex = CameraPosition.builder()
-//                            .target(new LatLng(1.3840, 103.7470))
-//                            .zoom(7)
-//                            .bearing(0)
-//                            .tilt(45)
-//                            .build();
-//
-//                    LatLng latLng = new LatLng(1.289545, 103.849972);
-//                    googleMap.addMarker(new MarkerOptions().position(latLng)
-//                            .title("Singapore"));
-//
-//                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(googlePlex), 500, null);
-//
-//                    handler.postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            NextbusAPIs.callActiveBuses(serviceNumToCheck, getActivity(), getContext(), new NextbusAPIs.VolleyCallBackActiveBusList() {
-//                                @Override
-//                                public void onSuccessActiveBus(List<BusLocationInfo> busLocationInfoList) {
-//                                    if (busLocationInfoList.size() > 0) {
-//                                        for (int i = 0; i < busLocationInfoList.size(); i++) {
-//                                            mMap.addMarker(new MarkerOptions()
-//                                                    .position(busLocationInfoList.get(i).getBusLocation())
-//                                                    .title(busLocationInfoList.get(i).getServicePlate())
-//                                                    .icon(generateBitmapDescriptorFromRes(getContext(), R.drawable.ic_baseline_directions_bus_24))); // add the marker to Map
-//                                        }
-//                                    }
-//                                }
-//
-//                                @Override
-//                                public void onFailureActiveBus() {
-//                                    //TODO; display failure message
-//                                }
-//                            });
-//                            handler.postDelayed(this, 5000);
-//                        }
-//                    }, 0);
-//                }
-//            });
-//        }
-
-//
-//        SupportMapFragment mapFragment = (SupportMapFragment) getFragmentManager().findFragmentById(R.id.mapNearBy);
-//        mapFragment.getMapAsync(BusLocationDisplayDialogFragment.this);
-
+        Handler newHandler = new Handler();
+        newHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                setArrivalTimings();
+                newHandler.postDelayed(this, 10000);
+            }
+        }, 0);
 
         return builder.create();
 
+    }
+    
+    private void setArrivalTimings() {
+
+        NextbusAPIs.callSingleStopInfo(getActivity(), getContext(), busStop.getStopId(), 0, true, new NextbusAPIs.VolleyCallBackSingleStop() {
+            @Override
+            public void onSuccessSingleStop(List<ServiceInStopDetails> servicesAllInfoAtStop) {
+                Log.e("re call", "bus stop list");
+                for (int i = 0; i < servicesAllInfoAtStop.size(); i++) {
+                    if (servicesAllInfoAtStop.get(i).getServiceNum().equals(fullServiceNumToCheck)) {
+                        ServiceInStopDetails serviceInStopDetails = servicesAllInfoAtStop.get(i);
+                        if (serviceInStopDetails.getFirstArrivalLive() != null) {
+                            if (serviceInStopDetails.getFirstArrival().charAt(0) == '-') {
+                                serviceFirstArrival.setText("No Service");
+                                serviceFirstArrival.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+                                serviceFirstArrival.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
+                                serviceFirstArrival.setTextColor(ContextCompat.getColor(getContext(), R.color.grey));
+                                serviceFirstArrivalLive.setVisibility(ImageView.INVISIBLE);
+//                textViewTime1Live.setText("");
+//                textViewTime1Live.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.transparent));
+                            } else {
+                                serviceFirstArrival.setText(serviceInStopDetails.getFirstArrival());
+                                serviceFirstArrival.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+                                if (serviceInStopDetails.getFirstArrivalLive().length() == 0) {
+                                    serviceFirstArrival.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
+                                    serviceFirstArrival.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
+                                    serviceFirstArrivalLive.setVisibility(ImageView.INVISIBLE);
+//                    textViewTime1Live.setText("");
+//                    textViewTime1Live.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.transparent));
+                                } else {
+                                    if ((serviceInStopDetails.getFirstArrival().length() == 1 && serviceInStopDetails.getFirstArrival().contains("1")) || serviceInStopDetails.getFirstArrival().contains("Arr")) {
+                                        serviceFirstArrival.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.NUS_Blue));
+                                        serviceFirstArrival.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                                    } else {
+                                        serviceFirstArrival.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
+                                        serviceFirstArrival.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
+                                    }
+                                    serviceFirstArrivalLive.setVisibility(ImageView.VISIBLE);
+//                    textViewTime1Live.setText("LIVE");
+//                    textViewTime1Live.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+//                    textViewTime1Live.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green));
+                                }
+                            }
+
+
+
+//            TextView serviceSecondArrivalLive = convertView.findViewById(R.id.list_serviceInStopDetails_timing2_live);
+                            if (serviceInStopDetails.getFirstArrival().charAt(0) == '-') {
+                                serviceSecondArrival.setText("");
+                                serviceSecondArrival.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
+                                serviceSecondArrival.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
+                                serviceSecondArrivalLive.setVisibility(ImageView.INVISIBLE);
+//                serviceSecondArrivalLive.setText("");
+//                serviceSecondArrivalLive.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.transparent));
+                            } else if (serviceInStopDetails.getSecondArrival().charAt(0) == '-') {
+                                serviceSecondArrival.setText("< LAST BUS");
+                                serviceSecondArrival.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
+                                serviceSecondArrival.setTextColor(ContextCompat.getColor(getContext(), R.color.grey));
+                                serviceSecondArrival.setTextSize(14);
+                                serviceSecondArrivalLive.setVisibility(ImageView.INVISIBLE);
+                            } else {
+                                serviceSecondArrival.setText(serviceInStopDetails.getSecondArrival());
+                                if (serviceInStopDetails.getSecondArrivalLive().length() == 0) {
+                                    serviceSecondArrival.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
+                                    serviceSecondArrival.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
+                                    serviceSecondArrivalLive.setVisibility(ImageView.INVISIBLE);
+//                    serviceSecondArrivalLive.setText("");
+//                    serviceSecondArrivalLive.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.transparent));
+                                } else {
+                                    if ((serviceInStopDetails.getSecondArrival().length() == 1 && serviceInStopDetails.getSecondArrival().contains("1")) || serviceInStopDetails.getSecondArrival().contains("Arr")) {
+                                        serviceSecondArrival.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.NUS_Blue));
+                                        serviceSecondArrival.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                                    } else {
+                                        serviceSecondArrival.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
+                                        serviceSecondArrival.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
+                                    }
+                                    serviceSecondArrivalLive.setVisibility(ImageView.VISIBLE);
+//                    serviceSecondArrivalLive.setText("LIVE");
+//                    serviceSecondArrivalLive.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+//                    serviceSecondArrivalLive.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green));
+                                }
+                            }
+                        }
+                        serviceFirstArrival.setVisibility(View.VISIBLE);
+                        serviceSecondArrival.setVisibility(View.VISIBLE);
+                        loadingStopInfoProgressBar.setVisibility(View.GONE);
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onFailureSingleStop() {
+
+            }
+        });
+        
     }
 
     @Override
     public void onMapReady(@NonNull @NotNull GoogleMap googleMap) {
         map = googleMap;
         CameraPosition googlePlex = CameraPosition.builder()
-                .target(new LatLng(1.3840, 103.7470))
-                .zoom(7)
+                .target(new LatLng(busStop.getStopLatitude(), busStop.getStopLongitude()))
+                .zoom((float) 14.9999998)
                 .bearing(0)
-                .tilt(45)
+                .tilt(0)
                 .build();
 
-        map.addMarker(new MarkerOptions()
-                        .position(new LatLng(1.3840, 103.7470))
-                        .title("TEST"));
+//        map.addMarker(new MarkerOptions()
+//                        .position(new LatLng(1.3840, 103.7470))
+//                        .title("TEST"));
 
         map.animateCamera(CameraUpdateFactory.newCameraPosition(googlePlex), 500, null);
 
@@ -177,12 +242,17 @@ public class BusLocationDisplayDialogFragment extends DialogFragment implements 
                 NextbusAPIs.callActiveBuses(serviceNumToCheck, getActivity(), getContext(), new NextbusAPIs.VolleyCallBackActiveBusList() {
                     @Override
                     public void onSuccessActiveBus(List<BusLocationInfo> busLocationInfoList) {
+                        map.clear();
+                        map.addMarker(new MarkerOptions()
+                                .position(new LatLng(busStop.getStopLatitude(), busStop.getStopLongitude()))
+                                .title(busStop.getStopName()));
                         if (busLocationInfoList.size() > 0) {
                             for (int i = 0; i < busLocationInfoList.size(); i++) {
                                 map.addMarker(new MarkerOptions()
                                         .position(busLocationInfoList.get(i).getBusLocation())
                                         .title(busLocationInfoList.get(i).getServicePlate())
-                                        .icon(generateBitmapDescriptorFromRes(getContext(), R.drawable.ic_baseline_directions_bus_24))); // add the marker to Map
+                                        .icon(generateBitmapDescriptorFromRes(
+                                                getContext(), R.drawable.ic_baseline_directions_bus_36_large))); // add bus markers to map
                             }
                         }
                     }
@@ -192,7 +262,7 @@ public class BusLocationDisplayDialogFragment extends DialogFragment implements 
                         //TODO; display failure message
                     }
                 });
-                handler.postDelayed(this, 5000);
+                handler.postDelayed(this, 5000); //refresh every 5sec
             }
         }, 0);
 
@@ -232,13 +302,29 @@ public class BusLocationDisplayDialogFragment extends DialogFragment implements 
         super.onCancel(dialog);
     }
 
-    public static BusLocationDisplayDialogFragment newInstance(String serviceNum, String stopName) {
+    public static BusLocationDisplayDialogFragment newInstance(String serviceNum, String stopName, StopList busStop) {
         BusLocationDisplayDialogFragment dialogFragment = new BusLocationDisplayDialogFragment();
         Bundle args = new Bundle();
         dialogFragment.setArguments(args);
-        dialogFragment.setServiceNumToCheck(serviceNum);
+        if (serviceNum.contains("D1")) {
+            dialogFragment.setServiceNumToCheck("D1");
+        } else if (serviceNum.contains("C")) {
+            dialogFragment.setServiceNumToCheck("C");
+        } else {
+            dialogFragment.setServiceNumToCheck(serviceNum);
+        }
+        dialogFragment.setFullServiceNumToCheck(serviceNum);
         dialogFragment.setStopNameString(stopName);
+        dialogFragment.setBusStop(busStop);
         return dialogFragment;
+    }
+    
+    public void setFullServiceNumToCheck(String fullServiceNumToCheck) {
+        this.fullServiceNumToCheck = fullServiceNumToCheck;
+    }
+
+    public void setBusStop(StopList busStop) {
+        this.busStop = busStop;
     }
 
     public void setServiceNumToCheck(String serviceNumToCheck) {
@@ -248,8 +334,6 @@ public class BusLocationDisplayDialogFragment extends DialogFragment implements 
     public void setStopNameString(String stopNameString) {
         this.stopNameString = stopNameString;
     }
-
-
 
     //helper method to add marker as image onto map
     public static BitmapDescriptor generateBitmapDescriptorFromRes(

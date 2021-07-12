@@ -409,28 +409,38 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
         if (navTestResultSegment.size() > 2) {
             holder.navR_via.setVisibility(View.VISIBLE);
             StringBuilder stringBuilder = new StringBuilder();
-            if (navTestResultSegment.size() > 3 && navTestResultSegment.get(1).getNodeSequence().size() > 0 && navTestResultSegment.get(3).getNodeSequence().size() > 0) {
+            if (navTestResultSegment.size() > 3 && navTestResultSegment.get(1).getEdgeSequence().size() == 0
+                    && navTestResultSegment.get(3).getEdgeSequence().size() == 0) {
+                Log.e("case", "1");
                 stringBuilder.append("via ")
                         .append(navTestResultSegment.get(1).getNodeSequence().get(navTestResultSegment.get(1).getNodeSequence().size() - 1).getAltname())
                         .append(", ")
                         .append(navTestResultSegment.get(3).getNodeSequence().get(0).getAltname());
-            } else if (navTestResultSegment.size() >= 3 && navTestResultSegment.get(2).getNodeSequence().size() > 0 && navTestResultSegment.get(0).getNodeSequence().size() > 0) {
+            } else if (navTestResultSegment.size() >= 3 && navTestResultSegment.get(2).getEdgeSequence().size() == 0
+                    && navTestResultSegment.get(0).getEdgeSequence().size() == 0) {
+                Log.e("case", "2" + navTestResultSegment.get(0).getNodeSequence().get(navTestResultSegment.get(0).getNodeSequence().size() - 1).getAltname());
                 stringBuilder.append("via ")
                         .append(navTestResultSegment.get(0).getNodeSequence().get(navTestResultSegment.get(0).getNodeSequence().size() - 1).getAltname())
                         .append(", ")
                         .append(navTestResultSegment.get(2).getNodeSequence().get(0).getAltname());
-            } else if (navTestResultSegment.size() > 3 && navTestResultSegment.get(2).getNodeSequence().size() > 0 && navTestResultSegment.get(1).getNodeSequence().size() > 0) {
+            } else if (navTestResultSegment.size() > 3 && navTestResultSegment.get(2).getEdgeSequence().size() == 0
+                    && navTestResultSegment.get(1).getEdgeSequence().size() == 0) {
+                Log.e("case", "3");
                 stringBuilder.append("via ")
                         .append(navTestResultSegment.get(1).getNodeSequence().get(navTestResultSegment.get(1).getNodeSequence().size() - 1).getAltname())
                         .append(", ")
                         .append(navTestResultSegment.get(2).getNodeSequence().get(navTestResultSegment.get(2).getNodeSequence().size() - 1).getAltname());
-            } else if (navTestResultSegment.size() > 2 && navTestResultSegment.get(0).getNodeSequence().size() > 0 && navTestResultSegment.get(1).getNodeSequence().size() > 0) {
+            } else if (navTestResultSegment.size() > 2 && navTestResultSegment.get(0).getEdgeSequence().size() == 0
+                    && navTestResultSegment.get(1).getEdgeSequence().size() == 0) {
+                Log.e("case", "4");
                 stringBuilder.append("via ")
                         .append(navTestResultSegment.get(0).getNodeSequence().get(navTestResultSegment.get(0).getNodeSequence().size() - 1).getAltname())
                         .append(", ")
                         .append(navTestResultSegment.get(1).getNodeSequence().get(navTestResultSegment.get(1).getNodeSequence().size() - 1).getAltname());
-            } else if (navTestResultSegment.get(1).getNodeSequence().size() > 0) {
-                stringBuilder.append("via ").append(navTestResultSegment.get(1).getNodeSequence().get(navTestResultSegment.get(1).getNodeSequence().size() - 1).getAltname());
+            } else if (navTestResultSegment.get(1).getEdgeSequence().size() == 0) {
+                Log.e("case", "5");
+                stringBuilder.append("via ")
+                        .append(navTestResultSegment.get(1).getNodeSequence().get(navTestResultSegment.get(1).getNodeSequence().size() - 1).getAltname());
 //            } else if (navTestResultSegment.size() == 3 && navTestResultSegment.get(1).getNodeSequence().size() > 0) {
 //                stringBuilder.append("via ").append(navTestResultSegment.get(1).getNodeSequence().get(0).getName());
             } else {

@@ -73,6 +73,7 @@ public class HomeFragment extends Fragment implements LocationServices.LocationF
         listGroup = new ArrayList<>();
         listItem = new HashMap<>();
         adapter = new StopsMainAdapter(getContext(), listGroup, listItem);
+        Log.e("reset", "adapter");
         expandableListView.setAdapter(adapter);
 
         homeFavouritesProgressBar = rootView.findViewById(R.id.progressBarHomeELV);

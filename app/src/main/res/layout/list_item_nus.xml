@@ -61,22 +61,6 @@
         app:layout_constraintStart_toEndOf="@+id/list_child_timing1"
         app:layout_constraintTop_toTopOf="parent" />
 
-<!--    <TextView-->
-<!--        android:id="@+id/list_child_timing2_live"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginEnd="20dp"-->
-<!--        android:paddingLeft="5dp"-->
-<!--        android:paddingTop="2dp"-->
-<!--        android:paddingRight="5dp"-->
-<!--        android:paddingBottom="2dp"-->
-<!--        android:textAlignment="textEnd"-->
-<!--        android:textColor="@color/black"-->
-<!--        android:textSize="10dp"-->
-<!--        app:layout_constraintBottom_toBottomOf="@+id/list_child_timing2"-->
-<!--        app:layout_constraintEnd_toEndOf="@+id/list_child_timing2"-->
-<!--        app:layout_constraintTop_toTopOf="@+id/list_child_timing2" />-->
-
     <ImageView
         android:id="@+id/live_timing_imageview"
         android:layout_width="13dp"
