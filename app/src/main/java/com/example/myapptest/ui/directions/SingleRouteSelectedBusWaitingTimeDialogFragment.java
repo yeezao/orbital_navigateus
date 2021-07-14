@@ -39,7 +39,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 public class SingleRouteSelectedBusWaitingTimeDialogFragment extends DialogFragment {
 
     public static String TAG = "SingleRouteSelectedBusWaitingTimeDialogFragment";
@@ -76,7 +75,7 @@ public class SingleRouteSelectedBusWaitingTimeDialogFragment extends DialogFragm
         });
 
         linearLayoutManager = new LinearLayoutManager(getContext());
-        singleResultRecyclerView = view.findViewById(R.id.singleBusArrivingRecyclerView);
+        singleResultRecyclerView = view.findViewById(R.id.announcementRecyclerView);
         singleResultRecyclerView.setClickable(false);
         singleResultRecyclerView.setLayoutManager(linearLayoutManager);
 
@@ -99,7 +98,7 @@ public class SingleRouteSelectedBusWaitingTimeDialogFragment extends DialogFragm
 
 
 
-        TextView title = view.findViewById(R.id.arrivalNotificationsStopName);
+        TextView title = view.findViewById(R.id.AnnouncementTitle);
         title.setText(stop.getName());
 
         return builder.create();

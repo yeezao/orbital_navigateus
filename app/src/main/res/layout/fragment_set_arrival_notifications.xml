@@ -222,7 +222,7 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
-                        android:id="@+id/arrivalNotificationsStopName"
+                        android:id="@+id/AnnouncementTitle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-light"

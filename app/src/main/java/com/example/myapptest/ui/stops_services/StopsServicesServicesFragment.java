@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapptest.R;
-import com.example.myapptest.data.busnetworkinformation.NetworkTickerTapes;
+import com.example.myapptest.data.busnetworkinformation.NetworkTickerTapesAnnouncements;
 import com.example.myapptest.data.busrouteinformation.ServiceInfo;
 import com.example.myapptest.data.NextbusAPIs;
 import com.example.myapptest.data.busstopinformation.StopList;
@@ -68,19 +68,19 @@ public class StopsServicesServicesFragment extends Fragment {
             @Override
             public void onSuccessServiceList(List<ServiceInfo> servicesInfo) {
                 listOfServices = servicesInfo;
-                NextbusAPIs.callListOfTickerTapes(getActivity(), getContext(), new NextbusAPIs.VolleyCallBackTickerTapesList() {
+                NextbusAPIs.callListOfTickerTapes(getActivity(), getContext(), new NextbusAPIs.VolleyCallBackTickerTapesAnnouncementsList() {
                     @Override
-                    public void onSuccessTickerTapes(List<NetworkTickerTapes> networkTickerTapesList) {
+                    public void onSuccessTickerTapesAnnouncements(List<NetworkTickerTapesAnnouncements> networkTickerTapesAnnouncementsList) {
                         Log.e("tickertapes", " success");
-                        for (int i = 0; i < networkTickerTapesList.size(); i++) {
-                            String[] servicesAffected = networkTickerTapesList.get(i).getServicesAffected().split(",");
+                        for (int i = 0; i < networkTickerTapesAnnouncementsList.size(); i++) {
+                            String[] servicesAffected = networkTickerTapesAnnouncementsList.get(i).getServicesAffected().split(",");
                             for (int j = 0; j < servicesAffected.length; j++) {
                                 for (int k = 0; k < servicesInfo.size(); k++) {
                                     if ((servicesAffected[j].contains(servicesInfo.get(k).getServiceNum())
                                             || servicesInfo.get(k).getServiceNum().contains(servicesAffected[j])) &&
-                                            (!networkTickerTapesList.get(i).getMessage().contains("testing") &&
-                                                    !networkTickerTapesList.get(i).getMessage().contains("Testing") &&
-                                                    !networkTickerTapesList.get(i).getMessage().contains("maintenance"))) {
+                                            (!networkTickerTapesAnnouncementsList.get(i).getMessage().contains("testing") &&
+                                                    !networkTickerTapesAnnouncementsList.get(i).getMessage().contains("Testing") &&
+                                                    !networkTickerTapesAnnouncementsList.get(i).getMessage().contains("maintenance"))) {
                                         ServiceInfo serviceInfo = servicesInfo.get(k);
                                         serviceInfo.setServiceStatus(1);
                                         servicesInfo.set(k, serviceInfo);
@@ -93,7 +93,7 @@ public class StopsServicesServicesFragment extends Fragment {
                     }
 
                     @Override
-                    public void onFailureTickerTapes() {
+                    public void onFailureTickerTapesAnnouncements() {
                         Log.e("tickertapes", " failed");
                         for (int i = 0; i < servicesInfo.size(); i++) {
                             ServiceInfo serviceInfo = servicesInfo.get(i);

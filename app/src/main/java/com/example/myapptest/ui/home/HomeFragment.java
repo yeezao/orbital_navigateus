@@ -1,5 +1,6 @@
 package com.example.myapptest.ui.home;
 
+import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -29,11 +30,13 @@ import com.example.myapptest.ExpandableListViewStandardCode;
 import com.example.myapptest.MainActivity;
 import com.example.myapptest.R;
 import com.example.myapptest.data.LocationServices;
-import com.example.myapptest.data.busnetworkinformation.NetworkTickerTapes;
+import com.example.myapptest.data.busnetworkinformation.NetworkTickerTapesAnnouncements;
 import com.example.myapptest.data.NextbusAPIs;
 import com.example.myapptest.data.busstopinformation.ServiceInStopDetails;
 import com.example.myapptest.data.busstopinformation.StopList;
 import com.example.myapptest.favourites.FavouriteStop;
+import com.example.myapptest.ui.AnnouncementCustomRecyclerViewAdapter;
+import com.example.myapptest.ui.AnnouncementTickerTapesDialogFragment;
 import com.example.myapptest.ui.StopsMainAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -86,11 +89,6 @@ public class HomeFragment extends Fragment implements LocationServices.LocationF
         homeFavouritesProgressBar = rootView.findViewById(R.id.progressBarHomeELV);
         textViewUpdating = rootView.findViewById(R.id.textViewUpdating);
 
-//        List<IsFirstRuns> isFirstRuns = MainActivity.isFirstRunsDatabase.isFirstRunsCRUD().getIsFirstRuns();
-//        if (isFirstRuns.get(0).isFirstRunHomeFrag()) {
-//            //TODO: load HelpDialogFragment
-//        }
-
         return rootView;
 
     }
@@ -106,6 +104,11 @@ public class HomeFragment extends Fragment implements LocationServices.LocationF
 
     @Override
     public boolean onOptionsItemSelected(@NonNull @NotNull MenuItem item) {
+        if (item.getItemId() == R.id.action_messages) {
+            AnnouncementTickerTapesDialogFragment dialogFragment = AnnouncementTickerTapesDialogFragment.newInstance(false);
+            dialogFragment.show(getChildFragmentManager(), AnnouncementTickerTapesDialogFragment.TAG);
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -134,22 +137,22 @@ public class HomeFragment extends Fragment implements LocationServices.LocationF
         TextView tickerTapesText = rootView.findViewById(R.id.textViewServiceStatusDesc);
         ConstraintLayout serviceStatusHomeContainer = rootView.findViewById(R.id.serviceStatusHomeContainer);
 
-        NextbusAPIs.callListOfTickerTapes(getActivity(), getContext(), new NextbusAPIs.VolleyCallBackTickerTapesList() {
+        NextbusAPIs.callListOfTickerTapes(getActivity(), getContext(), new NextbusAPIs.VolleyCallBackTickerTapesAnnouncementsList() {
             @Override
-            public void onSuccessTickerTapes(List<NetworkTickerTapes> networkTickerTapesList) {
+            public void onSuccessTickerTapesAnnouncements(List<NetworkTickerTapesAnnouncements> networkTickerTapesAnnouncementsList) {
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         tickerTapesPB.setVisibility(View.GONE);
                         tickerTapesStatusIcon.setVisibility(View.VISIBLE);
-                        if (networkTickerTapesList.size() == 0) {
+                        if (networkTickerTapesAnnouncementsList.size() == 0) {
                             tickerTapesStatusIcon.setImageResource(R.drawable.ic_baseline_service_ok_24);
                             tickerTapesText.setText("Good service on all routes. Have a great day! :)");
                         } else {
                             tickerTapesStatusIcon.setImageResource(R.drawable.ic_baseline_service_disruption_24);
                             StringBuilder stringBuilder = new StringBuilder();
-                            stringBuilder.append(networkTickerTapesList.size()).append(" active service alert(s). Tap here for info.");
+                            stringBuilder.append(networkTickerTapesAnnouncementsList.size()).append(" active service alert(s). Tap here for info.");
                             tickerTapesText.setText(stringBuilder.toString());
                             serviceStatusHomeContainer.setOnClickListener(new View.OnClickListener() {
                                 @Override
@@ -164,7 +167,7 @@ public class HomeFragment extends Fragment implements LocationServices.LocationF
             }
 
             @Override
-            public void onFailureTickerTapes() {
+            public void onFailureTickerTapesAnnouncements() {
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override

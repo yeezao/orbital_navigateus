@@ -13,7 +13,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.myapptest.MainActivity;
 import com.example.myapptest.R;
-import com.example.myapptest.data.busnetworkinformation.NetworkTickerTapes;
+import com.example.myapptest.data.busnetworkinformation.NetworkTickerTapesAnnouncements;
 import com.example.myapptest.data.busrouteinformation.BusLocationInfo;
 import com.example.myapptest.data.busrouteinformation.ServiceInfo;
 import com.example.myapptest.data.busstopinformation.ServiceInStopDetails;
@@ -300,15 +300,15 @@ public class NextbusAPIs {
     }
 
     /**
-     * Calls list of TickerTapes (urgent announcements in NUS speak (why??)) and packages it into a {@link List<NetworkTickerTapes>}.
+     * Calls list of TickerTapes (urgent announcements in NUS speak (why??)) and packages it into a {@link List< NetworkTickerTapesAnnouncements >}.
      *
      * @param activity
      * @param context
      * @param callback
      */
-    public static void callListOfTickerTapes(Activity activity, Context context, final VolleyCallBackTickerTapesList callback) {
+    public static void callListOfTickerTapes(Activity activity, Context context, final VolleyCallBackTickerTapesAnnouncementsList callback) {
 
-        String url = "https://nnextbus.nus.edu.sg/TickerTapes";
+        String url = mainUrl + "TickerTapes";
 
         StringRequest stopStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
 
@@ -320,18 +320,18 @@ public class NextbusAPIs {
                 List<String> displayFrom = JsonPath.read(response, "$.TickerTapesResult.TickerTape[*].Display_From");
                 List<String> displayTo = JsonPath.read(response, "$.TickerTapesResult.TickerTape[*].Display_To");
 
-                List<NetworkTickerTapes> networkTickerTapesList = new ArrayList<>();
+                List<NetworkTickerTapesAnnouncements> networkTickerTapesAnnouncementsList = new ArrayList<>();
 
                 for (int i = 0; i < messages.size(); i++) {
-                    NetworkTickerTapes networkTickerTapes = new NetworkTickerTapes();
-                    networkTickerTapes.mainSetterNetworkTickerTapes(
+                    NetworkTickerTapesAnnouncements networkTickerTapesAnnouncements = new NetworkTickerTapesAnnouncements();
+                    networkTickerTapesAnnouncements.mainSetterNetworkTickerTapes(
                             messages.get(i), servicesAffected.get(i), displayFrom.get(i), displayTo.get(i));
-                    if (networkTickerTapes.checkIfValid()) {
-                        networkTickerTapesList.add(networkTickerTapes);
+                    if (networkTickerTapesAnnouncements.checkIfValid()) {
+                        networkTickerTapesAnnouncementsList.add(networkTickerTapesAnnouncements);
                     }
                 }
 
-                callback.onSuccessTickerTapes(networkTickerTapesList);
+                callback.onSuccessTickerTapesAnnouncements(networkTickerTapesAnnouncementsList);
 
             }
 
@@ -341,7 +341,56 @@ public class NextbusAPIs {
             public void onErrorResponse(VolleyError error) {
                 // TODO: Handle error
                 Log.e("volley API error", "" + error);
-                callback.onFailureTickerTapes();
+                callback.onFailureTickerTapesAnnouncements();
+            }
+
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/json; charset=UTF-8");
+                params.put("Authorization", activity.getString(R.string.auth_header));
+                return params;
+            }
+        };
+
+        if (context != null) {
+            RequestQueue stopRequestQueue = Volley.newRequestQueue(context);
+            stopRequestQueue.add(stopStringRequest);
+        }
+    }
+
+    public static void callListOfAnnouncements(Activity activity, Context context, final VolleyCallBackTickerTapesAnnouncementsList callback) {
+
+        String url = mainUrl + "Announcements";
+
+        StringRequest stopStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+
+                List<String> messages = JsonPath.read(response, "$.AnnouncementsResult.Announcement[*].Text");
+
+                List<NetworkTickerTapesAnnouncements> networkTickerTapesAnnouncementsList = new ArrayList<>();
+
+                for (int i = 0; i < messages.size(); i++) {
+                    NetworkTickerTapesAnnouncements networkTickerTapesAnnouncements = new NetworkTickerTapesAnnouncements();
+                    networkTickerTapesAnnouncements.mainSetterNetworkTickerTapes(messages.get(i), null, null, null);
+                    networkTickerTapesAnnouncementsList.add(networkTickerTapesAnnouncements);
+                }
+
+                callback.onSuccessTickerTapesAnnouncements(networkTickerTapesAnnouncementsList);
+
+            }
+
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // TODO: Handle error
+                Log.e("volley API error", "" + error);
+                callback.onFailureTickerTapesAnnouncements();
             }
 
         }) {
@@ -435,9 +484,9 @@ public class NextbusAPIs {
         void onFailurePickupPoint();
     }
 
-    public interface VolleyCallBackTickerTapesList {
-        void onSuccessTickerTapes(List<NetworkTickerTapes> networkTickerTapesList);
-        void onFailureTickerTapes();
+    public interface VolleyCallBackTickerTapesAnnouncementsList {
+        void onSuccessTickerTapesAnnouncements(List<NetworkTickerTapesAnnouncements> networkTickerTapesAnnouncementsList);
+        void onFailureTickerTapesAnnouncements();
     }
 
     public interface VolleyCallBackActiveBusList {

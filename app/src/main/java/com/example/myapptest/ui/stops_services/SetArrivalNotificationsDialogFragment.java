@@ -16,9 +16,7 @@ import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 
 import com.example.myapptest.R;
 import com.example.myapptest.data.busstopinformation.ArrivalNotifications;
@@ -53,7 +51,7 @@ public class SetArrivalNotificationsDialogFragment extends DialogFragment {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.fragment_set_arrival_notifications, null);
 
-        TextView arrivalNotificationsStopName = view.findViewById(R.id.arrivalNotificationsStopName);
+        TextView arrivalNotificationsStopName = view.findViewById(R.id.AnnouncementTitle);
         arrivalNotificationsStopName.setText(singleStopArrivalNotifications.getStopName());
 
         selectTimeSpinner = (Spinner) view.findViewById(R.id.chooseTimeSpinner);
