@@ -29,11 +29,11 @@ public class ExpandableListViewStandardCode {
     private static List<ArrivalNotifications> arrivalNotificationsArray;
 
     /**
-     * Sets the 3 listeners that are used across all ExpandableListViews in this app:
+     * Sets the 3 listeners that are used across all {@link ExpandableListView} in this app:
      * GroupClick (expand/collapse), GroupLongClick (Alerts/Favourites Dialog) & ItemClick (Bus Locations)
      *
      *
-     * @param expandableListView
+     * @param expandableListView the {@link ExpandableListView} object being operated on
      * @param listGroup
      * @param listItem
      * @param adapter

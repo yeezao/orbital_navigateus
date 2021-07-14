@@ -29,6 +29,13 @@ public class NextbusAPIs {
 
     private static final String mainUrl = "https://nnextbus.nus.edu.sg/";
 
+    /**
+     * Calls list of all bus stops in NUS, and packages the JSON response string into a {@link List<StopList>}.
+     *
+     * @param activity
+     * @param context
+     * @param callback
+     */
     public static void callStopsList(Activity activity, Context context, final VolleyCallBackAllStops callback) {
         String url = mainUrl + "BusStops";
 
@@ -88,6 +95,16 @@ public class NextbusAPIs {
         }
     }
 
+    /**
+     * Calls arrival data for a single stop and packages the JSON response string into a {@link List<ServiceInStopDetails>}.
+     *
+     * @param activity
+     * @param context
+     * @param stopId
+     * @param groupPosition
+     * @param isOnClick
+     * @param callback
+     */
     public static void callSingleStopInfo(Activity activity, Context context, String stopId, int groupPosition, boolean isOnClick, final VolleyCallBackSingleStop callback) {
 
         String url = mainUrl + "ShuttleService?busstopname=" + stopId;
@@ -152,6 +169,14 @@ public class NextbusAPIs {
 
     }
 
+    /**
+     * Calls list of all services and a short description line for each service and packages the JSON response string
+     * into a {@link List<ServiceInfo>}.
+     *
+     * @param activity
+     * @param context
+     * @param callback
+     */
     public static void callListOfServices(Activity activity, Context context, final VolleyCallBackServiceList callback) {
 
         String url = mainUrl + "ServiceDescription";
@@ -203,6 +228,15 @@ public class NextbusAPIs {
         }
     }
 
+    /**
+     * Calls list of all stops along a service's route and packages the JSON response string into a {@link List<StopList>}.
+     *
+     * @param returnAsString
+     * @param serviceNum
+     * @param activity
+     * @param context
+     * @param callback
+     */
     public static void callPickupPoint(boolean returnAsString, String serviceNum, Activity activity, Context context, final VolleyCallBackPickupPoint callback) {
 
         String url = mainUrl + "PickupPoint?route_code=" + serviceNum;
@@ -265,6 +299,13 @@ public class NextbusAPIs {
         }
     }
 
+    /**
+     * Calls list of TickerTapes (urgent announcements in NUS speak (why??)) and packages it into a {@link List<NetworkTickerTapes>}.
+     *
+     * @param activity
+     * @param context
+     * @param callback
+     */
     public static void callListOfTickerTapes(Activity activity, Context context, final VolleyCallBackTickerTapesList callback) {
 
         String url = "https://nnextbus.nus.edu.sg/TickerTapes";

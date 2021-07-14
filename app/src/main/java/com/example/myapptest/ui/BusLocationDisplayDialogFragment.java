@@ -14,6 +14,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -122,7 +123,12 @@ public class BusLocationDisplayDialogFragment extends DialogFragment implements 
         return builder.create();
 
     }
-    
+
+    /**
+     * Method to pull arrival time data from NextBus servers and display it on the dialog.
+     * This method is similar to the {@link StopsMainAdapter#getChildView(int, int, boolean, View, ViewGroup)} method.
+     *
+     */
     private void setArrivalTimings() {
 
         NextbusAPIs.callSingleStopInfo(getActivity(), getContext(), busStop.getStopId(), 0, true, new NextbusAPIs.VolleyCallBackSingleStop() {
@@ -234,7 +240,7 @@ public class BusLocationDisplayDialogFragment extends DialogFragment implements 
 //                        .position(new LatLng(1.3840, 103.7470))
 //                        .title("TEST"));
 
-        map.animateCamera(CameraUpdateFactory.newCameraPosition(googlePlex), 500, null);
+        map.animateCamera(CameraUpdateFactory.newCameraPosition(googlePlex), 1, null);
 
         handler.postDelayed(new Runnable() {
             @Override
@@ -265,10 +271,6 @@ public class BusLocationDisplayDialogFragment extends DialogFragment implements 
                 handler.postDelayed(this, 5000); //refresh every 5sec
             }
         }, 0);
-
-    }
-
-    private void pullBusLocationsOnline() {
 
     }
 

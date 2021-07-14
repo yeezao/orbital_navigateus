@@ -19,6 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
@@ -34,6 +35,7 @@ import com.example.myapptest.data.busstopinformation.ServiceInStopDetails;
 import com.example.myapptest.data.busstopinformation.StopList;
 import com.example.myapptest.favourites.FavouriteStop;
 import com.example.myapptest.ui.StopsMainAdapter;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -68,6 +70,11 @@ public class HomeFragment extends Fragment implements LocationServices.LocationF
 
         rootView = inflater.inflate(R.layout.fragment_home, container, false);
         setHasOptionsMenu(true);
+
+        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+
+        BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.nav_view);
+        bottomNavigationView.setVisibility(View.VISIBLE);
 
         expandableListView = (ExpandableListView) rootView.findViewById(R.id.expandable_listview_home);
         listGroup = new ArrayList<>();

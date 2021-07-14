@@ -13,6 +13,12 @@ import java.util.List;
 
 public class StandardCode {
 
+    /**
+     * Static method to package JSON response for list of all bus stops into {@link List<StopList>} object
+     *
+     * @param jsonResponse JSON response string from API call
+     * @return {@link List<StopList>} object from the JSON response
+     */
     public static List<StopList> packageStopListFromPickupPoint(String jsonResponse) {
 
         List<StopList> listOfAllStops = new ArrayList<>();
@@ -37,7 +43,6 @@ public class StandardCode {
         return listOfAllStops;
 
     }
-
 
     /**
      * Method to check: if stopId is a terminal stopId, modify it to the starting stopId
@@ -79,8 +84,9 @@ public class StandardCode {
             return null;
         }
         return json;
-
     }
+
+
 
 
 

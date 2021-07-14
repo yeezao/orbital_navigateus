@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_splashFragment">
 
     <fragment
         android:id="@+id/navigation_home"
@@ -34,7 +34,7 @@
             app:destination="@id/navigation_directions" />
         <action
             android:id="@+id/action_navigation_stops_services_master_to_stopsServicesSingleServiceSelectedFragment"
-            app:destination="@id/stopsServicesSingleServiceSelectedFragment"
+            app:destination="@id/navigation_stopsServicesSingleServiceSelectedFragment"
             app:enterAnim="@animator/slide_in_right"
             app:popExitAnim="@android:anim/slide_out_right" />
         <!--        <action-->
@@ -69,7 +69,7 @@
     </fragment>
 
     <fragment
-        android:id="@+id/stopsServicesSingleServiceSelectedFragment"
+        android:id="@+id/navigation_stopsServicesSingleServiceSelectedFragment"
         android:name="com.example.myapptest.ui.stops_services.StopsServicesSingleServiceSelectedFragment"
         android:label="Service Route"
         tools:layout="@layout/fragment_single_service_selected" >
@@ -85,6 +85,38 @@
         <argument
             android:name="serviceFullRoute"
             app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_splashFragment"
+        android:label="fragment_splash"
+        android:name="com.example.myapptest.ui.startup.SplashFragment"
+        tools:layout="@layout/fragment_splash" >
+        <action
+            android:id="@+id/action_splashFragment_to_viewPagerFragment"
+            app:destination="@id/navigation_viewPagerFragment"
+            app:popUpTo="@id/navigation_splashFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_splashFragment_to_homeFragment"
+            app:destination="@id/navigation_home"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"
+            app:popUpTo="@id/navigation_splashFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_viewPagerFragment"
+        android:label="fragment_view_pager"
+        android:name="com.example.myapptest.ui.onboarding.ViewPagerFragment"
+        tools:layout="@layout/fragment_onboarding_view_pager" >
+        <action
+            android:id="@+id/action_viewPagerFragment_to_homeFragment"
+            app:destination="@id/navigation_home"
+            app:popUpTo="@id/navigation_viewPagerFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
 </navigation>
