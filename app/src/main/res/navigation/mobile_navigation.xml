@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.example.myapptest.ui.home.HomeFragment"
+        android:name="com.doublefree.navigateus.ui.home.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" >
         <action
@@ -23,7 +23,7 @@
 
     <fragment
         android:id="@+id/navigation_stops_services_master"
-        android:name="com.example.myapptest.ui.stops_services.StopsServicesMasterFragment"
+        android:name="com.doublefree.navigateus.ui.stops_services.StopsServicesMasterFragment"
         android:label="@string/stops_services"
         tools:layout="@layout/fragment_stops_services_master">
         <action
@@ -44,7 +44,7 @@
 
     <fragment
         android:id="@+id/navigation_directions"
-        android:name="com.example.myapptest.ui.directions.DirectionsFragment"
+        android:name="com.doublefree.navigateus.ui.directions.DirectionsFragment"
         android:label="@string/title_directions"
         tools:layout="@layout/fragment_directions" >
         <action
@@ -63,14 +63,14 @@
 
     <fragment
         android:id="@+id/navigation_directionsResultFragment"
-        android:name="com.example.myapptest.ui.directions.DirectionsResultFragment"
+        android:name="com.doublefree.navigateus.ui.directions.DirectionsResultFragment"
         android:label="Route Display"
         tools:layout="@layout/fragment_directions_result">
     </fragment>
 
     <fragment
         android:id="@+id/navigation_stopsServicesSingleServiceSelectedFragment"
-        android:name="com.example.myapptest.ui.stops_services.StopsServicesSingleServiceSelectedFragment"
+        android:name="com.doublefree.navigateus.ui.stops_services.StopsServicesSingleServiceSelectedFragment"
         android:label="Service Route"
         tools:layout="@layout/fragment_single_service_selected" >
         <argument
@@ -90,7 +90,7 @@
     <fragment
         android:id="@+id/navigation_splashFragment"
         android:label="fragment_splash"
-        android:name="com.example.myapptest.ui.startup.SplashFragment"
+        android:name="com.doublefree.navigateus.ui.startup.SplashFragment"
         tools:layout="@layout/fragment_splash" >
         <action
             android:id="@+id/action_splashFragment_to_viewPagerFragment"
@@ -110,7 +110,7 @@
     <fragment
         android:id="@+id/navigation_viewPagerFragment"
         android:label="fragment_view_pager"
-        android:name="com.example.myapptest.ui.onboarding.ViewPagerFragment"
+        android:name="com.doublefree.navigateus.ui.onboarding.ViewPagerFragment"
         tools:layout="@layout/fragment_onboarding_view_pager" >
         <action
             android:id="@+id/action_viewPagerFragment_to_homeFragment"
