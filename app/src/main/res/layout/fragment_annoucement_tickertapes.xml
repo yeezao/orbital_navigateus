@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/AnnouncementTitle"
+            android:id="@+id/ServiceTimetableTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-light"
@@ -60,8 +60,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/announcementRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_width="0dp"
+        android:layout_height="225dp"
         android:layout_marginStart="25dp"
         android:layout_marginEnd="25dp"
         android:layout_marginBottom="10dp"

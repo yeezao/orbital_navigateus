@@ -75,16 +75,20 @@ public class StopsServicesServicesFragment extends Fragment {
                         for (int i = 0; i < networkTickerTapesAnnouncementsList.size(); i++) {
                             String[] servicesAffected = networkTickerTapesAnnouncementsList.get(i).getServicesAffected().split(",");
                             for (int j = 0; j < servicesAffected.length; j++) {
-                                for (int k = 0; k < servicesInfo.size(); k++) {
-                                    if ((servicesAffected[j].contains(servicesInfo.get(k).getServiceNum())
-                                            || servicesInfo.get(k).getServiceNum().contains(servicesAffected[j])) &&
+                                for (int k = 0; k < listOfServices.size(); k++) {
+                                    Log.e("compare service", servicesAffected[j] + " " + listOfServices.get(k).getServiceNum());
+                                    String singleServiceAffected = servicesAffected[j].trim();
+                                    String serviceToCheck = listOfServices.get(k).getServiceNum();
+                                    if (!singleServiceAffected.isEmpty() && !serviceToCheck.isEmpty() &&
+                                            (servicesAffected[j].trim().contains(listOfServices.get(k).getServiceNum())
+                                            || listOfServices.get(k).getServiceNum().contains(servicesAffected[j].trim())) &&
                                             (!networkTickerTapesAnnouncementsList.get(i).getMessage().contains("testing") &&
                                                     !networkTickerTapesAnnouncementsList.get(i).getMessage().contains("Testing") &&
                                                     !networkTickerTapesAnnouncementsList.get(i).getMessage().contains("maintenance"))) {
-                                        ServiceInfo serviceInfo = servicesInfo.get(k);
+                                        ServiceInfo serviceInfo = listOfServices.get(k);
                                         serviceInfo.setServiceStatus(1);
-                                        servicesInfo.set(k, serviceInfo);
-                                        break;
+                                        listOfServices.set(k, serviceInfo);
+                                        Log.e("compare service matched", servicesAffected[j] + " " + listOfServices.get(k).getServiceNum());
                                     }
                                 }
                             }

@@ -5,6 +5,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Half;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -103,7 +104,7 @@ public class HomeFragment extends Fragment implements LocationServices.LocationF
     @Override
     public boolean onOptionsItemSelected(@NonNull @NotNull MenuItem item) {
         if (item.getItemId() == R.id.action_messages) {
-            AnnouncementTickerTapesDialogFragment dialogFragment = AnnouncementTickerTapesDialogFragment.newInstance(false);
+            AnnouncementTickerTapesDialogFragment dialogFragment = AnnouncementTickerTapesDialogFragment.newInstance(false, null, "");
             dialogFragment.show(getChildFragmentManager(), AnnouncementTickerTapesDialogFragment.TAG);
             return true;
         }
@@ -123,8 +124,16 @@ public class HomeFragment extends Fragment implements LocationServices.LocationF
             }
         });
 
-        checkServiceStatus();
         setExpandableListView();
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                checkServiceStatus();
+                handler.postDelayed(this, 5000);
+            }
+        }, 0);
 
     }
 
@@ -155,6 +164,9 @@ public class HomeFragment extends Fragment implements LocationServices.LocationF
                             serviceStatusHomeContainer.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
+                                    AnnouncementTickerTapesDialogFragment dialogFragment =
+                                            AnnouncementTickerTapesDialogFragment.newInstance(true, networkTickerTapesAnnouncementsList, "");
+                                    dialogFragment.show(getChildFragmentManager(), AnnouncementTickerTapesDialogFragment.TAG);
                                     //TODO: open dialog with recyclerview here
                                 }
                             });

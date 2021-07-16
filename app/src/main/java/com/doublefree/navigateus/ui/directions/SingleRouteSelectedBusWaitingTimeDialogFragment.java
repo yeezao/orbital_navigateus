@@ -98,7 +98,7 @@ public class SingleRouteSelectedBusWaitingTimeDialogFragment extends DialogFragm
 
 
 
-        TextView title = view.findViewById(R.id.AnnouncementTitle);
+        TextView title = view.findViewById(R.id.ServiceTimetableTitle);
         title.setText(stop.getName());
 
         return builder.create();

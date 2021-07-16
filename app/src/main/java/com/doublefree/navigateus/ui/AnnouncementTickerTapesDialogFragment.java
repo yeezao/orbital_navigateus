@@ -19,6 +19,7 @@ import com.doublefree.navigateus.data.busnetworkinformation.NetworkTickerTapesAn
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AnnouncementTickerTapesDialogFragment extends DialogFragment {
@@ -30,6 +31,9 @@ public class AnnouncementTickerTapesDialogFragment extends DialogFragment {
     ProgressBar progressBar;
     RecyclerView announcementRecyclerView;
     LinearLayoutManager llm;
+
+    List<NetworkTickerTapesAnnouncements> list;
+    String specificService;
 
     View view;
 
@@ -60,28 +64,54 @@ public class AnnouncementTickerTapesDialogFragment extends DialogFragment {
         return builder.create();
     }
 
+    private void setRecyclerView(List<NetworkTickerTapesAnnouncements> list) {
+        announcementRecyclerView.setVisibility(View.VISIBLE);
+        AnnouncementCustomRecyclerViewAdapter adapter = new AnnouncementCustomRecyclerViewAdapter(getActivity(), getContext(), list);
+        announcementRecyclerView.setAdapter(adapter);
+        progressBar.setVisibility(View.GONE);
+    }
+
+    private List<NetworkTickerTapesAnnouncements> filterTickerTapes(List<NetworkTickerTapesAnnouncements> list) {
+
+        List<NetworkTickerTapesAnnouncements> newList = new ArrayList<>();
+
+        for (int i = 0; i < list.size(); i++) {
+            String[] servicesAffected = list.get(i).getServicesAffected().split(",");
+            for (int j = 0; j < servicesAffected.length && !servicesAffected[j].isEmpty(); j++) {
+                if (servicesAffected[j].trim().contains(specificService) || specificService.contains(servicesAffected[j].trim())) {
+                    newList.add(list.get(i));
+                }
+            }
+        }
+
+        return newList;
+
+    }
+
     private void loadAnnouncements(View view) {
 
-        TextView title = view.findViewById(R.id.AnnouncementTitle);
+        TextView title = view.findViewById(R.id.ServiceTimetableTitle);
 
         if (isTickerTapes) {
             title.setText("Service Alerts");
-            NextbusAPIs.callListOfTickerTapes(getActivity(), getContext(), new NextbusAPIs.VolleyCallBackTickerTapesAnnouncementsList() {
-                @Override
-                public void onSuccessTickerTapesAnnouncements(List<NetworkTickerTapesAnnouncements> networkTickerTapesAnnouncementsList) {
-                    announcementRecyclerView.setVisibility(View.VISIBLE);
-                    AnnouncementCustomRecyclerViewAdapter adapter = new AnnouncementCustomRecyclerViewAdapter(getActivity(), getContext(), networkTickerTapesAnnouncementsList);
-                    announcementRecyclerView.setAdapter(adapter);
-                    progressBar.setVisibility(View.GONE);
-                }
+            if (list != null && list.size() > 0) {
+                setRecyclerView(list);
+            } else {
+                NextbusAPIs.callListOfTickerTapes(getActivity(), getContext(), new NextbusAPIs.VolleyCallBackTickerTapesAnnouncementsList() {
+                    @Override
+                    public void onSuccessTickerTapesAnnouncements(List<NetworkTickerTapesAnnouncements> networkTickerTapesAnnouncementsList) {
+                        List<NetworkTickerTapesAnnouncements> newList = filterTickerTapes(networkTickerTapesAnnouncementsList);
+                        setRecyclerView(newList);
+                    }
 
-                @Override
-                public void onFailureTickerTapesAnnouncements() {
-                    TextView failed = view.findViewById(R.id.textViewAnnoucementConnectionFailed);
-                    progressBar.setVisibility(View.GONE);
-                    failed.setVisibility(View.VISIBLE);
-                }
-            });
+                    @Override
+                    public void onFailureTickerTapesAnnouncements() {
+                        TextView failed = view.findViewById(R.id.textViewAnnoucementConnectionFailed);
+                        progressBar.setVisibility(View.GONE);
+                        failed.setVisibility(View.VISIBLE);
+                    }
+                });
+            }
         } else {
             title.setText("Announcements");
             NextbusAPIs.callListOfAnnouncements(getActivity(), getContext(), new NextbusAPIs.VolleyCallBackTickerTapesAnnouncementsList() {
@@ -104,15 +134,25 @@ public class AnnouncementTickerTapesDialogFragment extends DialogFragment {
 
     }
 
-    public static AnnouncementTickerTapesDialogFragment newInstance(boolean isTickerTapes) {
+    public static AnnouncementTickerTapesDialogFragment newInstance(boolean isTickerTapes, List<NetworkTickerTapesAnnouncements> list, String specificService) {
         AnnouncementTickerTapesDialogFragment dialogFragment = new AnnouncementTickerTapesDialogFragment();
         dialogFragment.setTickerTapes(isTickerTapes);
+        dialogFragment.setList(list);
+        dialogFragment.setSpecificService(specificService);
         return dialogFragment;
     }
 
 
-    public void setTickerTapes(boolean tickerTapes) {
+    private void setTickerTapes(boolean tickerTapes) {
         isTickerTapes = tickerTapes;
+    }
+
+    private void setList(List<NetworkTickerTapesAnnouncements> list) {
+        this.list = list;
+    }
+
+    private void setSpecificService(String specificService) {
+        this.specificService = specificService;
     }
 
 

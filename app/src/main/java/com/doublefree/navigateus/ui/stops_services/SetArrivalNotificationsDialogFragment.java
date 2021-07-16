@@ -51,7 +51,7 @@ public class SetArrivalNotificationsDialogFragment extends DialogFragment {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.fragment_set_arrival_notifications, null);
 
-        TextView arrivalNotificationsStopName = view.findViewById(R.id.AnnouncementTitle);
+        TextView arrivalNotificationsStopName = view.findViewById(R.id.ServiceTimetableTitle);
         arrivalNotificationsStopName.setText(singleStopArrivalNotifications.getStopName());
 
         selectTimeSpinner = (Spinner) view.findViewById(R.id.chooseTimeSpinner);

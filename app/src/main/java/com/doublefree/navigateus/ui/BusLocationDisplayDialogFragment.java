@@ -54,6 +54,7 @@ public class BusLocationDisplayDialogFragment extends DialogFragment implements 
     private GoogleMap map;
 
     private final Handler handler = new Handler();
+    private final Handler newHandler = new Handler();
 
     private MapView mapView;
     
@@ -75,6 +76,7 @@ public class BusLocationDisplayDialogFragment extends DialogFragment implements 
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 handler.removeCallbacksAndMessages(null);
+                newHandler.removeCallbacksAndMessages(null);
             }
         });
 
@@ -105,10 +107,10 @@ public class BusLocationDisplayDialogFragment extends DialogFragment implements 
         serviceSecondArrivalLive = view.findViewById(R.id.live_timing_imageview_2);
         loadingStopInfoProgressBar = view.findViewById(R.id.singleServiceMapProgressBar);
 
-        Handler newHandler = new Handler();
         newHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                Log.e("newhandler", "running");
                 setArrivalTimings();
                 newHandler.postDelayed(this, 10000);
             }
@@ -239,6 +241,7 @@ public class BusLocationDisplayDialogFragment extends DialogFragment implements 
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                Log.e("handler", "running");
                 NextbusAPIs.callActiveBuses(serviceNumToCheck, getActivity(), getContext(), new NextbusAPIs.VolleyCallBackActiveBusList() {
                     @Override
                     public void onSuccessActiveBus(List<BusLocationInfo> busLocationInfoList) {
@@ -289,12 +292,14 @@ public class BusLocationDisplayDialogFragment extends DialogFragment implements 
     @Override
     public void onDismiss(@NonNull @NotNull DialogInterface dialog) {
         handler.removeCallbacksAndMessages(null);
+        newHandler.removeCallbacksAndMessages(null);
         super.onDismiss(dialog);
     }
 
     @Override
     public void onCancel(@NonNull @NotNull DialogInterface dialog) {
         handler.removeCallbacksAndMessages(null);
+        newHandler.removeCallbacksAndMessages(null);
         super.onCancel(dialog);
     }
 

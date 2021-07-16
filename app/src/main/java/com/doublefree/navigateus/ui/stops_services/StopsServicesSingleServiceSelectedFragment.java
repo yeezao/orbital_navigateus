@@ -15,14 +15,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.doublefree.navigateus.ExpandableListViewStandardCode;
 import com.doublefree.navigateus.R;
 import com.doublefree.navigateus.StandardCode;
 import com.doublefree.navigateus.data.NextbusAPIs;
+import com.doublefree.navigateus.data.busrouteinformation.BusOperatingHours;
 import com.doublefree.navigateus.data.busstopinformation.ServiceInStopDetails;
 import com.doublefree.navigateus.data.busstopinformation.StopList;
+import com.doublefree.navigateus.ui.AnnouncementTickerTapesDialogFragment;
 import com.doublefree.navigateus.ui.StopsMainAdapter;
 
 import org.jetbrains.annotations.NotNull;
@@ -49,6 +52,7 @@ public class StopsServicesSingleServiceSelectedFragment extends Fragment {
     StopsMainAdapter adapter;
     
     List<StopList> listOfAllStopsAlongRoute;
+    List<BusOperatingHours> busOperatingHoursList = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,6 +75,8 @@ public class StopsServicesSingleServiceSelectedFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
+        callOperatingHours();
+
         return rootView;
 
     }
@@ -84,12 +90,13 @@ public class StopsServicesSingleServiceSelectedFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull @NotNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_single_service_timetable:
-                //TODO: load dialog with service timetable
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.action_single_service_timetable) {
+            SingleServiceOperatingHoursDialogFragment dialogFragment =
+                    SingleServiceOperatingHoursDialogFragment.newInstance(busOperatingHoursList, serviceNumString);
+            dialogFragment.show(getChildFragmentManager(), SingleServiceOperatingHoursDialogFragment.TAG);
+            return true;
         }
+        return super.onOptionsItemSelected(item);
 
     }
 
@@ -115,9 +122,13 @@ public class StopsServicesSingleServiceSelectedFragment extends Fragment {
                 serviceStatusIcon.setImageResource(R.drawable.ic_baseline_service_disruption_20);
                 serviceStatusDesc.setText("Service Disrupted");
                 serviceDisruptedText.setVisibility(View.VISIBLE);
-                serviceDisruptedText.setOnClickListener(new View.OnClickListener() {
+                ConstraintLayout disruptedClick = view.findViewById(R.id.singleServiceStatusConstraintLayout);
+                disruptedClick.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        AnnouncementTickerTapesDialogFragment dialogFragment =
+                                AnnouncementTickerTapesDialogFragment.newInstance(true, null, serviceNumString);
+                        dialogFragment.show(getChildFragmentManager(), AnnouncementTickerTapesDialogFragment.TAG);
                         //TODO: load dialog fragment with disruption announcement
                     }
                 });
@@ -210,6 +221,20 @@ public class StopsServicesSingleServiceSelectedFragment extends Fragment {
             }
         }
 
+    }
+
+    private void callOperatingHours() {
+        NextbusAPIs.callBusOperatingHours(getActivity(), getContext(), serviceNumString, new NextbusAPIs.VolleyCallBackOperatingHours() {
+            @Override
+            public void onSuccessOperatingHours(List<BusOperatingHours> list) {
+                busOperatingHoursList = list;
+            }
+
+            @Override
+            public void onFailureOperatingHours() {
+                //TODO: display snackbar?
+            }
+        });
     }
 
 }

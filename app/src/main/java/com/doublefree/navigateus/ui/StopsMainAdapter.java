@@ -158,7 +158,7 @@ public class StopsMainAdapter extends BaseExpandableListAdapter {
 //                textViewTime1Live.setBackgroundColor(ContextCompat.getColor(context, R.color.transparent));
                 } else {
                     textViewTime1.setText(child.getFirstArrival());
-                    textViewTime1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+                    textViewTime1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
                     if (child.getFirstArrivalLive().length() == 0) {
                         textViewTime1.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
                         textViewTime1.setTextColor(ContextCompat.getColor(context, R.color.black));

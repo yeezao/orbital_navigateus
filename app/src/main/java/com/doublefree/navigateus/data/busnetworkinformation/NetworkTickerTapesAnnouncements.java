@@ -1,5 +1,8 @@
 package com.doublefree.navigateus.data.busnetworkinformation;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -9,6 +12,10 @@ public class NetworkTickerTapesAnnouncements {
     private LocalDateTime displayFrom;
     private LocalDateTime displayTo;
     private String servicesAffected;
+
+    public NetworkTickerTapesAnnouncements() {
+
+    }
 
     public void mainSetterNetworkTickerTapes(String message, String servicesAffected, String displayFromString, String displayToString) {
         this.message = message;
@@ -41,6 +48,4 @@ public class NetworkTickerTapesAnnouncements {
         LocalDateTime now = LocalDateTime.now();
         return displayFrom.isBefore(now) && displayTo.isAfter(now);
     }
-
-
 }

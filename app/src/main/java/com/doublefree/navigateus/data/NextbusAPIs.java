@@ -15,6 +15,7 @@ import com.doublefree.navigateus.MainActivity;
 import com.doublefree.navigateus.R;
 import com.doublefree.navigateus.data.busnetworkinformation.NetworkTickerTapesAnnouncements;
 import com.doublefree.navigateus.data.busrouteinformation.BusLocationInfo;
+import com.doublefree.navigateus.data.busrouteinformation.BusOperatingHours;
 import com.doublefree.navigateus.data.busrouteinformation.ServiceInfo;
 import com.doublefree.navigateus.data.busstopinformation.ServiceInStopDetails;
 import com.doublefree.navigateus.data.busstopinformation.StopList;
@@ -193,6 +194,7 @@ public class NextbusAPIs {
                 serviceNums = JsonPath.read(response, "$.ServiceDescriptionResult.ServiceDescription[*].Route");
                 serviceDescs = JsonPath.read(response, "$.ServiceDescriptionResult.ServiceDescription[*].RouteDescription");
                 for (int i = 0; i < serviceNums.size(); i++) {
+                    Log.e("serviceNums", serviceNums.get(i));
                     singleServiceInfo = new ServiceInfo();
                     singleServiceInfo.setServiceNum(serviceNums.get(i));
                     singleServiceInfo.setServiceDesc(serviceDescs.get(i));
@@ -478,22 +480,23 @@ public class NextbusAPIs {
             @Override
             public void onResponse(String response) {
 
-                List<String> scheduleType = JsonPath.read(response, "$.RouteMinMaxTimeResult.RouteMinMaxTime[*].ScheduleType");
-                List<String> dayType = JsonPath.read(response, "$.RouteMinMaxTimeResult.RouteMinMaxTime[*].DayType");
-                List<String> firstTime = JsonPath.read(response, "$.RouteMinMaxTimeResult.RouteMinMaxTime[*].FirstTime");
-                List<String> lastTime = JsonPath.read(response, "$.RouteMinMaxTimeResult.RouteMinMaxTime[*].LastTime");
+                Log.e("operatinghours response is", response);
 
+                String path = "$.RouteMinMaxTimeResult.RouteMinMaxTime[*].";
 
-                List<BusLocationInfo> busLocationInfoList = new ArrayList<>();
+                List<String> scheduleType = JsonPath.read(response, path + "ScheduleType");
+                List<String> dayType = JsonPath.read(response, path + "DayType");
+                List<String> firstTime = JsonPath.read(response, path + "FirstTime");
+                List<String> lastTime = JsonPath.read(response, path + "LastTime");
 
-//                for (int i = 0; i < scheduleType.size(); i++) {
-//                    BusLocationInfo busLocationInfo = new BusLocationInfo();
-//                    busLocationInfo.setServicePlate(plateNum.get(i));
-//                    busLocationInfo.setBusLocation(lat.get(i), lng.get(i));
-//                    busLocationInfoList.add(busLocationInfo);
-//                }
+                List<BusOperatingHours> busOperatingHoursList = new ArrayList<>();
 
-                callback.onSuccessOperatingHours();
+                for (int i = 0; i < scheduleType.size(); i++) {
+                    BusOperatingHours temp = new BusOperatingHours(scheduleType.get(i), dayType.get(i), firstTime.get(i), lastTime.get(i));
+                    busOperatingHoursList.add(temp);
+                }
+
+                callback.onSuccessOperatingHours(busOperatingHoursList);
 
             }
 
@@ -556,7 +559,7 @@ public class NextbusAPIs {
     }
 
     public interface VolleyCallBackOperatingHours {
-        void onSuccessOperatingHours();
+        void onSuccessOperatingHours(List<BusOperatingHours> list);
         void onFailureOperatingHours();
     }
 
