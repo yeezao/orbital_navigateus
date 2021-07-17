@@ -383,21 +383,14 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
                 Navigation.createNavigateOnClickListener(R.id.action_navigation_directions_to_directionsResultFragment);
 
                 //TODO:  onclick stuff for recyclerview
+//
+//                AppCompatActivity activity = (AppCompatActivity) view.getContext();
+//
+//                ((MainActivity) activity).setNavResultSingle(navResultTest, origin, dest);
 
-//                DirectionsResultFragment directionsResultFragment = new DirectionsResultFragment();
-//                directionsResultFragment.setNavTestResult(navResultTest);
-//                directionsResultFragment.setOrigin(origin);
-//                directionsResultFragment.setDest(dest);
-//                Intent intent = new Intent();
-
-                AppCompatActivity activity = (AppCompatActivity) view.getContext();
-
-                ((MainActivity) activity).setNavResultSingle(navResultTest, origin, dest);
-
-                navController.navigate(R.id.action_navigation_directions_to_directionsResultFragment);
-
-//                activity.getSupportFragmentManager().beginTransaction()
-//                        .replace(R.id.fragmentViewDirections, directionsResultFragment).addToBackStack(null).commit();
+                DirectionsFragmentDirections.ActionNavigationDirectionsToDirectionsResultFragment action =
+                        DirectionsFragmentDirections.actionNavigationDirectionsToDirectionsResultFragment(navResultTest, origin, dest);
+                navController.navigate(action);
 
             }
         });
@@ -453,7 +446,6 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
 
 
     @Override
-    //TODO: itemCount
     public int getItemCount() {
         return resultsList.size();
     }

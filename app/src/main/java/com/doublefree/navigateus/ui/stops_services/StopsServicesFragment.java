@@ -563,7 +563,6 @@ public class StopsServicesFragment extends Fragment {
 
         this.listOfAllStops = listOfAllStops;
 
-        //TODO: sort list of stops by distance
         Log.e("userLocation in initListData is: ", "" + userLocation);
         if (userLocation != null && (userLocation.getLatitude() != 0 && userLocation.getLongitude() != 0) && isLocationPermissionGranted) {
             for (i = 0; i < listOfAllStops.size(); i++) {

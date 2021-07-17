@@ -64,11 +64,6 @@ public class SingleServiceCustomAdapterRecyclerView extends RecyclerView.Adapter
                                 currentService.getServiceNum(), currentService.getServiceDesc(), currentService.getServiceStatus(), currentService.getServiceFullRoute());
                 navController.navigate(action);
 
-                //TODO:  onclick stuff for recyclerview
-                AppCompatActivity activity = (AppCompatActivity) view.getContext();
-
-//                navController.navigate(R.id.);
-
             }
         });
 

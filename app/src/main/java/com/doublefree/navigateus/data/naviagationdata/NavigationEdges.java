@@ -1,8 +1,11 @@
 package com.doublefree.navigateus.data.naviagationdata;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
-public class NavigationEdges {
+public class NavigationEdges implements Parcelable {
 
     private String from;
     private int fromnumid;
@@ -15,6 +18,36 @@ public class NavigationEdges {
     private List<String> services;
     private boolean usable = true;
     private String edgeDesc;
+
+    public NavigationEdges() {
+
+    }
+
+    protected NavigationEdges(Parcel in) {
+        from = in.readString();
+        fromnumid = in.readInt();
+        to = in.readString();
+        tonumid = in.readInt();
+        by = in.readString();
+        duration = in.readInt();
+        sheltered = in.readByte() != 0;
+        accessible = in.readByte() != 0;
+        services = in.createStringArrayList();
+        usable = in.readByte() != 0;
+        edgeDesc = in.readString();
+    }
+
+    public static final Creator<NavigationEdges> CREATOR = new Creator<NavigationEdges>() {
+        @Override
+        public NavigationEdges createFromParcel(Parcel in) {
+            return new NavigationEdges(in);
+        }
+
+        @Override
+        public NavigationEdges[] newArray(int size) {
+            return new NavigationEdges[size];
+        }
+    };
 
     public String getFrom() {
         return from;
@@ -105,4 +138,23 @@ public class NavigationEdges {
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(from);
+        dest.writeInt(fromnumid);
+        dest.writeString(to);
+        dest.writeInt(tonumid);
+        dest.writeString(by);
+        dest.writeInt(duration);
+        dest.writeByte((byte) (sheltered ? 1 : 0));
+        dest.writeByte((byte) (accessible ? 1 : 0));
+        dest.writeStringList(services);
+        dest.writeByte((byte) (usable ? 1 : 0));
+        dest.writeString(edgeDesc);
+    }
 }

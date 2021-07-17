@@ -167,7 +167,6 @@ public class HomeFragment extends Fragment implements LocationServices.LocationF
                                     AnnouncementTickerTapesDialogFragment dialogFragment =
                                             AnnouncementTickerTapesDialogFragment.newInstance(true, networkTickerTapesAnnouncementsList, "");
                                     dialogFragment.show(getChildFragmentManager(), AnnouncementTickerTapesDialogFragment.TAG);
-                                    //TODO: open dialog with recyclerview here
                                 }
                             });
                         }

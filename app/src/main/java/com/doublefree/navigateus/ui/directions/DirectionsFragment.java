@@ -37,6 +37,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.doublefree.navigateus.MainActivity;
 import com.doublefree.navigateus.R;
+import com.doublefree.navigateus.StandardCode;
 import com.doublefree.navigateus.data.busstopinformation.StopList;
 import com.doublefree.navigateus.data.naviagationdata.NavigationGraph;
 import com.doublefree.navigateus.data.naviagationdata.NavigationResults;
@@ -135,7 +136,7 @@ public class DirectionsFragment extends Fragment {
     List<String> listOfNames;
 
     private void SetAutoFillAdapter() {
-        String loadLocationsForSearch = loadJSONFromAsset("points.json");
+        String loadLocationsForSearch = StandardCode.loadJSONFromAsset(getContext(), "points.json");
         listOfNames = JsonPath.read(loadLocationsForSearch, "$.nodes[*].name");
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this.getContext(), android.R.layout.simple_list_item_1, listOfNames);
         Log.e("arrayadapter is", arrayAdapter + "");
@@ -315,58 +316,9 @@ public class DirectionsFragment extends Fragment {
         }
     }
 
-    private String loadJSONFromAsset(String fileName) {
-        String json = null;
-        try {
-            InputStream is = getContext().getAssets().open(fileName);
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-        return json;
-    }
-
     int numberOfCompletes = 0;
 
     public interface VolleyCallBack {
         void onSuccess();
     }
-
-//    private void StartNavigation() {
-//
-//        sharedCommonServices =  new ArrayList<>();
-//
-//        for (int i = 0; i < navigationSearchInfo.getOriginServiceDetails().size(); i++) {
-//                String serviceBeingCompared = navigationSearchInfo.getOriginServiceDetails().get(i).getServiceNum();
-//                Log.e("serviceBeingCompared i is", serviceBeingCompared);
-//            for (int j = 0; j < navigationSearchInfo.getDestServiceDetails().size(); j++) {
-//                Log.e("serviceBeingCompared j inner is", navigationSearchInfo.getDestServiceDetails().get(j).getServiceNum());
-//                if (serviceBeingCompared.equals(navigationSearchInfo.getDestServiceDetails().get(j).getServiceNum())) {
-//                    sharedCommonServices.add(serviceBeingCompared);
-//                }
-//            }
-//        }
-//
-//        GetServiceRoute("C", new VolleyCallBack() {
-//            @Override
-//            public void onSuccess() {
-//                Handler handler = new Handler();
-//                handler.postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        waitingForDirectionsResultProgressBar.setVisibility(View.GONE);
-//                    }
-//                }, 300);
-//            }
-//        });
-//
-//
-//    }
-
-
 }

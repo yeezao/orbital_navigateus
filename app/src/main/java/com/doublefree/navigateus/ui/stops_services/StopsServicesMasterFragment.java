@@ -29,12 +29,6 @@ public class StopsServicesMasterFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_stops_services_master, container, false);
 
-//        Toolbar stopsServicesMasterToolbar = rootView.findViewById(R.id.stops_services_master_toolbar);
-//        stopsServicesMasterToolbar.setTitle("Stops & Services");
-//        ((AppCompatActivity)getActivity()).setSupportActionBar(stopsServicesMasterToolbar);
-//        stopsServicesMasterToolbar.setTitleTextColor(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.white));
-//        setHasOptionsMenu(true);
-
         firstViewPager = (ViewPager) rootView.findViewById(R.id.viewpager_content);
 
         tabLayout = (TabLayout) rootView.findViewById(R.id.tabLayout2);
@@ -65,86 +59,8 @@ public class StopsServicesMasterFragment extends Fragment {
 
         viewPager.setOffscreenPageLimit(2);
         viewPager.setAdapter(adapter);
-//        StopsServicesMasterFragmentDirections.ActionNavigationStopsServicesMasterToNavigationStopsServicesStops action =
-//                StopsServicesMasterFragmentDirections.actionNavigationStopsServicesMasterToNavigationStopsServicesStops(jsonIntermediate);
-//        NavHostFragment.findNavController(StopsServicesMasterFragment.this).navigate(action);
+
     }
 
-//    LocationManager locationManager;
-//    final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
-//    boolean isLocationPermissionGranted = false;
-//
-//
-//    private void checkLocationPermission() {
-//        if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-//                && ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            // Consider calling
-//            //    ActivityCompat#requestPermissions
-//            // here to request the missing permissions, and then overriding
-//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-//            //                                          int[] grantResults)
-//            // to handle the case where the user grants the permission. See the documentation
-//            // for ActivityCompat#requestPermissions for more details.
-//            ActivityCompat.requestPermissions(this.getActivity(),
-//                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-//                    MY_PERMISSIONS_REQUEST_LOCATION);
-//
-//            return;
-//        } else {
-//            newStopsServicesFragment.setLocationPermissionGranted(true);
-//        }
-//    }
-//
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode,
-//                                           String permissions[], int[] grantResults) {
-//        switch (requestCode) {
-//            case MY_PERMISSIONS_REQUEST_LOCATION: {
-//                // If request is cancelled, the result arrays are empty.
-//                if (grantResults.length > 0
-//                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//
-//                    // permission was granted, yay! Do the
-//                    // location-related task you need to do.
-//                    if (ContextCompat.checkSelfPermission(this.getContext(),
-//                            Manifest.permission.ACCESS_FINE_LOCATION)
-//                            == PackageManager.PERMISSION_GRANTED) {
-//                        isLocationPermissionGranted = true;
-//                        //TODO: pass in Lat/Lng and bool for location
-//                    }
-//
-//                } else {
-//
-//                    // permission denied, boo! Disable the
-//                    // functionality that depends on this permission.
-//                    isLocationPermissionGranted = false;
-//
-//                }
-//                return;
-//            }
-//
-//        }
-////        getUserLocationAndStopList(isLocationPermissionGranted);
-//        newStopsServicesFragment.setLocationPermissionGranted(isLocationPermissionGranted);
-//
-//    }
-//
-//    Location userLocation;
-//    Double userLatitude;
-//    Double userLongitude;
-
-//    private void getUserLocationAndStopList(boolean isLocationPermissionGranted) {
-//
-//        try {
-//            userLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-//            if (userLocation == null) {
-//                getUserLocationAndStopList(isLocationPermissionGranted);
-//            }
-//        } catch (SecurityException e) {
-//            userLocation.setLatitude(0.0);
-//            userLocation.setLongitude(0.0);
-//        }
-//        newStopsServicesFragment.setUserLocation(userLocation);
-//    }
 
 }

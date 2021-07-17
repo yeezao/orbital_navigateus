@@ -252,7 +252,6 @@ public class SingleRouteListCustomAdapterRecyclerView extends RecyclerView.Adapt
         holder.takeServiceClickable.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: open DialogFragment with service arrival info
                 Log.e("onclick", "fired");
                 SingleRouteSelectedBusWaitingTimeDialogFragment dialogFragment;
                 int timeTillThisSegment = 0;

@@ -44,7 +44,11 @@ public class AnnouncementTickerTapesDialogFragment extends DialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
-        view = inflater.inflate(R.layout.fragment_annoucement_tickertapes, null);
+        if (isTickerTapes) {
+            view = inflater.inflate(R.layout.fragment_tickertapes, null);
+        } else {
+            view = inflater.inflate(R.layout.fragment_annoucement, null);
+        }
 
         builder.setView(view).setNegativeButton("OK", new DialogInterface.OnClickListener() {
             @Override

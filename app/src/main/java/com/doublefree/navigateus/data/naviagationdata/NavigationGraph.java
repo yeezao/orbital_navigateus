@@ -2,7 +2,6 @@ package com.doublefree.navigateus.data.naviagationdata;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import java.io.IOException;
@@ -31,9 +30,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
-
-    NavigationResultsFullyComplete navFinished;
+public class NavigationGraph {
 
     public NavigationNodes[] navNodes = new NavigationNodes[1000];
 
@@ -1065,11 +1062,6 @@ public class NavigationGraph extends AsyncTask<Void, Void, NavigationResults> {
             return null;
         }
         return json;
-    }
-
-    @Override
-    protected NavigationResults doInBackground(Void... voids) {
-        return null;
     }
 
     public interface VolleyCallBack {

@@ -129,7 +129,6 @@ public class StopsServicesSingleServiceSelectedFragment extends Fragment {
                         AnnouncementTickerTapesDialogFragment dialogFragment =
                                 AnnouncementTickerTapesDialogFragment.newInstance(true, null, serviceNumString);
                         dialogFragment.show(getChildFragmentManager(), AnnouncementTickerTapesDialogFragment.TAG);
-                        //TODO: load dialog fragment with disruption announcement
                     }
                 });
                 break;

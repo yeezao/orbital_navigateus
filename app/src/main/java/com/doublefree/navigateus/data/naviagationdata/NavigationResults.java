@@ -13,9 +13,29 @@ public class NavigationResults implements Parcelable {
     private boolean showResult = true;
     private int displayTotalTimeTaken = 0;
 
+    public NavigationResults() {
+    }
+
     protected NavigationResults(Parcel in) {
+        firstRunResult = in.readParcelable(NavigationPartialResults.class.getClassLoader());
         totalTimeTaken = in.readInt();
+        resultsConcatenated = in.createTypedArrayList(NavigationPartialResults.CREATOR);
         showResult = in.readByte() != 0;
+        displayTotalTimeTaken = in.readInt();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(firstRunResult, flags);
+        dest.writeInt(totalTimeTaken);
+        dest.writeTypedList(resultsConcatenated);
+        dest.writeByte((byte) (showResult ? 1 : 0));
+        dest.writeInt(displayTotalTimeTaken);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<NavigationResults> CREATOR = new Creator<NavigationResults>() {
@@ -29,9 +49,6 @@ public class NavigationResults implements Parcelable {
             return new NavigationResults[size];
         }
     };
-
-    public NavigationResults() {
-    }
 
     public boolean isShowResult() {
         return showResult;
@@ -77,17 +94,6 @@ public class NavigationResults implements Parcelable {
         this.displayTotalTimeTaken = displayTotalTimeTaken;
     }
 
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(totalTimeTaken);
-        dest.writeByte((byte) (showResult ? 1 : 0));
-    }
 
     public NavigationResults clone() throws CloneNotSupportedException {
         NavigationResults navigationResultsClone = (NavigationResults) super.clone();

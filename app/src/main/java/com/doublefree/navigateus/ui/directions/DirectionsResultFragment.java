@@ -53,13 +53,6 @@ public class DirectionsResultFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         View view = inflater.inflate(R.layout.fragment_directions_result, container, false);
-        TextView originTextBox = view.findViewById(R.id.textView_origin_resultList);
-        TextView destTextBox = view.findViewById(R.id.textView_dest_resultList);
-        origin = ((MainActivity) getActivity()).getOrigin();
-        dest = ((MainActivity) getActivity()).getDest();
-        originTextBox.setText(origin);
-        destTextBox.setText(dest);
-        singleNavResult = ((MainActivity) getActivity()).getNavResultSingle();
 
         this.setHasOptionsMenu(true);
 
@@ -73,6 +66,15 @@ public class DirectionsResultFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        singleNavResult = DirectionsResultFragmentArgs.fromBundle(getArguments()).getResultpack();
+        origin = DirectionsResultFragmentArgs.fromBundle(getArguments()).getOrigin();
+        dest = DirectionsResultFragmentArgs.fromBundle(getArguments()).getDest();
+
+        TextView originTextBox = view.findViewById(R.id.textView_origin_resultList);
+        TextView destTextBox = view.findViewById(R.id.textView_dest_resultList);
+        originTextBox.setText(origin);
+        destTextBox.setText(dest);
+
         Display display = getActivity().getWindowManager().getDefaultDisplay();
         DisplayMetrics displayMetrics = new DisplayMetrics();
         display.getMetrics(displayMetrics);
@@ -85,9 +87,6 @@ public class DirectionsResultFragment extends Fragment {
         SingleRouteListCustomAdapterRecyclerView singleRouteListCustomAdapterRecyclerView =
                 new SingleRouteListCustomAdapterRecyclerView(getActivity(), getContext(), singleNavResult, origin, dest, this.getChildFragmentManager(), dpWidth);
         singleResultRecyclerView.setAdapter(singleRouteListCustomAdapterRecyclerView);
-
-//        waitingForDirectionsResultProgressBar.setVisibility(View.GONE);
-//        singleResultRecyclerView.setVisibility(View.VISIBLE);
 
 
     }

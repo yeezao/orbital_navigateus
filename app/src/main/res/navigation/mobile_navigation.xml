@@ -66,6 +66,15 @@
         android:name="com.doublefree.navigateus.ui.directions.DirectionsResultFragment"
         android:label="Route Display"
         tools:layout="@layout/fragment_directions_result">
+        <argument
+            android:name="resultpack"
+            app:argType="com.doublefree.navigateus.data.naviagationdata.NavigationResults" />
+        <argument
+            android:name="origin"
+            app:argType="string" />
+        <argument
+            android:name="dest"
+            app:argType="string" />
     </fragment>
 
     <fragment

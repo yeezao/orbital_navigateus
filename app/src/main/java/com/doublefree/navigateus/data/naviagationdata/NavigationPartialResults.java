@@ -1,9 +1,12 @@
 package com.doublefree.navigateus.data.naviagationdata;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class NavigationPartialResults {
+public class NavigationPartialResults implements Parcelable {
 
     private int timeForSegment;
     private int timeAtEndOfSegment = 0;
@@ -17,6 +20,37 @@ public class NavigationPartialResults {
     private List<NavigationNodes> afterTransferNodesTraversed = new ArrayList<>();
     private List<NavigationEdges> edgeSequence = new ArrayList<>();
     private List<NavigationNodes> nodeSequence = new ArrayList<>();
+
+    public NavigationPartialResults() {
+
+    }
+
+    protected NavigationPartialResults(Parcel in) {
+        timeForSegment = in.readInt();
+        timeAtEndOfSegment = in.readInt();
+        nodesTraversed = in.createTypedArrayList(NavigationNodes.CREATOR);
+        busToWaitFor = in.createStringArray();
+        viableBuses1 = in.createStringArrayList();
+        viableBuses2 = in.createStringArrayList();
+        busWaitingTime = in.readInt();
+        transferStop = in.readParcelable(NavigationNodes.class.getClassLoader());
+        beforeTransferNodesTraversed = in.createTypedArrayList(NavigationNodes.CREATOR);
+        afterTransferNodesTraversed = in.createTypedArrayList(NavigationNodes.CREATOR);
+        edgeSequence = in.createTypedArrayList(NavigationEdges.CREATOR);
+        nodeSequence = in.createTypedArrayList(NavigationNodes.CREATOR);
+    }
+
+    public static final Creator<NavigationPartialResults> CREATOR = new Creator<NavigationPartialResults>() {
+        @Override
+        public NavigationPartialResults createFromParcel(Parcel in) {
+            return new NavigationPartialResults(in);
+        }
+
+        @Override
+        public NavigationPartialResults[] newArray(int size) {
+            return new NavigationPartialResults[size];
+        }
+    };
 
     public int getTimeForSegment() {
         return timeForSegment;
@@ -142,5 +176,24 @@ public class NavigationPartialResults {
     public void addNodeSequence(NavigationNodes singleNode) {this.nodeSequence.add(singleNode);}
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(timeForSegment);
+        dest.writeInt(timeAtEndOfSegment);
+        dest.writeTypedList(nodesTraversed);
+        dest.writeStringArray(busToWaitFor);
+        dest.writeStringList(viableBuses1);
+        dest.writeStringList(viableBuses2);
+        dest.writeInt(busWaitingTime);
+        dest.writeParcelable(transferStop, flags);
+        dest.writeTypedList(beforeTransferNodesTraversed);
+        dest.writeTypedList(afterTransferNodesTraversed);
+        dest.writeTypedList(edgeSequence);
+        dest.writeTypedList(nodeSequence);
+    }
 }
