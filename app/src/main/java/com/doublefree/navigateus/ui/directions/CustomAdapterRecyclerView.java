@@ -403,7 +403,7 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
             StringBuilder stringBuilder = new StringBuilder();
             if (navTestResultSegment.size() > 3 && navTestResultSegment.get(1).getEdgeSequence().size() == 0
                     && navTestResultSegment.get(3).getEdgeSequence().size() == 0) {
-                Log.e("case", "1");
+                Log.e("case", "1 " + " " + navTestResultSegment.get(1).getNodeSequence().get(0).getName() + " " + navTestResultSegment.get(1).getNodeSequence().get(navTestResultSegment.get(1).getNodeSequence().size() - 1).getAltname() + " " + navTestResultSegment.get(3).getNodesTraversed().get(0).getName());
                 stringBuilder.append("via ")
                         .append(navTestResultSegment.get(1).getNodeSequence().get(navTestResultSegment.get(1).getNodeSequence().size() - 1).getAltname())
                         .append(", ")

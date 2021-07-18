@@ -57,7 +57,6 @@ public class ExpandableListViewStandardCode {
                 } else {
                     Log.e("stopid is", listOfStops.get(groupPosition).getStopId());
                     String stopId = StandardCode.StopIdExceptionsWithReturn(listOfStops.get(groupPosition).getStopId());
-                    //TODO: hardcoded exceptions need to be changed when new ISB network begins
                     NextbusAPIs.callSingleStopInfo(activity, context, stopId,
                             groupPosition, true, new NextbusAPIs.VolleyCallBackSingleStop() {
                                 @Override

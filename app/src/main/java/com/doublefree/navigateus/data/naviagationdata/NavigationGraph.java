@@ -517,11 +517,11 @@ public class NavigationGraph {
 
         List<NavigationPartialResults> transferConcat = new ArrayList<>();
 
-
+        Log.e("sizes are", stopId.size() + " " + aServiceAtStop.size());
 
         //check if there exists any direct buses between origin and dest stop
         for (int i = 0; i < stopId.size(); i++) {
-            if (stopId.get(i).equals(originBusStop.getId())) {
+            if (checkDestCondition(stopId.get(i), originBusStop.getId(), true)) {
                 originIndex = i;
                 Log.e("origin name", stopId.get(i));
             } else if (checkDestCondition(stopId.get(i), destBusStop.getId(), originIndex >= 0)) {
@@ -581,6 +581,7 @@ public class NavigationGraph {
             directServicesAlreadyEntered.addAll(routeToTake.getViableBuses1());
             routeToTake.setNodeSequence(remakeStopList(stopId,
                     aServiceAtStop, routeToTake.getViableBuses1(), originBusStop, destBusStop));
+            Log.e("sizecheck", routeToTake.getNodeSequence().size() + "");
 
             transferConcat.add(routeToTake);
 
@@ -595,7 +596,8 @@ public class NavigationGraph {
             List<String> servicesAtDest = new ArrayList<>();
             List<String> servicesAtOrigin = new ArrayList<>();
             for (int i = 0; i < stopId.size(); i++) {
-                if (stopId.get(i).equals(originBusStop.getId())) {
+                Log.e("stopids are", stopId.get(i) + " " + originBusStop.getId() + " " + destBusStop.getId());
+                if (checkDestCondition(stopId.get(i), originBusStop.getId(), true)) {
                     servicesAtOrigin.add(aServiceAtStop.get(i));
                     Log.e("origin service added", aServiceAtStop.get(i));
                 } else if (checkDestCondition(stopId.get(i), destBusStop.getId(), true)) {
@@ -646,7 +648,7 @@ public class NavigationGraph {
 //                                Log.e("transfer 2nd check", servicesAtDest.get(j) + " " + servicesAtIntermediateStop.get(k));
                                 for (int m = 0; m < stopId.size(); m++) {
 //                                    Log.e("transfer 3rd check", currentStop.getId() + " " + destBusStop.getId() + " " + stopId.get(m) + " " + servicesAtDest.get(j) + " " + aServiceAtStop.get(m));
-                                    if (currentStop.getId().equals(stopId.get(m)) && aServiceAtStop.get(m).equals(servicesAtDest.get(j))) {
+                                    if (checkDestCondition(stopId.get(m), currentStop.getId(), true) && aServiceAtStop.get(m).equals(servicesAtDest.get(j))) {
                                         transferOriginIndex = m;
 //                                        Log.e("origin name", stopId.get(m) + " " + transferOriginIndex);
                                     } else if (checkDestCondition(stopId.get(m), destBusStop.getId(), transferOriginIndex >= 0) && aServiceAtStop.get(m).equals(servicesAtDest.get(j))) {
@@ -692,7 +694,7 @@ public class NavigationGraph {
                                         if (checkDestCondition(stopId.get(m), currentStop.getId(), transferOriginIndex >= 0) && aServiceAtStop.get(m).equals(servicesAtOrigin.get(j))) {
                                             transferDestIndex = m;
                                             Log.e("transfer dest name", stopId.get(m));
-                                        } else if (originBusStop.getId().equals(stopId.get(m)) && aServiceAtStop.get(m).equals(servicesAtOrigin.get(j))) {
+                                        } else if (checkDestCondition(stopId.get(m), originBusStop.getId(), true) && aServiceAtStop.get(m).equals(servicesAtOrigin.get(j))) {
                                             transferOriginIndex = m;
                                             Log.e("transfer origin name", stopId.get(m));
                                         }
@@ -805,8 +807,10 @@ public class NavigationGraph {
     //TODO: hardcoded exceptions need to be changed when new ISB network begins
     private boolean checkDestCondition(String stopId, String fixedStop, boolean originSet) {
         if (originSet && (fixedStop.equals(stopId)
-                || (fixedStop.equals("KR-BT") && (stopId.contains("KTR") || stopId.equals("KR-BTE")))
-                || (fixedStop.equals("PGPT") && stopId.contains("PGPE")))) {
+                || (fixedStop.equals("KRB") && stopId.contains("KRB"))
+                || (fixedStop.equals("OTH") && stopId.contains("OTH"))
+                || (fixedStop.equals("UTOWN") && stopId.contains("UTOWN"))
+                || (fixedStop.equals("COM2") && stopId.contains("COM2")))) {
             return true;
         }
         return false;
@@ -822,7 +826,7 @@ public class NavigationGraph {
             for (int j = 0; j < stopId.size(); j++) {
                 if (busList.get(a).equals(aServiceAtStop.get(j))) {
                     Log.e("remaking service being checked", busList.get(a));
-                    if (stopId.get(j).equals(firstStop.getId())) {
+                    if (checkDestCondition(stopId.get(j), firstStop.getId(), true)) {
                         Log.e("start adding here", stopId.get(j) + " " + firstStop.getId());
                         startAdding = true;
                         checkThisService.clear();

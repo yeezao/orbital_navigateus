@@ -1331,7 +1331,7 @@
     {
       "name": "AS5 (Bus Stop)",
       "altname": "AS5",
-      "id": "AS7",
+      "id": "AS5",
       "numid": 1,
       "lat": 1.2935,
       "lon": 103.7721
@@ -1355,7 +1355,7 @@
     {
       "name": "Oei Tiong Ham Building (Bus Stop)",
       "altname": "OTH Bldg",
-      "id": "BUKITTIMAH-BTC2",
+      "id": "OTH",
       "numid": 4,
       "lat": 1.319744,
       "lon": 103.8179
@@ -1363,7 +1363,7 @@
     {
       "name": "Central Library (Bus Stop)",
       "altname": "Central Lib",
-      "id": "CENLIB",
+      "id": "CLB",
       "numid": 5,
       "lat": 1.2964,
       "lon": 103.7722
@@ -1371,7 +1371,7 @@
     {
       "name": "College Green (Bus Stop)",
       "altname": "College Green",
-      "id": "CGH",
+      "id": "CG",
       "numid": 6,
       "lat": 1.323333,
       "lon": 103.8163
@@ -1387,7 +1387,7 @@
     {
       "name": "EA (Bus Stop)",
       "altname": "EA (Bus Stop)",
-      "id": "BLK-EA-OPP",
+      "id": "EA",
       "numid": 8,
       "lat": 1.3004,
       "lon": 103.7701
@@ -1395,7 +1395,7 @@
     {
       "name": "Information Technology (Bus Stop)",
       "altname": "IT (Bus Stop)",
-      "id": "COMCEN",
+      "id": "IT",
       "numid": 9,
       "lat": 1.297376,
       "lon": 103.7729
@@ -1403,7 +1403,7 @@
     {
       "name": "KRT / Kent Ridge Bus Terminal",
       "altname": "Kent Ridge Bus Ter",
-      "id": "KR-BT",
+      "id": "KRB",
       "numid": 10,
       "lat": 1.294167,
       "lon": 103.7697
@@ -1475,7 +1475,7 @@
     {
       "name": "Opp TCOMS (Bus Stop)",
       "altname": "Opp TCOMS",
-      "id": "PGP12-OPP",
+      "id": "TCOMS-OPP",
       "numid": 19,
       "lat": 1.2938,
       "lon": 103.777
@@ -1491,7 +1491,7 @@
     {
       "name": "Opp University Health Centre (Bus Stop)",
       "altname": "Opp UHC",
-      "id": "STAFFCLUB-OPP",
+      "id": "UHC-OPP",
       "numid": 21,
       "lat": 1.2988,
       "lon": 103.7755
@@ -1521,9 +1521,9 @@
       "lon": 103.7778
     },
     {
-      "name": "PGPT / Prince George's Park Bus Terminal",
-      "altname": "PGP Terminal",
-      "id": "PGPT",
+      "name": "Prince George's Park (Bus Stop)",
+      "altname": "PGP (Bus Stop)",
+      "id": "PGP",
       "numid": 25,
       "lat": 1.2918,
       "lon": 103.7805
@@ -1531,7 +1531,7 @@
     {
       "name": "Prince George's Park Residence (Bus Stop)",
       "altname": "PGPR",
-      "id": "PGP",
+      "id": "PGPR",
       "numid": 26,
       "lat": 1.290999,
       "lon": 103.781
@@ -1555,7 +1555,7 @@
     {
       "name": "TCOMS (Bus Stop)",
       "altname": "TCOMS",
-      "id": "PGP12",
+      "id": "TCOMS",
       "numid": 29,
       "lat": 1.293702,
       "lon": 103.7765
@@ -1579,22 +1579,22 @@
     {
       "name": "University Health Centre (Bus Stop)",
       "altname": "UHC",
-      "id": "STAFFCLUB",
+      "id": "UHC",
       "numid": 32,
       "lat": 1.2989,
       "lon": 103.7761
     },
     {
-      "name": "University Town (Bus Stop)",
+      "name": "Utown / University Town (Bus Stop)",
       "altname": "Utown",
-      "id": "UTown",
+      "id": "UTOWN",
       "numid": 33,
       "lat": 1.303622,
       "lon": 103.7747
     },
     {
-      "name": "Ventus (Opp LT13) (Bus Stop)",
-      "altname": "Ventus (Opp LT13)",
+      "name": "Ventus (Bus Stop)",
+      "altname": "Ventus",
       "id": "LT13-OPP",
       "numid": 34,
       "lat": 1.2953,

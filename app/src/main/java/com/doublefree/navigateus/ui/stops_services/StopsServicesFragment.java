@@ -47,8 +47,10 @@ import com.jayway.jsonpath.JsonPath;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -276,9 +278,12 @@ public class StopsServicesFragment extends Fragment {
                     expandableListView.collapseGroup(groupPosition);
                 } else {
                     singleStopClickedProgressBar.setVisibility(View.VISIBLE);
-                    getListOfChildServices(groupPosition, true, new VolleyCallBack() {
+                    NextbusAPIs.callSingleStopInfo(getActivity(), getContext(), listOfAllStops.get(groupPosition).getStopId(), groupPosition, true, new NextbusAPIs.VolleyCallBackSingleStop() {
                         @Override
-                        public void onSuccess() {
+                        public void onSuccessSingleStop(List<ServiceInStopDetails> servicesAllInfoAtStop) {
+                            listItem.remove(listGroup.get(groupPosition));
+                            listItem.put(listGroup.get(groupPosition), servicesAllInfoAtStop);
+                            adapter.notifyDataSetChanged();
                             expandableListView.expandGroup(groupPosition, true);
                             refreshTimingProgressBar.setClickable(true);
                             Handler handler = new Handler();
@@ -289,7 +294,26 @@ public class StopsServicesFragment extends Fragment {
                                 }
                             }, 600);
                         }
+
+                        @Override
+                        public void onFailureSingleStop() {
+
+                        }
                     });
+//                    getListOfChildServices(groupPosition, true, new VolleyCallBack() {
+//                        @Override
+//                        public void onSuccess() {
+//                            expandableListView.expandGroup(groupPosition, true);
+//                            refreshTimingProgressBar.setClickable(true);
+//                            Handler handler = new Handler();
+//                            handler.postDelayed(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    singleStopClickedProgressBar.setVisibility(View.GONE);
+//                                }
+//                            }, 600);
+//                        }
+//                    });
                 }
                 return true;
             }
@@ -338,17 +362,33 @@ public class StopsServicesFragment extends Fragment {
 //                            dialogFragment.setArrivalNotificationsDialogListener(StopsServicesFragment.this);
                             dialogFragment.show(getChildFragmentManager(), SetArrivalNotificationsDialogFragment.TAG);
                         } else {
-                            getListOfChildServices(groupPosition, false, new VolleyCallBack() {
+                            NextbusAPIs.callSingleStopInfo(getActivity(), getContext(), listOfAllStops.get(groupPosition).getStopId(), groupPosition, false, new NextbusAPIs.VolleyCallBackSingleStop() {
                                 @Override
-                                public void onSuccess() {
+                                public void onSuccessSingleStop(List<ServiceInStopDetails> servicesAllInfoAtStop) {
+                                    listItem.remove(listGroup.get(groupPosition));
+                                    listItem.put(listGroup.get(groupPosition), servicesAllInfoAtStop);
+                                    adapter.notifyDataSetChanged();
                                     Log.e("listitem this pos after refresh is:", listItem.get(listGroup.get(groupPosition)) + "");
                                     singleStopArrivalNotification.setServicesAtStop(listItem.get(listGroup.get(groupPosition)));
                                     SetArrivalNotificationsDialogFragment dialogFragment = SetArrivalNotificationsDialogFragment.newInstance(singleStopArrivalNotification);
-//                                    dialogFragment.setArrivalNotificationsDialogListener(StopsServicesFragment.this);
-//                                    dialogFragment.setTargetFragment(StopsServicesFragment.this, 0);
                                     dialogFragment.show(getChildFragmentManager(), SetArrivalNotificationsDialogFragment.TAG);
                                 }
+
+                                @Override
+                                public void onFailureSingleStop() {
+
+                                }
                             });
+//                            getListOfChildServices(groupPosition, false, new VolleyCallBack() {
+//                                @Override
+//                                public void onSuccess() {
+//
+//                                    Log.e("listitem this pos after refresh is:", listItem.get(listGroup.get(groupPosition)) + "");
+//                                    singleStopArrivalNotification.setServicesAtStop(listItem.get(listGroup.get(groupPosition)));
+//                                    SetArrivalNotificationsDialogFragment dialogFragment = SetArrivalNotificationsDialogFragment.newInstance(singleStopArrivalNotification);
+//                                    dialogFragment.show(getChildFragmentManager(), SetArrivalNotificationsDialogFragment.TAG);
+//                                }
+//                            });
                         }
                     }
                     return true;
@@ -457,9 +497,14 @@ public class StopsServicesFragment extends Fragment {
         } else {
             for (i = 0; i < listOfAllStops.size(); i++) {
                 if (expandableListView.isGroupExpanded(i)) {
-                    getListOfChildServices(i, true, new VolleyCallBack() {
+                    NextbusAPIs.callSingleStopInfo(getActivity(), getContext(), listOfAllStops.get(i).getStopId(), i, true, new NextbusAPIs.VolleyCallBackSingleStop() {
+                        int finalI = i;
                         @Override
-                        public void onSuccess() {
+                        public void onSuccessSingleStop(List<ServiceInStopDetails> servicesAllInfoAtStop) {
+                            Log.e("size inner", finalI + "");
+                            listItem.remove(listGroup.get(finalI));
+                            listItem.put(listGroup.get(finalI), servicesAllInfoAtStop);
+                            adapter.notifyDataSetChanged();
                             numExpanded[0]--;
                             if (numExpanded[0] == 0) {
                                 if (!searchingLocation && isOnClick) {
@@ -467,7 +512,23 @@ public class StopsServicesFragment extends Fragment {
                                 }
                             }
                         }
+
+                        @Override
+                        public void onFailureSingleStop() {
+
+                        }
                     });
+//                    getListOfChildServices(i, true, new VolleyCallBack() {
+//                        @Override
+//                        public void onSuccess() {
+//                            numExpanded[0]--;
+//                            if (numExpanded[0] == 0) {
+//                                if (!searchingLocation && isOnClick) {
+//                                    setRefreshCircleInvisible(refreshTimingProgressBar, 800);
+//                                }
+//                            }
+//                        }
+//                    });
                 }
             }
         }
@@ -562,6 +623,7 @@ public class StopsServicesFragment extends Fragment {
     private void initListData(List<StopList> listOfAllStops) {
 
         this.listOfAllStops = listOfAllStops;
+        Log.e("size", this.listOfAllStops.size() + "");
 
         Log.e("userLocation in initListData is: ", "" + userLocation);
         if (userLocation != null && (userLocation.getLatitude() != 0 && userLocation.getLongitude() != 0) && isLocationPermissionGranted) {
@@ -593,6 +655,12 @@ public class StopsServicesFragment extends Fragment {
             TextView sortOrder = viewForFragment.findViewById(R.id.textView13);
             sortOrder.setText("Sorted by distance");
         } else {
+            listOfAllStops.sort(new Comparator<StopList>() {
+                @Override
+                public int compare(StopList o1, StopList o2) {
+                    return o1.getStopName().compareTo(o2.getStopName());
+                }
+            });
             TextView sortOrder = viewForFragment.findViewById(R.id.textView13);
             sortOrder.setText("Sorted by A-Z");
         }
@@ -650,73 +718,6 @@ public class StopsServicesFragment extends Fragment {
     List<String> serviceSecondArrival;
     List<String> firstArrivalLive;
     List<String> secondArrivalLive;
-
-    private void getListOfChildServices(int groupPosition, boolean isOnClick, final VolleyCallBack callback) {
-
-        Log.e("null check for", listOfAllStops + "");
-
-        String url = "https://nnextbus.nus.edu.sg/ShuttleService?busstopname=" + listOfAllStops.get(groupPosition).getStopId();
-
-        StringRequest stopStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-                servicesAllInfoAtStop = new ArrayList<>();
-                Log.e("GetStopInfo response is", response);
-                servicesAtStop = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].name");
-                serviceFirstArrival = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].arrivalTime");
-                serviceSecondArrival = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].nextArrivalTime");
-                firstArrivalLive = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].arrivalTime_veh_plate");
-                secondArrivalLive = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].nextArrivalTime_veh_plate");
-                Log.e("servicesAtStop is: ", servicesAtStop.get(0));
-                for (int i = 0; i < servicesAtStop.size(); i++) {
-                    serviceInfoAtStop = new ServiceInStopDetails();
-                    serviceInfoAtStop.setServiceNum(servicesAtStop.get(i));
-                    serviceInfoAtStop.setFirstArrival(serviceFirstArrival.get(i));
-                    Log.e("first arrival is: ", "" + serviceFirstArrival.get(i));
-                    serviceInfoAtStop.setSecondArrival(serviceSecondArrival.get(i));
-                    serviceInfoAtStop.setFirstArrivalLive(firstArrivalLive.get(i));
-                    serviceInfoAtStop.setSecondArrivalLive(secondArrivalLive.get(i));
-                    servicesAllInfoAtStop.add(serviceInfoAtStop);
-                }
-//                Log.e("servicesAllInfoAtStop is: ", "" + servicesAllInfoAtStop);
-//                Log.e("value of j is: ", "" + groupPosition);
-                listItem.remove(listGroup.get(groupPosition));
-                listItem.put(listGroup.get(groupPosition), servicesAllInfoAtStop);
-
-                adapter.notifyDataSetChanged();
-                callback.onSuccess();
-                Log.e("listItem is: ", "" + listItem);
-
-            }
-
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                // TODO: Handle error
-                Log.e("volley API error", "" + error);
-            }
-
-        }) {
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("Content-Type", "application/json; charset=UTF-8");
-                params.put("Authorization", getActivity().getString(R.string.auth_header));
-                return params;
-            }
-        };
-
-        if (this.getContext() != null) {
-            RequestQueue stopRequestQueue = Volley.newRequestQueue(this.getContext());
-            stopRequestQueue.add(stopStringRequest);
-        }
-
-//        Log.e("list is: ", list.toString());
-//        return list;
-    }
 
     public interface VolleyCallBack {
         void onSuccess();

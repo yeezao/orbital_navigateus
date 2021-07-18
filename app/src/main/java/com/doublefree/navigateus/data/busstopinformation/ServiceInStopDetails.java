@@ -87,4 +87,5 @@ public class ServiceInStopDetails {
         this.secondArrivalBusType = secondArrivalBusType;
     }
 
+
 }

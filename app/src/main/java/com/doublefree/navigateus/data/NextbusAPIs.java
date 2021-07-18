@@ -122,21 +122,28 @@ public class NextbusAPIs {
                 List<String> serviceSecondArrival;
                 List<String> firstArrivalLive;
                 List<String> secondArrivalLive;
+                List<String> stopIds;
+                
+                final String path = "$.ShuttleServiceResult.shuttles[*].";
 
                 servicesAllInfoAtStop = new ArrayList<>();
-                servicesAtStop = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].name");
-                serviceFirstArrival = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].arrivalTime");
-                serviceSecondArrival = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].nextArrivalTime");
-                firstArrivalLive = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].arrivalTime_veh_plate");
-                secondArrivalLive = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].nextArrivalTime_veh_plate");
+                servicesAtStop = JsonPath.read(response, path + "name");
+                serviceFirstArrival = JsonPath.read(response, path + "arrivalTime");
+                serviceSecondArrival = JsonPath.read(response, path + "nextArrivalTime");
+                firstArrivalLive = JsonPath.read(response, path + "arrivalTime_veh_plate");
+                secondArrivalLive = JsonPath.read(response, path + "nextArrivalTime_veh_plate");
+                stopIds = JsonPath.read(response, path + "busstopcode");
                 for (int i = 0; i < servicesAtStop.size(); i++) {
-                    serviceInfoAtStop = new ServiceInStopDetails();
-                    serviceInfoAtStop.setServiceNum(servicesAtStop.get(i));
-                    serviceInfoAtStop.setFirstArrival(serviceFirstArrival.get(i));
-                    serviceInfoAtStop.setSecondArrival(serviceSecondArrival.get(i));
-                    serviceInfoAtStop.setFirstArrivalLive(firstArrivalLive.get(i));
-                    serviceInfoAtStop.setSecondArrivalLive(secondArrivalLive.get(i));
-                    servicesAllInfoAtStop.add(serviceInfoAtStop);
+                    if (!stopIds.get(i).contains("-E") || stopIds.get(i).contains("-E-S")) {
+                        serviceInfoAtStop = new ServiceInStopDetails();
+                        serviceInfoAtStop.setServiceNum(servicesAtStop.get(i));
+                        serviceInfoAtStop.setFirstArrival(serviceFirstArrival.get(i));
+                        serviceInfoAtStop.setSecondArrival(serviceSecondArrival.get(i));
+                        serviceInfoAtStop.setFirstArrivalLive(firstArrivalLive.get(i));
+                        serviceInfoAtStop.setSecondArrivalLive(secondArrivalLive.get(i));
+                        servicesAllInfoAtStop.add(serviceInfoAtStop);
+                    }
+
                 }
 
                 callback.onSuccessSingleStop(servicesAllInfoAtStop);
