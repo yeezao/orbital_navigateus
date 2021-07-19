@@ -9,6 +9,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -21,12 +22,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.doublefree.navigateus.R;
 import com.doublefree.navigateus.data.NextbusAPIs;
 import com.doublefree.navigateus.data.busrouteinformation.BusLocationInfo;
+import com.doublefree.navigateus.data.busrouteinformation.ServiceInfo;
 import com.doublefree.navigateus.data.busstopinformation.ServiceInStopDetails;
 import com.doublefree.navigateus.data.busstopinformation.StopList;
+import com.doublefree.navigateus.ui.stops_services.StopsServicesMasterFragmentDirections;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -49,7 +54,12 @@ public class BusLocationDisplayDialogFragment extends DialogFragment implements 
     String stopNameString;
     String fullServiceNumToCheck;
     StopList busStop = new StopList();
+    String serviceNumToCheckDesc;
     public static String TAG = "BusLocationDisplayDialogFragment";
+
+    private DialogFullRouteCallBack fullRouteCallBack;
+
+    Fragment parentView;
 
     private GoogleMap map;
 
@@ -72,13 +82,20 @@ public class BusLocationDisplayDialogFragment extends DialogFragment implements 
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.bus_location_display_dialogfragment, null);
 
-        builder.setView(view).setNegativeButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                handler.removeCallbacksAndMessages(null);
-                newHandler.removeCallbacksAndMessages(null);
-            }
-        });
+        builder.setView(view)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        handler.removeCallbacksAndMessages(null);
+                        newHandler.removeCallbacksAndMessages(null);
+                    }
+                })
+                .setNegativeButton("SEE FULL ROUTE", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        fullRouteCallBack.clickedFullRoute(serviceNumToCheck);
+                    }
+                });
 
         // Gets the MapView from the XML layout and creates it
         mapView = (MapView) view.findViewById(R.id.mapview);
@@ -123,7 +140,6 @@ public class BusLocationDisplayDialogFragment extends DialogFragment implements 
     /**
      * Method to pull arrival time data from NextBus servers and display it on the dialog.
      * This method is similar to the {@link StopsMainAdapter#getChildView(int, int, boolean, View, ViewGroup)} method.
-     *
      */
     private void setArrivalTimings() {
 
@@ -178,7 +194,7 @@ public class BusLocationDisplayDialogFragment extends DialogFragment implements 
 //                serviceSecondArrivalLive.setText("");
 //                serviceSecondArrivalLive.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.transparent));
                             } else if (serviceInStopDetails.getSecondArrival().charAt(0) == '-') {
-                                serviceSecondArrival.setText("< LAST BUS");
+                                serviceSecondArrival.setText("");
                                 serviceSecondArrival.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
                                 serviceSecondArrival.setTextColor(ContextCompat.getColor(getContext(), R.color.grey));
                                 serviceSecondArrival.setTextSize(14);
@@ -303,21 +319,25 @@ public class BusLocationDisplayDialogFragment extends DialogFragment implements 
         super.onCancel(dialog);
     }
 
-    public static BusLocationDisplayDialogFragment newInstance(String serviceNum, String stopName, StopList busStop) {
+    public static BusLocationDisplayDialogFragment newInstance(String serviceNum, String stopName, StopList busStop, DialogFullRouteCallBack callback) {
         BusLocationDisplayDialogFragment dialogFragment = new BusLocationDisplayDialogFragment();
         Bundle args = new Bundle();
         dialogFragment.setArguments(args);
         if (serviceNum.contains("D1")) {
             dialogFragment.setServiceNumToCheck("D1");
-        } else if (serviceNum.contains("C")) {
-            dialogFragment.setServiceNumToCheck("C");
         } else {
             dialogFragment.setServiceNumToCheck(serviceNum);
         }
         dialogFragment.setFullServiceNumToCheck(serviceNum);
         dialogFragment.setStopNameString(stopName);
         dialogFragment.setBusStop(busStop);
+//        dialogFragment.setParentView(parentView);
+        dialogFragment.setFullRouteCallBack(callback);
         return dialogFragment;
+    }
+
+    public void setParentView(Fragment parentView) {
+        this.parentView = parentView;
     }
     
     public void setFullServiceNumToCheck(String fullServiceNumToCheck) {
@@ -335,6 +355,8 @@ public class BusLocationDisplayDialogFragment extends DialogFragment implements 
     public void setStopNameString(String stopNameString) {
         this.stopNameString = stopNameString;
     }
+
+    public void setFullRouteCallBack(DialogFullRouteCallBack callBack) {this.fullRouteCallBack = callBack;}
 
     //helper method to add marker as image onto map
     public static BitmapDescriptor generateBitmapDescriptorFromRes(

@@ -16,7 +16,10 @@
         <action
             android:id="@+id/action_navigation_home_to_navigation_directions"
             app:destination="@id/navigation_directions" />
-<!--        <argument-->
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_stopsServicesSingleServiceSelectedFragment"
+            app:destination="@id/navigation_stopsServicesSingleServiceSelectedFragment" />
+        <!--        <argument-->
 <!--            android:name="passStopsList"-->
 <!--            app:argType="string" />-->
     </fragment>
@@ -127,5 +130,13 @@
             app:popUpTo="@id/navigation_viewPagerFragment"
             app:popUpToInclusive="true" />
     </fragment>
+    <dialog
+        android:id="@+id/busLocationDisplayDialogFragment"
+        android:name="com.doublefree.navigateus.ui.BusLocationDisplayDialogFragment"
+        android:label="BusLocationDisplayDialogFragment" >
+        <action
+            android:id="@+id/action_busLocationDisplayDialogFragment_to_navigation_stopsServicesSingleServiceSelectedFragment"
+            app:destination="@id/navigation_stopsServicesSingleServiceSelectedFragment" />
+    </dialog>
 
 </navigation>

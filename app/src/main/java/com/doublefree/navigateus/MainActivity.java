@@ -343,56 +343,6 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
     List<Double> listOfLat;
     List<Double> listOfLong;
 
-    private void getStringOfGroupStops() {
-
-        String url = "https://nnextbus.nus.edu.sg/BusStops";
-
-        StringRequest stringRequest = new StringRequest
-                (Request.Method.GET, url, new Response.Listener<String>() {
-
-                    @Override
-                    public void onResponse(String response) {
-                        firstPassStopsList = response;
-                        listOfAllStops = new ArrayList<>();
-                        listOfNames = JsonPath.read(response, "$.BusStopsResult.busstops[*].caption");
-                        listOfIds = JsonPath.read(response, "$.BusStopsResult.busstops[*].name");
-                        listOfLong = JsonPath.read(response, "$.BusStopsResult.busstops[*].longitude");
-                        listOfLat = JsonPath.read(response, "$.BusStopsResult.busstops[*].latitude");
-                        for (int i = 0; i < listOfNames.size(); i++) {
-                            listOfStops = new StopList();
-                            listOfStops.setStopName(listOfNames.get(i));
-                            listOfStops.setStopId(listOfIds.get(i));
-                            listOfStops.setStopLongitude(listOfLong.get(i));
-                            listOfStops.setStopLatitude(listOfLat.get(i));
-                            listOfAllStops.add(listOfStops);
-                        }
-                        Log.d("response is", response);
-                    }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // TODO: Handle error
-                        Log.e("volley API error", "" + error);
-                    }
-
-
-                }) {
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("Content-Type", "application/json; charset=UTF-8");
-                params.put("Authorization", getString(R.string.auth_header));
-                return params;
-            }
-        };
-
-        RequestQueue requestQueue = Volley.newRequestQueue(this.getApplicationContext());
-        requestQueue.add(stringRequest);
-
-    }
-
     //variables and methods for global bus arrival notifications
     List<ArrivalNotifications> arrivalNotificationsArray = new ArrayList<>();
     Handler monitoringHandler;
@@ -576,10 +526,9 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
      */
     public void updateMonitoringAndNotification(ArrivalNotifications singleStopArrivalNotificationForUpdate, int index) {
         Log.e("entered", "updatemonitoringandnotification");
-        getChildTimings(singleStopArrivalNotificationForUpdate.getStopId(), new MainActivity.VolleyCallBack() {
+        NextbusAPIs.callSingleStopInfo(mainActivity, getApplicationContext(), singleStopArrivalNotificationForUpdate.getStopId(), 0, true, new NextbusAPIs.VolleyCallBackSingleStop() {
             @Override
-            public void onSuccess() {
-                List<ServiceInStopDetails> monitoringAllServicesAtStop = servicesAllInfoAtStop;
+            public void onSuccessSingleStop(List<ServiceInStopDetails> servicesAllInfoAtStop) {
                 int i = 0;
                 int j = 0;
                 while (i < singleStopArrivalNotificationForUpdate.getServicesBeingWatched().size()
@@ -589,9 +538,9 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
                             .equals(singleStopArrivalNotificationForUpdate.getServicesBeingWatched().get(i))) {
                         //check if service has an estimate time, is not at "Arr" timing, and has an arrival time greater than the set monitoring threshold.
                         //If true, it sets the monitoring boolean value to true
-                        if (!arrivalNotificationsArray.get(index).getBeginWatching().get(i) && !monitoringAllServicesAtStop.get(j).getFirstArrival().equals("-")
-                                && !monitoringAllServicesAtStop.get(j).getFirstArrival().equals("Arr")
-                                && Integer.parseInt(monitoringAllServicesAtStop.get(j).getFirstArrival()) >= singleStopArrivalNotificationForUpdate.getTimeToWatch()){
+                        if (!arrivalNotificationsArray.get(index).getBeginWatching().get(i) && !servicesAllInfoAtStop.get(j).getFirstArrival().equals("-")
+                                && !servicesAllInfoAtStop.get(j).getFirstArrival().equals("Arr")
+                                && Integer.parseInt(servicesAllInfoAtStop.get(j).getFirstArrival()) >= singleStopArrivalNotificationForUpdate.getTimeToWatch()){
                             arrivalNotificationsArray.get(index).getBeginWatching().set(i, true);
                         }
                         i++;
@@ -601,7 +550,7 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
                         j++;
                     }
                 }
-                List<String> returnInfo = DetermineMonitoringThresholdReached(singleStopArrivalNotificationForUpdate, monitoringAllServicesAtStop);
+                List<String> returnInfo = DetermineMonitoringThresholdReached(singleStopArrivalNotificationForUpdate, servicesAllInfoAtStop);
                 if (returnInfo != null) {
                     ChangeNotification(returnInfo, singleStopArrivalNotificationForUpdate);
                     ChangeArrivalNotificationsArray(singleStopArrivalNotificationForUpdate);
@@ -610,7 +559,47 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
                     //?
                 }
             }
+
+            @Override
+            public void onFailureSingleStop() {
+
+            }
         });
+//        getChildTimings(singleStopArrivalNotificationForUpdate.getStopId(), new MainActivity.VolleyCallBack() {
+//            @Override
+//            public void onSuccess() {
+//                List<ServiceInStopDetails> monitoringAllServicesAtStop = servicesAllInfoAtStop;
+//                int i = 0;
+//                int j = 0;
+//                while (i < singleStopArrivalNotificationForUpdate.getServicesBeingWatched().size()
+//                        && j < singleStopArrivalNotificationForUpdate.getServicesAtStop().size()) {
+//                    //check if service from most recent data pull is a service being monitored
+//                    if (singleStopArrivalNotificationForUpdate.getServicesAtStop().get(j).getServiceNum()
+//                            .equals(singleStopArrivalNotificationForUpdate.getServicesBeingWatched().get(i))) {
+//                        //check if service has an estimate time, is not at "Arr" timing, and has an arrival time greater than the set monitoring threshold.
+//                        //If true, it sets the monitoring boolean value to true
+//                        if (!arrivalNotificationsArray.get(index).getBeginWatching().get(i) && !monitoringAllServicesAtStop.get(j).getFirstArrival().equals("-")
+//                                && !monitoringAllServicesAtStop.get(j).getFirstArrival().equals("Arr")
+//                                && Integer.parseInt(monitoringAllServicesAtStop.get(j).getFirstArrival()) >= singleStopArrivalNotificationForUpdate.getTimeToWatch()){
+//                            arrivalNotificationsArray.get(index).getBeginWatching().set(i, true);
+//                        }
+//                        i++;
+//                        j++;
+//
+//                    } else {
+//                        j++;
+//                    }
+//                }
+//                List<String> returnInfo = DetermineMonitoringThresholdReached(singleStopArrivalNotificationForUpdate, monitoringAllServicesAtStop);
+//                if (returnInfo != null) {
+//                    ChangeNotification(returnInfo, singleStopArrivalNotificationForUpdate);
+//                    ChangeArrivalNotificationsArray(singleStopArrivalNotificationForUpdate);
+////                    monitoringHandler.removeCallbacksAndMessages(0);
+//                } else {
+//                    //?
+//                }
+//            }
+//        });
     }
 
     /**
@@ -814,63 +803,62 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
     List<String> firstArrivalLive;
     List<String> secondArrivalLive;
 
-    private void getChildTimings(String stopId, final MainActivity.VolleyCallBack callback) {
-
-        String url = "https://nnextbus.nus.edu.sg/ShuttleService?busstopname=" + stopId;
-
-        StringRequest stopStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-                servicesAllInfoAtStop = new ArrayList<>();
-                Log.e("GetStopInfo in activity response is", response);
-                servicesAtStop = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].name");
-                serviceFirstArrival = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].arrivalTime");
-                serviceSecondArrival = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].nextArrivalTime");
-                firstArrivalLive = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].arrivalTime_veh_plate");
-                secondArrivalLive = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].nextArrivalTime_veh_plate");
-                Log.e("servicesAtStop is: ", servicesAtStop.get(0));
-                for (int i = 0; i < servicesAtStop.size(); i++) {
-                    serviceInfoAtStop = new ServiceInStopDetails();
-                    serviceInfoAtStop.setServiceNum(servicesAtStop.get(i));
-                    serviceInfoAtStop.setFirstArrival(serviceFirstArrival.get(i));
-                    Log.e("first arrival is: ", "" + serviceFirstArrival.get(i));
-                    serviceInfoAtStop.setSecondArrival(serviceSecondArrival.get(i));
-                    serviceInfoAtStop.setFirstArrivalLive(firstArrivalLive.get(i));
-                    serviceInfoAtStop.setSecondArrivalLive(secondArrivalLive.get(i));
-                    servicesAllInfoAtStop.add(serviceInfoAtStop);
-                }
-                callback.onSuccess();
-
-            }
-
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                // TODO: Handle error
-                Log.e("volley API error", "" + error);
-            }
-
-        }) {
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("Content-Type", "application/json; charset=UTF-8");
-                params.put("Authorization", getString(R.string.auth_header));
-                return params;
-            }
-        };
-
-        if (this != null) {
-            RequestQueue stopRequestQueue = Volley.newRequestQueue(this);
-            stopRequestQueue.add(stopStringRequest);
-        }
-
-//        Log.e("list is: ", list.toString());
-//        return list;
-    }
+//    private void getChildTimings(String stopId, final MainActivity.VolleyCallBack callback) {
+//
+//        String url = "https://nnextbus.nus.edu.sg/ShuttleService?busstopname=" + stopId;
+//
+//        StringRequest stopStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+//
+//            @Override
+//            public void onResponse(String response) {
+//                servicesAllInfoAtStop = new ArrayList<>();
+//                Log.e("GetStopInfo in activity response is", response);
+//                servicesAtStop = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].name");
+//                serviceFirstArrival = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].arrivalTime");
+//                serviceSecondArrival = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].nextArrivalTime");
+//                firstArrivalLive = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].arrivalTime_veh_plate");
+//                secondArrivalLive = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].nextArrivalTime_veh_plate");
+//                Log.e("servicesAtStop is: ", servicesAtStop.get(0));
+//                for (int i = 0; i < servicesAtStop.size(); i++) {
+//                    serviceInfoAtStop = new ServiceInStopDetails();
+//                    serviceInfoAtStop.setServiceNum(servicesAtStop.get(i));
+//                    serviceInfoAtStop.setFirstArrival(serviceFirstArrival.get(i));
+//                    Log.e("first arrival is: ", "" + serviceFirstArrival.get(i));
+//                    serviceInfoAtStop.setSecondArrival(serviceSecondArrival.get(i));
+//                    serviceInfoAtStop.setFirstArrivalLive(firstArrivalLive.get(i));
+//                    serviceInfoAtStop.setSecondArrivalLive(secondArrivalLive.get(i));
+//                    servicesAllInfoAtStop.add(serviceInfoAtStop);
+//                }
+//                callback.onSuccess();
+//
+//            }
+//
+//        }, new Response.ErrorListener() {
+//
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Log.e("volley API error", "" + error);
+//            }
+//
+//        }) {
+//
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                Map<String, String> params = new HashMap<String, String>();
+//                params.put("Content-Type", "application/json; charset=UTF-8");
+//                params.put("Authorization", getString(R.string.auth_header));
+//                return params;
+//            }
+//        };
+//
+//        if (this != null) {
+//            RequestQueue stopRequestQueue = Volley.newRequestQueue(this);
+//            stopRequestQueue.add(stopStringRequest);
+//        }
+//
+////        Log.e("list is: ", list.toString());
+////        return list;
+//    }
 
     public List<ArrivalNotifications> getArrivalNotificationsArray() {
         return arrivalNotificationsArray;

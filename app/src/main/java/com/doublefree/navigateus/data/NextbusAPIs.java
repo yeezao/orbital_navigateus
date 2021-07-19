@@ -20,6 +20,7 @@ import com.doublefree.navigateus.data.busrouteinformation.ServiceInfo;
 import com.doublefree.navigateus.data.busstopinformation.ServiceInStopDetails;
 import com.doublefree.navigateus.data.busstopinformation.StopList;
 import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.PathNotFoundException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -126,27 +127,33 @@ public class NextbusAPIs {
                 
                 final String path = "$.ShuttleServiceResult.shuttles[*].";
 
-                servicesAllInfoAtStop = new ArrayList<>();
-                servicesAtStop = JsonPath.read(response, path + "name");
-                serviceFirstArrival = JsonPath.read(response, path + "arrivalTime");
-                serviceSecondArrival = JsonPath.read(response, path + "nextArrivalTime");
-                firstArrivalLive = JsonPath.read(response, path + "arrivalTime_veh_plate");
-                secondArrivalLive = JsonPath.read(response, path + "nextArrivalTime_veh_plate");
-                stopIds = JsonPath.read(response, path + "busstopcode");
-                for (int i = 0; i < servicesAtStop.size(); i++) {
-                    if (!stopIds.get(i).contains("-E") || stopIds.get(i).contains("-E-S")) {
-                        serviceInfoAtStop = new ServiceInStopDetails();
-                        serviceInfoAtStop.setServiceNum(servicesAtStop.get(i));
-                        serviceInfoAtStop.setFirstArrival(serviceFirstArrival.get(i));
-                        serviceInfoAtStop.setSecondArrival(serviceSecondArrival.get(i));
-                        serviceInfoAtStop.setFirstArrivalLive(firstArrivalLive.get(i));
-                        serviceInfoAtStop.setSecondArrivalLive(secondArrivalLive.get(i));
-                        servicesAllInfoAtStop.add(serviceInfoAtStop);
+                try {
+
+                    servicesAllInfoAtStop = new ArrayList<>();
+                    servicesAtStop = JsonPath.read(response, path + "name");
+                    serviceFirstArrival = JsonPath.read(response, path + "arrivalTime");
+                    serviceSecondArrival = JsonPath.read(response, path + "nextArrivalTime");
+                    firstArrivalLive = JsonPath.read(response, path + "arrivalTime_veh_plate");
+                    secondArrivalLive = JsonPath.read(response, path + "nextArrivalTime_veh_plate");
+                    stopIds = JsonPath.read(response, path + "busstopcode");
+                    for (int i = 0; i < servicesAtStop.size(); i++) {
+                        if (!stopIds.get(i).contains("-E") || stopIds.get(i).contains("-E-S")) {
+                            serviceInfoAtStop = new ServiceInStopDetails();
+                            serviceInfoAtStop.setServiceNum(servicesAtStop.get(i));
+                            serviceInfoAtStop.setFirstArrival(serviceFirstArrival.get(i));
+                            serviceInfoAtStop.setSecondArrival(serviceSecondArrival.get(i));
+                            serviceInfoAtStop.setFirstArrivalLive(firstArrivalLive.get(i));
+                            serviceInfoAtStop.setSecondArrivalLive(secondArrivalLive.get(i));
+                            servicesAllInfoAtStop.add(serviceInfoAtStop);
+                        }
+
                     }
 
-                }
+                    callback.onSuccessSingleStop(servicesAllInfoAtStop);
 
-                callback.onSuccessSingleStop(servicesAllInfoAtStop);
+                } catch (PathNotFoundException e) {
+                    callback.onFailureSingleStop();
+                }
 
             }
 

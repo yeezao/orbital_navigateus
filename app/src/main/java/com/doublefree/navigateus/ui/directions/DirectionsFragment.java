@@ -98,14 +98,14 @@ public class DirectionsFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onCreateOptionsMenu(
-            Menu menu, MenuInflater inflater) {
-        menu.clear();
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Directions");
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.home_toolbar_menu, menu);
-    }
+//    @Override
+//    public void onCreateOptionsMenu(
+//            Menu menu, MenuInflater inflater) {
+//        menu.clear();
+//        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Directions");
+//        super.onCreateOptionsMenu(menu, inflater);
+//        inflater.inflate(R.menu.home_toolbar_menu, menu);
+//    }
 
     Button goButtonForNav;
 
@@ -150,57 +150,6 @@ public class DirectionsFragment extends Fragment {
     List<String> listOfIdsReload;
     List<Double> listOfLat;
     List<Double> listOfLong;
-
-    private void GetBusStopsListOnline() {
-        String url = "https://nnextbus.nus.edu.sg/BusStops";
-
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-                listOfBusStopsString = response;
-                ((MainActivity) getActivity()).setFirstPassStopsList(listOfBusStopsString);
-                listOfAllStops = new ArrayList<>();
-                listOfNamesReload = JsonPath.read(response, "$.BusStopsResult.busstops[*].caption");
-                listOfIdsReload = JsonPath.read(response, "$.BusStopsResult.busstops[*].name");
-                listOfLong = JsonPath.read(response, "$.BusStopsResult.busstops[*].longitude");
-                listOfLat = JsonPath.read(response, "$.BusStopsResult.busstops[*].latitude");
-                for (int i = 0; i < listOfNamesReload.size(); i++) {
-                    listOfStops = new StopList();
-                    listOfStops.setStopName(listOfNamesReload.get(i));
-                    listOfStops.setStopId(listOfIdsReload.get(i));
-                    listOfStops.setStopLongitude(listOfLong.get(i));
-                    listOfStops.setStopLatitude(listOfLat.get(i));
-                    listOfAllStops.add(listOfStops);
-                }
-                ((MainActivity) getActivity()).setListOfAllStops(listOfAllStops);
-                SetAutoFillAdapter();
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                // TODO: Handle error
-                Log.e("volley API error", "" + error);
-            }
-
-
-        }) {
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("Content-Type", "application/json; charset=UTF-8");
-                params.put("Authorization", getActivity().getString(R.string.auth_header));
-                return params;
-            }
-        };
-
-        if (this.getContext() != null) {
-            RequestQueue requestQueue = Volley.newRequestQueue(this.getContext());
-            requestQueue.add(stringRequest);
-        }
-    }
 
     NavigationSearchInfo navigationSearchInfo;
 

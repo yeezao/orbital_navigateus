@@ -138,7 +138,6 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
                             for (ServiceInStopDetails temp : busStopArrivalInfo) {
                                 for (int i = 0; i < currentSegment.getViableBuses1().size(); i++) {
                                     if (temp.getServiceNum().equals(currentSegment.getViableBuses1().get(i))
-                                            || (temp.getServiceNum().charAt(0) == 'C' && currentSegment.getViableBuses1().get(i).equals("C")) //to be deprecated on new ISB network
                                             || (temp.getServiceNum().equals("D1(To UTown)") //for COM2 bus stop - D1 twd UTown
                                             && currentSegment.getViableBuses1().get(i).equals("D1")
                                             && currentSegment.getNodesTraversed().get(1).getId().equals("LT13-OPP"))
@@ -381,13 +380,6 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
             public void onClick(View view) {
 
                 Navigation.createNavigateOnClickListener(R.id.action_navigation_directions_to_directionsResultFragment);
-
-                //TODO:  onclick stuff for recyclerview
-//
-//                AppCompatActivity activity = (AppCompatActivity) view.getContext();
-//
-//                ((MainActivity) activity).setNavResultSingle(navResultTest, origin, dest);
-
                 DirectionsFragmentDirections.ActionNavigationDirectionsToDirectionsResultFragment action =
                         DirectionsFragmentDirections.actionNavigationDirectionsToDirectionsResultFragment(navResultTest, origin, dest);
                 navController.navigate(action);
@@ -536,7 +528,6 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                // TODO: Handle error
                 Log.e("volley API error", "" + error);
                 callback.onFailure();
             }

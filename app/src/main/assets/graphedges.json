@@ -3774,7 +3774,7 @@
      "to": "PGPR",
      "tonumid": 26,
      "by": "A1/D2/K",
-     "duration": 7,
+     "duration": 5,
      "sheltered": "y",
      "accessible": "y",
      "edgeDesc1": "-",
@@ -4007,6 +4007,18 @@
      "accessible": "y",
      "edgeDesc1": "-",
      "edgeDesc2": "-"
+   },
+   {
+     "from": "OTH",
+     "fromnumid": 4,
+     "to": "BTC",
+     "tonumid": 600,
+     "by": "walk",
+     "duration": 1,
+     "sheltered": "y",
+     "accessible": "y",
+     "edgeDesc1": "Walking directions are not available within Bukit Timah Campus. Please follow directional signs to your destination.",
+     "edgeDesc2": "Walking directions are not available within Bukit Timah Campus. Please follow directional signs to the bus stop."
    }
  ]
 }

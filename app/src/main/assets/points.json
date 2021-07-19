@@ -345,6 +345,14 @@
       "lon": 103.7725
     },
     {
+      "name": "Faculty of Law / Bukit Timah Campus BTC",
+      "altname": "BTC",
+      "id": "BTC",
+      "numid": 600,
+      "lat": 1.31880784,
+      "lon": 103.8172166
+    },
+    {
       "name": "Frontier",
       "altname": "",
       "id": "FRONTIER",

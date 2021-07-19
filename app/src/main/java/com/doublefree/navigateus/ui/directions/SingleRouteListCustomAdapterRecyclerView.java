@@ -242,13 +242,13 @@ public class SingleRouteListCustomAdapterRecyclerView extends RecyclerView.Adapt
 
     private void displayBusArrivalInfo(MyViewHolder holder, NavigationNodes stop,
                                        NavigationPartialResults currentSegment, final int position) {
-        getBusArrivalInfo(stop.getId(), new VolleyCallBack() {
-            @Override
-            public void onSuccess(List<ServiceInStopDetails> busStopArrivalInfo) {
-                //TODO: sort the list for the earliest arrival
-                //TODO: display the earliest arrival only
-            }
-        });
+//        getBusArrivalInfo(stop.getId(), new VolleyCallBack() {
+//            @Override
+//            public void onSuccess(List<ServiceInStopDetails> busStopArrivalInfo) {
+//                //TODO: sort the list for the earliest arrival
+//                //TODO: display the earliest arrival only
+//            }
+//        });
         holder.takeServiceClickable.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -379,73 +379,73 @@ public class SingleRouteListCustomAdapterRecyclerView extends RecyclerView.Adapt
 
 
 
-    private void getBusArrivalInfo(String stopId, final VolleyCallBack callback) {
-
-        String url = "https://nnextbus.nus.edu.sg/ShuttleService?busstopname=" + stopId;
-
-        StringRequest stopStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-
-                //variables for service info at a particular stop
-                ServiceInStopDetails serviceInfoAtStop;
-                List<ServiceInStopDetails> servicesAllInfoAtStop;
-                List<String> servicesAtStop;
-                List<String> serviceFirstArrival;
-                List<String> serviceSecondArrival;
-                List<String> firstArrivalLive;
-                List<String> secondArrivalLive;
-                servicesAllInfoAtStop = new ArrayList<>();
-                Log.e("GetStopInfo response is", response);
-                servicesAtStop = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].name");
-                serviceFirstArrival = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].arrivalTime");
-                serviceSecondArrival = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].nextArrivalTime");
-                firstArrivalLive = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].arrivalTime_veh_plate");
-                secondArrivalLive = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].nextArrivalTime_veh_plate");
-                Log.e("servicesAtStop is: ", servicesAtStop.get(0));
-                for (int i = 0; i < servicesAtStop.size(); i++) {
-                    serviceInfoAtStop = new ServiceInStopDetails();
-                    serviceInfoAtStop.setServiceNum(servicesAtStop.get(i));
-                    serviceInfoAtStop.setFirstArrival(serviceFirstArrival.get(i));
-                    Log.e("first arrival is: ", "" + serviceFirstArrival.get(i));
-                    serviceInfoAtStop.setSecondArrival(serviceSecondArrival.get(i));
-                    serviceInfoAtStop.setFirstArrivalLive(firstArrivalLive.get(i));
-                    serviceInfoAtStop.setSecondArrivalLive(secondArrivalLive.get(i));
-                    servicesAllInfoAtStop.add(serviceInfoAtStop);
-                }
-//                Log.e("servicesAllInfoAtStop is: ", "" + servicesAllInfoAtStop);
-//                Log.e("value of j is: ", "" + groupPosition);
-
-                callback.onSuccess(servicesAllInfoAtStop);
-
-
-            }
-
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                // TODO: Handle error
-                Log.e("volley API error", "" + error);
-            }
-
-        }) {
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("Content-Type", "application/json; charset=UTF-8");
-                params.put("Authorization", context.getString(R.string.auth_header));
-                return params;
-            }
-        };
-
-        if (context != null) {
-            RequestQueue stopRequestQueue = Volley.newRequestQueue(context);
-            stopRequestQueue.add(stopStringRequest);
-        }
-    }
+//    private void getBusArrivalInfo(String stopId, final VolleyCallBack callback) {
+//
+//        String url = "https://nnextbus.nus.edu.sg/ShuttleService?busstopname=" + stopId;
+//
+//        StringRequest stopStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+//
+//            @Override
+//            public void onResponse(String response) {
+//
+//                //variables for service info at a particular stop
+//                ServiceInStopDetails serviceInfoAtStop;
+//                List<ServiceInStopDetails> servicesAllInfoAtStop;
+//                List<String> servicesAtStop;
+//                List<String> serviceFirstArrival;
+//                List<String> serviceSecondArrival;
+//                List<String> firstArrivalLive;
+//                List<String> secondArrivalLive;
+//                servicesAllInfoAtStop = new ArrayList<>();
+//                Log.e("GetStopInfo response is", response);
+//                servicesAtStop = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].name");
+//                serviceFirstArrival = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].arrivalTime");
+//                serviceSecondArrival = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].nextArrivalTime");
+//                firstArrivalLive = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].arrivalTime_veh_plate");
+//                secondArrivalLive = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].nextArrivalTime_veh_plate");
+//                Log.e("servicesAtStop is: ", servicesAtStop.get(0));
+//                for (int i = 0; i < servicesAtStop.size(); i++) {
+//                    serviceInfoAtStop = new ServiceInStopDetails();
+//                    serviceInfoAtStop.setServiceNum(servicesAtStop.get(i));
+//                    serviceInfoAtStop.setFirstArrival(serviceFirstArrival.get(i));
+//                    Log.e("first arrival is: ", "" + serviceFirstArrival.get(i));
+//                    serviceInfoAtStop.setSecondArrival(serviceSecondArrival.get(i));
+//                    serviceInfoAtStop.setFirstArrivalLive(firstArrivalLive.get(i));
+//                    serviceInfoAtStop.setSecondArrivalLive(secondArrivalLive.get(i));
+//                    servicesAllInfoAtStop.add(serviceInfoAtStop);
+//                }
+////                Log.e("servicesAllInfoAtStop is: ", "" + servicesAllInfoAtStop);
+////                Log.e("value of j is: ", "" + groupPosition);
+//
+//                callback.onSuccess(servicesAllInfoAtStop);
+//
+//
+//            }
+//
+//        }, new Response.ErrorListener() {
+//
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                // TODO: Handle error
+//                Log.e("volley API error", "" + error);
+//            }
+//
+//        }) {
+//
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                Map<String, String> params = new HashMap<String, String>();
+//                params.put("Content-Type", "application/json; charset=UTF-8");
+//                params.put("Authorization", context.getString(R.string.auth_header));
+//                return params;
+//            }
+//        };
+//
+//        if (context != null) {
+//            RequestQueue stopRequestQueue = Volley.newRequestQueue(context);
+//            stopRequestQueue.add(stopStringRequest);
+//        }
+//    }
 
     public interface VolleyCallBack {
         void onSuccess(List<ServiceInStopDetails> busStopArrivalInfo);

@@ -191,13 +191,14 @@ public class StopsMainAdapter extends BaseExpandableListAdapter {
 //                textViewTime2Live.setText("");
 //                textViewTime2Live.setBackgroundColor(ContextCompat.getColor(context, R.color.transparent));
                 } else if (child.getSecondArrival().charAt(0) == '-') {
-                    textViewTime2.setText("< LAST BUS");
+                    textViewTime2.setText("");
                     textViewTime2.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
                     textViewTime2.setTextColor(ContextCompat.getColor(context, R.color.grey));
-                    textViewTime2.setTextSize(14);
+                    textViewTime2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
                     imageViewLive2Time.setVisibility(ImageView.INVISIBLE);
                 } else {
                     textViewTime2.setText(child.getSecondArrival());
+                    textViewTime2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
                     if (child.getSecondArrivalLive().length() == 0) {
                         textViewTime2.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
                         textViewTime2.setTextColor(ContextCompat.getColor(context, R.color.black));

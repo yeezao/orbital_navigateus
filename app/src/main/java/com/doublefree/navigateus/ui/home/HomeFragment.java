@@ -25,6 +25,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ProcessLifecycleOwner;
+import androidx.navigation.Navigation;
 
 import com.doublefree.navigateus.ExpandableListViewStandardCode;
 import com.doublefree.navigateus.MainActivity;
@@ -32,12 +33,16 @@ import com.doublefree.navigateus.R;
 import com.doublefree.navigateus.data.LocationServices;
 import com.doublefree.navigateus.data.busnetworkinformation.NetworkTickerTapesAnnouncements;
 import com.doublefree.navigateus.data.NextbusAPIs;
+import com.doublefree.navigateus.data.busrouteinformation.ServiceInfo;
 import com.doublefree.navigateus.data.busstopinformation.ServiceInStopDetails;
 import com.doublefree.navigateus.data.busstopinformation.StopList;
 import com.doublefree.navigateus.favourites.FavouriteStop;
 import com.doublefree.navigateus.ui.AnnouncementTickerTapesDialogFragment;
+import com.doublefree.navigateus.ui.BusLocationDisplayDialogFragmentDirections;
+import com.doublefree.navigateus.ui.DialogFullRouteCallBack;
 import com.doublefree.navigateus.ui.StopsMainAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -45,7 +50,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class HomeFragment extends Fragment implements LocationServices.LocationFound {
+public class HomeFragment extends Fragment implements LocationServices.LocationFound, DialogFullRouteCallBack {
 
     public HomeFragment() {}
 
@@ -254,7 +259,7 @@ public class HomeFragment extends Fragment implements LocationServices.LocationF
         expandableListView.setVisibility(View.VISIBLE);
         homeFavouritesProgressBar.setVisibility(View.INVISIBLE);
         ExpandableListViewStandardCode.expandableListViewListeners(expandableListView, listGroup, listItem,
-                adapter, listOfAllStopsToDisplayInFavourites, getChildFragmentManager(), getActivity(), getContext(), true);
+                adapter, listOfAllStopsToDisplayInFavourites, getChildFragmentManager(), getActivity(), getContext(), true, HomeFragment.this);
 //        expandableListViewListeners();
 
         if (!isFirstRun) {
@@ -323,6 +328,11 @@ public class HomeFragment extends Fragment implements LocationServices.LocationF
 
                     @Override
                     public void onFailureSingleStop() {
+                        Snackbar snackbar = Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                R.string.failed_to_connect,
+                                Snackbar.LENGTH_LONG);
+                        snackbar.setAnchorView(R.id.nav_view);
+                        snackbar.show();
                         //TODO: display failed to load snackbar
                     }
                 });
@@ -330,4 +340,48 @@ public class HomeFragment extends Fragment implements LocationServices.LocationF
         }
     }
 
+    @Override
+    public void clickedFullRoute(final String serviceNumToCheck) {
+        Snackbar snackbar = Snackbar.make(getActivity().findViewById(android.R.id.content),
+                "Loading full route for " + serviceNumToCheck + "...",
+                Snackbar.LENGTH_LONG);
+        snackbar.setAnchorView(R.id.nav_view);
+        snackbar.show();
+        NextbusAPIs.callPickupPoint(true, serviceNumToCheck, getActivity(), getContext(), new NextbusAPIs.VolleyCallBackPickupPoint() {
+            @Override
+            public void OnSuccessPickupPointString(String response) {
+                NextbusAPIs.callListOfServices(getActivity(), getContext(), new NextbusAPIs.VolleyCallBackServiceList() {
+                    @Override
+                    public void onSuccessServiceList(List<ServiceInfo> servicesInfo) {
+                        for (int i = 0; i < servicesInfo.size(); i++) {
+                            if (servicesInfo.get(i).getServiceNum().equals(serviceNumToCheck)) {
+                                String serviceNumToCheckDesc = servicesInfo.get(i).getServiceDesc();
+                                Navigation.createNavigateOnClickListener(R.id.action_navigation_home_to_navigation_stopsServicesSingleServiceSelectedFragment);
+                                HomeFragmentDirections.ActionNavigationHomeToNavigationStopsServicesSingleServiceSelectedFragment action =
+                                        HomeFragmentDirections.actionNavigationHomeToNavigationStopsServicesSingleServiceSelectedFragment(
+                                                serviceNumToCheck, serviceNumToCheckDesc, 3, response);
+                                Navigation.findNavController(rootView).navigate(action);
+                                break;
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailureServiceList() {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onSuccessPickupPoint(List<StopList> listOfStopsAlongRoute) {
+                //DO NOTHING
+            }
+
+            @Override
+            public void onFailurePickupPoint() {
+
+            }
+        });
+    }
 }

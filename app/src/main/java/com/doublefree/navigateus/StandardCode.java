@@ -1,8 +1,10 @@
 package com.doublefree.navigateus;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.doublefree.navigateus.data.busstopinformation.StopList;
+import com.google.android.material.snackbar.Snackbar;
 import com.jayway.jsonpath.JsonPath;
 
 import java.io.IOException;
@@ -87,6 +89,14 @@ public class StandardCode {
             return null;
         }
         return json;
+    }
+
+    public static void showFailedToLoadSnackbar(Activity activity) {
+        Snackbar snackbar = Snackbar.make(activity.findViewById(android.R.id.content),
+                R.string.failed_to_connect,
+                Snackbar.LENGTH_LONG);
+        snackbar.setAnchorView(R.id.textView_container);
+        snackbar.show();
     }
 
 

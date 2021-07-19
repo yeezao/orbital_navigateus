@@ -22,11 +22,15 @@ import com.doublefree.navigateus.ExpandableListViewStandardCode;
 import com.doublefree.navigateus.R;
 import com.doublefree.navigateus.StandardCode;
 import com.doublefree.navigateus.data.NextbusAPIs;
+import com.doublefree.navigateus.data.busnetworkinformation.NetworkTickerTapesAnnouncements;
 import com.doublefree.navigateus.data.busrouteinformation.BusOperatingHours;
+import com.doublefree.navigateus.data.busrouteinformation.ServiceInfo;
 import com.doublefree.navigateus.data.busstopinformation.ServiceInStopDetails;
 import com.doublefree.navigateus.data.busstopinformation.StopList;
 import com.doublefree.navigateus.ui.AnnouncementTickerTapesDialogFragment;
+import com.doublefree.navigateus.ui.DialogFullRouteCallBack;
 import com.doublefree.navigateus.ui.StopsMainAdapter;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -34,7 +38,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class StopsServicesSingleServiceSelectedFragment extends Fragment {
+public class StopsServicesSingleServiceSelectedFragment extends Fragment implements DialogFullRouteCallBack {
 
     View rootView;
 
@@ -113,31 +117,6 @@ public class StopsServicesSingleServiceSelectedFragment extends Fragment {
 
         Log.e("serviceStatus", serviceStatus + "");
 
-        switch (serviceStatus) {
-            case 0:
-                serviceStatusIcon.setImageResource(R.drawable.ic_baseline_service_ok_20);
-                serviceStatusDesc.setText("Good Service");
-                break;
-            case 1:
-                serviceStatusIcon.setImageResource(R.drawable.ic_baseline_service_disruption_20);
-                serviceStatusDesc.setText("Service Disrupted");
-                serviceDisruptedText.setVisibility(View.VISIBLE);
-                ConstraintLayout disruptedClick = view.findViewById(R.id.singleServiceStatusConstraintLayout);
-                disruptedClick.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        AnnouncementTickerTapesDialogFragment dialogFragment =
-                                AnnouncementTickerTapesDialogFragment.newInstance(true, null, serviceNumString);
-                        dialogFragment.show(getChildFragmentManager(), AnnouncementTickerTapesDialogFragment.TAG);
-                    }
-                });
-                break;
-            case 3:
-                serviceStatusIcon.setImageResource(R.drawable.ic_baseline_service_unknown_20);
-                serviceStatusDesc.setText("Status Unknown");
-                break;
-        }
-
         if (serviceFullRouteInJSON.isEmpty()) {
             NextbusAPIs.callPickupPoint(false, serviceNumString, getActivity(), getContext(), new NextbusAPIs.VolleyCallBackPickupPoint() {
                 @Override
@@ -151,7 +130,11 @@ public class StopsServicesSingleServiceSelectedFragment extends Fragment {
 
                 @Override
                 public void onFailurePickupPoint() {
-                    //TODO: display snackbar
+                    Snackbar snackbar = Snackbar.make(getActivity().findViewById(android.R.id.content),
+                            R.string.failed_to_connect,
+                            Snackbar.LENGTH_LONG);
+                    snackbar.setAnchorView(R.id.nav_view);
+                    snackbar.show();
                 }
             });
         } else {
@@ -160,10 +143,67 @@ public class StopsServicesSingleServiceSelectedFragment extends Fragment {
             initListDataELV(listOfAllStopsOnRoute);
         }
 
+        setServiceStatus();
 
     }
 
     Handler timeRefreshHandler = new Handler(Looper.getMainLooper());
+
+    private void setServiceStatus() {
+
+        switch (serviceStatus) {
+            case 0:
+                serviceStatusIcon.setImageResource(R.drawable.ic_baseline_service_ok_20);
+                serviceStatusDesc.setText("Good Service");
+                break;
+            case 1:
+                serviceStatusIcon.setImageResource(R.drawable.ic_baseline_service_disruption_20);
+                serviceStatusDesc.setText("Service Alert");
+                serviceDisruptedText.setVisibility(View.VISIBLE);
+                ConstraintLayout disruptedClick = rootView.findViewById(R.id.singleServiceStatusConstraintLayout);
+                disruptedClick.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        AnnouncementTickerTapesDialogFragment dialogFragment =
+                                AnnouncementTickerTapesDialogFragment.newInstance(true, null, serviceNumString);
+                        dialogFragment.show(getChildFragmentManager(), AnnouncementTickerTapesDialogFragment.TAG);
+                    }
+                });
+                break;
+            case 3:
+                NextbusAPIs.callListOfTickerTapes(getActivity(), getContext(), new NextbusAPIs.VolleyCallBackTickerTapesAnnouncementsList() {
+                    @Override
+                    public void onSuccessTickerTapesAnnouncements(List<NetworkTickerTapesAnnouncements> networkTickerTapesAnnouncementsList) {
+                        for (int i = 0; i < networkTickerTapesAnnouncementsList.size(); i++) {
+                            String[] servicesAffected = networkTickerTapesAnnouncementsList.get(i).getServicesAffected().split(",");
+                            for (int j = 0; j < servicesAffected.length; j++) {
+                                Log.e("compare service", servicesAffected[j] + " " + serviceNumString);
+                                String singleServiceAffected = servicesAffected[j].trim();
+                                if (!singleServiceAffected.isEmpty() && !serviceNumString.isEmpty() &&
+                                        (servicesAffected[j].trim().contains(serviceNumString)
+                                                || serviceNumString.contains(servicesAffected[j].trim())) &&
+                                        (!networkTickerTapesAnnouncementsList.get(i).getMessage().contains("testing") &&
+                                                !networkTickerTapesAnnouncementsList.get(i).getMessage().contains("Testing") &&
+                                                !networkTickerTapesAnnouncementsList.get(i).getMessage().contains("maintenance"))) {
+                                    serviceStatus = 1;
+                                    break;
+                                }
+                            }
+                        }
+                        serviceStatus = 0;
+                        setServiceStatus();
+                    }
+
+                    @Override
+                    public void onFailureTickerTapesAnnouncements() {
+                        serviceStatusIcon.setImageResource(R.drawable.ic_baseline_service_unknown_20);
+                        serviceStatusDesc.setText("Status Unknown");
+                    }
+                });
+                break;
+
+        }
+    }
 
     private void initListDataELV(List<StopList> listOfAllStops) {
 
@@ -179,7 +219,7 @@ public class StopsServicesSingleServiceSelectedFragment extends Fragment {
         adapter.notifyDataSetChanged();
         expandableListView.setVisibility(View.VISIBLE);
         ExpandableListViewStandardCode.expandableListViewListeners(expandableListView, listGroup, listItem,
-                adapter, listOfAllStopsAlongRoute, getChildFragmentManager(), getActivity(), getContext(), false);
+                adapter, listOfAllStopsAlongRoute, getChildFragmentManager(), getActivity(), getContext(), false, StopsServicesSingleServiceSelectedFragment.this);
 //        expandableListViewListeners();
         
         timeRefreshHandler.postDelayed(new Runnable() {
@@ -214,7 +254,11 @@ public class StopsServicesSingleServiceSelectedFragment extends Fragment {
 
                     @Override
                     public void onFailureSingleStop() {
-                        //TODO: display failed to load snackbar
+                        Snackbar snackbar = Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                R.string.failed_to_connect,
+                                Snackbar.LENGTH_LONG);
+                        snackbar.setAnchorView(R.id.nav_view);
+                        snackbar.show();
                     }
                 });
             }
@@ -236,4 +280,8 @@ public class StopsServicesSingleServiceSelectedFragment extends Fragment {
         });
     }
 
+    @Override
+    public void clickedFullRoute(String serviceNum) {
+
+    }
 }

@@ -24,6 +24,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ProcessLifecycleOwner;
+import androidx.navigation.NavHost;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -35,11 +38,15 @@ import com.android.volley.toolbox.Volley;
 import com.doublefree.navigateus.ExpandableListViewStandardCode;
 import com.doublefree.navigateus.MainActivity;
 import com.doublefree.navigateus.R;
+import com.doublefree.navigateus.StandardCode;
 import com.doublefree.navigateus.data.NextbusAPIs;
+import com.doublefree.navigateus.data.busrouteinformation.ServiceInfo;
 import com.doublefree.navigateus.data.busstopinformation.ArrivalNotifications;
 import com.doublefree.navigateus.data.busstopinformation.ServiceInStopDetails;
 import com.doublefree.navigateus.data.busstopinformation.StopList;
 import com.doublefree.navigateus.ui.BusLocationDisplayDialogFragment;
+import com.doublefree.navigateus.ui.BusLocationDisplayDialogFragmentDirections;
+import com.doublefree.navigateus.ui.DialogFullRouteCallBack;
 import com.doublefree.navigateus.ui.StopsMainAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -56,7 +63,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class StopsServicesFragment extends Fragment {
+public class StopsServicesFragment extends Fragment implements DialogFullRouteCallBack {
 
     // EXPANDABLE LIST DECLARATIONS
     ExpandableListView expandableListView;
@@ -297,7 +304,8 @@ public class StopsServicesFragment extends Fragment {
 
                         @Override
                         public void onFailureSingleStop() {
-
+                            StandardCode.showFailedToLoadSnackbar(getActivity());
+                            singleStopClickedProgressBar.setVisibility(View.GONE);
                         }
                     });
 //                    getListOfChildServices(groupPosition, true, new VolleyCallBack() {
@@ -376,7 +384,7 @@ public class StopsServicesFragment extends Fragment {
 
                                 @Override
                                 public void onFailureSingleStop() {
-
+                                    StandardCode.showFailedToLoadSnackbar(getActivity());
                                 }
                             });
 //                            getListOfChildServices(groupPosition, false, new VolleyCallBack() {
@@ -462,7 +470,7 @@ public class StopsServicesFragment extends Fragment {
                 if (listItem.get(listGroup.get(groupPosition)) != null) {
                     String serviceNum = listItem.get(listGroup.get(groupPosition)).get(childPosition).getServiceNum();
                     String stopName = listGroup.get(groupPosition).getStopName();
-                    BusLocationDisplayDialogFragment dialogFragment = BusLocationDisplayDialogFragment.newInstance(serviceNum, stopName, listGroup.get(groupPosition));
+                    BusLocationDisplayDialogFragment dialogFragment = BusLocationDisplayDialogFragment.newInstance(serviceNum, stopName, listGroup.get(groupPosition), StopsServicesFragment.this);
                     dialogFragment.show(Objects.requireNonNull(getChildFragmentManager()), BusLocationDisplayDialogFragment.TAG);
                 }
 
@@ -515,7 +523,8 @@ public class StopsServicesFragment extends Fragment {
 
                         @Override
                         public void onFailureSingleStop() {
-
+                            StandardCode.showFailedToLoadSnackbar(getActivity());
+                            setRefreshCircleInvisible(refreshTimingProgressBar, 0);
                         }
                     });
 //                    getListOfChildServices(i, true, new VolleyCallBack() {
@@ -602,7 +611,7 @@ public class StopsServicesFragment extends Fragment {
 
             @Override
             public void onFailureAllStops() {
-                //TODO: show snackbar
+                StandardCode.showFailedToLoadSnackbar(getActivity());
             }
         });
 
@@ -718,6 +727,52 @@ public class StopsServicesFragment extends Fragment {
     List<String> serviceSecondArrival;
     List<String> firstArrivalLive;
     List<String> secondArrivalLive;
+
+    @Override
+    public void clickedFullRoute(final String serviceNum) {
+        Snackbar snackbar = Snackbar.make(getActivity().findViewById(android.R.id.content),
+                "Loading full route for " + serviceNum + "...",
+                Snackbar.LENGTH_LONG);
+        snackbar.setAnchorView(R.id.nav_view);
+        snackbar.show();
+        NextbusAPIs.callPickupPoint(true, serviceNum, getActivity(), getContext(), new NextbusAPIs.VolleyCallBackPickupPoint() {
+            @Override
+            public void OnSuccessPickupPointString(String response) {
+                NextbusAPIs.callListOfServices(getActivity(), getContext(), new NextbusAPIs.VolleyCallBackServiceList() {
+                    @Override
+                    public void onSuccessServiceList(List<ServiceInfo> servicesInfo) {
+                        Log.e("id 11212", serviceNum);
+                        for (int i = 0; i < servicesInfo.size(); i++) {
+                            if (servicesInfo.get(i).getServiceNum().equals(serviceNum)) {
+                                String serviceNumToCheckDesc = servicesInfo.get(i).getServiceDesc();
+                                Navigation.createNavigateOnClickListener(R.id.action_navigation_stops_services_master_to_stopsServicesSingleServiceSelectedFragment);
+                                StopsServicesMasterFragmentDirections.ActionNavigationStopsServicesMasterToStopsServicesSingleServiceSelectedFragment action =
+                                        StopsServicesMasterFragmentDirections.actionNavigationStopsServicesMasterToStopsServicesSingleServiceSelectedFragment(
+                                                serviceNum, serviceNumToCheckDesc, 3, response);
+                                Navigation.findNavController(viewForFragment).navigate(action);
+                                break;
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailureServiceList() {
+                        StandardCode.showFailedToLoadSnackbar(getActivity());
+                    }
+                });
+            }
+
+            @Override
+            public void onSuccessPickupPoint(List<StopList> listOfStopsAlongRoute) {
+                //DO NOTHING
+            }
+
+            @Override
+            public void onFailurePickupPoint() {
+                StandardCode.showFailedToLoadSnackbar(getActivity());
+            }
+        });
+    }
 
     public interface VolleyCallBack {
         void onSuccess();

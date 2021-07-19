@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.doublefree.navigateus.data.NextbusAPIs;
@@ -15,6 +16,7 @@ import com.doublefree.navigateus.data.busstopinformation.ServiceInStopDetails;
 import com.doublefree.navigateus.data.busstopinformation.StopList;
 import com.doublefree.navigateus.favourites.FavouriteStop;
 import com.doublefree.navigateus.ui.BusLocationDisplayDialogFragment;
+import com.doublefree.navigateus.ui.DialogFullRouteCallBack;
 import com.doublefree.navigateus.ui.stops_services.SetArrivalNotificationsDialogFragment;
 import com.doublefree.navigateus.ui.StopsMainAdapter;
 import com.google.android.material.snackbar.Snackbar;
@@ -22,11 +24,21 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Handler;
 
 public class ExpandableListViewStandardCode {
 
     private static ArrivalNotifications singleStopArrivalNotification;
     private static List<ArrivalNotifications> arrivalNotificationsArray;
+
+    public static void expandableListViewAutoRefreshTimings(ExpandableListView expandableListView,
+                                                            List<StopList> listGroup,
+                                                            HashMap<StopList, List<ServiceInStopDetails>> listItem,
+                                                            StopsMainAdapter adapter,
+                                                            List<StopList> listOfStops, FragmentManager childFragmentManager,
+                                                            Activity activity, Context context) {
+
+    }
 
     /**
      * Sets the 3 listeners that are used across all {@link ExpandableListView} in this app:
@@ -42,13 +54,15 @@ public class ExpandableListViewStandardCode {
      * @param activity
      * @param context
      * @param accountFavourites - to determine if filtering of retrieved services needs to be done based on favourites
+     * @param callback
      */
     public static void expandableListViewListeners(ExpandableListView expandableListView,
                                                    List<StopList> listGroup,
                                                    HashMap<StopList, List<ServiceInStopDetails>> listItem,
                                                    StopsMainAdapter adapter,
                                                    List<StopList> listOfStops, FragmentManager childFragmentManager,
-                                                   Activity activity, Context context, boolean accountFavourites) {
+                                                   Activity activity, Context context, boolean accountFavourites, DialogFullRouteCallBack callback) {
+
         expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
@@ -90,7 +104,7 @@ public class ExpandableListViewStandardCode {
 
                                 @Override
                                 public void onFailureSingleStop() {
-                                    //TODO: display failed to load snackback
+                                    StandardCode.showFailedToLoadSnackbar(activity);
                                 }
                             });
                 }
@@ -148,7 +162,7 @@ public class ExpandableListViewStandardCode {
 
                                     @Override
                                     public void onFailureSingleStop() {
-                                        //TODO: display failed to load snackback
+                                        StandardCode.showFailedToLoadSnackbar(activity);
                                     }
                                 });
 
@@ -168,7 +182,7 @@ public class ExpandableListViewStandardCode {
                 if (listItem.get(listGroup.get(groupPosition)) != null) {
                     String serviceNum = listItem.get(listGroup.get(groupPosition)).get(childPosition).getServiceNum();
                     String stopName = listGroup.get(groupPosition).getStopName();
-                    BusLocationDisplayDialogFragment dialogFragment = BusLocationDisplayDialogFragment.newInstance(serviceNum, stopName, listGroup.get(groupPosition));
+                    BusLocationDisplayDialogFragment dialogFragment = BusLocationDisplayDialogFragment.newInstance(serviceNum, stopName, listGroup.get(groupPosition), callback);
                     dialogFragment.show(childFragmentManager, BusLocationDisplayDialogFragment.TAG);
                 }
 
