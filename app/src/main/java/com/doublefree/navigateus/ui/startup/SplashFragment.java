@@ -51,7 +51,7 @@ public class SplashFragment extends Fragment{
                     navController.navigate(R.id.action_splashFragment_to_viewPagerFragment);
                 }
             }
-        }, 3000);
+        }, 10);
 
     }
 

@@ -54,21 +54,27 @@ public class NextbusAPIs {
                 List<Double> listOfLat;
                 List<Double> listOfLong;
 
-                listOfNames = JsonPath.read(response, "$.BusStopsResult.busstops[*].caption");
-                listOfIds = JsonPath.read(response, "$.BusStopsResult.busstops[*].name");
-                listOfLong = JsonPath.read(response, "$.BusStopsResult.busstops[*].longitude");
-                listOfLat = JsonPath.read(response, "$.BusStopsResult.busstops[*].latitude");
-                for (int i = 0; i < listOfNames.size(); i++) {
-                    listOfStops = new StopList();
-                    listOfStops.setStopName(listOfNames.get(i));
-                    listOfStops.setStopId(listOfIds.get(i));
-                    listOfStops.setStopLongitude(listOfLong.get(i));
-                    listOfStops.setStopLatitude(listOfLat.get(i));
-                    listOfAllStops.add(listOfStops);
-                }
-                ((MainActivity) activity).setListOfAllStops(listOfAllStops);
+                try {
 
-                callback.onSuccessAllStops(listOfAllStops);
+                    listOfNames = JsonPath.read(response, "$.BusStopsResult.busstops[*].caption");
+                    listOfIds = JsonPath.read(response, "$.BusStopsResult.busstops[*].name");
+                    listOfLong = JsonPath.read(response, "$.BusStopsResult.busstops[*].longitude");
+                    listOfLat = JsonPath.read(response, "$.BusStopsResult.busstops[*].latitude");
+                    for (int i = 0; i < listOfNames.size(); i++) {
+                        listOfStops = new StopList();
+                        listOfStops.setStopName(listOfNames.get(i));
+                        listOfStops.setStopId(listOfIds.get(i));
+                        listOfStops.setStopLongitude(listOfLong.get(i));
+                        listOfStops.setStopLatitude(listOfLat.get(i));
+                        listOfAllStops.add(listOfStops);
+                    }
+                    ((MainActivity) activity).setListOfAllStops(listOfAllStops);
+
+                    callback.onSuccessAllStops(listOfAllStops);
+
+                } catch (PathNotFoundException e) {
+                    callback.onFailureAllStops();
+                }
             }
         }, new Response.ErrorListener() {
 
@@ -205,16 +211,22 @@ public class NextbusAPIs {
                 ServiceInfo singleServiceInfo;
                 List<ServiceInfo> allServicesInfo = new ArrayList<>();
 
-                serviceNums = JsonPath.read(response, "$.ServiceDescriptionResult.ServiceDescription[*].Route");
-                serviceDescs = JsonPath.read(response, "$.ServiceDescriptionResult.ServiceDescription[*].RouteDescription");
-                for (int i = 0; i < serviceNums.size(); i++) {
-                    Log.e("serviceNums", serviceNums.get(i));
-                    singleServiceInfo = new ServiceInfo();
-                    singleServiceInfo.setServiceNum(serviceNums.get(i));
-                    singleServiceInfo.setServiceDesc(serviceDescs.get(i));
-                    allServicesInfo.add(singleServiceInfo);
+                try {
+
+                    serviceNums = JsonPath.read(response, "$.ServiceDescriptionResult.ServiceDescription[*].Route");
+                    serviceDescs = JsonPath.read(response, "$.ServiceDescriptionResult.ServiceDescription[*].RouteDescription");
+                    for (int i = 0; i < serviceNums.size(); i++) {
+                        Log.e("serviceNums", serviceNums.get(i));
+                        singleServiceInfo = new ServiceInfo();
+                        singleServiceInfo.setServiceNum(serviceNums.get(i));
+                        singleServiceInfo.setServiceDesc(serviceDescs.get(i));
+                        allServicesInfo.add(singleServiceInfo);
+                    }
+                    callback.onSuccessServiceList(allServicesInfo);
+
+                } catch (PathNotFoundException e) {
+                    callback.onFailureServiceList();
                 }
-                callback.onSuccessServiceList(allServicesInfo);
 
             }
 
@@ -272,19 +284,25 @@ public class NextbusAPIs {
                     List<Double> listOfLat;
                     List<Double> listOfLong;
 
-                    listOfNames = JsonPath.read(response, "$.PickupPointResult.pickuppoint[*].pickupname");
-                    listOfIds = JsonPath.read(response, "$.BusStopsResult.busstops[*].busstopcode");
-                    listOfLong = JsonPath.read(response, "$.BusStopsResult.busstops[*].lng");
-                    listOfLat = JsonPath.read(response, "$.BusStopsResult.busstops[*].lat");
-                    for (int i = 0; i < listOfNames.size(); i++) {
-                        listOfStops = new StopList();
-                        listOfStops.setStopName(listOfNames.get(i));
-                        listOfStops.setStopId(listOfIds.get(i));
-                        listOfStops.setStopLongitude(listOfLong.get(i));
-                        listOfStops.setStopLatitude(listOfLat.get(i));
-                        listOfAllStops.add(listOfStops);
+                    try {
+
+                        listOfNames = JsonPath.read(response, "$.PickupPointResult.pickuppoint[*].pickupname");
+                        listOfIds = JsonPath.read(response, "$.BusStopsResult.busstops[*].busstopcode");
+                        listOfLong = JsonPath.read(response, "$.BusStopsResult.busstops[*].lng");
+                        listOfLat = JsonPath.read(response, "$.BusStopsResult.busstops[*].lat");
+                        for (int i = 0; i < listOfNames.size(); i++) {
+                            listOfStops = new StopList();
+                            listOfStops.setStopName(listOfNames.get(i));
+                            listOfStops.setStopId(listOfIds.get(i));
+                            listOfStops.setStopLongitude(listOfLong.get(i));
+                            listOfStops.setStopLatitude(listOfLat.get(i));
+                            listOfAllStops.add(listOfStops);
+                        }
+                        callback.onSuccessPickupPoint(listOfAllStops);
+
+                    } catch (PathNotFoundException e) {
+                        callback.onFailurePickupPoint();
                     }
-                    callback.onSuccessPickupPoint(listOfAllStops);
                 }
 
             }
@@ -331,23 +349,29 @@ public class NextbusAPIs {
             @Override
             public void onResponse(String response) {
 
-                List<String> messages = JsonPath.read(response, "$.TickerTapesResult.TickerTape[*].Message");
-                List<String> servicesAffected = JsonPath.read(response, "$.TickerTapesResult.TickerTape[*].Affected_Service_Ids");
-                List<String> displayFrom = JsonPath.read(response, "$.TickerTapesResult.TickerTape[*].Display_From");
-                List<String> displayTo = JsonPath.read(response, "$.TickerTapesResult.TickerTape[*].Display_To");
+                try {
 
-                List<NetworkTickerTapesAnnouncements> networkTickerTapesAnnouncementsList = new ArrayList<>();
+                    List<String> messages = JsonPath.read(response, "$.TickerTapesResult.TickerTape[*].Message");
+                    List<String> servicesAffected = JsonPath.read(response, "$.TickerTapesResult.TickerTape[*].Affected_Service_Ids");
+                    List<String> displayFrom = JsonPath.read(response, "$.TickerTapesResult.TickerTape[*].Display_From");
+                    List<String> displayTo = JsonPath.read(response, "$.TickerTapesResult.TickerTape[*].Display_To");
 
-                for (int i = 0; i < messages.size(); i++) {
-                    NetworkTickerTapesAnnouncements networkTickerTapesAnnouncements = new NetworkTickerTapesAnnouncements();
-                    networkTickerTapesAnnouncements.mainSetterNetworkTickerTapes(
-                            messages.get(i), servicesAffected.get(i), displayFrom.get(i), displayTo.get(i));
-                    if (networkTickerTapesAnnouncements.checkIfValid()) {
-                        networkTickerTapesAnnouncementsList.add(networkTickerTapesAnnouncements);
+                    List<NetworkTickerTapesAnnouncements> networkTickerTapesAnnouncementsList = new ArrayList<>();
+
+                    for (int i = 0; i < messages.size(); i++) {
+                        NetworkTickerTapesAnnouncements networkTickerTapesAnnouncements = new NetworkTickerTapesAnnouncements();
+                        networkTickerTapesAnnouncements.mainSetterNetworkTickerTapes(
+                                messages.get(i), servicesAffected.get(i), displayFrom.get(i), displayTo.get(i));
+                        if (networkTickerTapesAnnouncements.checkIfValid()) {
+                            networkTickerTapesAnnouncementsList.add(networkTickerTapesAnnouncements);
+                        }
                     }
-                }
 
-                callback.onSuccessTickerTapesAnnouncements(networkTickerTapesAnnouncementsList);
+                    callback.onSuccessTickerTapesAnnouncements(networkTickerTapesAnnouncementsList);
+
+                } catch (PathNotFoundException e) {
+                    callback.onFailureTickerTapesAnnouncements();
+                }
 
             }
 
@@ -393,18 +417,27 @@ public class NextbusAPIs {
             @Override
             public void onResponse(String response) {
 
-                List<String> messages = JsonPath.read(response, "$.AnnouncementsResult.Announcement[*].Text");
+                try {
 
-                List<NetworkTickerTapesAnnouncements> networkTickerTapesAnnouncementsList = new ArrayList<>();
+                    List<String> messages = JsonPath.read(response, "$.AnnouncementsResult.Announcement[*].Text");
+                    List<String> displayFrom = JsonPath.read(response, "$.AnnouncementsResult.Announcement[*].Created_On");
+                    List<String> displayBool = JsonPath.read(response, "$.AnnouncementsResult.Announcement[*].Status");
 
-                for (int i = 0; i < messages.size(); i++) {
-                    NetworkTickerTapesAnnouncements networkTickerTapesAnnouncements = new NetworkTickerTapesAnnouncements();
-                    networkTickerTapesAnnouncements.mainSetterNetworkTickerTapes(messages.get(i), null, null, null);
-                    networkTickerTapesAnnouncementsList.add(networkTickerTapesAnnouncements);
+                    List<NetworkTickerTapesAnnouncements> networkTickerTapesAnnouncementsList = new ArrayList<>();
+
+                    for (int i = 0; i < messages.size(); i++) {
+                        if (displayBool.get(i).equals("Enabled")) {
+                            NetworkTickerTapesAnnouncements networkTickerTapesAnnouncements = new NetworkTickerTapesAnnouncements();
+                            networkTickerTapesAnnouncements.mainSetterNetworkTickerTapes(messages.get(i), null, displayFrom.get(i), null);
+                            networkTickerTapesAnnouncementsList.add(networkTickerTapesAnnouncements);
+                        }
+                    }
+
+                    callback.onSuccessTickerTapesAnnouncements(networkTickerTapesAnnouncementsList);
+
+                } catch (PathNotFoundException e) {
+                    callback.onFailureTickerTapesAnnouncements();
                 }
-
-                callback.onSuccessTickerTapesAnnouncements(networkTickerTapesAnnouncementsList);
-
             }
 
         }, new Response.ErrorListener() {
@@ -433,6 +466,14 @@ public class NextbusAPIs {
         }
     }
 
+    /**
+     * Calls buses currently tagged to the specified service and returns a {@link List<BusLocationInfo>}
+     *
+     * @param serviceNum
+     * @param activity
+     * @param context
+     * @param callback
+     */
     public static void callActiveBuses(String serviceNum, Activity activity, Context context, final VolleyCallBackActiveBusList callback) {
 
         String url = mainUrl + "ActiveBus?route_code=" + serviceNum;
@@ -442,21 +483,27 @@ public class NextbusAPIs {
             @Override
             public void onResponse(String response) {
 
-                List<String> plateNum = JsonPath.read(response, "$.ActiveBusResult.activebus[*].vehplate");
-                List<Double> lat = JsonPath.read(response, "$.ActiveBusResult.activebus[*].lat");
-                List<Double> lng = JsonPath.read(response, "$.ActiveBusResult.activebus[*].lng");;
+                try {
 
-                List<BusLocationInfo> busLocationInfoList = new ArrayList<>();
+                    List<String> plateNum = JsonPath.read(response, "$.ActiveBusResult.activebus[*].vehplate");
+                    List<Double> lat = JsonPath.read(response, "$.ActiveBusResult.activebus[*].lat");
+                    List<Double> lng = JsonPath.read(response, "$.ActiveBusResult.activebus[*].lng");
+                    ;
 
-                for (int i = 0; i < plateNum.size(); i++) {
-                    BusLocationInfo busLocationInfo = new BusLocationInfo();
-                    busLocationInfo.setServicePlate(plateNum.get(i));
-                    busLocationInfo.setBusLocation(lat.get(i), lng.get(i));
-                    busLocationInfoList.add(busLocationInfo);
+                    List<BusLocationInfo> busLocationInfoList = new ArrayList<>();
+
+                    for (int i = 0; i < plateNum.size(); i++) {
+                        BusLocationInfo busLocationInfo = new BusLocationInfo();
+                        busLocationInfo.setServicePlate(plateNum.get(i));
+                        busLocationInfo.setBusLocation(lat.get(i), lng.get(i));
+                        busLocationInfoList.add(busLocationInfo);
+                    }
+
+                    callback.onSuccessActiveBus(busLocationInfoList);
+
+                } catch (PathNotFoundException e) {
+                    callback.onFailureActiveBus();
                 }
-
-                callback.onSuccessActiveBus(busLocationInfoList);
-
             }
 
         }, new Response.ErrorListener() {
@@ -485,6 +532,14 @@ public class NextbusAPIs {
         }
     }
 
+    /**
+     * Calls the operating hours of the specified service, and returns a {@link List<BusOperatingHours>}
+     *
+     * @param activity
+     * @param context
+     * @param serviceNum
+     * @param callback
+     */
     public static void callBusOperatingHours(Activity activity, Context context, String serviceNum, final VolleyCallBackOperatingHours callback) {
 
         String url = mainUrl + "RouteMinMaxTime?route_code=" + serviceNum;
@@ -494,23 +549,27 @@ public class NextbusAPIs {
             @Override
             public void onResponse(String response) {
 
-                Log.e("operatinghours response is", response);
-
                 String path = "$.RouteMinMaxTimeResult.RouteMinMaxTime[*].";
 
-                List<String> scheduleType = JsonPath.read(response, path + "ScheduleType");
-                List<String> dayType = JsonPath.read(response, path + "DayType");
-                List<String> firstTime = JsonPath.read(response, path + "FirstTime");
-                List<String> lastTime = JsonPath.read(response, path + "LastTime");
+                try {
 
-                List<BusOperatingHours> busOperatingHoursList = new ArrayList<>();
+                    List<String> scheduleType = JsonPath.read(response, path + "ScheduleType");
+                    List<String> dayType = JsonPath.read(response, path + "DayType");
+                    List<String> firstTime = JsonPath.read(response, path + "FirstTime");
+                    List<String> lastTime = JsonPath.read(response, path + "LastTime");
 
-                for (int i = 0; i < scheduleType.size(); i++) {
-                    BusOperatingHours temp = new BusOperatingHours(scheduleType.get(i), dayType.get(i), firstTime.get(i), lastTime.get(i));
-                    busOperatingHoursList.add(temp);
+                    List<BusOperatingHours> busOperatingHoursList = new ArrayList<>();
+
+                    for (int i = 0; i < scheduleType.size(); i++) {
+                        BusOperatingHours temp = new BusOperatingHours(scheduleType.get(i), dayType.get(i), firstTime.get(i), lastTime.get(i));
+                        busOperatingHoursList.add(temp);
+                    }
+
+                    callback.onSuccessOperatingHours(busOperatingHoursList);
+
+                } catch (PathNotFoundException e) {
+                    callback.onFailureOperatingHours();
                 }
-
-                callback.onSuccessOperatingHours(busOperatingHoursList);
 
             }
 

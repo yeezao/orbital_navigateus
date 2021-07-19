@@ -53,9 +53,19 @@
             android:text="subtext"
             android:textColor="@android:color/black"
             android:textSize="12dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewAnnouncement" />
+
+        <TextView
+            android:id="@+id/datetime_todisplay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="TextView"
+            android:textSize="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewAnnouncementSub" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

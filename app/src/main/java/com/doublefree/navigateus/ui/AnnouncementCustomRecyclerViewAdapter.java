@@ -17,6 +17,9 @@ import com.doublefree.navigateus.data.busnetworkinformation.NetworkTickerTapesAn
 
 import org.jetbrains.annotations.NotNull;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.List;
 
 public class AnnouncementCustomRecyclerViewAdapter extends RecyclerView.Adapter<AnnouncementCustomRecyclerViewAdapter.MyViewHolder> {
@@ -54,7 +57,6 @@ public class AnnouncementCustomRecyclerViewAdapter extends RecyclerView.Adapter<
             return;
         }
 
-        Log.e("position", position + " " + list.get(position).getMessage());
         NetworkTickerTapesAnnouncements item = list.get(position);
         holder.mainMsg.setText(item.getMessage());
         Linkify.addLinks(holder.mainMsg, Linkify.ALL);
@@ -66,6 +68,9 @@ public class AnnouncementCustomRecyclerViewAdapter extends RecyclerView.Adapter<
         } else {
             holder.subMsg.setVisibility(View.GONE);
         }
+        LocalDateTime ldt = item.getDisplayFrom();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd LLL yyyy, HH:mm");
+        holder.datetime.setText(ldt.format(formatter));
 
     }
 
@@ -77,7 +82,7 @@ public class AnnouncementCustomRecyclerViewAdapter extends RecyclerView.Adapter<
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         //        TextView topText, mainText, bottomText, bottomText2;
-        TextView mainMsg, subMsg, noAnnouncements;
+        TextView mainMsg, subMsg, noAnnouncements, datetime;
 
 
         public MyViewHolder(View itemView) {
@@ -87,6 +92,7 @@ public class AnnouncementCustomRecyclerViewAdapter extends RecyclerView.Adapter<
             mainMsg = itemView.findViewById(R.id.textViewAnnouncement);
             subMsg = itemView.findViewById(R.id.textViewAnnouncementSub);
             noAnnouncements = itemView.findViewById(R.id.textViewNoAnnouncements);
+            datetime = itemView.findViewById(R.id.datetime_todisplay);
 
         }
     }
