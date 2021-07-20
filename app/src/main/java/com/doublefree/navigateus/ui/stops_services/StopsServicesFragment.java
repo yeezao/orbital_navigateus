@@ -345,6 +345,7 @@ public class StopsServicesFragment extends Fragment implements DialogFullRouteCa
                             singleStopArrivalNotification.setStopName(arrivalNotificationsArray.get(i).getStopName());
                             singleStopArrivalNotification.setLatitude(arrivalNotificationsArray.get(i).getLatitude());
                             singleStopArrivalNotification.setLongitude(arrivalNotificationsArray.get(i).getLongitude());
+                            singleStopArrivalNotification.setTimeToWatch(arrivalNotificationsArray.get(i).getTimeToWatch());
                             singleStopArrivalNotification.setWatchingForArrival(true);
                             singleStopArrivalNotification.setServicesBeingWatched(arrivalNotificationsArray.get(i).getServicesBeingWatched());
                             singleStopArrivalNotification.setServicesAtStop(arrivalNotificationsArray.get(i).getServicesAtStop());
@@ -693,7 +694,6 @@ public class StopsServicesFragment extends Fragment implements DialogFullRouteCa
             floatingGetLocationButton.setImageResource(R.drawable.ic_baseline_my_location_24);
         } else {
             isFirstRun = false;
-//            arrivalNotificationsArray = new ArrayList<>();
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override

@@ -4019,6 +4019,78 @@
      "accessible": "y",
      "edgeDesc1": "Walking directions are not available within Bukit Timah Campus. Please follow directional signs to your destination.",
      "edgeDesc2": "Walking directions are not available within Bukit Timah Campus. Please follow directional signs to the bus stop."
+   },
+   {
+     "from": "PGPR",
+     "fromnumid": 960,
+     "to": "PGPH",
+     "tonumid": 995,
+     "by": "walk",
+     "duration": 2,
+     "sheltered": "y",
+     "accessible": "y",
+     "edgeDesc1": "-",
+     "edgeDesc2": "-"
+   },
+   {
+     "from": "SRC",
+     "fromnumid": 103,
+     "to": "LT51",
+     "tonumid": 951,
+     "by": "walk",
+     "duration": 1,
+     "sheltered": "y",
+     "accessible": "y",
+     "edgeDesc1": "",
+     "edgeDesc2": ""
+   },
+   {
+     "from": "SRC",
+     "fromnumid": 103,
+     "to": "LT52",
+     "tonumid": 952,
+     "by": "walk",
+     "duration": 1,
+     "sheltered": "y",
+     "accessible": "y",
+     "edgeDesc1": "",
+     "edgeDesc2": ""
+   },
+   {
+     "from": "SRC",
+     "fromnumid": 103,
+     "to": "LT53",
+     "tonumid": 953,
+     "by": "walk",
+     "duration": 1,
+     "sheltered": "y",
+     "accessible": "y",
+     "edgeDesc1": "",
+     "edgeDesc2": ""
+   },
+   {
+     "from": "EA",
+     "fromnumid": 200,
+     "to": "ENG-AUD",
+     "tonumid": 290,
+     "by": "walk",
+     "duration": 1,
+     "sheltered": "y",
+     "accessible": "y",
+     "edgeDesc1": "",
+     "edgeDesc2": ""
+   },
+   {
+     "from": "EA",
+     "fromnumid": 200,
+     "to": "LT7A",
+     "tonumid": 291,
+     "by": "walk",
+     "duration": 1,
+     "sheltered": "y",
+     "accessible": "y",
+     "edgeDesc1": "",
+     "edgeDesc2": ""
    }
  ]
 }

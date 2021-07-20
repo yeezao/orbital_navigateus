@@ -267,11 +267,16 @@ public class BusLocationDisplayDialogFragment extends DialogFragment implements 
                                 .title(busStop.getStopName()));
                         if (busLocationInfoList.size() > 0) {
                             for (int i = 0; i < busLocationInfoList.size(); i++) {
-                                map.addMarker(new MarkerOptions()
+                                MarkerOptions markerOptions = new MarkerOptions();
+                                markerOptions
                                         .position(busLocationInfoList.get(i).getBusLocation())
-                                        .title(busLocationInfoList.get(i).getServicePlate())
-                                        .icon(generateBitmapDescriptorFromRes(
-                                                getContext(), R.drawable.ic_baseline_directions_bus_36_large))); // add bus markers to map
+                                        .title(busLocationInfoList.get(i).getServicePlate());
+                                BitmapDescriptor bitmapDescriptor = generateBitmapDescriptorFromRes(getContext(), R.drawable.ic_baseline_directions_bus_36_large);
+                                if (bitmapDescriptor != null)  {
+                                    markerOptions.icon(bitmapDescriptor); // add bus markers to map
+                                }
+                                map.addMarker(markerOptions);
+
                             }
                         }
                     }
@@ -361,18 +366,24 @@ public class BusLocationDisplayDialogFragment extends DialogFragment implements 
     //helper method to add marker as image onto map
     public static BitmapDescriptor generateBitmapDescriptorFromRes(
             Context context, int resId) {
-        Drawable drawable = ContextCompat.getDrawable(context, resId);
-        drawable.setBounds(
-                0,
-                0,
-                drawable.getIntrinsicWidth(),
-                drawable.getIntrinsicHeight());
-        Bitmap bitmap = Bitmap.createBitmap(
-                drawable.getIntrinsicWidth(),
-                drawable.getIntrinsicHeight(),
-                Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        drawable.draw(canvas);
-        return BitmapDescriptorFactory.fromBitmap(bitmap);
+        try {
+
+            Drawable drawable = ContextCompat.getDrawable(context, resId);
+            drawable.setBounds(
+                    0,
+                    0,
+                    drawable.getIntrinsicWidth(),
+                    drawable.getIntrinsicHeight());
+            Bitmap bitmap = Bitmap.createBitmap(
+                    drawable.getIntrinsicWidth(),
+                    drawable.getIntrinsicHeight(),
+                    Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bitmap);
+            drawable.draw(canvas);
+            return BitmapDescriptorFactory.fromBitmap(bitmap);
+
+        } catch (NullPointerException e) {
+            return null;
+        }
     }
 }

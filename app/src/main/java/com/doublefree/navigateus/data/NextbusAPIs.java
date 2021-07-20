@@ -83,6 +83,7 @@ public class NextbusAPIs {
                 // TODO: Handle error
                 Log.e("volley API error", "" + error);
                 callback.onFailureAllStops();
+                return;
             }
 
 
@@ -117,6 +118,11 @@ public class NextbusAPIs {
 
         String url = mainUrl + "ShuttleService?busstopname=" + stopId;
 
+        if (stopId.contains("COM2")) {
+            stopId = "COM2";
+        }
+
+        String finalStopId = stopId;
         StringRequest stopStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
 
             @Override
@@ -145,7 +151,16 @@ public class NextbusAPIs {
                     for (int i = 0; i < servicesAtStop.size(); i++) {
                         if (!stopIds.get(i).contains("-E") || stopIds.get(i).contains("-E-S")) {
                             serviceInfoAtStop = new ServiceInStopDetails();
-                            serviceInfoAtStop.setServiceNum(servicesAtStop.get(i));
+                            String serviceNum = servicesAtStop.get(i);
+                            Log.e("check D1 @ COM2", finalStopId + " " + servicesAtStop.get(i) + " " + stopIds.get(i));
+                            if (finalStopId.equals("COM2") && servicesAtStop.get(i).equals("D1")) {
+                                if (stopIds.get(i).contains("UT")) {
+                                    serviceNum = "D1 (to Utown)";
+                                } else if (stopIds.get(i).contains("BIZ2")) {
+                                    serviceNum = "D1 (to BIZ2)";
+                                }
+                            }
+                            serviceInfoAtStop.setServiceNum(serviceNum);
                             serviceInfoAtStop.setFirstArrival(serviceFirstArrival.get(i));
                             serviceInfoAtStop.setSecondArrival(serviceSecondArrival.get(i));
                             serviceInfoAtStop.setFirstArrivalLive(firstArrivalLive.get(i));
@@ -170,6 +185,7 @@ public class NextbusAPIs {
                 // TODO: Handle error
                 Log.e("volley API error", "" + error);
                 callback.onFailureSingleStop();
+                return;
             }
 
         }) {
@@ -237,6 +253,7 @@ public class NextbusAPIs {
                 // TODO: Handle error
                 Log.e("volley API error", "" + error);
                 callback.onFailureServiceList();
+                return;
             }
 
         }) {
@@ -382,6 +399,7 @@ public class NextbusAPIs {
                 // TODO: Handle error
                 Log.e("volley API error", "" + error);
                 callback.onFailureTickerTapesAnnouncements();
+                return;
             }
 
         }) {
@@ -447,6 +465,7 @@ public class NextbusAPIs {
                 // TODO: Handle error
                 Log.e("volley API error", "" + error);
                 callback.onFailureTickerTapesAnnouncements();
+                return;
             }
 
         }) {
@@ -513,6 +532,7 @@ public class NextbusAPIs {
                 // TODO: Handle error
                 Log.e("volley API error", "" + error);
                 callback.onFailureActiveBus();
+                return;
             }
 
         }) {
@@ -579,7 +599,7 @@ public class NextbusAPIs {
             public void onErrorResponse(VolleyError error) {
                 // TODO: Handle error
                 Log.e("volley API error", "" + error);
-//                callback.onFailureActiveBus();
+                return;
             }
 
         }) {

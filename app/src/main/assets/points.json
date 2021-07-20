@@ -297,6 +297,14 @@
       "lon": 103.7723
     },
     {
+      "name": "ENG-AUD / Engineering Auditorium",
+      "altname": "",
+      "id": "ENG-AUD",
+      "numid": 290,
+      "lat": 1.300621246,
+      "lon": 103.7705703
+    },
+    {
       "name": "ERC / Education Resource Centre",
       "altname": "ERC",
       "id": "ERC",
@@ -377,7 +385,7 @@
       "lon": 103.7745
     },
     {
-      "name": "I3",
+      "name": "i3 / I-Cube",
       "altname": "",
       "id": "I3",
       "numid": 344,
@@ -385,7 +393,7 @@
       "lon": 103.7753
     },
     {
-      "name": "Innovation 4.0",
+      "name": "i4.0 / Innovation 4.0",
       "altname": "",
       "id": "I4",
       "numid": 345,
@@ -777,6 +785,14 @@
       "lon": 103.7711
     },
     {
+      "name": "LT7A",
+      "altname": "",
+      "id": "LT7A",
+      "numid": 291,
+      "lat": 1.300508622,
+      "lon": 103.7709049
+    },
+    {
       "name": "LT8",
       "altname": "",
       "id": "LT8",
@@ -1089,7 +1105,7 @@
       "lon": 103.7798
     },
     {
-      "name": "S6",
+      "name": "S6 / Science Library",
       "altname": "",
       "id": "S6",
       "numid": 408,
@@ -1185,7 +1201,7 @@
       "lon": 103.7758
     },
     {
-      "name": "SRC / Stephen Riady Centre",
+      "name": "UTSRC - SRC / Stephen Riady Centre",
       "altname": "SRC",
       "id": "SRC",
       "numid": 103,
@@ -1233,7 +1249,7 @@
       "lon": 103.7724
     },
     {
-      "name": "Town Plaza",
+      "name": "TP / Town Plaza",
       "altname": "TP",
       "id": "TOWNPLAZA",
       "numid": 100,

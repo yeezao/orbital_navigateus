@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -41,17 +42,24 @@ public class SplashFragment extends Fragment{
         BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.nav_view);
         bottomNavigationView.setVisibility(View.GONE);
 
+        int delay = 2000;
+        if (onBoardingFinished()) {
+            delay = 800;
+        }
+
         new Handler().postDelayed(new Runnable() {
 
             @Override
             public void run() {
+                ImageView splash = view.findViewById(R.id.splashimageview);
                 if (onBoardingFinished()) {
+                    splash.setVisibility(View.INVISIBLE);
                     navController.navigate(R.id.action_splashFragment_to_homeFragment);
                 } else {
                     navController.navigate(R.id.action_splashFragment_to_viewPagerFragment);
                 }
             }
-        }, 10);
+        }, delay);
 
     }
 

@@ -76,6 +76,8 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        setTheme(R.style.Theme_Navigateus);
+
         super.onCreate(savedInstanceState);
 
         mainActivity = this;
@@ -244,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
             channelArrivalNotificationsRegular.enableLights(true);
             channelArrivalNotificationsRegular.setVibrationPattern(new long[] {0, 1000, 1000, 1000});
 
-            soundUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.quite_impressed_565);
+            soundUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.bus_announcement_mp3);
             channelArrivalNotificationsRegular.setSound(soundUri, audioAttributes);
             channelArrivalNotificationsRegular.enableVibration(true);
 
@@ -415,6 +417,8 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
         List<Boolean> boolList = new ArrayList<>();
         int i = 0;
         int j = 0;
+
+        //checks which services need to be monitored
         while (singleStopArrivalNotifications.isWatchingForArrival() && i < singleStopArrivalNotifications.getServicesBeingWatched().size()
                 && j < singleStopArrivalNotifications.getServicesAtStop().size()) {
             Log.e("checking in threshold for", forBoolListCheck.get(j).getServiceNum());
@@ -441,14 +445,21 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
         NotificationCompat.Builder persistentBuilder = new NotificationCompat.Builder(this, getString(R.string.arrivalnotifications_monitoring_notif_id));
         Log.e("entered", "yes in activity");
         for (i = 0; i < arrivalNotificationsArray.size(); i++) {
-            if (singleStopArrivalNotifications.getStopId().equals(arrivalNotificationsArray.get(i).getStopId())
-                    && singleStopArrivalNotifications.isWatchingForArrival() && singleStopArrivalNotifications.getServicesBeingWatched().size() > 0) {
-                arrivalNotificationsArray.set(i, singleStopArrivalNotifications);
-                Log.e("stopname repeated is" , singleStopArrivalNotifications.getStopName());
-                stopRepeated = true;
-                startNewMonitoring = true;
+            if (singleStopArrivalNotifications.getStopId().equals(arrivalNotificationsArray.get(i).getStopId())) {
+                if (singleStopArrivalNotifications.isWatchingForArrival() && singleStopArrivalNotifications.getServicesBeingWatched().size() > 0) {
+                    arrivalNotificationsArray.set(i, singleStopArrivalNotifications);
+                    Log.e("stopname repeated is" , singleStopArrivalNotifications.getStopName());
+                    stopRepeated = true;
+                    startNewMonitoring = true;
+                    break;
+                } else {
+                    arrivalNotificationsArray.set(i, singleStopArrivalNotifications);
+                    stopRepeated = true;
+                    startNewMonitoring = false;
+                }
                 break;
             }
+
         }
         if (!stopRepeated && singleStopArrivalNotifications.isWatchingForArrival() && singleStopArrivalNotifications.getServicesBeingWatched().size() > 0) {
             arrivalNotificationsArray.add(singleStopArrivalNotifications);
@@ -470,6 +481,9 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
         } else {
             notificationManager.cancel(singleStopArrivalNotifications.getStopId(), 0);
         }
+
+        Log.e("timeToWatch in mainActivity is:", singleStopArrivalNotifications.getTimeToWatch() + "");
+
 
 
     }
