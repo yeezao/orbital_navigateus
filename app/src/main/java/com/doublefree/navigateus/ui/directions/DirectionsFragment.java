@@ -70,6 +70,9 @@ public class DirectionsFragment extends Fragment {
     CheckBox accessible;
     CheckBox walkOnly;
 
+    String originText = "";
+    String destText = "";
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -191,10 +194,6 @@ public class DirectionsFragment extends Fragment {
     String destId;
 
     ProgressBar waitingForDirectionsResultProgressBar;
-
-    String originText;
-    String destText;
-
 
     private void PackageSearchInfo(View view) {
         InputMethodManager inputManager = (InputMethodManager)

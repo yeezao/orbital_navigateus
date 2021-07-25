@@ -28,6 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:text="Sheltered"
+        android:textSize="14dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/checkbox_accessible" />
 
@@ -37,6 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:text="Barrier-Free"
+        android:textSize="14dp"
         app:layout_constraintEnd_toStartOf="@+id/checkbox_walkOnly"
         app:layout_constraintStart_toEndOf="@+id/checkbox_sheltered"
         app:layout_constraintTop_toBottomOf="@+id/destInput" />
@@ -47,6 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="15dp"
         android:text="Walking Only"
+        android:textSize="14dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/checkbox_accessible" />
 
@@ -66,6 +69,7 @@
         android:layout_width="57dp"
         android:layout_height="wrap_content"
         android:text="Go"
+        android:textSize="14dp"
         app:layout_constraintBottom_toBottomOf="@id/destInput"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/destInput" />

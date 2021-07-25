@@ -10,8 +10,8 @@ android {
         applicationId "com.doublefree.navigateus"
         minSdkVersion 26
         targetSdkVersion 30
-        versionCode 42
-        versionName "0.6.3"
+        versionCode 52
+        versionName "0.6.5"
         setProperty("archivesBaseName", "n(avigate)us-$versionName")
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
