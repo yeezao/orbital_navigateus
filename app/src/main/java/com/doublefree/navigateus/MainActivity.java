@@ -5,10 +5,7 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.media.AudioAttributes;
 import android.net.Uri;
 import android.os.Build;
@@ -17,13 +14,6 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.doublefree.navigateus.data.busstopinformation.ArrivalNotifications;
 import com.doublefree.navigateus.data.NextbusAPIs;
 import com.doublefree.navigateus.data.busstopinformation.ServiceInStopDetails;
@@ -34,7 +24,6 @@ import com.doublefree.navigateus.databinding.ActivityMainBinding;
 import com.doublefree.navigateus.favourites.FavouriteDatabase;
 import com.doublefree.navigateus.favourites.FavouriteStop;
 import com.doublefree.navigateus.ui.NotificationBroadcast;
-import com.doublefree.navigateus.ui.NotificationBroadcastInterface;
 import com.doublefree.navigateus.ui.directions.DirectionsFragment;
 import com.doublefree.navigateus.ui.home.HomeFragment;
 import com.doublefree.navigateus.ui.stops_services.SetArrivalNotificationsDialogFragment;
@@ -46,7 +35,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -54,13 +42,9 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.room.Room;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.jayway.jsonpath.JsonPath;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements SetArrivalNotificationsDialogFragment.ArrivalNotificationsDialogListenerForActivity {
 

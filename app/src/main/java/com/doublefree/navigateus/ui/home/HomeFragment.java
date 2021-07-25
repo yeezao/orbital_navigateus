@@ -5,7 +5,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Half;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -39,7 +38,6 @@ import com.doublefree.navigateus.data.busstopinformation.ServiceInStopDetails;
 import com.doublefree.navigateus.data.busstopinformation.StopList;
 import com.doublefree.navigateus.favourites.FavouriteStop;
 import com.doublefree.navigateus.ui.AnnouncementTickerTapesDialogFragment;
-import com.doublefree.navigateus.ui.BusLocationDisplayDialogFragmentDirections;
 import com.doublefree.navigateus.ui.DialogFullRouteCallBack;
 import com.doublefree.navigateus.ui.StopsMainAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -357,7 +355,7 @@ public class HomeFragment extends Fragment implements LocationServices.LocationF
 
                     @Override
                     public void onFailureServiceList() {
-
+                        StandardCode.showFailedToLoadSnackbar(getActivity());
                     }
                 });
             }
@@ -369,7 +367,7 @@ public class HomeFragment extends Fragment implements LocationServices.LocationF
 
             @Override
             public void onFailurePickupPoint() {
-
+                StandardCode.showFailedToLoadSnackbar(getActivity());
             }
         });
     }
