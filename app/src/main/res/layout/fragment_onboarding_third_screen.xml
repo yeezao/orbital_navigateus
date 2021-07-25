@@ -8,10 +8,10 @@
 
     <ImageView
         android:id="@+id/imageView3"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_marginTop="150dp"
-        android:src="@drawable/ic_baseline_today_24"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/splash_routerecommendation"
+        android:translationY="-75dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -20,38 +20,39 @@
         android:id="@+id/title3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:text="Placeholder"
-        android:textSize="30sp"
+        android:layout_marginBottom="30dp"
+        android:text="Step-by-step Directions"
+        android:textSize="25dp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/description3"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/description3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="50dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="30dp"
         android:gravity="center"
-        android:text="Placeholder"
-        android:textSize="16sp"
+        android:lineSpacingExtra="1dp"
+        android:text="@string/directions_text"
+        android:textSize="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/nextFinish"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title3" />
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/finish"
+    <Button
+        android:id="@+id/nextFinish"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="40dp"
-        android:layout_marginBottom="40dp"
-        android:text="Finish"
-        android:textColor="@color/black"
-        android:textSize="22sp"
-        android:textStyle="bold"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="25dp"
+        android:text="Next"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

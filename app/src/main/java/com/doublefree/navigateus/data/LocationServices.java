@@ -124,15 +124,6 @@ public class LocationServices {
 
         } catch (SecurityException e) {
 //            Log.e("SecExp", "yes");
-            userLocation.setLatitude(0.0);
-            userLocation.setLongitude(0.0);
-            isLocationPermissionGranted = false;
-            Snackbar snackbar = Snackbar.make(activity.findViewById(android.R.id.content),
-                    "To sort the list of bus stops by proximity, please enable location permissions.",
-                    Snackbar.LENGTH_LONG);
-            snackbar.setAnchorView(R.id.textView_container);
-            snackbar.show();
-            listenerLocationFound.onLocationSecured(userLocation);
 
         }
 

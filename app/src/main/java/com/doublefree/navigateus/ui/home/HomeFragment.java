@@ -30,6 +30,7 @@ import androidx.navigation.Navigation;
 import com.doublefree.navigateus.ExpandableListViewStandardCode;
 import com.doublefree.navigateus.MainActivity;
 import com.doublefree.navigateus.R;
+import com.doublefree.navigateus.StandardCode;
 import com.doublefree.navigateus.data.LocationServices;
 import com.doublefree.navigateus.data.busnetworkinformation.NetworkTickerTapesAnnouncements;
 import com.doublefree.navigateus.data.NextbusAPIs;
@@ -86,7 +87,7 @@ public class HomeFragment extends Fragment implements LocationServices.LocationF
         expandableListView = (ExpandableListView) rootView.findViewById(R.id.expandable_listview_home);
         listGroup = new ArrayList<>();
         listItem = new HashMap<>();
-        adapter = new StopsMainAdapter(getContext(), listGroup, listItem);
+        adapter = new StopsMainAdapter(getActivity(), getContext(), listGroup, listItem, expandableListView, getChildFragmentManager());
         Log.e("reset", "adapter");
         expandableListView.setAdapter(adapter);
 
@@ -136,7 +137,7 @@ public class HomeFragment extends Fragment implements LocationServices.LocationF
             @Override
             public void run() {
                 checkServiceStatus();
-                handler.postDelayed(this, 5000);
+                handler.postDelayed(this, 60000);
             }
         }, 0);
 
@@ -152,46 +153,33 @@ public class HomeFragment extends Fragment implements LocationServices.LocationF
         NextbusAPIs.callListOfTickerTapes(getActivity(), getContext(), new NextbusAPIs.VolleyCallBackTickerTapesAnnouncementsList() {
             @Override
             public void onSuccessTickerTapesAnnouncements(List<NetworkTickerTapesAnnouncements> networkTickerTapesAnnouncementsList) {
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        tickerTapesPB.setVisibility(View.GONE);
-                        tickerTapesStatusIcon.setVisibility(View.VISIBLE);
-                        if (networkTickerTapesAnnouncementsList.size() == 0) {
-                            tickerTapesStatusIcon.setImageResource(R.drawable.ic_baseline_service_ok_24);
-                            tickerTapesText.setText("Good service on all routes. Have a great day! :)");
-                        } else {
-                            tickerTapesStatusIcon.setImageResource(R.drawable.ic_baseline_service_disruption_24);
-                            StringBuilder stringBuilder = new StringBuilder();
-                            stringBuilder.append(networkTickerTapesAnnouncementsList.size()).append(" active service alert(s). Tap here for info.");
-                            tickerTapesText.setText(stringBuilder.toString());
-                            serviceStatusHomeContainer.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    AnnouncementTickerTapesDialogFragment dialogFragment =
-                                            AnnouncementTickerTapesDialogFragment.newInstance(true, networkTickerTapesAnnouncementsList, "");
-                                    dialogFragment.show(getChildFragmentManager(), AnnouncementTickerTapesDialogFragment.TAG);
-                                }
-                            });
+                tickerTapesPB.setVisibility(View.GONE);
+                tickerTapesStatusIcon.setVisibility(View.VISIBLE);
+                if (networkTickerTapesAnnouncementsList.size() == 0) {
+                    tickerTapesStatusIcon.setImageResource(R.drawable.ic_baseline_service_ok_24);
+                    tickerTapesText.setText("Good service on all routes. Have a great day! :)");
+                } else {
+                    tickerTapesStatusIcon.setImageResource(R.drawable.ic_baseline_service_disruption_24);
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append(networkTickerTapesAnnouncementsList.size()).append(" active service alert(s). Tap here for info.");
+                    tickerTapesText.setText(stringBuilder.toString());
+                    serviceStatusHomeContainer.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            AnnouncementTickerTapesDialogFragment dialogFragment =
+                                    AnnouncementTickerTapesDialogFragment.newInstance(true, networkTickerTapesAnnouncementsList, "");
+                            dialogFragment.show(getChildFragmentManager(), AnnouncementTickerTapesDialogFragment.TAG);
                         }
-                    }
-                }, 1000);
-
+                    });
+                }
             }
 
             @Override
             public void onFailureTickerTapesAnnouncements() {
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        tickerTapesPB.setVisibility(View.GONE);
-                        tickerTapesStatusIcon.setVisibility(View.VISIBLE);
-                        tickerTapesStatusIcon.setImageResource(R.drawable.ic_baseline_service_unknown_24);
-                        tickerTapesText.setText("We couldn't connect to NUS servers.");
-                    }
-                }, 1000);
+                tickerTapesPB.setVisibility(View.GONE);
+                tickerTapesStatusIcon.setVisibility(View.VISIBLE);
+                tickerTapesStatusIcon.setImageResource(R.drawable.ic_baseline_service_unknown_24);
+                tickerTapesText.setText("We couldn't connect to NUS servers.");
             }
         });
 
@@ -297,8 +285,9 @@ public class HomeFragment extends Fragment implements LocationServices.LocationF
             if (expandableListView.isGroupExpanded(i)) {
                 anyExpanded = true;
                 int finalI = i;
-                NextbusAPIs.callSingleStopInfo(getActivity(), getContext(), listOfAllStopsToDisplayInFavourites.get(i).getStopId()
-                        , i, true, new NextbusAPIs.VolleyCallBackSingleStop() {
+                NextbusAPIs.callSingleStopInfo(getActivity(), getContext(),
+                        StandardCode.StopIdExceptionsWithReturn(listOfAllStopsToDisplayInFavourites.get(i).getStopId()),
+                        i, true, new NextbusAPIs.VolleyCallBackSingleStop() {
                     @Override
                     public void onSuccessSingleStop(List<ServiceInStopDetails> servicesAllInfoAtStop) {
                         List<ServiceInStopDetails> listOfServicesToAdd = new ArrayList<>();

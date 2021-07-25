@@ -2,7 +2,12 @@ package com.doublefree.navigateus.ui;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
+import android.text.style.URLSpan;
 import android.text.util.Linkify;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -58,8 +63,7 @@ public class AnnouncementCustomRecyclerViewAdapter extends RecyclerView.Adapter<
         }
 
         NetworkTickerTapesAnnouncements item = list.get(position);
-        holder.mainMsg.setText(item.getMessage());
-        Linkify.addLinks(holder.mainMsg, Linkify.ALL);
+        holder.mainMsg.setText(linkifyHtml(item.getMessage(), Linkify.ALL));
         holder.mainMsg.setMovementMethod(LinkMovementMethod.getInstance());
         if (item.getServicesAffected() != null) {
             StringBuilder stringBuilder = new StringBuilder();
@@ -72,6 +76,21 @@ public class AnnouncementCustomRecyclerViewAdapter extends RecyclerView.Adapter<
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd LLL yyyy, HH:mm");
         holder.datetime.setText(ldt.format(formatter));
 
+    }
+
+    public static Spannable linkifyHtml(String html, int linkifyMask) {
+        Spanned text = Html.fromHtml(html);
+        URLSpan[] currentSpans = text.getSpans(0, text.length(), URLSpan.class);
+
+        SpannableString buffer = new SpannableString(text);
+        Linkify.addLinks(buffer, linkifyMask);
+
+        for (URLSpan span : currentSpans) {
+            int end = text.getSpanEnd(span);
+            int start = text.getSpanStart(span);
+            buffer.setSpan(span, start, end, 0);
+        }
+        return buffer;
     }
 
     @Override

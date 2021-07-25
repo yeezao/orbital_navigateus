@@ -10,6 +10,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.doublefree.navigateus.R;
 import com.doublefree.navigateus.ui.onboarding.screens.FirstScreen;
+import com.doublefree.navigateus.ui.onboarding.screens.FourthScreen;
 import com.doublefree.navigateus.ui.onboarding.screens.SecondScreen;
 import com.doublefree.navigateus.ui.onboarding.screens.ThirdScreen;
 
@@ -29,6 +30,7 @@ public class ViewPagerFragment extends Fragment {
         FragmentList.add(new FirstScreen());
         FragmentList.add(new SecondScreen());
         FragmentList.add(new ThirdScreen());
+//        FragmentList.add(new FourthScreen());
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager(),getLifecycle(), FragmentList);
 

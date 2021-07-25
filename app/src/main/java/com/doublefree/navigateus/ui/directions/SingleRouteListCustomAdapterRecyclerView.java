@@ -137,7 +137,7 @@ public class SingleRouteListCustomAdapterRecyclerView extends RecyclerView.Adapt
                     stringBuilder.append(currentSegment.getViableBuses2().get(i));
                     if (currentSegment.getViableBuses2().get(i).contains("D1") && currentSegment.getNodeSequence().get(0).getId().equals("COM2")) {
                         if (currentSegment.getNodeSequence().get(1).getId().equals("LT13-OPP")) {
-                            stringBuilder.append(" (to UTown)");
+                            stringBuilder.append(" (to Utown)");
                         } else if (currentSegment.getNodeSequence().get(1).getId().equals("BIZ2")) {
                             stringBuilder.append(" (to BIZ2)");
                         }
@@ -209,7 +209,7 @@ public class SingleRouteListCustomAdapterRecyclerView extends RecyclerView.Adapt
                     stringBuilder.append(currentSegment.getViableBuses1().get(i));
                     if (currentSegment.getViableBuses1().get(i).contains("D1") && currentSegment.getNodeSequence().get(0).getId().equals("COM2")) {
                         if (currentSegment.getNodeSequence().get(1).getId().equals("LT13-OPP")) {
-                            stringBuilder.append(" (to UTown)");
+                            stringBuilder.append(" (to Utown)");
                         } else if (currentSegment.getNodeSequence().get(1).getId().equals("BIZ2")) {
                             stringBuilder.append(" (to BIZ2)");
                         }

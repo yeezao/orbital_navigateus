@@ -59,13 +59,13 @@ public class TabViewPagerAdapter extends FragmentPagerAdapter {
         Fragment fragment = null;
         switch (position) {
             case 0:
-                fragment = new StopsServicesFragment();
+                fragment = mFragmentList.get(0);
                 break;
 //            case 1:
 //                fragment = new StopsServicesLTAFragment();
 //                break;
             case 1:
-                fragment = new StopsServicesServicesFragment();
+                fragment = mFragmentList.get(1);
                 break;
 
         }
@@ -77,11 +77,11 @@ public class TabViewPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0:
-                return "NUS Stops";
+                return mFragmentTitleList.get(0);
 //            case 1:
 //                return "LTA Stops";
             case 1:
-                return "NUS Routes";
+                return mFragmentTitleList.get(1);
 
         }
         return null;

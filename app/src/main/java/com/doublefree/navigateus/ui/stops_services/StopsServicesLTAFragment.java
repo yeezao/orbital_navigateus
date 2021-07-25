@@ -50,7 +50,7 @@ public class StopsServicesLTAFragment extends Fragment {
         expandableListView = (ExpandableListView) view.findViewById(R.id.expandable_listview_lta_stops);
         listGroup = new ArrayList<>();
         listItem = new HashMap<>();
-        adapter = new StopsMainAdapter(getContext(), listGroup, listItem);
+        adapter = new StopsMainAdapter(getActivity(), getContext(), listGroup, listItem, expandableListView, getChildFragmentManager());
         expandableListView.setAdapter(adapter);
 
         return view;

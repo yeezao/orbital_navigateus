@@ -1,5 +1,6 @@
 package com.doublefree.navigateus.ui.directions;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.doublefree.navigateus.MainActivity;
 import com.doublefree.navigateus.R;
+import com.doublefree.navigateus.data.NextbusAPIs;
 import com.doublefree.navigateus.data.busstopinformation.ServiceInStopDetails;
 import com.doublefree.navigateus.data.naviagationdata.NavigationNodes;
 import com.doublefree.navigateus.data.naviagationdata.NavigationPartialResults;
@@ -42,6 +44,7 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
     ArrayList<String> busStop;
     ArrayList<String> routeId;
     ArrayList<String> busStopCode;
+    Activity activity;
     Context context;
     String origin, dest;
 
@@ -56,7 +59,8 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
 
     boolean afterSearch;
 
-    public CustomAdapterRecyclerView(Context context, List<NavigationResults> resultsList, String origin, String dest, NavController navController, float dpWidth, boolean afterSearch) {
+    public CustomAdapterRecyclerView(Activity activity, Context context, List<NavigationResults> resultsList, String origin, String dest, NavController navController, float dpWidth, boolean afterSearch) {
+        this.activity = activity;
         this.context = context;
         this.resultsList = resultsList;
         this.origin = origin;
@@ -129,9 +133,10 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
                         holder.navR_firstbusservices.setText(stringBuilder.toString());
                     }
                     int finalI = i;
-                    getBusArrivalInfo(currentSegment.getNodesTraversed().get(0), new VolleyCallBack() {
+                    NextbusAPIs.callSingleStopInfo(activity, context, currentSegment.getNodesTraversed().get(0).getId(),
+                            0, true, new NextbusAPIs.VolleyCallBackSingleStop() {
                         @Override
-                        public void onSuccess(List<ServiceInStopDetails> busStopArrivalInfo) {
+                        public void onSuccessSingleStop(List<ServiceInStopDetails> servicesAllInfoAtStop) {
                             int arrivaltime = 9999;
                             String service = "";
                             int timeTillNow = 0;
@@ -141,7 +146,7 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
                             }
                             firstTimeTillNow = timeTillNow;
                             boolean isServicesAvailable = false;
-                            for (ServiceInStopDetails temp : busStopArrivalInfo) {
+                            for (ServiceInStopDetails temp : servicesAllInfoAtStop) {
                                 for (int i = 0; i < currentSegment.getViableBuses1().size(); i++) {
                                     if (temp.getServiceNum().equals(currentSegment.getViableBuses1().get(i))
                                             || (temp.getServiceNum().equals("D1(To UTown)") //for COM2 bus stop - D1 twd UTown
@@ -228,7 +233,7 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
                         }
 
                         @Override
-                        public void onFailure() {
+                        public void onFailureSingleStop() {
                             Handler handler = new Handler();
                             handler.postDelayed(new Runnable() {
                                 @Override
@@ -237,7 +242,6 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
                                     holder.navR_busArrivalTimingInfo.setVisibility(View.VISIBLE);
                                 }
                             }, 800);
-
                         }
                     });
                     holder.recyclerviewItemHolder.setVisibility(View.VISIBLE);
@@ -289,9 +293,10 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
                     }
                     int finalI = i;
                     List<String> finalViableListToUse = viableListToUse;
-                    getBusArrivalInfo(currentSegment.getNodesTraversed().get(0), new VolleyCallBack() {
+                    NextbusAPIs.callSingleStopInfo(activity, context, currentSegment.getNodesTraversed().get(0).getId(),
+                            0, true, new NextbusAPIs.VolleyCallBackSingleStop() {
                         @Override
-                        public void onSuccess(List<ServiceInStopDetails> busStopArrivalInfo) {
+                        public void onSuccessSingleStop(List<ServiceInStopDetails> servicesAllInfoAtStop) {
                             int arrivaltime = 9999;
                             String service = "";
                             int timeTillNow = 0;
@@ -301,7 +306,7 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
                             }
                             Log.e("timetillbnow", timeTillNow + "");
                             boolean isServicesAvailable = false;
-                            for (ServiceInStopDetails temp : busStopArrivalInfo) {
+                            for (ServiceInStopDetails temp : servicesAllInfoAtStop) {
                                 for (int i = 0; !finalViableListToUse.isEmpty() && i < finalViableListToUse.size(); i++) {
                                     if (temp.getServiceNum().equals(finalViableListToUse.get(i))
                                             || (temp.getServiceNum().equals("D1(To UTown)") //for COM2 bus stop - D1 twd UTown
@@ -366,14 +371,13 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
                                     }
                                 }
                             }, 800);
-
                         }
 
                         @Override
-                        public void onFailure() {
+                        public void onFailureSingleStop() {
+
                         }
                     });
-                    
                 } else if (currentSegment.getViableBuses1().size() == 0 && currentSegment.getNodesTraversed().get(0).getName().equals(origin)) {
                     holder.navRLayoutContainer1.setVisibility(View.VISIBLE);
                     StringBuilder stringBuilder = new StringBuilder();
@@ -501,80 +505,5 @@ public class CustomAdapterRecyclerView extends RecyclerView.Adapter<CustomAdapte
 //            code = (TextView) itemView.findViewById(R.id.mobileNo);
 
         }
-    }
-
-
-
-    private void getBusArrivalInfo(NavigationNodes busNodeToCheck, final VolleyCallBack callback) {
-
-        String url = "https://nnextbus.nus.edu.sg/ShuttleService?busstopname=" + busNodeToCheck.getId();
-
-        StringRequest stopStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-
-                //variables for service info at a particular stop
-                ServiceInStopDetails serviceInfoAtStop;
-                List<ServiceInStopDetails> servicesAllInfoAtStop;
-                List<String> servicesAtStop;
-                List<String> serviceFirstArrival;
-                List<String> serviceSecondArrival;
-                List<String> firstArrivalLive;
-                List<String> secondArrivalLive;
-                servicesAllInfoAtStop = new ArrayList<>();
-                Log.e("GetStopInfo response is", response);
-                servicesAtStop = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].name");
-                serviceFirstArrival = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].arrivalTime");
-                serviceSecondArrival = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].nextArrivalTime");
-                firstArrivalLive = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].arrivalTime_veh_plate");
-                secondArrivalLive = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].nextArrivalTime_veh_plate");
-                Log.e("servicesAtStop is: ", servicesAtStop.get(0));
-                for (int i = 0; i < servicesAtStop.size(); i++) {
-                    serviceInfoAtStop = new ServiceInStopDetails();
-                    serviceInfoAtStop.setServiceNum(servicesAtStop.get(i));
-                    serviceInfoAtStop.setFirstArrival(serviceFirstArrival.get(i));
-                    Log.e("first arrival is: ", "" + serviceFirstArrival.get(i));
-                    serviceInfoAtStop.setSecondArrival(serviceSecondArrival.get(i));
-                    serviceInfoAtStop.setFirstArrivalLive(firstArrivalLive.get(i));
-                    serviceInfoAtStop.setSecondArrivalLive(secondArrivalLive.get(i));
-                    servicesAllInfoAtStop.add(serviceInfoAtStop);
-                }
-//                Log.e("servicesAllInfoAtStop is: ", "" + servicesAllInfoAtStop);
-//                Log.e("value of j is: ", "" + groupPosition);
-
-                callback.onSuccess(servicesAllInfoAtStop);
-
-
-            }
-
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("volley API error", "" + error);
-                callback.onFailure();
-            }
-
-        }) {
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("Content-Type", "application/json; charset=UTF-8");
-                params.put("Authorization", context.getString(R.string.auth_header));
-                return params;
-            }
-        };
-
-        if (context != null) {
-            RequestQueue stopRequestQueue = Volley.newRequestQueue(context);
-            stopRequestQueue.add(stopStringRequest);
-        }
-    }
-
-    public interface VolleyCallBack {
-        void onSuccess(List<ServiceInStopDetails> busStopArrivalInfo);
-        void onFailure();
     }
 }

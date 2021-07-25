@@ -10,9 +10,9 @@
     {
       "type": "SINGLE",
       "filters": [],
-      "versionCode": 39,
-      "versionName": "0.6.2",
-      "outputFile": "n(avigate)us-0.6.2-release.apk"
+      "versionCode": 42,
+      "versionName": "0.6.3",
+      "outputFile": "n(avigate)us-0.6.3-release.apk"
     }
   ]
 }

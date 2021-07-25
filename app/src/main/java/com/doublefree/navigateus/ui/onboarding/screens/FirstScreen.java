@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
@@ -20,11 +21,17 @@ public class FirstScreen extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_onboarding_first_screen, container, false);
         ViewPager2 viewPager = getActivity().findViewById(R.id.viewPager);
+        Button button = view.findViewById(R.id.next);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 viewPager.setCurrentItem(1);
-
+            }
+        });
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewPager.setCurrentItem(1);
             }
         });
         return view;

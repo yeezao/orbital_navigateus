@@ -4,6 +4,11 @@ import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.AudioAttributes;
 import android.net.Uri;
 import android.os.Build;
@@ -28,6 +33,8 @@ import com.doublefree.navigateus.data.naviagationdata.NavigationSearchInfo;
 import com.doublefree.navigateus.databinding.ActivityMainBinding;
 import com.doublefree.navigateus.favourites.FavouriteDatabase;
 import com.doublefree.navigateus.favourites.FavouriteStop;
+import com.doublefree.navigateus.ui.NotificationBroadcast;
+import com.doublefree.navigateus.ui.NotificationBroadcastInterface;
 import com.doublefree.navigateus.ui.directions.DirectionsFragment;
 import com.doublefree.navigateus.ui.home.HomeFragment;
 import com.doublefree.navigateus.ui.stops_services.SetArrivalNotificationsDialogFragment;
@@ -39,6 +46,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -52,6 +60,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements SetArrivalNotificationsDialogFragment.ArrivalNotificationsDialogListenerForActivity {
 
@@ -377,7 +386,8 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
                     isServicesTheSame = false;
                 } else {
                     for (int i = 0; i < listOfPreviousFavourites.size(); i++) {
-                        if (listOfPreviousFavourites.get(i).equals(singleStopArrivalNotifications.getServicesFavourited().get(i))) {
+                        Log.e("compare service", listOfPreviousFavourites.get(i) + " " + singleStopArrivalNotifications.getServicesFavourited().get(i));
+                        if (!listOfPreviousFavourites.get(i).equals(singleStopArrivalNotifications.getServicesFavourited().get(i))) {
                             isServicesTheSame = false;
                             break;
                         }
@@ -467,6 +477,16 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
             Log.e("stopname new is" , singleStopArrivalNotifications.getStopId() + " " + singleStopArrivalNotifications.getServicesBeingWatched());
         }
         if (startNewMonitoring) {
+
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
+            Intent cancelMonitoringIntent = new Intent(this, NotificationBroadcast.class);
+            cancelMonitoringIntent.setAction("CANCEL_MONITORING");
+            cancelMonitoringIntent.setIdentifier(singleStopArrivalNotifications.getStopId());
+            PendingIntent cancelMonitoringPendingIntent = PendingIntent.getBroadcast(this, 1, cancelMonitoringIntent, 0);
+
             persistentBuilder.setContentTitle("Monitoring " + singleStopArrivalNotifications.getStopName() + "...")
                     .setContentText("Please do not quit the app. "
                             + "We'll notify you when any of your selected buses are "
@@ -475,17 +495,43 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
                     .setOngoing(true)
                     .setSmallIcon(R.drawable.ic_baseline_directions_bus_24)
                     .setSound(null)
-                    .setPriority(NotificationCompat.PRIORITY_HIGH);
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setContentIntent(pendingIntent);
+//                    .setContentIntent(cancelMonitoringPendingIntent)
+//                    .addAction(0, "Stop Monitoring", cancelMonitoringPendingIntent);
             notificationManager.cancel(singleStopArrivalNotifications.getStopId(), 0);
             notificationManager.notify(singleStopArrivalNotifications.getStopId(), 0, persistentBuilder.build());
+
+//            NotificationBroadcast nb = new NotificationBroadcast();
+//            nb.mainSetter(this, notificationManager, arrivalNotificationsArray);
+//
+//
+//            IntentFilter intentFilter = new IntentFilter();
+//            intentFilter.addAction("android.intent.action.ANY_ACTION");
+//            this.registerReceiver(nb, intentFilter);
+
+//            BroadcastReceiver br = new BroadcastReceiver() {
+//                @Override
+//                public void onReceive(Context context, Intent intent) {
+//                    Log.e("broadcast", "received");
+//                    notificationManager.cancel(intent.getIdentifier(), 0);
+//                    for (int i = 0; i < arrivalNotificationsArray.size(); i++) {
+//                        if (arrivalNotificationsArray.get(i).getStopId().equals(intent.getIdentifier())) {
+//                            ArrivalNotifications temp = arrivalNotificationsArray.get(i);
+//                            temp.setWatchingForArrival(false);
+//                            arrivalNotificationsArray.set(i, temp);
+//                        }
+//                    }
+//                }
+//            };
+//
+//            registerReceiver(br, new IntentFilter("CANCEL_MONITORING"));
+
+
+
         } else {
             notificationManager.cancel(singleStopArrivalNotifications.getStopId(), 0);
         }
-
-        Log.e("timeToWatch in mainActivity is:", singleStopArrivalNotifications.getTimeToWatch() + "");
-
-
-
     }
 
     @Override
@@ -519,6 +565,7 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
             if (arrivalNotificationsArray.size() > 0) {
                 for (int i = 0; i < arrivalNotificationsArray.size(); i++) {
                     if (arrivalNotificationsArray.get(i).isWatchingForArrival()) {
+                        Log.e("is monitoring", arrivalNotificationsArray.get(i).getStopId());
                         updateMonitoringAndNotification(arrivalNotificationsArray.get(i), i);
                     }
                 }
@@ -677,8 +724,15 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
                                         + " minutes at " + singleStopNotificationForUpdate.getStopName() + "."));
             }
         }
+
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
         regularBuilder.setSmallIcon(R.drawable.ic_baseline_directions_bus_24)
-                .setPriority(NotificationCompat.PRIORITY_HIGH);
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
         notificationManager.notify(singleStopNotificationForUpdate.getStopId(), 0, regularBuilder.build());
     }
 
@@ -808,72 +862,6 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
     }
 
 
-    //variables and method for retrieving service info at a particular stop
-    ServiceInStopDetails serviceInfoAtStop;
-    List<ServiceInStopDetails> servicesAllInfoAtStop;
-    List<String> servicesAtStop;
-    List<String> serviceFirstArrival;
-    List<String> serviceSecondArrival;
-    List<String> firstArrivalLive;
-    List<String> secondArrivalLive;
-
-//    private void getChildTimings(String stopId, final MainActivity.VolleyCallBack callback) {
-//
-//        String url = "https://nnextbus.nus.edu.sg/ShuttleService?busstopname=" + stopId;
-//
-//        StringRequest stopStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-//
-//            @Override
-//            public void onResponse(String response) {
-//                servicesAllInfoAtStop = new ArrayList<>();
-//                Log.e("GetStopInfo in activity response is", response);
-//                servicesAtStop = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].name");
-//                serviceFirstArrival = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].arrivalTime");
-//                serviceSecondArrival = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].nextArrivalTime");
-//                firstArrivalLive = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].arrivalTime_veh_plate");
-//                secondArrivalLive = JsonPath.read(response, "$.ShuttleServiceResult.shuttles[*].nextArrivalTime_veh_plate");
-//                Log.e("servicesAtStop is: ", servicesAtStop.get(0));
-//                for (int i = 0; i < servicesAtStop.size(); i++) {
-//                    serviceInfoAtStop = new ServiceInStopDetails();
-//                    serviceInfoAtStop.setServiceNum(servicesAtStop.get(i));
-//                    serviceInfoAtStop.setFirstArrival(serviceFirstArrival.get(i));
-//                    Log.e("first arrival is: ", "" + serviceFirstArrival.get(i));
-//                    serviceInfoAtStop.setSecondArrival(serviceSecondArrival.get(i));
-//                    serviceInfoAtStop.setFirstArrivalLive(firstArrivalLive.get(i));
-//                    serviceInfoAtStop.setSecondArrivalLive(secondArrivalLive.get(i));
-//                    servicesAllInfoAtStop.add(serviceInfoAtStop);
-//                }
-//                callback.onSuccess();
-//
-//            }
-//
-//        }, new Response.ErrorListener() {
-//
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Log.e("volley API error", "" + error);
-//            }
-//
-//        }) {
-//
-//            @Override
-//            public Map<String, String> getHeaders() throws AuthFailureError {
-//                Map<String, String> params = new HashMap<String, String>();
-//                params.put("Content-Type", "application/json; charset=UTF-8");
-//                params.put("Authorization", getString(R.string.auth_header));
-//                return params;
-//            }
-//        };
-//
-//        if (this != null) {
-//            RequestQueue stopRequestQueue = Volley.newRequestQueue(this);
-//            stopRequestQueue.add(stopStringRequest);
-//        }
-//
-////        Log.e("list is: ", list.toString());
-////        return list;
-//    }
-
     public List<ArrivalNotifications> getArrivalNotificationsArray() {
         return arrivalNotificationsArray;
     }
@@ -930,9 +918,23 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
         return dest;
     }
 
-    public interface VolleyCallBack {
-        void onSuccess();
+    public NotificationManager getNotificationManager() {
+        return notificationManager;
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    //    public class NotificationBroadcast extends BroadcastReceiver {
+//
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//
+//        }
+//
+//    }
 }
 
 //    @Override

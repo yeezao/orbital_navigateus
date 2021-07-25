@@ -152,14 +152,8 @@ public class StopsServicesServicesFragment extends Fragment {
     private void loadIntoRecyclerView(List<ServiceInfo> servicesInfo) {
         singleServiceCustomAdapterRecyclerView = new SingleServiceCustomAdapterRecyclerView(
                 getContext(), servicesInfo, navController);
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                nusServicesRecyclerView.setAdapter(singleServiceCustomAdapterRecyclerView);
-                progressBar.setVisibility(View.GONE);
-            }
-        }, 500);
+        nusServicesRecyclerView.setAdapter(singleServiceCustomAdapterRecyclerView);
+        progressBar.setVisibility(View.GONE);
 
     }
 

@@ -108,7 +108,7 @@ public class StopsServicesFragment extends Fragment implements DialogFullRouteCa
         expandableListView = (ExpandableListView) view.findViewById(R.id.expandable_listview_nus_stops);
         listGroup = new ArrayList<>();
         listItem = new HashMap<>();
-        adapter = new StopsMainAdapter(getContext(), listGroup, listItem);
+        adapter = new StopsMainAdapter(getActivity(), getContext(), listGroup, listItem, expandableListView, getChildFragmentManager());
         expandableListView.setAdapter(adapter);
 
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
@@ -330,6 +330,7 @@ public class StopsServicesFragment extends Fragment implements DialogFullRouteCa
         expandableListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+//                ExpandableListViewStandardCode.showAlertFavouriteDialog(false, id, getActivity(), getContext(), listOfAllStops, getChildFragmentManager());
                 int groupPosition = ExpandableListView.getPackedPositionGroup(id);
                 if (ExpandableListView.getPackedPositionType(id) == ExpandableListView.PACKED_POSITION_TYPE_GROUP) {
                     SetArrivalNotificationsDialogFragment dialogFragment;
@@ -694,19 +695,13 @@ public class StopsServicesFragment extends Fragment implements DialogFullRouteCa
             floatingGetLocationButton.setImageResource(R.drawable.ic_baseline_my_location_24);
         } else {
             isFirstRun = false;
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    stopsNUSMainLoadingProgressBar.setVisibility(View.INVISIBLE);
-                    floatingGetLocationButton.setClickable(true);
-                    refreshLocationProgressBar.setVisibility(View.INVISIBLE);
-                    floatingRefreshButton.setImageResource(R.drawable.ic_baseline_refresh_24);
-                    floatingRefreshButton.setClickable(true);
+            stopsNUSMainLoadingProgressBar.setVisibility(View.INVISIBLE);
+            floatingGetLocationButton.setClickable(true);
+            refreshLocationProgressBar.setVisibility(View.INVISIBLE);
+            floatingRefreshButton.setImageResource(R.drawable.ic_baseline_refresh_24);
+            floatingRefreshButton.setClickable(true);
 //                    getActivity().findViewById(R.id.floating_refresh_location_button).setClickable(true);
-                    adapter.notifyDataSetChanged();
-                }
-            }, 400);
+            adapter.notifyDataSetChanged();
             if (ProcessLifecycleOwner.get().getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
                 timeRefreshHandler.postDelayed(new Runnable() {
                     @Override

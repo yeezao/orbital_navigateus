@@ -44,4 +44,15 @@
         <item>19</item>
     </string-array>
 
+    <string name="real_time_bus_arrival_info">Find out the nearest bus stop to you, and when buses are arriving at each stop!
+        You can also find out first/last bus info for each service.</string>
+    <string name="arrival_notifs">Get notified when the bus you want to take is arriving! Tap the 3 dots next to any bus stop to select services to monitor, and
+    the timing to trigger the notification.</string>
+    <string name="directions_text">Need to get somewhere within campus? Find your way between buildings within NUS!
+        You can filter your search by sheltered routes, accessible routes, or walking-only routes too!</string>
+    <string name="describe_favourites">Save your most-used bus stops and services to your Favourites list, and get instant access from the Home tab!</string>
+    <string name="describe_alerts">Know if any bus service is disrupted, and make changes to your travel plans instantly!</string>
+    <string name="describe_service">Find information on a specific bus service, including first/last bus timings!</string>
+    <string name="data_disclaimer">Note: Data used in the app is retrieved real-time from NUS servers. We\'re unable to guarantee the accuracy of the data provided.</string>
+
 </resources>

@@ -17,6 +17,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -65,7 +66,9 @@ public class DirectionsFragment extends Fragment {
     float dpWidth;
     NavController navController;
 
-
+    CheckBox sheltered;
+    CheckBox accessible;
+    CheckBox walkOnly;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -74,6 +77,10 @@ public class DirectionsFragment extends Fragment {
 
         destInputEditor = view.findViewById(R.id.destInputEditor);
         originInputEditor = view.findViewById(R.id.originInputEditor);
+
+        sheltered = (CheckBox) view.findViewById(R.id.checkbox_sheltered);
+        accessible = (CheckBox) view.findViewById(R.id.checkbox_accessible);
+        walkOnly = (CheckBox) view.findViewById(R.id.checkbox_walkOnly);
 
         navController = NavHostFragment.findNavController(DirectionsFragment.this);
 
@@ -85,7 +92,7 @@ public class DirectionsFragment extends Fragment {
         display.getMetrics(displayMetrics);
         dpWidth = displayMetrics.widthPixels;
         customAdapterRecyclerView = new CustomAdapterRecyclerView(
-                getActivity(), savedNavigationResults, originText, destText, navController, dpWidth, false);
+                getActivity(), getContext(), savedNavigationResults, originText, destText, navController, dpWidth, false);
         resultRecyclerView.setAdapter(customAdapterRecyclerView);
 
         listOfBusStopsObject = ((MainActivity) getActivity()).getListOfAllStops();
@@ -131,6 +138,33 @@ public class DirectionsFragment extends Fragment {
             }
         });
 
+        sheltered.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                checkboxChangedListenerCheck(view);
+            }
+        });
+
+        accessible.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                checkboxChangedListenerCheck(view);
+            }
+        });
+
+        walkOnly.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                checkboxChangedListenerCheck(view);
+            }
+        });
+
+    }
+
+    public void checkboxChangedListenerCheck(View view) {
+        if (originText.length() > 0 && destText.length() > 0 && !originText.equals(destText)) {
+            PackageSearchInfo(view);
+        }
     }
 
     List<String> listOfNames;
@@ -176,11 +210,17 @@ public class DirectionsFragment extends Fragment {
             //do nothing, just move on
         }
 
-        originText = originInputEditor.getText().toString();
-        destText = destInputEditor.getText().toString();
+        if (originInputEditor.getText().toString().length() > 0) {
+            originText = originInputEditor.getText().toString();
+        }
+        if (destInputEditor.getText().toString().length() > 0) {
+            destText = destInputEditor.getText().toString();
+        }
 
 //        Log.e("originid is", originId);
 //        Log.e("destid is", destId);
+
+        Log.e("text lengths", originText.trim().length() + " " + destText.trim().length());
 
         if (originText.trim().equals(destText.trim())
                 && originText.trim().length() > 0 && destText.trim().length() > 0) {
@@ -202,10 +242,6 @@ public class DirectionsFragment extends Fragment {
             navigationSearchInfo.setOrigin(originText);
             navigationSearchInfo.setDest(destText);
 
-            CheckBox sheltered = (CheckBox) view.findViewById(R.id.checkbox_sheltered);
-            CheckBox accessible = (CheckBox) view.findViewById(R.id.checkbox_accessible);
-            CheckBox walkOnly = (CheckBox) view.findViewById(R.id.checkbox_walkOnly);
-
             navigationSearchInfo.setSheltered(sheltered.isChecked());
             navigationSearchInfo.setBarrierFree(accessible.isChecked());
             navigationSearchInfo.setWalkOnly(walkOnly.isChecked());
@@ -223,7 +259,7 @@ public class DirectionsFragment extends Fragment {
                     if (navigationResults != null && navigationResults.size() > 0) {
                         savedNavigationResults = navigationResults;
                         customAdapterRecyclerView = new CustomAdapterRecyclerView(
-                                getActivity(), savedNavigationResults, originText, destText, navController, dpWidth, true);
+                                getActivity(), getContext(), savedNavigationResults, originText, destText, navController, dpWidth, true);
                         resultRecyclerView.setAdapter(customAdapterRecyclerView);
                         goButtonForNav.setClickable(true);
                         waitingForDirectionsResultProgressBar.setVisibility(View.GONE);

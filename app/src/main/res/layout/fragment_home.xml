@@ -41,6 +41,7 @@
         android:layout_height="1dp"
         android:layout_marginTop="1dp"
         android:background="@android:color/darker_gray"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -53,11 +54,24 @@
         android:layout_marginStart="12dp"
         android:layout_marginEnd="40dp"
         android:backgroundTint="@color/transparent"
-        android:hint="Search stops, buildings, services..."
+        android:hint="Search feature is currently unavailable"
         android:inputType="textPersonName"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/home_searchButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:src="@drawable/ic_baseline_search_24"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/home_search"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/home_search"
+        app:layout_constraintTop_toTopOf="@+id/home_search" />
 
     <TextView
         android:id="@+id/favourites_label"
@@ -80,17 +94,6 @@
         app:layout_constraintBottom_toBottomOf="@+id/favourites_label"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/favourites_label" />
-
-    <ImageButton
-        android:id="@+id/home_searchButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:src="@drawable/ic_baseline_search_24"
-        app:layout_constraintBottom_toBottomOf="@+id/home_search"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/home_search"
-        app:layout_constraintTop_toTopOf="@+id/home_search" />
 
     <View
         android:id="@+id/viewDividerELVHome"

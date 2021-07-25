@@ -65,8 +65,17 @@ public class SingleStopBusArrivalCustomAdapterRecyclerView extends RecyclerView.
 
         StopArrivalInfoForDirections serviceToDisplay = stopArrivalInfoForDirections.get(position);
 
-        holder.serviceNum.setText(serviceToDisplay.getService());
-        holder.serviceDesc.setText(serviceToDisplay.getServiceDesc());
+        if (serviceToDisplay.getService().contains("D1") &&
+                (serviceToDisplay.getService().contains("Utown") || serviceToDisplay.getService().contains("UTown"))) {
+            holder.serviceNum.setText("D1");
+            holder.serviceDesc.setText("to Utown");
+        } else if (serviceToDisplay.getService().contains("D1") && serviceToDisplay.getService().contains("BIZ2")) {
+            holder.serviceNum.setText("D1");
+            holder.serviceDesc.setText("to BIZ 2");
+        } else {
+            holder.serviceNum.setText(serviceToDisplay.getService());
+            holder.serviceDesc.setText(serviceToDisplay.getServiceDesc());
+        }
         StringBuilder stringBuilder = new StringBuilder();
         if (serviceToDisplay.getArrivalTime() == 0) {
             stringBuilder.append("Arr");

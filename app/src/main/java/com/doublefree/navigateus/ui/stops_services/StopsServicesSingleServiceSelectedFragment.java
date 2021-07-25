@@ -74,7 +74,7 @@ public class StopsServicesSingleServiceSelectedFragment extends Fragment impleme
         expandableListView = (ExpandableListView) rootView.findViewById(R.id.expandable_listview_nus_stops_for_single_service);
         listGroup = new ArrayList<>();
         listItem = new HashMap<>();
-        adapter = new StopsMainAdapter(getContext(), listGroup, listItem);
+        adapter = new StopsMainAdapter(getActivity(), getContext(), listGroup, listItem, expandableListView, getChildFragmentManager());
         expandableListView.setAdapter(adapter);
 
         setHasOptionsMenu(true);
@@ -174,6 +174,7 @@ public class StopsServicesSingleServiceSelectedFragment extends Fragment impleme
                 NextbusAPIs.callListOfTickerTapes(getActivity(), getContext(), new NextbusAPIs.VolleyCallBackTickerTapesAnnouncementsList() {
                     @Override
                     public void onSuccessTickerTapesAnnouncements(List<NetworkTickerTapesAnnouncements> networkTickerTapesAnnouncementsList) {
+                        boolean disrupted = false;
                         for (int i = 0; i < networkTickerTapesAnnouncementsList.size(); i++) {
                             String[] servicesAffected = networkTickerTapesAnnouncementsList.get(i).getServicesAffected().split(",");
                             for (int j = 0; j < servicesAffected.length; j++) {
@@ -186,11 +187,14 @@ public class StopsServicesSingleServiceSelectedFragment extends Fragment impleme
                                                 !networkTickerTapesAnnouncementsList.get(i).getMessage().contains("Testing") &&
                                                 !networkTickerTapesAnnouncementsList.get(i).getMessage().contains("maintenance"))) {
                                     serviceStatus = 1;
+                                    disrupted = true;
                                     break;
                                 }
                             }
                         }
-                        serviceStatus = 0;
+                        if (!disrupted) {
+                            serviceStatus = 0;
+                        }
                         setServiceStatus();
                     }
 
@@ -210,10 +214,11 @@ public class StopsServicesSingleServiceSelectedFragment extends Fragment impleme
         listGroup.clear();
         for (int i = 0; i < listOfAllStops.size(); i++) {
             if (i == 0) {
-                listOfAllStops.get(i).setStopName(listOfAllStops.get(i).getStopName() + " (Start)");
+                listOfAllStops.get(i).setDisplayStopName(listOfAllStops.get(i).getStopName() + " (Start)");
             } else if (i == listOfAllStops.size() - 1) {
-                listOfAllStops.get(i).setStopName(listOfAllStops.get(i).getStopName() + " (End)");
+                listOfAllStops.get(i).setDisplayStopName(listOfAllStops.get(i).getStopName() + " (End)");
             }
+            listOfAllStops.get(i).setStopId(StandardCode.StopIdExceptionsWithReturn(listOfAllStops.get(i).getStopId()));
             listGroup.add(listOfAllStops.get(i));
         }
         adapter.notifyDataSetChanged();
@@ -243,7 +248,7 @@ public class StopsServicesSingleServiceSelectedFragment extends Fragment impleme
         for (int i = 0; numberOfGroupsExpanded[0] > 0 && i < listOfAllStopsAlongRoute.size(); i++) {
             if (expandableListView.isGroupExpanded(i)) {
                 int finalI = i;
-                NextbusAPIs.callSingleStopInfo(getActivity(), getContext(), listOfAllStopsAlongRoute.get(i).getStopId()
+                NextbusAPIs.callSingleStopInfo(getActivity(), getContext(), StandardCode.StopIdExceptionsWithReturn(listOfAllStopsAlongRoute.get(i).getStopId())
                         , i, true, new NextbusAPIs.VolleyCallBackSingleStop() {
                     @Override
                     public void onSuccessSingleStop(List<ServiceInStopDetails> servicesAllInfoAtStop) {

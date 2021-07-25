@@ -5,6 +5,7 @@ import java.util.List;
 public class StopList {
 
     private String stopName;
+    private String displayStopName = "";
     private String stopLongName;
     private String stopDescription;
     private String stopId;
@@ -24,6 +25,14 @@ public class StopList {
 
     public void setStopName(String stopName) {
         this.stopName = stopName;
+    }
+
+    public String getDisplayStopName() {
+        return displayStopName;
+    }
+
+    public void setDisplayStopName(String displayStopName) {
+        this.displayStopName = displayStopName;
     }
 
     public String getStopLongName() {

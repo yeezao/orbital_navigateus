@@ -23,16 +23,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ProgressBar
-        android:id="@+id/onGroupClickProgressBar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginEnd="10dp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <ImageView
+        android:id="@+id/showDialogFromBusStopImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="12dp"
+        android:paddingStart="3dp"
+        android:paddingTop="3dp"
+        android:paddingEnd="3dp"
+        android:paddingBottom="3dp"
+        app:layout_constraintBottom_toBottomOf="@+id/list_parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/list_parent"
+        app:srcCompat="@drawable/ic_baseline_directions_split_vert_24" />
 
 
     <!--    <TextView-->

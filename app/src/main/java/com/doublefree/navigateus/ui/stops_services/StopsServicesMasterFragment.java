@@ -49,13 +49,20 @@ public class StopsServicesMasterFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    StopsServicesFragment newStopsServicesFragment = new StopsServicesFragment();
+    StopsServicesFragment newStopsServicesFragment;
+    StopsServicesServicesFragment newStopsServicesServicesFragment;
 
     private void setupViewPager(ViewPager viewPager) {
         TabViewPagerAdapter adapter = new TabViewPagerAdapter(getChildFragmentManager());
+        if (newStopsServicesFragment == null) {
+            newStopsServicesFragment = new StopsServicesFragment();
+        }
         adapter.addFragment(newStopsServicesFragment, "NUS Stops");
 //        adapter.addFragment(new StopsServicesLTAFragment(), "LTA Stops");
-        adapter.addFragment(new StopsServicesServicesFragment(), "NUS Routes");
+        if (newStopsServicesServicesFragment == null) {
+            newStopsServicesServicesFragment = new StopsServicesServicesFragment();
+        }
+        adapter.addFragment(newStopsServicesServicesFragment, "NUS Routes");
 
         viewPager.setOffscreenPageLimit(2);
         viewPager.setAdapter(adapter);

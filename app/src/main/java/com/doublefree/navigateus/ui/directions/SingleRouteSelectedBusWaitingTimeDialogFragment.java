@@ -37,6 +37,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -88,6 +89,7 @@ public class SingleRouteSelectedBusWaitingTimeDialogFragment extends DialogFragm
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                Log.e("single stop selected waiting", stop.getId());
                 NextbusAPIs.callSingleStopInfo(getActivity(), getContext(), stop.getId(), 0, true, new NextbusAPIs.VolleyCallBackSingleStop() {
                     @Override
                     public void onSuccessSingleStop(List<ServiceInStopDetails> servicesAllInfoAtStop) {
@@ -124,9 +126,9 @@ public class SingleRouteSelectedBusWaitingTimeDialogFragment extends DialogFragm
 
     private void extractAndSortResponse(List<ServiceInStopDetails> busStopArrivalInfo) {
         List<ServiceInStopDetails> listOfViableServicesToDisplay = new ArrayList<>();
-        for (ServiceInStopDetails temp: busStopArrivalInfo){
+        for (ServiceInStopDetails temp: busStopArrivalInfo) {
             for (String service: (isViableService1 ? currentSegment.getViableBuses1() : currentSegment.getViableBuses2())) {
-                if (temp.getServiceNum().equals(service) || (temp.getServiceNum().equals("D1(To UTown)") //for COM2 bus stop - D1 twd UTown
+                if (temp.getServiceNum().equals(service) || ((temp.getServiceNum().contains("Utown") || temp.getServiceNum().contains("UTown")) //for COM2 bus stop - D1 twd UTown
                         && service.equals("D1") && currentSegment.getNodesTraversed().get(1).getId().equals("LT13-OPP"))
                         || (temp.getServiceNum().equals("D1(To BIZ2)") //for COM2 bus stop - D1 twd BIZ2
                         && service.equals("D1")
@@ -135,9 +137,6 @@ public class SingleRouteSelectedBusWaitingTimeDialogFragment extends DialogFragm
                 }
             }
         }
-        int earliestArrivalTime = 1000;
-        ServiceInStopDetails earliestArrival;
-        boolean isFirstArrivalEarliest = true;
         stopArrivalInfoForDirections.clear();
         for (ServiceInStopDetails temp: listOfViableServicesToDisplay) {
             Log.e("timetillnow", timeTillNow + "");
@@ -147,24 +146,13 @@ public class SingleRouteSelectedBusWaitingTimeDialogFragment extends DialogFragm
             if (!temp.getSecondArrival().contains("-")) {
                 stopArrivalInfoForDirections.add(setInstanceOfStopArrivalInfo(temp, false));
             }
-            for (int i = 0; i < stopArrivalInfoForDirections.size(); i++) {
-                int smallestIndex = i;
-                for (int j = i + 1; j < stopArrivalInfoForDirections.size(); j++) {
-                    if (stopArrivalInfoForDirections.get(j).getArrivalTime() < stopArrivalInfoForDirections.get(i).getArrivalTime()) {
-                        smallestIndex = j;
-                    }
-                }
-                if (smallestIndex != i) {
-                    Collections.swap(stopArrivalInfoForDirections, i, smallestIndex);
-                }
-            }
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
+            stopArrivalInfoForDirections.sort(new Comparator<StopArrivalInfoForDirections>() {
                 @Override
-                public void run() {
-                    startRecyclerView();
+                public int compare(StopArrivalInfoForDirections o1, StopArrivalInfoForDirections o2) {
+                    return o1.getArrivalTime() - o2.getArrivalTime();
                 }
-            }, 800);
+            });
+            startRecyclerView();
 
         }
 

@@ -19,12 +19,12 @@ import com.doublefree.navigateus.ui.BusLocationDisplayDialogFragment;
 import com.doublefree.navigateus.ui.DialogFullRouteCallBack;
 import com.doublefree.navigateus.ui.stops_services.SetArrivalNotificationsDialogFragment;
 import com.doublefree.navigateus.ui.StopsMainAdapter;
+import com.doublefree.navigateus.ui.stops_services.StopsServicesMasterFragmentDirections;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Handler;
 
 public class ExpandableListViewStandardCode {
 
@@ -116,60 +116,7 @@ public class ExpandableListViewStandardCode {
         expandableListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                int groupPosition = ExpandableListView.getPackedPositionGroup(id);
-                if (ExpandableListView.getPackedPositionType(id) == ExpandableListView.PACKED_POSITION_TYPE_GROUP) {
-                    SetArrivalNotificationsDialogFragment dialogFragment;
-                    boolean isStopBeingWatched = false;
-                    arrivalNotificationsArray = ((MainActivity) activity).getArrivalNotificationsArray();
-                    for (int i = 0; arrivalNotificationsArray != null && i < arrivalNotificationsArray.size(); i++) {
-                        if (arrivalNotificationsArray.get(i).getStopId().equals(listOfStops.get(groupPosition).getStopId())
-                                && arrivalNotificationsArray.get(i).isWatchingForArrival()) {
-                            Log.e("entered", "yes i  entered");
-                            isStopBeingWatched = true;
-                            singleStopArrivalNotification = new ArrivalNotifications();
-                            singleStopArrivalNotification.setStopId(arrivalNotificationsArray.get(i).getStopId());
-                            singleStopArrivalNotification.setStopName(arrivalNotificationsArray.get(i).getStopName());
-                            singleStopArrivalNotification.setLatitude(arrivalNotificationsArray.get(i).getLatitude());
-                            singleStopArrivalNotification.setLongitude(arrivalNotificationsArray.get(i).getLongitude());
-                            singleStopArrivalNotification.setWatchingForArrival(true);
-                            singleStopArrivalNotification.setServicesAtStop(arrivalNotificationsArray.get(i).getServicesAtStop());
-                            singleStopArrivalNotification.setServicesBeingWatched(arrivalNotificationsArray.get(i).getServicesBeingWatched());
-                            singleStopArrivalNotification = updateFavouritesInfo(singleStopArrivalNotification);
-                            dialogFragment = SetArrivalNotificationsDialogFragment.newInstance(singleStopArrivalNotification);
-//                            dialogFragment.setArrivalNotificationsDialogListener(StopsServicesFragment.this);
-                            dialogFragment.show(childFragmentManager, SetArrivalNotificationsDialogFragment.TAG);
-                            break;
-                        }
-                    }
-                    if (!isStopBeingWatched) {
-                        singleStopArrivalNotification = new ArrivalNotifications();
-                        singleStopArrivalNotification.setStopId(listOfStops.get(groupPosition).getStopId());
-                        singleStopArrivalNotification.setStopName(listOfStops.get(groupPosition).getStopName());
-                        singleStopArrivalNotification.setLatitude(listOfStops.get(groupPosition).getStopLatitude());
-                        singleStopArrivalNotification.setLongitude(listOfStops.get(groupPosition).getStopLongitude());
-                        singleStopArrivalNotification.setWatchingForArrival(false);
-                        singleStopArrivalNotification = updateFavouritesInfo(singleStopArrivalNotification);
-                        NextbusAPIs.callSingleStopInfo(activity, context, listOfStops.get(groupPosition).getStopId(),
-                                groupPosition, true, new NextbusAPIs.VolleyCallBackSingleStop() {
-                                    @Override
-                                    public void onSuccessSingleStop(List<ServiceInStopDetails> servicesAllInfoAtStop) {
-                                        singleStopArrivalNotification.setServicesAtStop(servicesAllInfoAtStop);
-                                        SetArrivalNotificationsDialogFragment dialogFragment = SetArrivalNotificationsDialogFragment.newInstance(singleStopArrivalNotification);
-//                                    dialogFragment.setArrivalNotificationsDialogListener(StopsServicesFragment.this);
-//                                    dialogFragment.setTargetFragment(StopsServicesFragment.this, 0);
-                                        dialogFragment.show(childFragmentManager, SetArrivalNotificationsDialogFragment.TAG);
-                                    }
-
-                                    @Override
-                                    public void onFailureSingleStop() {
-                                        StandardCode.showFailedToLoadSnackbar(activity);
-                                    }
-                                });
-
-                    }
-                    return true;
-                }
-                return false;
+                return showAlertFavouriteDialog(false, id, activity, context, listOfStops, childFragmentManager);
             }
         });
 
@@ -191,6 +138,68 @@ public class ExpandableListViewStandardCode {
         });
     }
 
+    public static boolean showAlertFavouriteDialog(boolean isAlreadyGroupPosition, long id, Activity activity, Context context, List<StopList> listOfStops, FragmentManager childFragmentManager) {
+        int groupPosition;
+        if (!isAlreadyGroupPosition) {
+            groupPosition = ExpandableListView.getPackedPositionGroup(id);
+        } else {
+            groupPosition = (int) id;
+        }
+        if (ExpandableListView.getPackedPositionType(id) == ExpandableListView.PACKED_POSITION_TYPE_GROUP) {
+            SetArrivalNotificationsDialogFragment dialogFragment;
+            boolean isStopBeingWatched = false;
+            arrivalNotificationsArray = ((MainActivity) activity).getArrivalNotificationsArray();
+            for (int i = 0; arrivalNotificationsArray != null && i < arrivalNotificationsArray.size(); i++) {
+                if (arrivalNotificationsArray.get(i).getStopId().equals(listOfStops.get(groupPosition).getStopId())
+                        && arrivalNotificationsArray.get(i).isWatchingForArrival()) {
+                    Log.e("entered", "yes i  entered");
+                    isStopBeingWatched = true;
+                    singleStopArrivalNotification = new ArrivalNotifications();
+                    singleStopArrivalNotification.setStopId(arrivalNotificationsArray.get(i).getStopId());
+                    singleStopArrivalNotification.setStopName(arrivalNotificationsArray.get(i).getStopName());
+                    singleStopArrivalNotification.setLatitude(arrivalNotificationsArray.get(i).getLatitude());
+                    singleStopArrivalNotification.setLongitude(arrivalNotificationsArray.get(i).getLongitude());
+                    singleStopArrivalNotification.setWatchingForArrival(true);
+                    singleStopArrivalNotification.setServicesAtStop(arrivalNotificationsArray.get(i).getServicesAtStop());
+                    singleStopArrivalNotification.setServicesBeingWatched(arrivalNotificationsArray.get(i).getServicesBeingWatched());
+                    singleStopArrivalNotification = updateFavouritesInfo(singleStopArrivalNotification);
+                    dialogFragment = SetArrivalNotificationsDialogFragment.newInstance(singleStopArrivalNotification);
+//                            dialogFragment.setArrivalNotificationsDialogListener(StopsServicesFragment.this);
+                    dialogFragment.show(childFragmentManager, SetArrivalNotificationsDialogFragment.TAG);
+                    break;
+                }
+            }
+            if (!isStopBeingWatched) {
+                singleStopArrivalNotification = new ArrivalNotifications();
+                singleStopArrivalNotification.setStopId(listOfStops.get(groupPosition).getStopId());
+                singleStopArrivalNotification.setStopName(listOfStops.get(groupPosition).getStopName());
+                singleStopArrivalNotification.setLatitude(listOfStops.get(groupPosition).getStopLatitude());
+                singleStopArrivalNotification.setLongitude(listOfStops.get(groupPosition).getStopLongitude());
+                singleStopArrivalNotification.setWatchingForArrival(false);
+                singleStopArrivalNotification = updateFavouritesInfo(singleStopArrivalNotification);
+                NextbusAPIs.callSingleStopInfo(activity, context, listOfStops.get(groupPosition).getStopId(),
+                        groupPosition, true, new NextbusAPIs.VolleyCallBackSingleStop() {
+                            @Override
+                            public void onSuccessSingleStop(List<ServiceInStopDetails> servicesAllInfoAtStop) {
+                                singleStopArrivalNotification.setServicesAtStop(servicesAllInfoAtStop);
+                                SetArrivalNotificationsDialogFragment dialogFragment = SetArrivalNotificationsDialogFragment.newInstance(singleStopArrivalNotification);
+//                                    dialogFragment.setArrivalNotificationsDialogListener(StopsServicesFragment.this);
+//                                    dialogFragment.setTargetFragment(StopsServicesFragment.this, 0);
+                                dialogFragment.show(childFragmentManager, SetArrivalNotificationsDialogFragment.TAG);
+                            }
+
+                            @Override
+                            public void onFailureSingleStop() {
+                                StandardCode.showFailedToLoadSnackbar(activity);
+                            }
+                        });
+
+            }
+            return true;
+        }
+        return false;
+    }
+
     /**
      * Updates the favourites info in the ArrivalNotifications instance that is passed in
      *
@@ -206,5 +215,6 @@ public class ExpandableListViewStandardCode {
         }
         return singleStopArrivalNotification;
     }
+
 
 }

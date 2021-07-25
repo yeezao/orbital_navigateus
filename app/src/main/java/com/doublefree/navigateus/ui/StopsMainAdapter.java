@@ -1,16 +1,20 @@
 package com.doublefree.navigateus.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
 
+import com.doublefree.navigateus.ExpandableListViewStandardCode;
 import com.doublefree.navigateus.R;
 import com.doublefree.navigateus.data.busstopinformation.ServiceInStopDetails;
 import com.doublefree.navigateus.data.busstopinformation.StopList;
@@ -21,15 +25,23 @@ import java.util.List;
 public class StopsMainAdapter extends BaseExpandableListAdapter {
 
     Context context;
+    Activity activity;
     List<StopList> listGroup;
     HashMap<StopList, List<ServiceInStopDetails>> listItem;
+    ExpandableListView expandableListView;
+    FragmentManager childFragmentManager;
 
-    public StopsMainAdapter(Context context, List<StopList> listGroup, HashMap<StopList, List<ServiceInStopDetails>>
-            listItem){
+
+    public StopsMainAdapter(Activity activity, Context context, List<StopList> listGroup, HashMap<StopList, List<ServiceInStopDetails>>
+            listItem, ExpandableListView expandableListView, FragmentManager childFragmentManager){
         this.context = context;
         this.listGroup = listGroup;
         this.listItem = listItem;
+        this.expandableListView = expandableListView;
+        this.activity = activity;
+        this.childFragmentManager = childFragmentManager;
     }
+
     @Override
     public int getGroupCount() {
         return listGroup.size();
@@ -88,7 +100,7 @@ public class StopsMainAdapter extends BaseExpandableListAdapter {
             }
         }
         TextView textViewParent = convertView.findViewById(R.id.list_parent);
-        textViewParent.setText(group.getStopName());
+        textViewParent.setText(group.getDisplayStopName().isEmpty() ? group.getStopName() : group.getDisplayStopName());
         if (group.getStopDescription() != null) { //for LTA only
             TextView textViewSubparent = convertView.findViewById(R.id.list_subparent);
             textViewSubparent.setText(group.getStopDescription() + " (" + group.getStopId() + ")");
@@ -96,6 +108,15 @@ public class StopsMainAdapter extends BaseExpandableListAdapter {
         } else { //for NUS only
 
         }
+
+        //clicking the 3 dots opens the alertfav dialog
+        ImageView showDialog = convertView.findViewById(R.id.showDialogFromBusStopImageView);
+        showDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ExpandableListViewStandardCode.showAlertFavouriteDialog(true, groupPosition, activity, context, listGroup, childFragmentManager);
+            }
+        });
 
 //        ProgressBar onClickProgressBar = convertView.findViewById(R.id.onGroupClickProgressBar);
 

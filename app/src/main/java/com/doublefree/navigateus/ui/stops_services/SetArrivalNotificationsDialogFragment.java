@@ -52,6 +52,10 @@ public class SetArrivalNotificationsDialogFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_set_arrival_notifications, null);
 
         TextView arrivalNotificationsStopName = view.findViewById(R.id.ServiceTimetableTitle);
+
+        if (singleStopArrivalNotifications.getStopName().contains("COM 2")) {
+            singleStopArrivalNotifications.setStopName("COM 2");
+        }
         arrivalNotificationsStopName.setText(singleStopArrivalNotifications.getStopName());
 
         selectTimeSpinner = (Spinner) view.findViewById(R.id.chooseTimeSpinner);
@@ -298,6 +302,10 @@ public class SetArrivalNotificationsDialogFragment extends DialogFragment {
         dialogFragment.setArguments(args);
         dialogFragment.setSingleStopArrivalNotifications(singleStopArrivalNotifications);
         return dialogFragment;
+    }
+
+    public static void showDialogForAlertsAndFavourites() {
+
     }
 //
 //    @Override
