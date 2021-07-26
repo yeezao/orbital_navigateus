@@ -55,14 +55,14 @@ public class StandardCode {
      */
     //TODO: this needs to be modified when new bus network is up
     public static String StopIdExceptionsWithReturn(String stopId) {
-        if (stopId.contains("KRB")) {
+        if (stopId.contains("COM2")) {
+            return "COM2";
+        } else if (stopId.contains("KRB")) {
             return "KRB";
         } else if (stopId.contains("OTH")) {
             return "OTH";
         } else if (stopId.contains("UTOWN")) {
             return "UTOWN";
-        } else if (stopId.contains("COM2")) {
-            return "COM2";
         }
         return stopId;
     }

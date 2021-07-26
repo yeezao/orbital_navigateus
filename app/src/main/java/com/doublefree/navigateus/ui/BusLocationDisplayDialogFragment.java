@@ -113,8 +113,12 @@ public class BusLocationDisplayDialogFragment extends DialogFragment implements 
 //        map.animateCamera(cameraUpdate);
 
         TextView stopName = view.findViewById(R.id.busLocationStopName);
-        stopName.setText(stopNameString);
-        
+        if (stopNameString.contains("COM 2") || stopNameString.contains("COM2")) {
+            stopName.setText("COM 2");
+        } else {
+            stopName.setText(stopNameString);
+        }
+
         serviceNum = view.findViewById(R.id.list_child);
         serviceNum.setText(fullServiceNumToCheck);
 
@@ -161,7 +165,7 @@ public class BusLocationDisplayDialogFragment extends DialogFragment implements 
 //                textViewTime1Live.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.transparent));
                             } else {
                                 serviceFirstArrival.setText(serviceInStopDetails.getFirstArrival());
-                                serviceFirstArrival.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+                                serviceFirstArrival.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
                                 if (serviceInStopDetails.getFirstArrivalLive().length() == 0) {
                                     serviceFirstArrival.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
                                     serviceFirstArrival.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
@@ -197,10 +201,11 @@ public class BusLocationDisplayDialogFragment extends DialogFragment implements 
                                 serviceSecondArrival.setText("");
                                 serviceSecondArrival.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
                                 serviceSecondArrival.setTextColor(ContextCompat.getColor(getContext(), R.color.grey));
-                                serviceSecondArrival.setTextSize(14);
+                                serviceSecondArrival.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
                                 serviceSecondArrivalLive.setVisibility(ImageView.INVISIBLE);
                             } else {
                                 serviceSecondArrival.setText(serviceInStopDetails.getSecondArrival());
+                                serviceSecondArrival.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
                                 if (serviceInStopDetails.getSecondArrivalLive().length() == 0) {
                                     serviceSecondArrival.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
                                     serviceSecondArrival.setTextColor(ContextCompat.getColor(getContext(), R.color.black));

@@ -116,6 +116,8 @@ public class NextbusAPIs {
      */
     public static void callSingleStopInfo(Activity activity, Context context, String stopId, int groupPosition, boolean isOnClick, final VolleyCallBackSingleStop callback) {
 
+        Log.e("stopid is", stopId);
+
         String url = mainUrl + "ShuttleService?busstopname=" + stopId;
 
         if (stopId.contains("COM2")) {
@@ -153,7 +155,7 @@ public class NextbusAPIs {
                             serviceInfoAtStop = new ServiceInStopDetails();
                             String serviceNum = servicesAtStop.get(i);
                             Log.e("check D1 @ COM2", finalStopId + " " + servicesAtStop.get(i) + " " + stopIds.get(i));
-                            if (finalStopId.equals("COM2") && servicesAtStop.get(i).equals("D1")) {
+                            if (finalStopId.contains("COM2") && servicesAtStop.get(i).equals("D1")) {
                                 if (stopIds.get(i).contains("UT")) {
                                     serviceNum = "D1 (to Utown)";
                                 } else if (stopIds.get(i).contains("BIZ2")) {
