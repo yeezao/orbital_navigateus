@@ -22,7 +22,7 @@ public class ThirdScreen extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View view = inflater.inflate(R.layout.fragment_onboarding_fourth_screen, container, false);
+        View view = inflater.inflate(R.layout.fragment_onboarding_third_screen, container, false);
         Button button = view.findViewById(R.id.nextFinish);
 
         view.setOnClickListener(new View.OnClickListener() {

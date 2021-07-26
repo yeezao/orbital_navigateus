@@ -12,7 +12,7 @@
     <!-- Settings, should always be in the overflow -->
     <item android:id="@+id/action_messages"
         android:icon="@drawable/ic_baseline_message_24"
-        android:title="Messages"
+        android:title="Announcements"
         app:showAsAction="always"/>
 
 <!--    <item android:id="@+id/action_help"-->
@@ -20,9 +20,9 @@
 <!--        android:title="Help"-->
 <!--        app:showAsAction="ifRoom"/>-->
 
-    <item android:id="@+id/action_about"
-        android:title="About"
-        app:showAsAction="never"/>
+<!--    <item android:id="@+id/action_about"-->
+<!--        android:title="About"-->
+<!--        app:showAsAction="never"/>-->
 
 
 </menu>
