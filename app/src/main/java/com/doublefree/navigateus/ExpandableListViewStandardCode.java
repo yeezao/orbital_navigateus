@@ -138,7 +138,20 @@ public class ExpandableListViewStandardCode {
         });
     }
 
-    public static boolean showAlertFavouriteDialog(boolean isAlreadyGroupPosition, long id, Activity activity, Context context, List<StopList> listOfStops, FragmentManager childFragmentManager) {
+    /**
+     * Shows the {@link SetArrivalNotificationsDialogFragment} for the appropriate stop
+     *
+     * @param isAlreadyGroupPosition - determines if the id is a group position id
+     * @param id - the id of the parent that was actioned on by the user
+     * @param activity
+     * @param context
+     * @param listOfStops - list of stop data for all stops already loaded in parent fragment
+     * @param childFragmentManager
+     * @return if the method was successfully completed (i.e. dialog is shown)
+     */
+    public static boolean showAlertFavouriteDialog(boolean isAlreadyGroupPosition, long id,
+                                                   Activity activity, Context context, List<StopList> listOfStops,
+                                                   FragmentManager childFragmentManager) {
         int groupPosition;
         if (!isAlreadyGroupPosition) {
             groupPosition = ExpandableListView.getPackedPositionGroup(id);
@@ -203,8 +216,8 @@ public class ExpandableListViewStandardCode {
     /**
      * Updates the favourites info in the ArrivalNotifications instance that is passed in
      *
-     * @param singleStopArrivalNotification
-     * @return singleStopArrivalNotifications
+     * @param singleStopArrivalNotification - the object for the stop which favourites data needs to be checked
+     * @return singleStopArrivalNotifications - the object for the stop which has already been updated with favourites data checked
      */
     public static ArrivalNotifications updateFavouritesInfo(ArrivalNotifications singleStopArrivalNotification) {
 

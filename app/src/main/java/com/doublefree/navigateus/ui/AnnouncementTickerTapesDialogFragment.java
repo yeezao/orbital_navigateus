@@ -75,6 +75,7 @@ public class AnnouncementTickerTapesDialogFragment extends DialogFragment {
         progressBar.setVisibility(View.GONE);
     }
 
+
     private List<NetworkTickerTapesAnnouncements> filterTickerTapes(List<NetworkTickerTapesAnnouncements> list) {
 
         List<NetworkTickerTapesAnnouncements> newList = new ArrayList<>();

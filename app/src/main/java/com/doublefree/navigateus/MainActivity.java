@@ -179,25 +179,6 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
 
     };
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        if (item.getItemId() == android.R.id.home) {
-//            //Title bar back press triggers onBackPressed()
-//            onBackPressed();
-//            return true;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
-//
-////    Both navigation bar back press and title bar back press will trigger this method
-//    @Override
-//    public void onBackPressed() {
-//        while (!navController.getBackQueue().isEmpty()) {
-//            navController.navigateUp();
-//        }
-//        super.onBackPressed();
-//    }
-
     @Override
     public boolean onSupportNavigateUp() {
         navController.navigateUp();
@@ -208,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
     Uri soundUri;
 
     /**
-     * Creates notification channels (as required by Android for arrival alerts and persistent arrival notifications
+     * Creates notification channels (as required by Android for arrival alerts and persistent arrival notifications)
      */
     private void createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
@@ -223,6 +204,7 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
                     .setUsage(AudioAttributes.USAGE_NOTIFICATION)
                     .build();
 
+            //sets notification channel for persistent notification (alert monitoring)
             NotificationChannel channelArrivalNotificationsPersistent
                     = new NotificationChannel(getString(R.string.arrivalnotifications_monitoring_notif_id), persistentName, importanceArrivalNotifications);
             channelArrivalNotificationsPersistent.setDescription(descriptionPersistent);
@@ -231,6 +213,7 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
             channelArrivalNotificationsPersistent.setSound(null, audioAttributes);
             channelArrivalNotificationsPersistent.setBypassDnd(true);
 
+            //sets notification channel for normal notification (alert triggered)
             NotificationChannel channelArrivalNotificationsRegular
                     = new NotificationChannel(getString(R.string.arrivalnotifications_triggered_notif_id), "Notify Arrival", importanceArrivalNotifications);
             channelArrivalNotificationsRegular.setDescription(descriptionRegular);
@@ -254,89 +237,10 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
         }
     }
 
-    //currently not in use
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//            fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    fm.beginTransaction().hide(active).show(homeFragment).addToBackStack(null).commit();
-                    active = homeFragment;
-                    if (active != homeFragment) {
-                        navView.setSelectedItemId(R.id.navigation_home);
-                    }
-                    return true;
-
-                case R.id.navigation_stops_services_master:
-//                    if (active == homeFragment) {
-//                        fm.beginTransaction().addToBackStack(null);
-//                    }
-                    fm.beginTransaction().hide(active).show(stopsServicesMasterFragment).addToBackStack(null).commit();
-
-                    active = stopsServicesMasterFragment;
-//                    navView.setSelectedItemId(R.id.navigation_stops_services_master);
-                    return true;
-
-                case R.id.navigation_directions:
-//                    if (active == homeFragment) {
-//                        fm.beginTransaction().addToBackStack(null);
-//                    }
-                    fm.beginTransaction().hide(active).show(directionsFragment).addToBackStack(null).commit();
-                    active = directionsFragment;
-//                    navView.setSelectedItemId(R.id.navigation_directions);
-                    return true;
-            }
-            return false;
-        }
-    };
-
-//    fm.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
-//        @Override
-//        public void onBackStackChanged() {
-//            // If the stack decreases it means I clicked the back button
-//            if( fragmentManager.getBackStackEntryCount() <= count){
-//                //check your position based on selected fragment and set it accordingly.
-//                navigation.getMenu().getItem(your_pos).setChecked(true);
-//            }
-//        }
-//    });
-
-//    @Override
-//    public void onBackPressed() {
-//
-//        int count = getSupportFragmentManager().getBackStackEntryCount();
-//
-//        Fragment fragmentChecker = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_main);
-//
-//        if (count == 0) {
-//            super.onBackPressed();
-//            //additional code
-//        } else if (fragmentChecker instanceof StopsServicesMasterFragment
-//                || fragmentChecker instanceof DirectionsFragment || fragmentChecker instanceof HomeFragment) {
-//            fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-//            navView.getMenu().getItem(1).setChecked(true);
-////        } else if (fragmentChecker instanceof HomeFragment) {
-////            fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-////            navView.getMenu().getItem(1).setChecked(true);
-////            super.onBackPressed();
-//        } else {
-//            super.onBackPressed();
-//        }
-//
-//    }
-
     //variables and methods for global list of bus stops
     String firstPassStopsList;
 
     List<StopList> listOfAllStops;
-    StopList listOfStops;
-    List<String> listOfNames;
-    List<String> listOfIds;
-    List<Double> listOfLat;
-    List<Double> listOfLong;
 
     //variables and methods for global bus arrival notifications
     List<ArrivalNotifications> arrivalNotificationsArray = new ArrayList<>();
@@ -436,6 +340,7 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
         }
         singleStopArrivalNotifications.setBeginWatching(boolList);
 
+        //builds a persistent notification
         NotificationCompat.Builder persistentBuilder = new NotificationCompat.Builder(this, getString(R.string.arrivalnotifications_monitoring_notif_id));
         Log.e("entered", "yes in activity");
         for (i = 0; i < arrivalNotificationsArray.size(); i++) {
@@ -462,6 +367,7 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
         }
         if (startNewMonitoring) {
 
+            //starts a persistent notification
             Intent intent = new Intent(this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
@@ -485,35 +391,8 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
 //                    .addAction(0, "Stop Monitoring", cancelMonitoringPendingIntent);
             notificationManager.cancel(singleStopArrivalNotifications.getStopId(), 0);
             notificationManager.notify(singleStopArrivalNotifications.getStopId(), 0, persistentBuilder.build());
-
-//            NotificationBroadcast nb = new NotificationBroadcast();
-//            nb.mainSetter(this, notificationManager, arrivalNotificationsArray);
-//
-//
-//            IntentFilter intentFilter = new IntentFilter();
-//            intentFilter.addAction("android.intent.action.ANY_ACTION");
-//            this.registerReceiver(nb, intentFilter);
-
-//            BroadcastReceiver br = new BroadcastReceiver() {
-//                @Override
-//                public void onReceive(Context context, Intent intent) {
-//                    Log.e("broadcast", "received");
-//                    notificationManager.cancel(intent.getIdentifier(), 0);
-//                    for (int i = 0; i < arrivalNotificationsArray.size(); i++) {
-//                        if (arrivalNotificationsArray.get(i).getStopId().equals(intent.getIdentifier())) {
-//                            ArrivalNotifications temp = arrivalNotificationsArray.get(i);
-//                            temp.setWatchingForArrival(false);
-//                            arrivalNotificationsArray.set(i, temp);
-//                        }
-//                    }
-//                }
-//            };
-//
-//            registerReceiver(br, new IntentFilter("CANCEL_MONITORING"));
-
-
-
         } else {
+            //cancels a persistent notification
             notificationManager.cancel(singleStopArrivalNotifications.getStopId(), 0);
         }
     }
@@ -582,10 +461,10 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
                     if (singleStopArrivalNotificationForUpdate.getServicesAtStop().get(j).getServiceNum()
                             .equals(singleStopArrivalNotificationForUpdate.getServicesBeingWatched().get(i))) {
                         //check if service has an estimate time, is not at "Arr" timing, and has an arrival time greater than the set monitoring threshold.
-                        //If true, it sets the monitoring boolean value to true
+                        //if true, it sets the monitoring boolean value to true
                         if (!arrivalNotificationsArray.get(index).getBeginWatching().get(i) && !servicesAllInfoAtStop.get(j).getFirstArrival().equals("-")
                                 && !servicesAllInfoAtStop.get(j).getFirstArrival().equals("Arr")
-                                && Integer.parseInt(servicesAllInfoAtStop.get(j).getFirstArrival()) >= singleStopArrivalNotificationForUpdate.getTimeToWatch()){
+                                && Integer.parseInt(servicesAllInfoAtStop.get(j).getFirstArrival()) >= singleStopArrivalNotificationForUpdate.getTimeToWatch()) {
                             arrivalNotificationsArray.get(index).getBeginWatching().set(i, true);
                         }
                         i++;
@@ -610,41 +489,6 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
 
             }
         });
-//        getChildTimings(singleStopArrivalNotificationForUpdate.getStopId(), new MainActivity.VolleyCallBack() {
-//            @Override
-//            public void onSuccess() {
-//                List<ServiceInStopDetails> monitoringAllServicesAtStop = servicesAllInfoAtStop;
-//                int i = 0;
-//                int j = 0;
-//                while (i < singleStopArrivalNotificationForUpdate.getServicesBeingWatched().size()
-//                        && j < singleStopArrivalNotificationForUpdate.getServicesAtStop().size()) {
-//                    //check if service from most recent data pull is a service being monitored
-//                    if (singleStopArrivalNotificationForUpdate.getServicesAtStop().get(j).getServiceNum()
-//                            .equals(singleStopArrivalNotificationForUpdate.getServicesBeingWatched().get(i))) {
-//                        //check if service has an estimate time, is not at "Arr" timing, and has an arrival time greater than the set monitoring threshold.
-//                        //If true, it sets the monitoring boolean value to true
-//                        if (!arrivalNotificationsArray.get(index).getBeginWatching().get(i) && !monitoringAllServicesAtStop.get(j).getFirstArrival().equals("-")
-//                                && !monitoringAllServicesAtStop.get(j).getFirstArrival().equals("Arr")
-//                                && Integer.parseInt(monitoringAllServicesAtStop.get(j).getFirstArrival()) >= singleStopArrivalNotificationForUpdate.getTimeToWatch()){
-//                            arrivalNotificationsArray.get(index).getBeginWatching().set(i, true);
-//                        }
-//                        i++;
-//                        j++;
-//
-//                    } else {
-//                        j++;
-//                    }
-//                }
-//                List<String> returnInfo = DetermineMonitoringThresholdReached(singleStopArrivalNotificationForUpdate, monitoringAllServicesAtStop);
-//                if (returnInfo != null) {
-//                    ChangeNotification(returnInfo, singleStopArrivalNotificationForUpdate);
-//                    ChangeArrivalNotificationsArray(singleStopArrivalNotificationForUpdate);
-////                    monitoringHandler.removeCallbacksAndMessages(0);
-//                } else {
-//                    //?
-//                }
-//            }
-//        });
     }
 
     /**
@@ -770,6 +614,7 @@ public class MainActivity extends AppCompatActivity implements SetArrivalNotific
                     }
                     return returnInfo;
                 } if (!monitoringAllServicesAtStop.get(j).getSecondArrival().equals("-") && !monitoringAllServicesAtStop.get(j).getSecondArrival().equals("Arr")
+                        && singleStopArrivalNotificationForUpdate.getBeginWatching().get(i)
                         && Integer.parseInt(monitoringAllServicesAtStop.get(j).getSecondArrival()) <= singleStopArrivalNotificationForUpdate.getTimeToWatch()) {
                     List<String> returnInfo = new ArrayList<>();
                     returnInfo.add(monitoringAllServicesAtStop.get(j).getServiceNum());
