@@ -91,11 +91,17 @@ public class StandardCode {
         return json;
     }
 
+    /**
+     * Displays a failed to connect snackbar to inform the user that the app
+     * was not able to connect to NUS servers.
+     *
+     * @param activity
+     */
     public static void showFailedToLoadSnackbar(Activity activity) {
         Snackbar snackbar = Snackbar.make(activity.findViewById(android.R.id.content),
                 R.string.failed_to_connect,
                 Snackbar.LENGTH_LONG);
-        snackbar.setAnchorView(R.id.textView_container);
+        snackbar.setAnchorView(R.id.nav_view);
         snackbar.show();
     }
 
