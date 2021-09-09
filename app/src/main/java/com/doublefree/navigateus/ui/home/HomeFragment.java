@@ -51,7 +51,9 @@ import java.util.List;
 
 public class HomeFragment extends Fragment implements LocationServices.LocationFound, DialogFullRouteCallBack {
 
-    public HomeFragment() {}
+    public HomeFragment() {
+        //empty constructor
+    }
 
     ExpandableListView expandableListView;
     List<StopList> listGroup;
