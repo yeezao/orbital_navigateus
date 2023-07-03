@@ -168,37 +168,31 @@ public class StopsMainAdapter extends BaseExpandableListAdapter {
                 TextView textViewTime2 = convertView.findViewById(R.id.list_child_timing2);
                 ImageView imageViewLive1Time = convertView.findViewById(R.id.live_timing_imageview);
                 ImageView imageViewLive2Time = convertView.findViewById(R.id.live_timing_imageview_2);
+                imageViewLive1Time.setVisibility(ImageView.INVISIBLE);
+                imageViewLive2Time.setVisibility(ImageView.INVISIBLE);
 //            TextView textViewTime1Live = convertView.findViewById(R.id.list_child_timing1_live);
-                if (child.getFirstArrival().charAt(0) == '-') {
+                if (child.getFirstArrival().charAt(0) == '-') {  //no service
                     textViewTime1.setText("No Service");
                     textViewTime1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
                     textViewTime1.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
                     textViewTime1.setTextColor(ContextCompat.getColor(context, R.color.grey));
-                    imageViewLive1Time.setVisibility(ImageView.INVISIBLE);
+//                    imageViewLive1Time.setVisibility(ImageView.INVISIBLE);
 //                textViewTime1Live.setText("");
 //                textViewTime1Live.setBackgroundColor(ContextCompat.getColor(context, R.color.transparent));
                 } else {
+
                     textViewTime1.setText(child.getFirstArrival());
                     textViewTime1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-                    if (child.getFirstArrivalLive().length() == 0) {
+
+                    if ((child.getFirstArrival().length() == 1 && child.getFirstArrival().contains("1")) || child.getFirstArrival().contains("Arr")) {
+                        textViewTime1.setBackgroundColor(ContextCompat.getColor(context, R.color.NUS_Blue));
+                        textViewTime1.setTextColor(ContextCompat.getColor(context, R.color.white));
+                    } else {
                         textViewTime1.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
                         textViewTime1.setTextColor(ContextCompat.getColor(context, R.color.black));
-                        imageViewLive1Time.setVisibility(ImageView.INVISIBLE);
-//                    textViewTime1Live.setText("");
-//                    textViewTime1Live.setBackgroundColor(ContextCompat.getColor(context, R.color.transparent));
-                    } else {
-                        if ((child.getFirstArrival().length() == 1 && child.getFirstArrival().contains("1")) || child.getFirstArrival().contains("Arr")) {
-                            textViewTime1.setBackgroundColor(ContextCompat.getColor(context, R.color.NUS_Blue));
-                            textViewTime1.setTextColor(ContextCompat.getColor(context, R.color.white));
-                        } else {
-                            textViewTime1.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
-                            textViewTime1.setTextColor(ContextCompat.getColor(context, R.color.black));
-                        }
-                        imageViewLive1Time.setVisibility(ImageView.VISIBLE);
-//                    textViewTime1Live.setText("LIVE");
-//                    textViewTime1Live.setTextColor(ContextCompat.getColor(context, R.color.white));
-//                    textViewTime1Live.setBackgroundColor(ContextCompat.getColor(context, R.color.green));
                     }
+//                    imageViewLive1Time.setVisibility(ImageView.VISIBLE);
+
                 }
 
 
@@ -208,7 +202,7 @@ public class StopsMainAdapter extends BaseExpandableListAdapter {
                     textViewTime2.setText("");
                     textViewTime2.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
                     textViewTime2.setTextColor(ContextCompat.getColor(context, R.color.black));
-                    imageViewLive2Time.setVisibility(ImageView.INVISIBLE);
+//                    imageViewLive2Time.setVisibility(ImageView.INVISIBLE);
 //                textViewTime2Live.setText("");
 //                textViewTime2Live.setBackgroundColor(ContextCompat.getColor(context, R.color.transparent));
                 } else if (child.getSecondArrival().charAt(0) == '-') {
@@ -216,29 +210,20 @@ public class StopsMainAdapter extends BaseExpandableListAdapter {
                     textViewTime2.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
                     textViewTime2.setTextColor(ContextCompat.getColor(context, R.color.grey));
                     textViewTime2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
-                    imageViewLive2Time.setVisibility(ImageView.INVISIBLE);
+//                    imageViewLive2Time.setVisibility(ImageView.INVISIBLE);
                 } else {
                     textViewTime2.setText(child.getSecondArrival());
                     textViewTime2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-                    if (child.getSecondArrivalLive().length() == 0) {
+
+                    if ((child.getSecondArrival().length() == 1 && child.getSecondArrival().contains("1")) || child.getSecondArrival().contains("Arr")) {
+                        textViewTime2.setBackgroundColor(ContextCompat.getColor(context, R.color.NUS_Blue));
+                        textViewTime2.setTextColor(ContextCompat.getColor(context, R.color.white));
+                    } else {
                         textViewTime2.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
                         textViewTime2.setTextColor(ContextCompat.getColor(context, R.color.black));
-                        imageViewLive2Time.setVisibility(ImageView.INVISIBLE);
-//                    textViewTime2Live.setText("");
-//                    textViewTime2Live.setBackgroundColor(ContextCompat.getColor(context, R.color.transparent));
-                    } else {
-                        if ((child.getSecondArrival().length() == 1 && child.getSecondArrival().contains("1")) || child.getSecondArrival().contains("Arr")) {
-                            textViewTime2.setBackgroundColor(ContextCompat.getColor(context, R.color.NUS_Blue));
-                            textViewTime2.setTextColor(ContextCompat.getColor(context, R.color.white));
-                        } else {
-                            textViewTime2.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
-                            textViewTime2.setTextColor(ContextCompat.getColor(context, R.color.black));
-                        }
-                        imageViewLive2Time.setVisibility(ImageView.VISIBLE);
-//                    textViewTime2Live.setText("LIVE");
-//                    textViewTime2Live.setTextColor(ContextCompat.getColor(context, R.color.white));
-//                    textViewTime2Live.setBackgroundColor(ContextCompat.getColor(context, R.color.green));
                     }
+//                    imageViewLive2Time.setVisibility(ImageView.VISIBLE);
+
                 }
             }
             //for list_item_lta (LTA only)

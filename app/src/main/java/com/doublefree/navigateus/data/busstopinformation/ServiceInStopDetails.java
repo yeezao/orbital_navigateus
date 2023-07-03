@@ -5,8 +5,8 @@ public class ServiceInStopDetails {
     private String serviceNum;
     private String firstArrival;
     private String secondArrival;
-    private String firstArrivalLive;
-    private String secondArrivalLive;
+    private String firstArrivalLive = "";
+    private String secondArrivalLive =  "";
     private String firstArrivalCrowded;
     private String secondArrivalCrowded;
     private String firstArrivalBusType;

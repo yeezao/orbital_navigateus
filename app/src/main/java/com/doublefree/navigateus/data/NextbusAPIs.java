@@ -13,6 +13,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.doublefree.navigateus.MainActivity;
 import com.doublefree.navigateus.R;
+import com.doublefree.navigateus.StandardCode;
 import com.doublefree.navigateus.data.busnetworkinformation.NetworkTickerTapesAnnouncements;
 import com.doublefree.navigateus.data.busrouteinformation.BusLocationInfo;
 import com.doublefree.navigateus.data.busrouteinformation.BusOperatingHours;
@@ -147,8 +148,8 @@ public class NextbusAPIs {
                     servicesAtStop = JsonPath.read(response, path + "name");
                     serviceFirstArrival = JsonPath.read(response, path + "arrivalTime");
                     serviceSecondArrival = JsonPath.read(response, path + "nextArrivalTime");
-                    firstArrivalLive = JsonPath.read(response, path + "arrivalTime_veh_plate");
-                    secondArrivalLive = JsonPath.read(response, path + "nextArrivalTime_veh_plate");
+                    //firstArrivalLive = JsonPath.read(response, path + "arrivalTime_veh_plate");
+                    //secondArrivalLive = JsonPath.read(response, path + "nextArrivalTime_veh_plate");
                     stopIds = JsonPath.read(response, path + "busstopcode");
                     for (int i = 0; i < servicesAtStop.size(); i++) {
                         if (!stopIds.get(i).contains("-E") || stopIds.get(i).contains("-E-S")) {
@@ -162,11 +163,12 @@ public class NextbusAPIs {
                                     serviceNum = "D1 (to BIZ2)";
                                 }
                             }
-                            serviceInfoAtStop.setServiceNum(serviceNum);
+                            serviceInfoAtStop.setServiceNum(StandardCode.splitPubFromServiceNum(serviceNum));
+                            //serviceInfoAtStop.setServiceNum(serviceNum);
                             serviceInfoAtStop.setFirstArrival(serviceFirstArrival.get(i));
                             serviceInfoAtStop.setSecondArrival(serviceSecondArrival.get(i));
-                            serviceInfoAtStop.setFirstArrivalLive(firstArrivalLive.get(i));
-                            serviceInfoAtStop.setSecondArrivalLive(secondArrivalLive.get(i));
+                            //serviceInfoAtStop.setFirstArrivalLive(firstArrivalLive.get(i));
+                            //serviceInfoAtStop.setSecondArrivalLive(secondArrivalLive.get(i));
                             servicesAllInfoAtStop.add(serviceInfoAtStop);
                         }
 

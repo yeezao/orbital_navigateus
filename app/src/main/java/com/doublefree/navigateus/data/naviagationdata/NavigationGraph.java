@@ -907,7 +907,7 @@ public class NavigationGraph {
 
         NavigationPartialResults routeForSegment = new NavigationPartialResults();
 
-        PriorityQueue<NavigationNodes> pq = new PriorityQueue<NavigationNodes>(new Comparator<NavigationNodes>() {
+        PriorityQueue<NavigationNodes> pq = new PriorityQueue<>(new Comparator<NavigationNodes>() {
             @Override
             public int compare(NavigationNodes o1, NavigationNodes o2) {
                 return Integer.compare(o1.getWeightTillNow(), o2.getWeightTillNow());
@@ -1067,6 +1067,8 @@ public class NavigationGraph {
         }
         return json;
     }
+
+
 
     public interface VolleyCallBack {
         void onSuccess(List<ServiceInStopDetails> servicesAllInfoAtStop);

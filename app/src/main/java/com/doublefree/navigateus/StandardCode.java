@@ -12,6 +12,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import kotlin.text.Regex;
+
 public class StandardCode {
 
     /**
@@ -105,6 +107,15 @@ public class StandardCode {
         snackbar.show();
     }
 
+    public static String splitPubFromServiceNum(String s) {
+
+        if (s.contains("PUB")) {
+            String[] splitString = s.split(":");
+            return splitString[1];
+        }
+        return s;
+
+    }
 
 
 
