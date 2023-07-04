@@ -17,7 +17,8 @@ public class NetworkTickerTapesAnnouncements {
 
     }
 
-    public void mainSetterNetworkTickerTapes(String message, String servicesAffected, String displayFromString, String displayToString) {
+    public void mainSetterNetworkTickerTapes(String message, String servicesAffected,
+                                             String displayFromString, String displayToString) {
         this.message = message;
         this.servicesAffected = servicesAffected;
         if (displayFromString != null) {

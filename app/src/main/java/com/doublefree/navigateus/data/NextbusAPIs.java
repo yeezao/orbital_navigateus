@@ -155,6 +155,7 @@ public class NextbusAPIs {
                         if (!stopIds.get(i).contains("-E") || stopIds.get(i).contains("-E-S")) {
                             serviceInfoAtStop = new ServiceInStopDetails();
                             String serviceNum = servicesAtStop.get(i);
+                            /*  //D1 double-stop @ COM2 no longer exists
                             Log.e("check D1 @ COM2", finalStopId + " " + servicesAtStop.get(i) + " " + stopIds.get(i));
                             if (finalStopId.contains("COM2") && servicesAtStop.get(i).equals("D1")) {
                                 if (stopIds.get(i).contains("UT")) {
@@ -162,9 +163,9 @@ public class NextbusAPIs {
                                 } else if (stopIds.get(i).contains("BIZ2")) {
                                     serviceNum = "D1 (to BIZ2)";
                                 }
-                            }
+                            }\
+                            */
                             serviceInfoAtStop.setServiceNum(StandardCode.splitPubFromServiceNum(serviceNum));
-                            //serviceInfoAtStop.setServiceNum(serviceNum);
                             serviceInfoAtStop.setFirstArrival(serviceFirstArrival.get(i));
                             serviceInfoAtStop.setSecondArrival(serviceSecondArrival.get(i));
                             //serviceInfoAtStop.setFirstArrivalLive(firstArrivalLive.get(i));

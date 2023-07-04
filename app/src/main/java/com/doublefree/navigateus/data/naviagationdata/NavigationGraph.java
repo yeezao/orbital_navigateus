@@ -146,20 +146,31 @@ public class NavigationGraph {
     private boolean checkConditions(JSONObject edgeDetail) throws JSONException {
         if ((!mustBeSheltered && !mustBeAccessible & !isWalkOnly)) {
             return true;
-        } else if (mustBeSheltered && mustBeAccessible && isWalkOnly && edgeDetail.getString("sheltered").equals("y")
-                && edgeDetail.getString("accessible").equals("y") && edgeDetail.getString("by").equals("walk")) {
+        } else if (mustBeSheltered && mustBeAccessible && isWalkOnly
+                && edgeDetail.getString("sheltered").equals("y")
+                && edgeDetail.getString("accessible").equals("y")
+                && edgeDetail.getString("by").equals("walk")) {
             return true;
-        } else if (mustBeAccessible && mustBeSheltered && !isWalkOnly && edgeDetail.getString("sheltered").equals("y") && edgeDetail.getString("accessible").equals("y")) {
+        } else if (mustBeAccessible && mustBeSheltered && !isWalkOnly
+                && edgeDetail.getString("sheltered").equals("y")
+                && edgeDetail.getString("accessible").equals("y")) {
             return true;
-        } else if (mustBeSheltered && isWalkOnly && !mustBeAccessible && edgeDetail.getString("sheltered").equals("y") && edgeDetail.getString("by").equals("walk")) {
+        } else if (mustBeSheltered && isWalkOnly && !mustBeAccessible
+                && edgeDetail.getString("sheltered").equals("y")
+                && edgeDetail.getString("by").equals("walk")) {
             return true;
-        } else if (mustBeAccessible && isWalkOnly && !mustBeSheltered && edgeDetail.getString("accessible").equals("y") && edgeDetail.getString("by").equals("walk")) {
+        } else if (mustBeAccessible && isWalkOnly && !mustBeSheltered
+                && edgeDetail.getString("accessible").equals("y")
+                && edgeDetail.getString("by").equals("walk")) {
             return true;
-        } else if (mustBeSheltered && !mustBeAccessible && !isWalkOnly && edgeDetail.getString("sheltered").equals("y")) {
+        } else if (mustBeSheltered && !mustBeAccessible && !isWalkOnly
+                && edgeDetail.getString("sheltered").equals("y")) {
             return true;
-        } else if (mustBeAccessible && !mustBeSheltered && !isWalkOnly && edgeDetail.getString("accessible").equals("y")) {
+        } else if (mustBeAccessible && !mustBeSheltered && !isWalkOnly
+                && edgeDetail.getString("accessible").equals("y")) {
             return true;
-        } else if (isWalkOnly && !mustBeSheltered && !mustBeAccessible && edgeDetail.getString("by").equals("walk")) {
+        } else if (isWalkOnly && !mustBeSheltered && !mustBeAccessible
+                && edgeDetail.getString("by").equals("walk")) {
             return true;
         }
         return false;
@@ -174,7 +185,8 @@ public class NavigationGraph {
 
     boolean deleteLastEdge = true;
 
-    public void startNavProcess(NavigationSearchInfo navigationSearchInfo, Activity activity, Context context, final NavigationResultsFullyComplete navFinished) {
+    public void startNavProcess(NavigationSearchInfo navigationSearchInfo, Activity activity,
+                                Context context, final NavigationResultsFullyComplete navFinished) {
 
         Log.e("entered", "185");
 

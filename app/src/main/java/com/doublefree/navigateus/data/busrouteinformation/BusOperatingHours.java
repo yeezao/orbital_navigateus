@@ -7,7 +7,8 @@ public class BusOperatingHours {
     private String firstTime = "";
     private String lastTime = "";
 
-    public BusOperatingHours(String scheduleType, String dayType, String firstTime, String lastTime) {
+    public BusOperatingHours(String scheduleType, String dayType,
+                             String firstTime, String lastTime) {
         this.scheduleType = scheduleType;
         this.dayType = dayType;
         this.firstTime = firstTime;
